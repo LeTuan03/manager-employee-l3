@@ -1,87 +1,24 @@
 import React, { useState } from "react";
-import {
-    Button,
-    Checkbox,
-    Table,
-    Tag,
-    Modal,
-    Space,
-    message,
-    DatePicker,
-} from "antd";
+import { Button, Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
-    acceptEmployee,
     deleteEmployee,
     getCertificateByEmployee,
     getEmployeeById,
 } from "../services/api";
 import { format } from "date-fns";
 import EmployeeProfile from "./EmployeeProfile";
-import TextArea from "antd/es/input/TextArea";
 
 const TableComponet = (props) => {
-    const { listEmployee, loading, getAllEmployee, type } = props;
+    const { listEmployee, loading, getAllEmployee, setOpen, setEmployeeId } =
+        props;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isApproveOpen, setIsApproveOpen] = useState(false);
-    const [isRejectOpen, setIsRejectOpen] = useState(false);
-    const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
-        useState(false);
+
     const [profile, setProfile] = useState({});
     const [certificate, setCertificate] = useState([]);
     const [resume, setResume] = useState({});
-    const [value, setValue] = useState("");
-
-    const [messageApi, contextHolder] = message.useMessage();
-    const info = (message) => {
-        messageApi.success(
-            "Cập nhật thông tin nhân viên thành công !!!" || message
-        );
-    };
-
-    const showModal = (user) => {
-        setIsModalOpen(true);
-        setProfile(user);
-    };
-
-    const handleApproveOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleApproveCancel = () => {
-        setIsApproveOpen(false);
-    };
-    const handleAdditionalRequestOk = () => {
-        setIsAdditionalRequestOpen(true);
-    };
-    const handleAdditionalRequestCancel = () => {
-        setIsAdditionalRequestOpen(false);
-    };
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        setIsApproveOpen(false);
-    };
-    const handleRejectOk = () => {
-        setIsRejectOpen(false);
-    };
-    const handleRejectCancel = () => {
-        setIsRejectOpen(false);
-    };
-
-    const handleGetCerByEmp = async (id) => {
-        const res = await getCertificateByEmployee(id);
-        setCertificate(res?.data?.data);
-    };
-
-    const handeGetResume = async (id) => {
-        const res = await getEmployeeById(id);
-        setResume(res?.data?.data);
-    };
 
     const columns = [
         {
@@ -90,13 +27,11 @@ const TableComponet = (props) => {
             key: "stt",
             render: (_, item, index) => <>{index + 1}</>,
         },
-
         {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
             sorter: true,
-            width: 300,
             render: (text) => <a>{text}</a>,
         },
         {
@@ -164,16 +99,14 @@ const TableComponet = (props) => {
                     case "4":
                         status = "Yêu cầu bổ sung";
                         break;
-                    case "6":
-                        status = "Yêu cầu kết thúc hồ sơ";
                     case "7":
-                        status = "Yêu cầu kết thúc đã được chấp nhận";
+                        status = "Yêu cầu kết thúc";
                         break;
                     case "8":
                         status = "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
                         break;
                     case "9":
-                        status = "Từ chối yêu cầu kết thúc hồ sơ";
+                        status = " Từ chối yêu cầu kết thúc hồ sơ";
                     default:
                         break;
                 }
@@ -184,27 +117,24 @@ const TableComponet = (props) => {
         {
             title: "Thao tác",
             key: "action",
-            render: (_, user) => (
+            render: (_, employee) => (
                 <div className="flex justify-center gap-3">
-                    {(user.submitProfileStatus === "1" ||
-                        user.submitProfileStatus === "2") &&
-                    (localStorage.getItem("role") === "5" ||
-                        localStorage.getItem("role") === "4") ? (
+                    {employee.submitProfileStatus === "1" ? (
                         <>
                             <span
                                 className="cursor-pointer"
                                 onClick={() => {
-                                    handleDeleteEmployee(user.id);
+                                    handleDeleteEmployee(employee.id);
                                 }}
                             >
                                 <DeleteOutlined className="text-red-600 text-lg" />
                             </span>
                             <span
-                                className="cursor-pointer"
                                 onClick={() => {
-                                    showModal(user);
-                                    handeGetResume(user.id);
+                                    setOpen(true);
+                                    setEmployeeId(employee.id);
                                 }}
+                                className="cursor-pointer"
                             >
                                 <EditOutlined className="text-blue-600 text-lg" />
                             </span>
@@ -213,9 +143,9 @@ const TableComponet = (props) => {
                         <span
                             className="cursor-pointer"
                             onClick={() => {
-                                showModal(user);
-                                handleGetCerByEmp(user.id);
-                                handeGetResume(user.id);
+                                handleGetCerByEmp(employee.id);
+                                handeGetResume(employee.id);
+                                showModal(employee);
                             }}
                         >
                             <EyeOutlined className="text-green-600 text-lg" />
@@ -232,37 +162,25 @@ const TableComponet = (props) => {
             await getAllEmployee();
         }
     };
-    const handleAccept = async () => {
-        //Duyệt nhân viên
-        try {
-            const res = await acceptEmployee(profile);
-            setIsApproveOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleOk = () => {
+        setIsModalOpen(false);
     };
-    const additionalRequestTermination = async () => {
-        //Thêm nội dung yêu cầu bổ sung
-        try {
-            const res = await acceptEmployee(profile);
-            setIsAdditionalRequestOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
-    const handleRejectProfile = async () => {
-        //reject profile
-        try {
-            profile.reasonForRefuseEndProfile = value;
-            profile.submitProfileStatus = "5";
-            const res = await acceptEmployee(profile);
-            setIsRejectOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleGetCerByEmp = async (id) => {
+        const res = await getCertificateByEmployee(id);
+        setCertificate(res?.data?.data);
+    };
+
+    const handeGetResume = async (id) => {
+        const res = await getEmployeeById(id);
+        setResume(res?.data?.data);
+    };
+
+    const showModal = (user) => {
+        setProfile(user);
+        setIsModalOpen(true);
     };
     return (
         <>
@@ -284,62 +202,11 @@ const TableComponet = (props) => {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={
-                    type === "awaiting-approval" ? (
-                        <div className="flex justify-center">
-                            {localStorage.getItem("role") === "5" ? (
-                                <>
-                                    <Button
-                                        className="bg-green-700 text-white"
-                                        onClick={() => setIsApproveOpen(true)}
-                                    >
-                                        Phê duyệt
-                                    </Button>
-                                    <Button
-                                        key="submit"
-                                        type="primary"
-                                        onClick={() =>
-                                            setIsAdditionalRequestOpen(true)
-                                        }
-                                    >
-                                        Yêu cầu bổ sung
-                                    </Button>
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        onClick={() => setIsRejectOpen(true)}
-                                    >
-                                        Từ chối
-                                    </Button>
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        onClick={handleCancel}
-                                    >
-                                        Hủy
-                                    </Button>
-                                </>
-                            ) : (
-                                <Button
-                                    type="primary"
-                                    danger
-                                    onClick={handleCancel}
-                                >
-                                    Hủy
-                                </Button>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="flex justify-center">
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={handleCancel}
-                            >
-                                Hủy
-                            </Button>
-                        </div>
-                    )
+                    <div className="flex justify-center">
+                        <Button type="primary" danger onClick={handleCancel}>
+                            Hủy
+                        </Button>
+                    </div>
                 }
             >
                 <EmployeeProfile
@@ -348,149 +215,6 @@ const TableComponet = (props) => {
                     resume={resume}
                 />
             </Modal>
-            <Modal
-                title="Phê duyệt nhân viên"
-                centered
-                open={isApproveOpen}
-                onOk={handleApproveOk}
-                onCancel={handleApproveCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() => setIsApproveOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => handleAccept()}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                Ngày hẹn:
-                <Space direction="vertical" size={12} className="mt-1 mb-4">
-                    <DatePicker
-                        placeholder="Chọn ngày"
-                        style={{ width: "470px" }}
-                        onChange={(e) =>
-                            (profile.appointmentDate = format(
-                                e.$d,
-                                "yyyy-MM-dd"
-                            ))
-                        }
-                    />
-                </Space>
-                <Checkbox>Đã đủ điều kiện phê duyệt</Checkbox>
-            </Modal>
-            <Modal
-                title="Nội dung yêu cầu bổ sung"
-                centered
-                open={isAdditionalRequestOpen}
-                onOk={handleAdditionalRequestOk}
-                onCancel={handleAdditionalRequestCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() =>
-                                    setIsAdditionalRequestOpen(false)
-                                }
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => {
-                                    additionalRequestTermination();
-                                }}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                <TextArea
-                    onChange={(e) =>
-                        (profile.additionalRequestTermination = e.target.value)
-                    }
-                    placeholder="Nhập nội dung"
-                    autoSize={{
-                        minRows: 3,
-                    }}
-                />
-            </Modal>
-            <Modal
-                title="Nội dung từ chối"
-                centered
-                open={isRejectOpen}
-                onOk={handleRejectOk}
-                onCancel={handleRejectCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() => setIsRejectOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => handleRejectProfile()}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                Ngày từ chối *
-                <Space direction="vertical" size={12} className="mt-1 mb-4">
-                    <DatePicker
-                        placeholder="Chọn ngày"
-                        style={{ width: "470px" }}
-                        onChange={(e) =>
-                            (profile.rejectionDate = new Date(
-                                e.target.value
-                            ).getTime())
-                        }
-                    />
-                </Space>
-                Lí do:
-                <TextArea
-                    className="mt-1"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    placeholder="Nhập nội dung ..."
-                    autoSize={{
-                        minRows: 3,
-                    }}
-                />
-            </Modal>
-            {contextHolder}
         </>
     );
 };

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import { getListWaitApprove } from "../../services/api";
-import TableComponet from "../../components/Table";
+import ResumeComponent from "../../components/ResumeComponent";
 import IncreaseSalary from "../../components/IncreaseSalary";
 import Promote from "../../components/Promote";
 import Propose from "../../components/Propose";
+import ModalInput from "../../components/ModalInput";
 
 export default function AwaitingApproval() {
+    const [employeeId, setEmployeeId] = useState(null);
+    const [open, setOpen] = useState(false);
     const [listEmployee, setListEmployee] = useState([]);
     const [loading, setLoading] = useState(false);
     const getAllEmployee = async () => {
@@ -25,12 +28,27 @@ export default function AwaitingApproval() {
             key: "1",
             label: `HỒ SƠ`,
             children: (
-                <TableComponet
-                    listEmployee={listEmployee}
-                    getAllEmployee={getAllEmployee}
-                    loading={loading}
-                    type="awaiting-approval"
-                ></TableComponet>
+                <>
+                    <ModalInput
+                        employeeId={employeeId}
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                    <ResumeComponent
+                        setEmployeeId={setEmployeeId}
+                        setOpen={setOpen}
+                        listEmployee={listEmployee}
+                        getAllEmployee={getAllEmployee}
+                        loading={loading}
+                        type="awaiting-approval"
+                    ></ResumeComponent>
+                </>
+                // <ResumeComponent
+                //     listEmployee={listEmployee}
+                //     getAllEmployee={getAllEmployee}
+                //     loading={loading}
+                //     type="awaiting-approval"
+                // ></ResumeComponent>
             ),
         },
         {
