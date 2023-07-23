@@ -97,6 +97,21 @@ export const deleteFamily = (id) => {
 export const getProcess = async () => {
     return await axiosCustom.get("/process/current-leader");
 };
+export const salaryApprove = async (data) => {
+    return await axiosCustom.put(`/salary-increase/${data.id}`, data);
+};
 export const getProposal = async () => {
     return await axiosCustom.get("/proposal/current-leader");
+};
+
+export const acceptPromote = async (data) => {
+    return await axiosCustom.put(`/process/${data.id}`, data);
+};
+
+export const rejectPromote = async (data) => {
+    return await axiosCustom.put(`/process/${data.id}`, data);
+};
+
+export const proposalEdit = async (data) => {
+    return await axiosCustom.put(`/proposal/${data.id}`, data);
 };

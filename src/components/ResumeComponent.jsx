@@ -282,6 +282,7 @@ const ResumeComponent = (props) => {
                     pageSizeOptions: ["1", "10", "20", "30"],
                 }}
             />
+
             {/* Hồ sơ nhân viên */}
             <Modal
                 width={1300}

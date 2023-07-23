@@ -3,7 +3,10 @@ import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import { Col, Row, Modal, Result, Table, Button, Tabs } from "antd";
 import { getSalaryIncreaseByCurrentLeader } from "../services/api";
 import { format } from "date-fns";
-export default function IncreaseSalaryTab() {
+import ResumeModal from "./ResumeModal";
+
+export default function IncreaseSalary() {
+    const [profile, setProfile] = useState({});
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -86,8 +89,8 @@ export default function IncreaseSalaryTab() {
                 <div
                     className="cursor-pointer"
                     onClick={() => {
-                        console.log(user);
                         setIsModalOpen(true);
+                        setProfile(user);
                     }}
                 >
                     <EyeOutlined className="text-green-600 text-lg" />
@@ -117,20 +120,13 @@ export default function IncreaseSalaryTab() {
                         width={1300}
                         centered
                         footer={
-                            <div className="text-center">
-                                <Button className="bg-green-700 text-white">
-                                    Phê duyệt
-                                </Button>
-                                <Button key="submit" type="primary">
-                                    Yêu cầu bổ sung
-                                </Button>
-                                <Button type="primary" danger>
-                                    Từ chối
-                                </Button>
+                            <div className="text-center flex justify-center">
+                                <ResumeModal profile={profile} type="" />
                                 <Button
+                                    className="ml-2"
                                     type="primary"
                                     danger
-                                    onClick={() => handleCancel()}
+                                    onClick={() => setIsModalOpen(false)}
                                 >
                                     Hủy
                                 </Button>
@@ -145,7 +141,7 @@ export default function IncreaseSalaryTab() {
                                 {
                                     key: "1",
                                     label: `TĂNG LƯƠNG`,
-                                    children: <IncreaseTab />,
+                                    children: <IncreaseTab profile={profile} />,
                                 },
                             ]}
                         />
@@ -161,14 +157,14 @@ export default function IncreaseSalaryTab() {
     );
 }
 
-const IncreaseTab = () => {
+const IncreaseTab = ({ profile }) => {
     return (
         <div className="p-[35px] bg-[#e7e7e7]">
             <div className="bg-white p-[64px]">
                 <Row>
                     <Col flex={2} className="text-center">
                         <h3>CÔNG TY OCEAN TECH</h3>
-                        <p>Số:</p>
+                        <p>Số: {profile.employeeId}</p>
                     </Col>
                     <Col flex={3} className="text-center">
                         <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
