@@ -18,13 +18,11 @@ export default function Approved() {
         getAllEmployee();
     }, []);
     return (
-        <div>
-            <TableComponet
-                listEmployee={listEmployee}
-                getAllEmployee={getAllEmployee}
-                loading={loading}
-                type={"approved"}
-            ></TableComponet>
-        </div>
+        <TableComponet
+            listEmployee={listEmployee}
+            getAllEmployee={getAllEmployee}
+            loading={loading}
+            type={"approved"}
+        ></TableComponet>
     );
 }

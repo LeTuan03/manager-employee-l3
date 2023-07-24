@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { UserOutlined } from '@ant-design/icons';
+import React, { useEffect } from "react";
+import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, message, Row, Col, Avatar } from "antd";
 const FormEmployee = ({ form, employee }) => {
-
     const onFinish = async (values) => {
         const { fullName, phone } = values;
-        message.success("Sửa thành công" + " " + fullName)
+        message.success("Sửa thành công" + " " + fullName);
     };
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
@@ -15,6 +14,7 @@ const FormEmployee = ({ form, employee }) => {
             name: employee.name,
             code: employee.code,
             gender: employee.gender,
+            // dateOfBirth: new Date(942253200000).getTime(),
             dateOfBirth: 942253200000,
             address: employee.address,
             team: employee.team,
@@ -26,12 +26,12 @@ const FormEmployee = ({ form, employee }) => {
             placeOfIssueCard: employee.placeOfIssueCard,
             ethnic: employee.ethnic,
             religion: employee.religion,
-        })
-    }, [employee])
+        });
+    }, [employee]);
     return (
         <>
             <Form
-                layout={'vertical'}
+                layout={"vertical"}
                 form={form}
                 name="basic"
                 initialValues={{
@@ -59,18 +59,12 @@ const FormEmployee = ({ form, employee }) => {
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="code"
-                                    label="Mã nhân viên"
-                                >
+                                <Form.Item name="code" label="Mã nhân viên">
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="gender"
-                                    label="Giới tính"
-                                >
+                                <Form.Item name="gender" label="Giới tính">
                                     <Input />
                                 </Form.Item>
                             </Col>
@@ -91,18 +85,12 @@ const FormEmployee = ({ form, employee }) => {
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="ethnic"
-                                    label="Dân tộc"
-                                >
+                                <Form.Item name="ethnic" label="Dân tộc">
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="religion"
-                                    label="Tôn giáo"
-                                >
+                                <Form.Item name="religion" label="Tôn giáo">
                                     <Input />
                                 </Form.Item>
                             </Col>
@@ -155,18 +143,12 @@ const FormEmployee = ({ form, employee }) => {
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="phone"
-                                    label="Số điện thoại"
-                                >
+                                <Form.Item name="phone" label="Số điện thoại">
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item
-                                    name="team"
-                                    label="Nhóm"
-                                >
+                                <Form.Item name="team" label="Nhóm">
                                     <Input />
                                 </Form.Item>
                             </Col>
@@ -188,8 +170,12 @@ const FormEmployee = ({ form, employee }) => {
                             </Col>
                         </Row>
                     </Col>
-                    <Col className='flex justify-center items-start' span={6}>
-                        <Avatar className='cursor-pointer' size={200} icon={<UserOutlined />} />
+                    <Col className="flex justify-center items-start" span={6}>
+                        <Avatar
+                            className="cursor-pointer"
+                            size={200}
+                            icon={<UserOutlined />}
+                        />
                     </Col>
                 </Row>
             </Form>

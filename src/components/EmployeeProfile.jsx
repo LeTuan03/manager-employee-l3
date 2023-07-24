@@ -11,19 +11,12 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
+import useSplitParagraphs from "../hook/useSplitParagraphs";
 export default function EmployeeProfile(props) {
     const { profile, certificate, resume } = props;
-    const splitTextIntoParagraphs = (text, maxLength) => {
-        const paragraphs = [];
-        while (text?.length > 0) {
-            const paragraph = text.substring(0, maxLength);
-            paragraphs.push(paragraph);
-            text = text.substring(maxLength);
-        }
-        return paragraphs;
-    };
-    const skillParagraphs = splitTextIntoParagraphs(profile?.skill, 50);
-    const activityParagraphs = splitTextIntoParagraphs(profile?.activity, 50);
+
+    const skillParagraphs = useSplitParagraphs(profile?.skill, 50);
+    const activityParagraphs = useSplitParagraphs(profile?.activity, 50);
 
     const columns = [
         {

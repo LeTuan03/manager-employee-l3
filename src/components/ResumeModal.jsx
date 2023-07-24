@@ -2,10 +2,19 @@ import React, { useState } from "react";
 import { Button, Checkbox, DatePicker, Modal, Space } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
-import { acceptPromote, proposalEdit, salaryApprove } from "../services/api";
+import {
+    acceptPromote,
+    getCertificateByEmployee,
+    getEmployeeById,
+    proposalEdit,
+    salaryApprove,
+} from "../services/api";
+import EmployeeProfile from "./EmployeeProfile";
 
 export default function ResumeModal(props) {
     const { profile, type } = props;
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
     const [acceptDate, setAcceptDate] = useState("");
     const [rejectDate, setRejectDate] = useState("");
@@ -14,6 +23,8 @@ export default function ResumeModal(props) {
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
     const [value, setValue] = useState("");
+    const [certificate, setCertificate] = useState([]);
+    const [resume, setResume] = useState({});
 
     const handleApproveOk = () => {};
     const handleApproveCancel = () => {
@@ -29,6 +40,19 @@ export default function ResumeModal(props) {
     const handleRejectCancel = () => {
         setIsRejectOpen(false);
     };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const handleWatchResume = async (id) => {
+        const res = await getCertificateByEmployee(id);
+        setCertificate(res?.data?.data);
+        const res2 = await getEmployeeById(id);
+        setResume(res2?.data?.data);
+    };
+
     // Phê duyệt
     const handleAccept = async () => {
         if (type === "Propose") {
@@ -37,7 +61,7 @@ export default function ResumeModal(props) {
         } else if (type === "Promote") {
             profile.acceptanceDate = acceptDate;
             const res = await acceptPromote(profile);
-        } else {
+        } else if (type === "IncreaseSalary") {
             profile.acceptanceDate = acceptDate;
             const res = await salaryApprove(profile);
         }
@@ -49,7 +73,7 @@ export default function ResumeModal(props) {
             const res = await proposalEdit(profile);
         } else if (type === "Promote") {
             const res = await acceptPromote(profile);
-        } else {
+        } else if (type === "IncreaseSalary") {
             const res = await salaryApprove(profile);
         }
     };
@@ -61,12 +85,19 @@ export default function ResumeModal(props) {
             const res = await proposalEdit(profile);
         } else if (type === "Promote") {
             const res = rejectPromote(profile);
-        } else {
+        } else if (type === "IncreaseSalary") {
             const res = await salaryApprove(profile);
         }
     };
+    console.log(profile);
     return (
         <>
+            <Button
+                className="bg-green-700 text-white"
+                onClick={() => setIsModalOpen(true)}
+            >
+                Xem hồ sơ
+            </Button>
             <Button
                 className="bg-green-700 text-white"
                 onClick={() => setIsApproveOpen(true)}
@@ -85,6 +116,32 @@ export default function ResumeModal(props) {
             </Button>
             <div>
                 {/* modal */}
+                {/* Hồ sơ nhân viên  */}
+                <Modal
+                    width={1300}
+                    title="Hồ sơ nhân viên"
+                    centered
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    footer={
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() =>
+                                handleWatchResume(profile.employeeId)
+                            }
+                        >
+                            Hủy
+                        </Button>
+                    }
+                >
+                    <EmployeeProfile
+                        profile={profile}
+                        certificate={certificate}
+                        resume={resume}
+                    />
+                </Modal>
 
                 {/* Phê duyệt nhân viên */}
                 <Modal

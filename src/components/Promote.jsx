@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Result, Row, Table, Tabs } from "antd";
-import { getProcess } from "../services/api";
+import {
+    getByEmpIdProcess,
+    getEmployeeById,
+    getProcess,
+} from "../services/api";
 import { format } from "date-fns";
 import ResumeModal from "./ResumeModal";
 
@@ -152,6 +156,17 @@ export default function Promote() {
 }
 
 const PromoteTab = ({ profile }) => {
+    const [data, setData] = useState({});
+    const [emp, setEmp] = useState({});
+    const handleGetDetailPromote = async () => {
+        const res = await getByEmpIdProcess(profile.employeeId);
+        const res2 = await getEmployeeById(profile.employeeId);
+        setData(res?.data?.data[0]);
+        setEmp(res2?.data?.data);
+    };
+    useEffect(() => {
+        handleGetDetailPromote();
+    }, [profile]);
     return (
         <div className="p-[35px] bg-[#e7e7e7]">
             <div className="bg-white p-[64px]">
@@ -192,8 +207,8 @@ const PromoteTab = ({ profile }) => {
                 <div className="flex justify-center leading-10">
                     <div>
                         <div>
-                            <b> Điều 1: </b> Bổ nhiệm Ông/Bà: Nguyen Van cccc
-                            giữ chức vụ kể từ ngày 20 tháng 7 năm 2023.
+                            <b> Điều 1: </b> Bổ nhiệm Ông/Bà: {emp.name}
+                            giữ chức vụ kể từ ngày {data.promotionDay}.
                         </div>
                         <div>
                             <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày
@@ -201,8 +216,8 @@ const PromoteTab = ({ profile }) => {
                         </div>
                         <div>
                             <b>Điều 3:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: Nguyen Van cccc chịu trách
-                            nhiệm thi hành quyết định này.
+                            chính Kế toán và Ông/Bà: {emp.name} chịu trách nhiệm
+                            thi hành quyết định này.
                         </div>
                     </div>
                 </div>
@@ -211,11 +226,11 @@ const PromoteTab = ({ profile }) => {
                     <Row>
                         <Col flex={3} className="text-center"></Col>
                         <Col flex={2} className="text-center">
-                            <i>Hà Nội, ngày 21 tháng 7 năm 2023</i>
+                            <i>Hà Nội, ngày ... tháng ... năm ... 2023</i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i>(Ký, ghi rõ họ tên)</i>
 
-                            <b className="block mt-5">Ky</b>
+                            <b className="block mt-5">{emp.name}</b>
                         </Col>
                     </Row>
                 </div>

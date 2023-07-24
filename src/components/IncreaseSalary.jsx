@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import { Col, Row, Modal, Result, Table, Button, Tabs } from "antd";
-import { getSalaryIncreaseByCurrentLeader } from "../services/api";
+import {
+    getByEmpIdSalary,
+    getEmployeeById,
+    getSalaryIncreaseByCurrentLeader,
+} from "../services/api";
 import { format } from "date-fns";
 import ResumeModal from "./ResumeModal";
 
@@ -121,7 +125,10 @@ export default function IncreaseSalary() {
                         centered
                         footer={
                             <div className="text-center flex justify-center">
-                                <ResumeModal profile={profile} type="" />
+                                <ResumeModal
+                                    profile={profile}
+                                    type="IncreaseSalary"
+                                />
                                 <Button
                                     className="ml-2"
                                     type="primary"
@@ -158,6 +165,18 @@ export default function IncreaseSalary() {
 }
 
 const IncreaseTab = ({ profile }) => {
+    const [data, setData] = useState({});
+    const [emp, setEmp] = useState({});
+    const handleGetDetailSalary = async () => {
+        const res = await getByEmpIdSalary(profile.employeeId);
+        const res2 = await getEmployeeById(profile.employeeId);
+        setData(res?.data?.data[0]);
+        setEmp(res2?.data?.data);
+    };
+    useEffect(() => {
+        handleGetDetailSalary();
+    }, [profile]);
+
     return (
         <div className="p-[35px] bg-[#e7e7e7]">
             <div className="bg-white p-[64px]">
@@ -174,7 +193,7 @@ const IncreaseTab = ({ profile }) => {
                 </Row>
                 <div className="text-center">
                     <h3 className="mt-10"> QUYẾT ĐỊNH </h3>
-                    <p class="font-bold">
+                    <p className="font-bold">
                         Về việc tăng lương cho người lao động
                     </p>
                 </div>
@@ -201,13 +220,14 @@ const IncreaseTab = ({ profile }) => {
                 <div className="flex justify-center leading-10">
                     <div>
                         <div>
-                            <b> Điều 1: </b> Kể từ ngày: 28 tháng 6 năm 2023 ,
-                            mức lương của Ông/Bà: yyy sẽ là: 4 đồng
+                            <b> Điều 1: </b> Kể từ ngày: {data?.startDate} , mức
+                            lương của Ông/Bà: {emp.name} sẽ là: {data.newSalary}{" "}
+                            đ.
                         </div>
                         <div>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: yyy căn cứ quyết định thi
-                            hành.
+                            chính Kế toán và Ông/Bà: {emp.name} căn cứ quyết
+                            định thi hành.
                         </div>
                     </div>
                 </div>
@@ -220,7 +240,7 @@ const IncreaseTab = ({ profile }) => {
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i>(Ký, ghi rõ họ tên)</i>
 
-                            <b className="block mt-5">Ky</b>
+                            <b className="block mt-5">{emp.name}</b>
                         </Col>
                     </Row>
                 </div>

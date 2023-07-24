@@ -43,12 +43,6 @@ export default function AwaitingApproval() {
                         type="awaiting-approval"
                     ></ResumeComponent>
                 </>
-                // <ResumeComponent
-                //     listEmployee={listEmployee}
-                //     getAllEmployee={getAllEmployee}
-                //     loading={loading}
-                //     type="awaiting-approval"
-                // ></ResumeComponent>
             ),
         },
         {

@@ -11,8 +11,14 @@ import { format } from "date-fns";
 import EmployeeProfile from "./EmployeeProfile";
 
 const TableComponet = (props) => {
-    const { listEmployee, loading, getAllEmployee, setOpen, setEmployeeId } =
-        props;
+    const {
+        listEmployee,
+        loading,
+        getAllEmployee,
+        setOpen,
+        setEmployeeId,
+        type,
+    } = props;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -119,7 +125,18 @@ const TableComponet = (props) => {
             key: "action",
             render: (_, employee) => (
                 <div className="flex justify-center gap-3">
-                    {employee.submitProfileStatus === "1" ? (
+                    {type === "approved" ? (
+                        <span
+                            className="cursor-pointer"
+                            onClick={() => {
+                                handleGetCerByEmp(employee.id);
+                                handeGetResume(employee.id);
+                                showModal(employee);
+                            }}
+                        >
+                            <EyeOutlined className="text-green-600 text-lg" />
+                        </span>
+                    ) : employee.submitProfileStatus === "1" ? (
                         <>
                             <span
                                 className="cursor-pointer"
