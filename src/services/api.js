@@ -4,6 +4,13 @@ export const searchEmployee = async () => {
         "/employee/search?pageIndex=1&pageSize=10&listStatus=3,6,8,9"
     );
 };
+
+export const searchEmployeeEnd = async () => {
+    return await axiosCustom(
+        "/employee/search?pageIndex=1&pageSize=100&listStatus=7,0"
+    );
+};
+
 export const deleteEmployee = async (id) => {
     return await axiosCustom.delete(`/employee/${id}`);
 };
@@ -59,6 +66,10 @@ export const employeeRole = async () => {
         "/employee/search?pageIndex=1&pageSize=10&listStatus=1,2,4,5"
     );
 };
+
+export const updateEmployee = (id, data) => {
+    return axios.put(`/employee/${id}`, data);
+};
 export const createEmployee = (data) => {
     return axios.post("/employee", data);
 };
@@ -88,6 +99,23 @@ export const updateFamily = (id, data) => {
 };
 export const deleteFamily = (id) => {
     return axios.delete(`/employee-family/${id}`);
+};
+
+export const postAvatar = (img) => {
+    let data = new FormData();
+    data.append("file", img);
+    return axios.post(`/employee/upload-image`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+};
+export const postExp = (id, data) => {
+    return axios.post(`/experience?employeeId=${id}`, data);
+};
+
+//SUBMISSION OF DOCUMENTS
+
+export const submitAndSaveResume = async (data) => {
+    return await axiosCustom.put(`/employee/${data.id}`, data);
 };
 
 //leader
@@ -128,4 +156,59 @@ export const rejectPromote = async (data) => {
 
 export const proposalEdit = async (data) => {
     return await axiosCustom.put(`/proposal/${data.id}`, data);
+};
+
+//salary
+
+export const getSalaryByEmp = async (id) => {
+    return await axiosCustom.get(`/salary-increase?employeeId=${id}`);
+};
+//thêm tăng lương
+export const addSalaryByEmp = async (id, data) => {
+    return await axiosCustom.post(`/salary-increase?employeeId=${id}`, data);
+};
+export const updateSalary = async (data) => {
+    return await axiosCustom.put(`/salary-increase/${data.id}`, data);
+};
+export const deleteSalary = async (id) => {
+    return await axiosCustom.delete(`/salary-increase/${id}`);
+};
+
+//process
+export const getProcessByEmp = async (id) => {
+    return await axiosCustom.get(`/process?employeeId=${id}`);
+};
+export const addProcessByEmp = async (id, data) => {
+    return await axiosCustom.post(`/process?employeeId=${id}`, data);
+};
+export const updateProcess = async (data) => {
+    return await axiosCustom.put(`/process/${data.id}`, data);
+};
+export const deleteProcess = async (id) => {
+    return await axiosCustom.delete(`/process/${id}`);
+};
+
+//proposal
+
+export const getProposalByEmp = async (id) => {
+    return await axiosCustom.get(`/proposal?employeeId=${id}`);
+};
+
+export const addProposalByEmp = async (id, data) => {
+    return await axiosCustom.post(
+        `/proposal?employeeId=${id}/&page=1&size=20`,
+        data
+    );
+};
+export const updateProposal = async (data) => {
+    return await axiosCustom.put(`/proposal/${data.id}`, data);
+};
+export const deleteProposal = async (id) => {
+    return await axiosCustom.delete(`/proposal/${id}`);
+};
+
+//leader
+
+export const getLeader = async () => {
+    return await axiosCustom.get(`/leader`);
 };

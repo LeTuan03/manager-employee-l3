@@ -7,12 +7,10 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-const Header = () => {
+import { useSelector } from "react-redux";
+const Header = ({ toggleCollapsed, collapsed }) => {
+    const { role } = useSelector((state) => state.account);
     const navigate = useNavigate();
-    const [collapsed, setCollapsed] = useState(false);
-    const toggleCollapsed = () => {
-        setCollapsed(!collapsed);
-    };
     const handleLogOut = () => {
         localStorage.removeItem("access_token");
         navigate("/login");
@@ -49,9 +47,9 @@ const Header = () => {
                     <span>
                         Hi,{" "}
                         <strong>
-                            {localStorage.getItem("role") === "5"
+                            {role === 5
                                 ? "MANAGER"
-                                : localStorage.getItem("role") === "4"
+                                : role === 4
                                 ? "USER"
                                 : "ADMIN"}{" "}
                         </strong>

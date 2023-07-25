@@ -1,90 +1,91 @@
 import React, { useEffect, useState } from "react";
-import {
-    Form,
-    Input,
-    message,
-    Row,
-    Col,
-    Button,
-    Table,
-    DatePicker,
-} from "antd";
+import { Form, Input, message, Row, Col, Button, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
-import moment from "moment";
 import { useSelector } from "react-redux";
+import _, { values } from "lodash";
 import {
     createCertificate,
     deleteCertificate,
     getCertificateByEmployeeId,
     updateCertificate,
 } from "../services/api";
-const TabEmployeeCertificate = ({ employee }) => {
+import { v4 as uuidv4 } from "uuid";
+const TabEmployeeCertificate = ({ employee, setCertificate, certificate }) => {
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);
-    const [certificate, setCertificate] = useState([]);
     const [loading, setLoading] = useState(false);
     const { role } = useSelector((state) => state.account);
-    const dateFormat = "YYYY-MM-DD";
-    const today = moment();
-
-    const [date, setDate] = useState(today);
-    const [disabled, setdisabled] = useState(false);
 
     const onFinish = async (values) => {
-        const { certificateName, field, content } = values;
+        const { certificateName, field, content, issueDate } = values;
         const data = {
+            uid: uuidv4(),
             certificateName,
-            issueDate: "2022-09-09",
+            issueDate,
             field,
             content,
         };
         if (id) {
             await handleUpdateCertificate(data);
         } else {
-            await handleCreateCertificate([data]);
+            await handleCreateCertificate(data);
         }
+        console.log("id", values?.test);
     };
+
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };
     const handleCreateCertificate = async (data) => {
-        try {
-            const res = await createCertificate(employee.id, data);
-            if (res?.status === 200) {
-                setCertificate(res?.data?.data);
-                formCertificate.resetFields();
-                message.success("Thêm thành công văn bằng");
+        if (!_.isEmpty(employee)) {
+            try {
+                const res = await createCertificate(employee.id, [data]);
+                if (res?.status === 200) {
+                    setCertificate(res?.data?.data);
+                    formCertificate.resetFields();
+                    message.success("Thêm thành công văn bằng");
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const onCheckboxHandle = (e) => {
-        if (e.target.checked) {
-            setwarntill(moment("2090-10-10"));
-            setdisabled(true);
         } else {
-            setwarntill(today);
-            setdisabled(false);
+            if (_.isEmpty(certificate)) {
+                setCertificate([data]);
+            } else {
+                setCertificate([data, ...certificate]);
+            }
+            message.success("Thêm thành công văn bằng");
+            formCertificate.resetFields();
         }
     };
+
     const handleUpdateCertificate = async (data) => {
-        try {
-            const res = await updateCertificate(id, data);
-            if (res?.data?.code === 200) {
-                setId(null);
-                handleGetCertificateById();
-                message.success("Sửa thành công văn bằng");
+        const cloneCertificate = _.cloneDeep(certificate);
+        const index = cloneCertificate.findIndex((item) => item.uid === id);
+        if (index === -1) {
+            try {
+                const res = await updateCertificate(id, data);
+                if (res?.data?.code === 200) {
+                    setId(null);
+                    handleGetCertificateById();
+                    formCertificate.resetFields();
+                    message.success("Sửa thành công văn bằng");
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
+        } else {
+            cloneCertificate[index] = data;
+            setCertificate(cloneCertificate);
+            setId(null);
+            formCertificate.resetFields();
+            message.success("Sửa thành công văn bằng");
         }
     };
     const handleDeleteCertificate = async (id) => {
         try {
             const res = await deleteCertificate(id);
-            console.log(res);
             if (res?.status === 200) {
                 handleGetCertificateById();
                 message.success("Xóa thành công văn bằng");
@@ -92,6 +93,11 @@ const TabEmployeeCertificate = ({ employee }) => {
         } catch (error) {
             console.log(error);
         }
+    };
+    const handleDeleteByUid = (uid) => {
+        const newList = certificate.filter((item) => item.uid !== uid);
+        setCertificate(newList);
+        message.success("Xóa thành công văn bằng");
     };
     const handleGetCertificateById = async () => {
         try {
@@ -105,6 +111,9 @@ const TabEmployeeCertificate = ({ employee }) => {
     };
     useEffect(() => {
         setCertificate(employee.certificatesDto);
+        return () => {
+            formCertificate.resetFields();
+        };
     }, [employee]);
     const columns = [
         {
@@ -122,7 +131,9 @@ const TabEmployeeCertificate = ({ employee }) => {
                     <>
                         <span
                             onClick={() => {
-                                handleDeleteCertificate(item.id);
+                                item.id
+                                    ? handleDeleteCertificate(item.id)
+                                    : handleDeleteByUid(item.uid);
                             }}
                             className="cursor-pointer"
                         >
@@ -132,9 +143,12 @@ const TabEmployeeCertificate = ({ employee }) => {
                             onClick={() => {
                                 formCertificate.setFieldsValue({
                                     ...item,
-                                    issueDate: moment(item.issueDate).format(),
+                                    issueDate: format(
+                                        new Date(item.issueDate),
+                                        "yyyy-MM-dd"
+                                    ),
                                 });
-                                setId(item?.id);
+                                setId(item.id || item.uid);
                             }}
                             className="cursor-pointer"
                         >
@@ -161,7 +175,7 @@ const TabEmployeeCertificate = ({ employee }) => {
             key: "issueDate",
             align: "center",
             render: (issueDate) => (
-                <>{format(new Date(issueDate), "dd/MM/yyyy")}</>
+                <>{issueDate && format(new Date(issueDate), "dd/MM/yyyy")}</>
             ),
         },
         {
@@ -174,9 +188,6 @@ const TabEmployeeCertificate = ({ employee }) => {
     if (role !== 4) {
         columns.splice(1, 1);
     }
-    // const init = {
-    //     dateOfBirth: dayjs(),
-    // };
     return (
         <>
             <Form
@@ -205,25 +216,12 @@ const TabEmployeeCertificate = ({ employee }) => {
                             <Input />
                         </Form.Item>
                     </Col>
+                    <Form.Item name="test" hidden>
+                        <Input hidden />
+                    </Form.Item>
                     <Col span={6}>
-                        <Form.Item
-                            name="issueDate"
-                            label="Ngày cấp"
-                            getValueFromEvent={(onChange) =>
-                                moment(onChange).format("YYYY-MM-DD")
-                            }
-                            // getValueProps={(i) => ({ value: moment(i) })}
-                        >
-                            <DatePicker
-                                className="w-full"
-                                defaultValue={moment()}
-                                format={dateFormat}
-                                onChange={(date, dateString) =>
-                                    setwarntill(dateString)
-                                }
-                                value={warntill}
-                                clearIcon
-                            />
+                        <Form.Item name="issueDate" label="Ngày cấp">
+                            <Input type="date"></Input>
                         </Form.Item>
                     </Col>
                     <Col span={9}>

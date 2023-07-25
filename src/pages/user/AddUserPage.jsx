@@ -1,48 +1,54 @@
-import React, { useState } from 'react';
-import Employyee from '../manager/Employee'
-import TabAddEmployee from './TabAddEmployee'
-import TabAddCertificate from './TabAddCertificate'
-import TabAddFamily from './TabAddFamily'
-import { Form, Modal, Tabs } from 'antd';
+import React, { useEffect, useState } from "react";
+import Table from "../../components/Table";
+import { searchEmployee } from "../../services/api";
+import ModalInput from "../../components/ModalInput";
+import { Button } from "antd";
 const AddUserPage = () => {
-    const [form] = Form.useForm();
-    const [open,setOpen]=useState(true)
-    const items = [
-        {
-            key: "1",
-            label: `THÔNG TIN NHÂN VIÊN`,
-            children: <TabAddEmployee></TabAddEmployee>
-        },
-        {
-            key: "2",
-            label: `QUAN HỆ GIA ĐÌNH`,
-            children: <TabAddFamily></TabAddFamily>,
-        },
-        {
-            key: "3",
-            label: `THÔNG TIN VĂN BẰNG`,
-            children: <TabAddCertificate></TabAddCertificate>,
-        },
-    ];
+    const [listEmployee, setListEmployee] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [employeeId, setEmployeeId] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const getAllEmployee = async () => {
+        setLoading(true);
+        const res = await searchEmployee();
+        if (res?.status === 200) {
+            setListEmployee(res?.data?.data);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getAllEmployee();
+    }, []);
     return (
         <>
-            <Modal
-                title="THÊM THÔNG TIN NHÂN VIÊN"
-                open={open}
-                centered
-                width={1000}
-                onOk={() => {
-                    form.submit();
+            <Button
+                type="primary"
+                className="mb-5"
+                onClick={() => {
+                    setOpen(true);
                 }}
-                onCancel={() => {
-                    setOpen(false);
-                }}
-                okText={"Sửa"}
-                cancelText={"Hủy"}
             >
-                <Tabs defaultActiveKey="1" items={items} />
-            </Modal>
-            <Employyee></Employyee>
+                Thêm mới
+            </Button>
+            <ModalInput
+                open={open}
+                setEmployeeId={setEmployeeId}
+                employeeId={employeeId}
+                setOpen={setOpen}
+                setIsModalOpen={setIsModalOpen}
+            ></ModalInput>
+            <Table
+                setEmployeeId={setEmployeeId}
+                setOpen={setOpen}
+                listEmployee={listEmployee}
+                getAllEmployee={getAllEmployee}
+                loading={loading}
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                
+            ></Table>
         </>
     );
 };

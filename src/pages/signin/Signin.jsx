@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getCurrentRole, getToken } from "../../services/api";
+import { doLoginAction } from "../../redux/account/accountSlice";
+import { useDispatch } from "react-redux";
 
 export default function SignIn() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [messageApi, contextHolder] = message.useMessage();
     const notify = (message) => {
@@ -16,6 +19,7 @@ export default function SignIn() {
             localStorage.setItem("access_token", response.access_token);
             const role = await getCurrentRole();
             localStorage.setItem("role", role?.data[0]);
+            dispatch(doLoginAction(role?.data[0]));
             navigate("/");
         } catch (error) {
             notify("Sai tên tài khoản hoặc mật khẩu !!!");

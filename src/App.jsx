@@ -7,6 +7,9 @@ import SignIn from "./pages/signin/Signin";
 import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
 import Release from "./pages/release/Release";
+import UpdateHappeningManage from "./pages/update_happening/UpdateHappeningManage";
+import AddUserPage from "./pages/user/AddUserPage";
+import RoleUserRoute from "./components/RoleUserRoute";
 
 export default function App() {
     const router = createBrowserRouter([
@@ -24,6 +27,10 @@ export default function App() {
                     element: <Employee></Employee>,
                 },
                 {
+                    path: "/update_appening",
+                    element: <UpdateHappeningManage></UpdateHappeningManage>,
+                },
+                {
                     path: "/release",
                     element: <Release></Release>,
                 },
@@ -34,6 +41,14 @@ export default function App() {
                 {
                     path: "/approved",
                     element: <Approved></Approved>,
+                },
+                {
+                    path: "/addnew_employee",
+                    element: (
+                        <RoleUserRoute>
+                            <AddUserPage></AddUserPage>
+                        </RoleUserRoute>
+                    ),
                 },
             ],
         },

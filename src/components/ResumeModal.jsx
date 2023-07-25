@@ -13,39 +13,23 @@ import EmployeeProfile from "./EmployeeProfile";
 
 export default function ResumeModal(props) {
     const { profile, type } = props;
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
-    const [acceptDate, setAcceptDate] = useState("");
-    const [rejectDate, setRejectDate] = useState("");
-    const [additional, setAdditional] = useState("");
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
-    const [value, setValue] = useState("");
+    const [acceptDate, setAcceptDate] = useState("");
+    const [rejectDate, setRejectDate] = useState("");
+    const [additional, setAdditional] = useState("");
     const [certificate, setCertificate] = useState([]);
     const [resume, setResume] = useState({});
+    const [value, setValue] = useState("");
 
-    const handleApproveOk = () => {};
-    const handleApproveCancel = () => {
-        setIsApproveOpen(false);
-    };
     const handleAdditionalRequestOk = () => {};
     const handleAdditionalRequestCancel = () => {
         setIsAdditionalRequestOpen(false);
     };
 
-    const handleRejectOk = () => {};
-
-    const handleRejectCancel = () => {
-        setIsRejectOpen(false);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
     const handleWatchResume = async (id) => {
         const res = await getCertificateByEmployee(id);
         setCertificate(res?.data?.data);
@@ -122,8 +106,7 @@ export default function ResumeModal(props) {
                     title="Hồ sơ nhân viên"
                     centered
                     open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    onCancel={() => setIsModalOpen(false)}
                     footer={
                         <Button
                             type="primary"
@@ -148,8 +131,7 @@ export default function ResumeModal(props) {
                     title="Phê duyệt nhân viên"
                     centered
                     open={isApproveOpen}
-                    onOk={handleApproveOk}
-                    onCancel={handleApproveCancel}
+                    onCancel={() => setIsApproveOpen(false)}
                     footer={
                         <>
                             <Button
@@ -226,8 +208,7 @@ export default function ResumeModal(props) {
                     title="Nội dung từ chối"
                     centered
                     open={isRejectOpen}
-                    onOk={handleRejectOk}
-                    onCancel={handleRejectCancel}
+                    onCancel={() => setIsRejectOpen(false)}
                     footer={
                         <>
                             <Button

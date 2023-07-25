@@ -193,9 +193,8 @@ const ResumeComponent = (props) => {
             key: "action",
             render: (_, user) => (
                 <div className="flex justify-center gap-3">
-                    {(user.submitProfileStatus === "1" ||
-                        user.submitProfileStatus === "2") &&
-                    localStorage.getItem("role") === "3" ? (
+                    {user.submitProfileStatus === "1" &&
+                    localStorage.getItem("role") === "5" ? (
                         <>
                             <span
                                 className="cursor-pointer"
@@ -393,7 +392,7 @@ const ResumeComponent = (props) => {
                         placeholder="Chọn ngày"
                         style={{ width: "470px" }}
                         onChange={(e) =>
-                            (profile.appointmentDate = format(
+                            (profile.terminationAppointmentDate = format(
                                 e.$d,
                                 "yyyy-MM-dd"
                             ))

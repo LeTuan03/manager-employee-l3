@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, message, Row, Col, Button, Table } from "antd";
+import { Form, Input, message, Row, Col, Button, Table, Select } from "antd";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { createFamily, deleteFamily, getFamilyByEmployeeId, updateFamily } from "../services/api";
-const TabEmployeeFamily = ({ employee }) => {
+import {
+    createFamily,
+    deleteFamily,
+    getFamilyByEmployeeId,
+    updateFamily,
+} from "../services/api";
+import { v4 as uuidv4 } from "uuid";
+import _ from "lodash";
+const TabEmployeeFamily = ({ employee, setFamily, family }) => {
     const [formFamily] = Form.useForm();
-    const [update, setUpdate] = useState(null)
-    const [family, setFamily] = useState([]);
+    const [update, setUpdate] = useState(null);
+
     const onFinish = async (values) => {
         const {
             email,
@@ -14,31 +21,37 @@ const TabEmployeeFamily = ({ employee }) => {
             citizenIdentificationNumber,
             dateOfBirth,
             relationShip,
+            gender,
             phoneNumber,
             address,
         } = values;
         const data = {
+            uid: uuidv4(),
             email,
             name,
             citizenIdentificationNumber,
             dateOfBirth,
+            gender,
             relationShip,
             phoneNumber,
             address,
-            employeeId: employee.id
-        }
+            employeeId: employee.id,
+        };
         if (update) {
-            await handleUpdateFamily(data)
+            await handleUpdateFamily(data);
         } else {
-            await handleCreateFamily(data)
+            await handleCreateFamily(data);
         }
-
+        console.log(data);
     };
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };
     useEffect(() => {
         setFamily(employee.employeeFamilyDtos);
+        return () => {
+            formFamily.resetFields();
+        };
     }, [employee]);
     const handleGetFamily = async () => {
         try {
@@ -61,31 +74,54 @@ const TabEmployeeFamily = ({ employee }) => {
             console.log(error);
         }
     };
+    const handleDeleteByUid = (uid) => {
+        const newList = family.filter((item) => item.uid !== uid);
+        setFamily(newList);
+        message.success("Xóa thành công văn bằng");
+    };
     const handleCreateFamily = async (data) => {
-        try {
-            const res = await createFamily(employee.id, [data])
-            // console.log(res)
-            if (res?.data?.code===200) {
-                setFamily(res?.data?.data)
-                message.success("Thêm thành công")
+        if (!_.isEmpty(employee)) {
+            try {
+                const res = await createFamily(employee.id, [data]);
+                if (res?.data?.code === 200) {
+                    setFamily(res?.data?.data);
+                    message.success("Thêm thành công");
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleUpdateFamily =async (data) => {
-        try {
-            const res = await updateFamily(update, data)
-            console.log(res)
-            if (res?.data?.code) {
-                await handleGetFamily();
-                formFamily.resetFields()
-                message.success("Sửa thành công")
+        } else {
+            if (_.isEmpty(family)) {
+                setFamily([data]);
+            } else {
+                setFamily([data, ...family]);
             }
-        } catch (error) {
-            console.log(error)
+            message.success("Thêm thành công văn bằng");
+            formFamily.resetFields();
         }
-    }
+    };
+    const handleUpdateFamily = async (data) => {
+        const cloneFamily = _.cloneDeep(family);
+        const index = cloneFamily.findIndex((item) => item.uid === update);
+        if (index === -1) {
+            try {
+                const res = await updateFamily(update, data);
+                if (res?.data?.code) {
+                    await handleGetFamily();
+                    formFamily.resetFields();
+                    message.success("Sửa thành công");
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            cloneFamily[index] = data;
+            setFamily(cloneFamily);
+            setUpdate(null);
+            formFamily.resetFields();
+            message.success("Sửa thành công văn bằng");
+        }
+    };
     const columns = [
         {
             title: "STT",
@@ -103,15 +139,23 @@ const TabEmployeeFamily = ({ employee }) => {
                         <span
                             className="cursor-pointer"
                             onClick={() => {
-                                handleDeleteFamily(family.id);
+                                family.id
+                                    ? handleDeleteFamily(family.id)
+                                    : handleDeleteByUid(family.uid);
                             }}
                         >
                             <DeleteOutlined className="text-red-600 text-lg" />
                         </span>
                         <span
                             onClick={() => {
-                                formFamily.setFieldsValue(family)
-                                setUpdate(family.id)
+                                formFamily.setFieldsValue({
+                                    ...family,
+                                    dateOfBirth: format(
+                                        new Date(family.dateOfBirth),
+                                        "yyyy-MM-dd"
+                                    ),
+                                });
+                                setUpdate(family.id || family.uid);
                             }}
                             className="cursor-pointer"
                         >
@@ -184,23 +228,52 @@ const TabEmployeeFamily = ({ employee }) => {
                         </Form.Item>
                     </Col>
                     <Col span={5}>
-                        <Form.Item name="citizenIdentificationNumber" label="Số CCCD/CMT">
+                        <Form.Item
+                            name="citizenIdentificationNumber"
+                            label="Số CCCD/CMT"
+                        >
                             <Input />
                         </Form.Item>
                     </Col>
                     <Col span={5}>
                         <Form.Item name="dateOfBirth" label="Ngày sinh">
-                            <Input />
+                            <Input type="date"></Input>
                         </Form.Item>
                     </Col>
                     <Col span={5}>
                         <Form.Item name="relationShip" label="Quan hệ">
-                            <Input />
+                            <Select
+                                options={[
+                                    {
+                                        value: 1,
+                                        label: "Con",
+                                    },
+                                    {
+                                        value: 2,
+                                        label: "Bố/Mẹ",
+                                    },
+                                    {
+                                        value: 3,
+                                        label: "Anh/Chị/Em",
+                                    },
+                                ]}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={4}>
                         <Form.Item name="gender" label="Giới tính">
-                            <Input />
+                            <Select
+                                options={[
+                                    {
+                                        value: 0,
+                                        label: "Nam",
+                                    },
+                                    {
+                                        value: 1,
+                                        label: "Nữ",
+                                    },
+                                ]}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -220,15 +293,18 @@ const TabEmployeeFamily = ({ employee }) => {
                             <Input />
                         </Form.Item>
                     </Col>
-                    <Col className="flex justify-center items-center gap-2" span={4}>
+                    <Col
+                        className="flex justify-center items-center gap-2"
+                        span={4}
+                    >
                         <Button type="primary" htmlType="submit">
-                            Thêm
+                            {update ? "Sửa" : "Thêm"}
                         </Button>
                         <Button
                             htmlType="button"
                             onClick={() => {
                                 formFamily.resetFields();
-                                setUpdate(null)
+                                setUpdate(null);
                             }}
                         >
                             Đặt lại

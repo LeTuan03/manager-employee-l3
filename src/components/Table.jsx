@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Button, Modal, Table, Tag } from "antd";
+import { Button, DatePicker, Modal, Space, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
     deleteEmployee,
     getCertificateByEmployee,
     getEmployeeById,
+    submitAndSaveResume,
 } from "../services/api";
 import { format } from "date-fns";
 import EmployeeProfile from "./EmployeeProfile";
+import TextArea from "antd/es/input/TextArea";
+import UpdateHappeningModal from "./UpdateHappeningModal";
 
 const TableComponet = (props) => {
     const {
@@ -21,6 +24,7 @@ const TableComponet = (props) => {
     } = props;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isResumeOpen, setIsResumeOpen] = useState(false);
 
     const [profile, setProfile] = useState({});
     const [certificate, setCertificate] = useState([]);
@@ -125,18 +129,7 @@ const TableComponet = (props) => {
             key: "action",
             render: (_, employee) => (
                 <div className="flex justify-center gap-3">
-                    {type === "approved" ? (
-                        <span
-                            className="cursor-pointer"
-                            onClick={() => {
-                                handleGetCerByEmp(employee.id);
-                                handeGetResume(employee.id);
-                                showModal(employee);
-                            }}
-                        >
-                            <EyeOutlined className="text-green-600 text-lg" />
-                        </span>
-                    ) : employee.submitProfileStatus === "1" ? (
+                    {employee.submitProfileStatus === "1" ? (
                         <>
                             <span
                                 className="cursor-pointer"
@@ -156,6 +149,8 @@ const TableComponet = (props) => {
                                 <EditOutlined className="text-blue-600 text-lg" />
                             </span>
                         </>
+                    ) : employee.submitProfileStatus === "3" ? (
+                        <UpdateHappeningModal employee={employee} />
                     ) : (
                         <span
                             className="cursor-pointer"
@@ -173,17 +168,17 @@ const TableComponet = (props) => {
         },
     ];
 
-    const handleDeleteEmployee = async (id) => {
-        const res = await deleteEmployee(id);
-        if (res?.data?.code === 200) {
-            await getAllEmployee();
-        }
-    };
     const handleOk = () => {
         setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+    const handleDeleteEmployee = async (id) => {
+        const res = await deleteEmployee(id);
+        if (res?.data?.code === 200) {
+            await getAllEmployee();
+        }
     };
     const handleGetCerByEmp = async (id) => {
         const res = await getCertificateByEmployee(id);
@@ -198,6 +193,9 @@ const TableComponet = (props) => {
     const showModal = (user) => {
         setProfile(user);
         setIsModalOpen(true);
+    };
+    const handleDecisionDay = async () => {
+        const res = await submitAndSaveResume(profile);
     };
     return (
         <>
@@ -220,6 +218,14 @@ const TableComponet = (props) => {
                 onCancel={handleCancel}
                 footer={
                     <div className="flex justify-center">
+                        {type === "Release" && profile.numberSaved === null && (
+                            <Button
+                                type="primary"
+                                onClick={() => setIsResumeOpen(true)}
+                            >
+                                Nộp lưu hồ sơ
+                            </Button>
+                        )}
                         <Button type="primary" danger onClick={handleCancel}>
                             Hủy
                         </Button>
@@ -230,6 +236,54 @@ const TableComponet = (props) => {
                     profile={profile}
                     certificate={certificate}
                     resume={resume}
+                />
+            </Modal>
+            <Modal
+                title="NỘP LƯU HỒ SƠ"
+                centered
+                open={isResumeOpen}
+                onCancel={() => setIsResumeOpen(false)}
+                footer={
+                    <>
+                        <Button
+                            key="cancel"
+                            type="primary"
+                            danger
+                            onClick={() => setIsResumeOpen(false)}
+                        >
+                            Hủy
+                        </Button>
+                        <Button
+                            key="submit"
+                            type="primary"
+                            onClick={() => handleDecisionDay()}
+                        >
+                            Xác nhận
+                        </Button>
+                    </>
+                }
+            >
+                Ngày quyết định *
+                <Space direction="vertical" size={12} className="mt-1 mb-4">
+                    <DatePicker
+                        placeholder="Chọn ngày"
+                        style={{ width: "470px" }}
+                        onChange={(e) => (
+                            (profile.decisionDay = new Date(
+                                e.$d
+                            ).toISOString()),
+                            console.log(e),
+                            console.log(new Date(e.$d).toISOString())
+                        )}
+                    />
+                </Space>
+                Số lưu:
+                <TextArea
+                    className="mt-1"
+                    onChange={(e) => (profile.numberSaved = e.target.value)}
+                    autoSize={{
+                        maxRows: 1,
+                    }}
                 />
             </Modal>
         </>
