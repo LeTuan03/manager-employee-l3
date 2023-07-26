@@ -1,80 +1,120 @@
-import { Col, Input, Modal, Row, Select } from "antd";
+import { Col, Form, Input, Modal, Row, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { Require } from "./UpdateHappeningModal";
-import TextArea from "antd/es/input/TextArea";
-import { getLeader } from "../services/api";
+import { getAllLeader, updateEmployee } from "../services/api";
+import { format } from "date-fns";
+import _ from "lodash";
 
-export default function SentLeader({ openModal, setOpenModal }) {
-    const [leaderItem, setLeaderItem] = useState([]);
-    const getLeaders = async () => {
-        const res = await getLeader();
-        setLeaderItem(res?.data?.data);
+const SendLeader = ({ employee, setOpenSendLeader, openSendLeader }) => {
+    const [form] = Form.useForm();
+    const [nameLeader, setNameLeader] = useState([]);
+    const handleCancel = () => {
+        setOpenSendLeader(false);
+    };
+    const handleGetAllLeader = async () => {
+        const res = await getAllLeader();
+        if (res?.data?.code) {
+            const data = res?.data?.data;
+            const nameData = data.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.leaderName,
+                };
+            });
+            setNameLeader(nameData);
+        }
+    };
+    const onFinish = async (values) => {
+        const { leaderId, submitDay, submitContent } = values;
+        const data = {
+            ...employee,
+            leaderId,
+            submitDay,
+            submitContent,
+            submitProfileStatus: "2",
+        };
+        await handleSendLeader(data);
+    };
+    const handleSendLeader = async (data) => {
+        const res = await updateEmployee(employee?.id, data);
+        if (res?.data?.code === 200) {
+            setOpenSendLeader(false);
+            message.success("Trình lãnh đạo thành công");
+        }
     };
     useEffect(() => {
-        getLeaders();
+        handleGetAllLeader();
     }, []);
     return (
-        <Modal
-            title="TRÌNH LÃNH ĐẠO"
-            centered
-            open={openModal}
-            onCancel={() => setOpenModal(false)}
-            width={800}
-        >
-            <Row gutter={16}>
-                <Col span={8}>
-                    <Require /> Ngày trình
-                </Col>
-                <Col span={8}>
-                    <Require /> Tên lãnh đạo
-                </Col>
-                <Col span={8}>
-                    <Require /> Chức vụ
-                </Col>
-            </Row>
-            <Row gutter={16} className="mt-2">
-                <Col span={8}>
-                    <Input type="date" />
-                </Col>
-                <Col span={8}>
-                    <Select
-                        className="w-full"
-                        defaultValue="lucy"
-                        options={[
-                            {
-                                value: "jack",
-                                label: "Jack",
-                            },
-                            {
-                                value: "lucy",
-                                label: "Lucy",
-                            },
-                            {
-                                value: "Yiminghe",
-                                label: "yiminghe",
-                            },
-                        ]}
-                    />
-                </Col>
-                <Col span={8}>
-                    <Select className="w-full" options={leaderItem} />
-                </Col>
-            </Row>
-            <Row className="mt-8">
-                <Col span={24}>
-                    <Require /> Nội dung
-                </Col>
-            </Row>
-            <Row className="mt-2">
-                <Col span={24}>
-                    <TextArea
-                        autoSize={{
-                            minRows: 3,
-                            maxRows: 6,
-                        }}
-                    />
-                </Col>
-            </Row>
-        </Modal>
+        <>
+            <Modal
+                width={760}
+                centered
+                cancelText={"Hủy"}
+                okText={"Trình lãnh đạo"}
+                title="Trình lãnh đạo"
+                open={openSendLeader}
+                onOk={() => {
+                    form.submit();
+                }}
+                onCancel={handleCancel}
+            >
+                <Form
+                    layout={"vertical"}
+                    form={form}
+                    name="basic"
+                    initialValues={{
+                        remember: true,
+                        submitDay: format(new Date(), "yyyy-MM-dd"),
+                    }}
+                    onFinish={onFinish}
+                    autoComplete="off"
+                >
+                    <Row gutter={15}>
+                        <Col span={8}>
+                            <Form.Item
+                                label="Ngày trình"
+                                name="submitDay"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Bạn cần nhập trường này",
+                                    },
+                                ]}
+                            >
+                                <Input type="date"></Input>
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item name="leaderId" label="Tên lãnh đạo">
+                                <Select options={nameLeader} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item label="Chức vụ">
+                                <Select></Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={24}>
+                            <Form.Item
+                                label="Nội dung"
+                                name="submitContent"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Bạn cần nhập trường này",
+                                    },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
+        </>
     );
-}
+};
+
+export default SendLeader;

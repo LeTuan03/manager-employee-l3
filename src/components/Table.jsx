@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Modal, Space, Table, Tag } from "antd";
+import { Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
-    deleteEmployee,
-    getCertificateByEmployee,
-    getEmployeeById,
-    submitAndSaveResume,
-} from "../services/api";
+    DeleteOutlined,
+    EditOutlined,
+    EyeOutlined,
+    InfoCircleOutlined,
+} from "@ant-design/icons";
+import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
-import EmployeeProfile from "./EmployeeProfile";
-import TextArea from "antd/es/input/TextArea";
 import UpdateHappeningModal from "./UpdateHappeningModal";
-
+import EmployeeProfile from "./EmployeeProfile";
+import SaveResume from "./SaveResume";
 const TableComponet = (props) => {
     const {
         listEmployee,
@@ -20,16 +19,12 @@ const TableComponet = (props) => {
         getAllEmployee,
         setOpen,
         setEmployeeId,
+        setIsModalOpen,
+        employeeId,
+        setIsResumeOpen,
+        isResumeOpen,
         type,
     } = props;
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isResumeOpen, setIsResumeOpen] = useState(false);
-
-    const [profile, setProfile] = useState({});
-    const [certificate, setCertificate] = useState([]);
-    const [resume, setResume] = useState({});
-
     const columns = [
         {
             title: "STT",
@@ -67,7 +62,7 @@ const TableComponet = (props) => {
             sorter: true,
         },
         {
-            title: "Team",
+            title: "Nhóm",
             dataIndex: "team",
             key: "team",
             sorter: true,
@@ -109,14 +104,21 @@ const TableComponet = (props) => {
                     case "4":
                         status = "Yêu cầu bổ sung";
                         break;
+                    case "5":
+                        status = "Từ chối";
+                        break;
+                    case "6":
+                        status = "Yêu cầu kết thúc hồ sơ";
+                        break;
                     case "7":
-                        status = "Yêu cầu kết thúc";
+                        status = "Chấp nhận yêu cầu kết thúc hồ sơ";
                         break;
                     case "8":
                         status = "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
                         break;
                     case "9":
-                        status = " Từ chối yêu cầu kết thúc hồ sơ";
+                        status = "Từ chối yêu cầu kết thúc hồ sơ";
+                        break;
                     default:
                         break;
                 }
@@ -128,74 +130,57 @@ const TableComponet = (props) => {
             title: "Thao tác",
             key: "action",
             render: (_, employee) => (
-                <div className="flex justify-center gap-3">
-                    {employee.submitProfileStatus === "1" ? (
-                        <>
-                            <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    handleDeleteEmployee(employee.id);
-                                }}
-                            >
-                                <DeleteOutlined className="text-red-600 text-lg" />
-                            </span>
-                            <span
-                                onClick={() => {
-                                    setOpen(true);
-                                    setEmployeeId(employee.id);
-                                }}
-                                className="cursor-pointer"
-                            >
-                                <EditOutlined className="text-blue-600 text-lg" />
-                            </span>
-                        </>
-                    ) : employee.submitProfileStatus === "3" ? (
-                        <UpdateHappeningModal employee={employee} />
-                    ) : (
+                <div className="flex justify-center gap-2">
+                    {employee.submitProfileStatus === "1" && (
                         <span
                             className="cursor-pointer"
                             onClick={() => {
-                                handleGetCerByEmp(employee.id);
-                                handeGetResume(employee.id);
-                                showModal(employee);
+                                handleDeleteEmployee(employee.id);
                             }}
                         >
-                            <EyeOutlined className="text-green-600 text-lg" />
+                            <DeleteOutlined className="text-red-600 text-lg" />
                         </span>
+                    )}
+                    {["1", "4"].includes(employee.submitProfileStatus) && (
+                        <span
+                            onClick={() => {
+                                setOpen(true);
+                                setEmployeeId(employee.id);
+                            }}
+                            className="cursor-pointer"
+                        >
+                            <EditOutlined className="text-blue-600 text-lg" />
+                        </span>
+                    )}
+                    {["9", "8", "5", "4"].includes(
+                        employee.submitProfileStatus
+                    ) && <InfoCircleOutlined className="text-orange-500" />}
+                    {["2", "0", "8", "6", "7", "3"].includes(
+                        employee.submitProfileStatus
+                    ) && (
+                        <EyeOutlined
+                            className="text-green-600 text-lg"
+                            onClick={() => {
+                                setIsModalOpen(true);
+                                setEmployeeId(employee.id);
+                                // setIsResumeOpen(true);
+                            }}
+                        />
+                    )}
+                    {employee.submitProfileStatus === "3" && (
+                        <UpdateHappeningModal
+                            employee={employee}
+                        ></UpdateHappeningModal>
                     )}
                 </div>
             ),
         },
     ];
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
     const handleDeleteEmployee = async (id) => {
         const res = await deleteEmployee(id);
         if (res?.data?.code === 200) {
             await getAllEmployee();
         }
-    };
-    const handleGetCerByEmp = async (id) => {
-        const res = await getCertificateByEmployee(id);
-        setCertificate(res?.data?.data);
-    };
-
-    const handeGetResume = async (id) => {
-        const res = await getEmployeeById(id);
-        setResume(res?.data?.data);
-    };
-
-    const showModal = (user) => {
-        setProfile(user);
-        setIsModalOpen(true);
-    };
-    const handleDecisionDay = async () => {
-        const res = await submitAndSaveResume(profile);
     };
     return (
         <>
@@ -209,83 +194,6 @@ const TableComponet = (props) => {
                     pageSizeOptions: ["1", "10", "20", "30"],
                 }}
             />
-            <Modal
-                width={1300}
-                title="Hồ sơ nhân viên"
-                centered
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                footer={
-                    <div className="flex justify-center">
-                        {type === "Release" && profile.numberSaved === null && (
-                            <Button
-                                type="primary"
-                                onClick={() => setIsResumeOpen(true)}
-                            >
-                                Nộp lưu hồ sơ
-                            </Button>
-                        )}
-                        <Button type="primary" danger onClick={handleCancel}>
-                            Hủy
-                        </Button>
-                    </div>
-                }
-            >
-                <EmployeeProfile
-                    profile={profile}
-                    certificate={certificate}
-                    resume={resume}
-                />
-            </Modal>
-            <Modal
-                title="NỘP LƯU HỒ SƠ"
-                centered
-                open={isResumeOpen}
-                onCancel={() => setIsResumeOpen(false)}
-                footer={
-                    <>
-                        <Button
-                            key="cancel"
-                            type="primary"
-                            danger
-                            onClick={() => setIsResumeOpen(false)}
-                        >
-                            Hủy
-                        </Button>
-                        <Button
-                            key="submit"
-                            type="primary"
-                            onClick={() => handleDecisionDay()}
-                        >
-                            Xác nhận
-                        </Button>
-                    </>
-                }
-            >
-                Ngày quyết định *
-                <Space direction="vertical" size={12} className="mt-1 mb-4">
-                    <DatePicker
-                        placeholder="Chọn ngày"
-                        style={{ width: "470px" }}
-                        onChange={(e) => (
-                            (profile.decisionDay = new Date(
-                                e.$d
-                            ).toISOString()),
-                            console.log(e),
-                            console.log(new Date(e.$d).toISOString())
-                        )}
-                    />
-                </Space>
-                Số lưu:
-                <TextArea
-                    className="mt-1"
-                    onChange={(e) => (profile.numberSaved = e.target.value)}
-                    autoSize={{
-                        maxRows: 1,
-                    }}
-                />
-            </Modal>
         </>
     );
 };

@@ -5,16 +5,20 @@ import ModalInput from "../../components/ModalInput";
 import { Button, Modal } from "antd";
 import EmployeeProfile from "../../components/EmployeeProfile";
 import ModalEnd from "../../components/ModalEnd";
-const AddUserPage = () => {
+import SaveResume from "../../components/SaveResume";
+const PageEnd = () => {
+    const [isResumeOpen, setIsResumeOpen] = useState(false);
+    const [isOpenResume, setIsOpenResume] = useState(false);
     const [listEmployee, setListEmployee] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [send, setSend] = useState(false);
     const [openSendLeader, setOpenSendLeader] = useState(false);
     const getAllEmployee = async () => {
         setLoading(true);
-        const res = await searchEmployee("1,2");
+        const res = await searchEmployee("7,0");
         if (res?.status === 200) {
             setListEmployee(res?.data?.data);
             setLoading(false);
@@ -25,15 +29,6 @@ const AddUserPage = () => {
     }, []);
     return (
         <>
-            <Button
-                type="primary"
-                className="mb-5"
-                onClick={() => {
-                    setOpen(true);
-                }}
-            >
-                Thêm mới
-            </Button>
             <ModalInput
                 open={open}
                 // setSend={setSend}
@@ -43,6 +38,7 @@ const AddUserPage = () => {
                 setIsModalOpen={setIsModalOpen}
             ></ModalInput>
             <Table
+                employeeId={employeeId}
                 setEmployeeId={setEmployeeId}
                 setOpen={setOpen}
                 listEmployee={listEmployee}
@@ -74,14 +70,14 @@ const AddUserPage = () => {
                             >
                                 Hủy
                             </Button>
-                            <Button
-                                type="primary"
-                                onClick={() => {
-                                    setOpenSendLeader(true);
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
+                            {isOpenResume && (
+                                <Button
+                                    type="primary"
+                                    onClick={() => setIsResumeOpen(true)}
+                                >
+                                    Nộp lưu hồ sơ
+                                </Button>
+                            )}
                         </div>
                     }
                 >
@@ -90,6 +86,13 @@ const AddUserPage = () => {
                         openSendLeader={openSendLeader}
                         employeeId={employeeId}
                     ></EmployeeProfile>
+
+                    <SaveResume
+                        setIsOpenResume={setIsOpenResume}
+                        employeeId={employeeId}
+                        isResumeOpen={isResumeOpen}
+                        setIsResumeOpen={setIsResumeOpen}
+                    ></SaveResume>
                 </Modal>
             )}
             <ModalEnd></ModalEnd>
@@ -97,4 +100,4 @@ const AddUserPage = () => {
     );
 };
 
-export default AddUserPage;
+export default PageEnd;

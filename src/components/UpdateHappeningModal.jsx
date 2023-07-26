@@ -32,6 +32,7 @@ import {
     getSalaryByEmp,
     updateProcess,
     updateSalary,
+    addProposalByEmp,
 } from "../services/api";
 import { format } from "date-fns";
 import SentLeader from "./SendLeader";
@@ -46,17 +47,19 @@ export default function UpdateHappeningModal({ employee }) {
         {
             key: "1",
             label: `TĂNG LƯƠNG`,
-            children: <TabIncreaseSalary salary={salary} />,
+            children: <TabIncreaseSalary employee={employee} salary={salary} />,
         },
         {
             key: "2",
             label: `THĂNG CHỨC`,
-            children: <TabProcess processs={processs} />,
+            children: <TabProcess employee={employee} processs={processs} />,
         },
         {
             key: "3",
             label: `ĐỀ XUẤT/THAM MƯU`,
-            children: <TabRecommendation recoments={recoments} />,
+            children: (
+                <TabRecommendation employee={employee} recoments={recoments} />
+            ),
         },
     ];
 
@@ -158,7 +161,14 @@ export default function UpdateHappeningModal({ employee }) {
                                     />
                                 </Col>
                                 <Col span={8}>
-                                    <Input value={employee.dateOfBirth} />
+                                    <Input
+                                        value={format(
+                                            new Date(
+                                                employee.dateOfBirth
+                                            ).getTime(),
+                                            "yyyy/MM/dd"
+                                        )}
+                                    />
                                 </Col>
                             </Row>
                         </Card>
@@ -174,7 +184,7 @@ export default function UpdateHappeningModal({ employee }) {
 
 //tab
 
-const TabIncreaseSalary = ({ salary }) => {
+const TabIncreaseSalary = ({ salary, employee }) => {
     const columns = [
         {
             title: "STT",
@@ -219,6 +229,49 @@ const TabIncreaseSalary = ({ salary }) => {
             title: "Trạng thái",
             dataIndex: "salaryIncreaseStatus",
             key: "salaryIncreaseStatus",
+            render: (salaryIncreaseStatus) => {
+                switch (salaryIncreaseStatus) {
+                    case 0:
+                        salaryIncreaseStatus = "Nộp lưu hồ sơ";
+                        break;
+                    case 1:
+                        salaryIncreaseStatus = "Lưu mới";
+                        break;
+                    case 2:
+                        salaryIncreaseStatus = "Chờ xử lí";
+                        break;
+                    case 3:
+                        salaryIncreaseStatus = "Đã được chấp nhận";
+                        break;
+                    case 4:
+                        salaryIncreaseStatus = "Yêu cầu bổ sung";
+                        break;
+                    case 5:
+                        salaryIncreaseStatus = "Từ chối";
+                        break;
+                    case 6:
+                        salaryIncreaseStatus = "Gửi yêu cầu kết thúc hồ sơ";
+                        break;
+                    case 7:
+                        salaryIncreaseStatus =
+                            "Chấp nhận yêu cầu kết thúc hồ sơ";
+                        break;
+                    case 8:
+                        salaryIncreaseStatus =
+                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
+                        break;
+                    case 9:
+                        salaryIncreaseStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                    default:
+                        salaryIncreaseStatus = "Chờ xử lí";
+                        break;
+                }
+                return (
+                    <a onClick={() => console.log(typeof salaryIncreaseStatus)}>
+                        {salaryIncreaseStatus}
+                    </a>
+                );
+            },
         },
         {
             title: "Thao tác",
@@ -232,23 +285,14 @@ const TabIncreaseSalary = ({ salary }) => {
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
-                                        setSalaryObj(employee);
-                                        salaryObj.startDate = format(
-                                            new Date(
-                                                employee.startDate
-                                            ).getTime(),
-                                            "yyyy/MM/dd"
-                                        );
-                                        console.log(salaryObj);
+                                        form.setFieldsValue(employee);
                                     }}
                                 />
                             </span>
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
-                                    onClick={() =>
-                                        handleDeleteSalary(employee.id)
-                                    }
+                                    onClick={() => handleDelete(employee.id)}
                                 />
                             </span>
                         </div>
@@ -257,16 +301,10 @@ const TabIncreaseSalary = ({ salary }) => {
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
+                                    setPresent(false);
                                     setIsModalOpen(true);
                                     setData(employee);
                                 }}
-                            />
-                            <TabSalary
-                                isModalOpen={isModalOpen}
-                                setIsModalOpen={setIsModalOpen}
-                                data={data}
-                                present={present}
-                                setPresent={setPresent}
                             />
                         </div>
                     )}
@@ -275,124 +313,155 @@ const TabIncreaseSalary = ({ salary }) => {
         },
     ];
 
+    const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [present, setPresent] = useState(false);
     const [data, setData] = useState({});
 
-    const [salaryObj, setSalaryObj] = useState({
-        newSalary: "",
-        note: "",
-        oldSalary: "",
-        reason: "",
-        salaryIncreaseStatus: 1,
-        startDate: "",
-    });
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setSalaryObj((preState) => ({ ...preState, [name]: value }));
-    };
-    const handleSubmit = async () => {
-        if (salaryObj.id) {
-            salaryObj.startDate = new Date(salaryObj.startDate).getTime();
-            const res = await updateSalary(salaryObj);
-        } else {
-            const res = await addSalaryByEmp(salary[0].employeeId, [salaryObj]);
+    const handleDelete = async (value) => {
+        try {
+            const res = await deleteSalary(value);
+            message.success("Xóa thành công!");
+        } catch (error) {
+            message.error("Xóa thất bại!");
         }
+    };
+
+    const handleSubmit = async (value) => {
+        try {
+            if (value.id) {
+                const res = await updateSalary(value);
+                message.success("Cập nhật thành công!");
+            } else {
+                const res = await addSalaryByEmp(salary[0].employeeId, [value]);
+                message.success("Thêm mới thành công!");
+            }
+            handleOpenPresent();
+            form.resetFields();
+        } catch (error) {
+            message.error("Cập  nhật thất bại!");
+        }
+    };
+    const handleOpenPresent = () => {
         setIsModalOpen(true);
         setPresent(true);
     };
-    const handleDeleteSalary = async (id) => {
-        const res = await deleteSalary(id);
-    };
+
     return (
-        <form>
-            <Row gutter={16} className="mb-2">
-                <Col span={8}>
-                    <Require /> Ngày tăng lương
-                </Col>
-                <Col span={8}>
-                    <Require /> Lương cũ
-                </Col>
-                <Col span={8}>
-                    <Require /> Lương mới
-                </Col>
-            </Row>
-            <Row gutter={16} className="mb-4">
-                <Col span={8}>
-                    <Input
-                        name="startDate"
-                        value={salaryObj.startDate}
-                        // value={format(salaryObj.startDate, "yyyy/MM/dd")}
-                        type="date"
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={8}>
-                    <Input
-                        name="oldSalary"
-                        value={salaryObj.oldSalary}
-                        type="number"
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={8}>
-                    <Input
-                        name="newSalary"
-                        value={salaryObj.newSalary}
-                        type="number"
-                        onChange={handleInputChange}
-                    />
-                </Col>
-            </Row>
-            <Row gutter={16} className="mb-2">
-                <Col span={9}>
-                    <Require /> Ghi chú
-                </Col>
-                <Col span={9}>
-                    <Require /> Lý do
-                </Col>
-            </Row>
-            <Row gutter={16} className="mb-2">
-                <Col span={9}>
-                    <Input
-                        name="note"
-                        value={salaryObj.note}
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={9}>
-                    <Input
-                        name="reason"
-                        value={salaryObj.reason}
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={6}>
-                    <Button
-                        className="mr-5 w-[40%] bg-green-700 text-white"
-                        onClick={handleSubmit}
-                    >
-                        Lưu
-                    </Button>
-                    <Button
-                        type="primary"
-                        danger
-                        className="w-[40%]"
-                        onClick={() => {
-                            setSalaryObj({
-                                newSalary: "",
-                                note: "",
-                                oldSalary: "",
-                                reason: "",
-                                salaryIncreaseStatus: 1,
-                                startDate: "",
-                            });
-                        }}
-                    >
-                        Đặt lại
-                    </Button>
-                </Col>
-            </Row>
+        <>
+            <Form form={form} onFinish={handleSubmit} layout="vertical">
+                <Row gutter={16} className="hidden">
+                    <Col span={8}>
+                        <Form.Item name={"id"}>
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16} className="hidden">
+                    <Col span={8}>
+                        <Form.Item name={"salaryIncreaseStatus"}>
+                            <Input value={1} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={8}>
+                        <Form.Item
+                            name="startDate"
+                            label="Ngày tăng lương"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input name="startDate" type="date" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item
+                            name="oldSalary"
+                            label="Lương cũ"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input type="number" name="oldSalary" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item
+                            name="newSalary"
+                            label="Lương mới"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input name="newSalary" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={16} className="mb-2">
+                    <Col span={9}>
+                        <Form.Item
+                            name="note"
+                            label="Ghi chú"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input name="note" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={11}>
+                        <Form.Item
+                            name="reason"
+                            label="Lý do"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input name="reason" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                className="w-full bg-green-700 text-white"
+                                htmlType="submit"
+                            >
+                                Lưu
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                type="primary"
+                                danger
+                                className="w-full"
+                                onClick={() => form.resetFields()}
+                            >
+                                Đặt lại
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
             <Row className="mt-8">
                 <Col span={24}>
                     <Table
@@ -402,7 +471,15 @@ const TabIncreaseSalary = ({ salary }) => {
                     />
                 </Col>
             </Row>
-        </form>
+            <TabSalary
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                data={data}
+                present={present}
+                setPresent={setPresent}
+                employee={employee}
+            />
+        </>
     );
 };
 
@@ -412,6 +489,7 @@ const TabSalary = ({
     data,
     present,
     setPresent,
+    employee,
 }) => {
     const items = [
         {
@@ -427,7 +505,7 @@ const TabSalary = ({
             <Modal
                 title="BIỂU MẪU"
                 centered
-                open={isModalOpen}
+                open={present || isModalOpen}
                 width={1300}
                 onCancel={() => {
                     setIsModalOpen(false);
@@ -466,7 +544,11 @@ const TabSalary = ({
                     />
                 </div>
             </Modal>
-            <SentLeader openModal={openModal} setOpenModal={setOpenModal} />
+            <SentLeader
+                employee={employee}
+                openSendLeader={openModal}
+                setOpenSendLeader={setOpenModal}
+            />
         </>
     );
 };
@@ -561,7 +643,7 @@ const IncreaseSalaryChildren = ({ data }) => {
 
 //process
 
-const TabProcess = ({ processs }) => {
+const TabProcess = ({ processs, employee }) => {
     const columns = [
         {
             title: "STT",
@@ -574,7 +656,7 @@ const TabProcess = ({ processs }) => {
             dataIndex: "promotionDay",
             key: "promotionDay",
             render: (_, { promotionDay }) => (
-                <>{format(new Date(promotionDay).getTime(), "yyyy-MM-dd")}</>
+                <a>{format(new Date(promotionDay).getTime(), "yyyy/MM/dd")}</a>
             ),
         },
         {
@@ -596,6 +678,44 @@ const TabProcess = ({ processs }) => {
             title: "Trạng thái",
             dataIndex: "processStatus",
             key: "processStatus",
+            render: (processStatus) => {
+                switch (processStatus) {
+                    case "0":
+                        processStatus = "Nộp lưu hồ sơ";
+                        break;
+                    case "1":
+                        processStatus = "Lưu mới";
+                        break;
+                    case "2":
+                        processStatus = "Chờ xử lí";
+                        break;
+                    case "3":
+                        processStatus = "Đã được chấp nhận";
+                        break;
+                    case "4":
+                        processStatus = "Yêu cầu bổ sung";
+                        break;
+                    case "5":
+                        processStatus = "Từ chối";
+                        break;
+                    case "6":
+                        processStatus = "Gửi yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "7":
+                        processStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "8":
+                        processStatus =
+                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "9":
+                        processStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                    default:
+                        processStatus = "Chờ xử lí";
+                        break;
+                }
+                return <a>{processStatus}</a>;
+            },
         },
         {
             title: "Thao tác",
@@ -609,12 +729,7 @@ const TabProcess = ({ processs }) => {
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
-                                        setProcess(employee);
-                                        process.promotionDay = format(
-                                            new Date(employee.promotionDay)
-                                                .getTime,
-                                            "yyyy-MM-dd"
-                                        );
+                                        form.setFieldsValue(employee);
                                     }}
                                 />
                             </span>
@@ -636,11 +751,6 @@ const TabProcess = ({ processs }) => {
                                     setData(employee);
                                 }}
                             />
-                            <ProcessModal
-                                isModalOpen={isModalOpen}
-                                setIsModalOpen={setIsModalOpen}
-                                data={data}
-                            />
                         </div>
                     )}
                 </div>
@@ -648,133 +758,139 @@ const TabProcess = ({ processs }) => {
         },
     ];
 
+    const [form] = Form.useForm();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
-
-    const [process, setProcess] = useState({
-        newPosition: "",
-        promotionDay: "",
-        note: "",
-        processStatus: 1,
-    });
-    const handleInputChange = (event) => {
-        if (event.target) {
-            const { name, value } = event.target;
-            setProcess((preState) => ({ ...preState, [name]: value }));
-        } else {
-            setProcess((preState) => ({ ...preState, newPosition: +event }));
-        }
-    };
-    const handleSubmit = async () => {
-        if (process.id) {
-            process.promotionDay = new Date(process.promotionDay).getTime();
-            const res = await updateProcess(process);
-        } else {
-            const res = await addProcessByEmp(processs[0].employeeId, [
-                process,
-            ]);
-        }
-    };
+    const [present, setPresent] = useState(false);
 
     const handleDeletePromote = async (id) => {
-        const res = await deleteProcess(id);
+        try {
+            const res = await deleteProcess(id);
+            message.success("Xóa thành công !");
+        } catch (error) {
+            message.error("Xóa thất bại !");
+        }
+    };
+
+    const handleSubmit = async (value) => {
+        try {
+            if (value.id) {
+                const res = await updateProcess(value);
+                message.success("Cập nhật thành công !");
+            } else {
+                const res = await addProcessByEmp(processs[0].employeeId, [
+                    value,
+                ]);
+                message.success("Thêm mới thành công !");
+            }
+            handleOpenPresent();
+            form.resetFields();
+        } catch (error) {
+            message.error("Cập nhật thất bại !");
+        }
+    };
+
+    const handleOpenPresent = () => {
+        setIsModalOpen(true);
+        setPresent(true);
     };
 
     return (
         <>
-            <Form name="form">
+            <Form form={form} onFinish={handleSubmit} layout="vertical">
                 <Row gutter={16} className="mb-2">
-                    <Col span={4}>
-                        <Require /> Ngày thăng chức
+                    <Col span={4} className="hidden">
+                        <Form.Item name="id">
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={4} className="hidden">
+                        <Form.Item name="processStatus">
+                            <Input value={1} />
+                        </Form.Item>
                     </Col>
                     <Col span={4}>
-                        <Require /> Chức vụ mới
-                    </Col>
-                    <Col span={8}>
-                        <Require /> Ghi chú
-                    </Col>
-                </Row>
-                <Row gutter={16} className="mb-2">
-                    <Col span={4}>
-                        <Input
-                            value={process.promotionDay}
+                        <Form.Item
                             name="promotionDay"
-                            type="date"
-                            onChange={handleInputChange}
-                        />
-                    </Col>
-                    <Col span={4}>
-                        <Select
-                            onChange={handleInputChange}
-                            value={
-                                process.newPosition === 1
-                                    ? "Trưởng phòng"
-                                    : process.newPosition === 0
-                                    ? "Giám đốc"
-                                    : "Quản lí"
-                            }
-                            className="w-full"
-                            options={[
+                            label="Ngày thăng chức"
+                            rules={[
                                 {
-                                    value: "0",
-                                    label: "Giám đốc",
-                                },
-                                {
-                                    value: "1",
-                                    label: "Trưởng phòng",
-                                },
-                                {
-                                    value: "3",
-                                    label: "Quản lí",
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
                                 },
                             ]}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <Input
-                            name="note"
-                            value={process.note}
-                            onChange={handleInputChange}
-                        />
+                        >
+                            <Input name="promotionDay" type="date" />
+                        </Form.Item>
                     </Col>
                     <Col span={4}>
-                        <Button
-                            className="mr-5 w-[40%] bg-green-700 text-white"
-                            onClick={handleSubmit}
+                        <Form.Item
+                            name="newPosition"
+                            label="Chức vụ mới"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
                         >
-                            Lưu
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            className="w-[40%]"
-                            onClick={() =>
-                                setProcess({
-                                    newPosition: "",
-                                    promotionDay: "",
-                                    note: "",
-                                    processStatus: 1,
-                                })
-                            }
+                            <Select
+                                className="w-full"
+                                options={[
+                                    {
+                                        value: 2,
+                                        label: "Giám đốc",
+                                    },
+                                    {
+                                        value: 1,
+                                        label: "Trưởng phòng",
+                                    },
+                                    {
+                                        value: 3,
+                                        label: "Quản lí",
+                                    },
+                                ]}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="note"
+                            label="Ghi chú"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
                         >
-                            Đặt lại
-                        </Button>
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                className="mr-5 w-full bg-green-700 text-white"
+                                htmlType="submit"
+                            >
+                                Lưu
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                type="primary"
+                                danger
+                                className="w-full"
+                                onClick={() => form.resetFields()}
+                            >
+                                Đặt lại
+                            </Button>
+                        </Form.Item>
                     </Col>
                 </Row>
-                <Form.Item
-                    label="Normal label"
-                    name="username"
-                    rules={[
-                        { required: true, message: "Không được để trống !" },
-                    ]}
-                >
-                    <Input
-                        value={process.promotionDay}
-                        name="promotionDay"
-                        type="date"
-                        onChange={handleInputChange}
-                    />
-                </Form.Item>
             </Form>
             <Row className="mt-8">
                 <Col span={24}>
@@ -785,11 +901,26 @@ const TabProcess = ({ processs }) => {
                     />
                 </Col>
             </Row>
+            <ProcessModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                data={data}
+                present={present}
+                setPresent={setPresent}
+                employee={employee}
+            />
         </>
     );
 };
 
-const ProcessModal = ({ isModalOpen, setIsModalOpen, data }) => {
+const ProcessModal = ({
+    isModalOpen,
+    setIsModalOpen,
+    data,
+    present,
+    setPresent,
+    employee,
+}) => {
     const items = [
         {
             key: "1",
@@ -798,43 +929,56 @@ const ProcessModal = ({ isModalOpen, setIsModalOpen, data }) => {
         },
     ];
 
+    const [openModal, setOpenModal] = useState(false);
+
     return (
-        <Modal
-            title="BIỂU MẪU"
-            centered
-            open={isModalOpen}
-            width={1300}
-            onCancel={() => setIsModalOpen(false)}
-            footer={
-                <div className="text-center">
-                    {" "}
-                    <Button
-                        key="cancel"
-                        type="primary"
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        Trình lãnh đạo
-                    </Button>
-                    <Button
-                        key="cancel"
-                        type="primary"
-                        danger
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        Hủy
-                    </Button>
+        <>
+            <Modal
+                title="BIỂU MẪU"
+                centered
+                open={present || isModalOpen}
+                width={1300}
+                onCancel={() => {
+                    setIsModalOpen(false);
+                    setPresent(false);
+                }}
+                footer={
+                    <div className="text-center">
+                        {present && (
+                            <Button
+                                key="cancel"
+                                type="primary"
+                                onClick={() => setOpenModal(true)}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
+                        <Button
+                            key="cancel"
+                            type="primary"
+                            danger
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
+            >
+                <div className="mt-10">
+                    <Tabs
+                        defaultActiveKey="1"
+                        items={items}
+                        tabPosition={"left"}
+                        style={{ height: 600, overflowY: "scroll" }}
+                    />
                 </div>
-            }
-        >
-            <div className="mt-10">
-                <Tabs
-                    defaultActiveKey="1"
-                    items={items}
-                    tabPosition={"left"}
-                    style={{ height: 600, overflowY: "scroll" }}
-                />
-            </div>
-        </Modal>
+            </Modal>
+            <SentLeader
+                employee={employee}
+                openSendLeader={openModal}
+                setOpenSendLeader={setOpenModal}
+            />
+        </>
     );
 };
 
@@ -897,7 +1041,7 @@ const ProcessChildren = ({ data }) => {
                         <Col span={24}>
                             <b>Điều 1:</b> Bổ nhiệm Ông/Bà: {empData.name} giữ
                             chức vụ kể từ ngày{" "}
-                            {format(data.promotionDay, "yyyy-MM-dd")}.
+                            {/* {format(data.promotionDay, "yyyy-MM-dd")}. */}
                         </Col>
                         <Col span={24}>
                             <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày
@@ -930,7 +1074,7 @@ const ProcessChildren = ({ data }) => {
 
 // recoment
 
-const TabRecommendation = ({ recoments }) => {
+const TabRecommendation = ({ recoments, employee }) => {
     const columns = [
         {
             title: "STT",
@@ -943,7 +1087,7 @@ const TabRecommendation = ({ recoments }) => {
             dataIndex: "proposalDate",
             key: "proposalDate",
             render: (_, { proposalDate }) => (
-                <>{format(new Date(proposalDate).getTime(), "yyyy-MM-dd")}</>
+                <>{format(new Date(proposalDate).getTime(), "yyyy/MM/dd")}</>
             ),
         },
         {
@@ -966,6 +1110,44 @@ const TabRecommendation = ({ recoments }) => {
             title: "Trạng thái",
             dataIndex: "proposalStatus",
             key: "proposalStatus",
+            render: (proposalStatus) => {
+                switch (proposalStatus) {
+                    case "0":
+                        proposalStatus = "Nộp lưu hồ sơ";
+                        break;
+                    case "1":
+                        proposalStatus = "Lưu mới";
+                        break;
+                    case "2":
+                        proposalStatus = "Chờ xử lí";
+                        break;
+                    case "3":
+                        proposalStatus = "Đã được chấp nhận";
+                        break;
+                    case "4":
+                        proposalStatus = "Yêu cầu bổ sung";
+                        break;
+                    case "5":
+                        proposalStatus = "Từ chối";
+                        break;
+                    case "6":
+                        proposalStatus = "Gửi yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "7":
+                        proposalStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "8":
+                        proposalStatus =
+                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
+                        break;
+                    case "9":
+                        proposalStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                    default:
+                        proposalStatus = "Chờ xử lí";
+                        break;
+                }
+                return <a>{proposalStatus}</a>;
+            },
         },
         {
             title: "Thao tác",
@@ -979,11 +1161,7 @@ const TabRecommendation = ({ recoments }) => {
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
-                                        setrecoment(employee);
-                                        recoment.proposalDate = format(
-                                            employee.proposalDate,
-                                            "yyyy-MM-dd"
-                                        );
+                                        form.setFieldsValue(employee);
                                     }}
                                 />
                             </span>
@@ -1005,11 +1183,6 @@ const TabRecommendation = ({ recoments }) => {
                                     setData(employee);
                                 }}
                             />
-                            <RecomnentModal
-                                isModalOpen={isModalOpen}
-                                setIsModalOpen={setIsModalOpen}
-                                data={data}
-                            />
                         </div>
                     )}
                 </div>
@@ -1017,133 +1190,163 @@ const TabRecommendation = ({ recoments }) => {
         },
     ];
 
+    const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [present, setPresent] = useState(false);
     const [data, setData] = useState({});
 
-    const [recoment, setrecoment] = useState({
-        proposalDate: "",
-        content: "",
-        note: "",
-        type: "",
-        detailedDescription: "",
-    });
-    const handleInputChange = (event) => {
-        if (event.target) {
-            const { name, value } = event.target;
-            setrecoment((preState) => ({ ...preState, [name]: value }));
-        } else {
-            setrecoment((preState) => ({ ...preState, type: +event }));
-        }
-    };
-    const handleSubmit = async () => {
-        if (recoment.id) {
-            const res = await updateProposal(recoment);
-        } else {
-            const res = await addProcessByEmp(recoments[0].employeeId, [
-                recoment,
-            ]);
-        }
-    };
-
     const handleDeleteRecoment = async (id) => {
-        const res = await deleteProposal(id);
+        try {
+            const res = await deleteProposal(id);
+            message.success("Xóa thành công!");
+        } catch (error) {
+            message.error("Xóa thất bại!");
+        }
     };
-
+    const handleSubmit = async (value) => {
+        try {
+            if (value.id) {
+                const res = await updateProposal(value);
+                message.success("Cập nhật thành công!");
+            } else {
+                const res = await addProposalByEmp(recoments[0].employeeId, [
+                    value,
+                ]);
+                message.success("Thêm mới thành công!");
+            }
+            handleOpenPresent();
+            form.resetFields();
+        } catch (error) {
+            message.error("Cập nhật thất  bại!");
+        }
+    };
+    const handleOpenPresent = () => {
+        setIsModalOpen(true);
+        setPresent(true);
+    };
     return (
-        <form>
-            <Row gutter={16} className="mb-2">
-                <Col span={6}>
-                    <Require /> Ngày diễn biến
-                </Col>
-                <Col span={6}>
-                    <Require /> Loại
-                </Col>
-                <Col span={12}>
-                    <Require /> Ghi chú
-                </Col>
-            </Row>
-            <Row gutter={16} className="mb-2">
-                <Col span={6}>
-                    <Input
-                        name="proposalDate"
-                        value={recoment.proposalDate}
-                        type="date"
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={6}>
-                    <Select
-                        onChange={handleInputChange}
-                        value={recoment.type === 1 ? "Đề xuất" : "Tham mưu"}
-                        className="w-full"
-                        options={[
-                            {
-                                value: "1",
-                                label: "Đề xuất",
-                            },
-                            {
-                                value: "2",
-                                label: "Tham mưu",
-                            },
-                        ]}
-                    />
-                </Col>
-                <Col span={12}>
-                    <Input
-                        name="note"
-                        value={recoment.note}
-                        onChange={handleInputChange}
-                    />
-                </Col>
-            </Row>
-            <Row gutter={16} className="mb-2">
-                <Col span={10}>
-                    <Require /> Nội dung
-                </Col>
-                <Col span={10}>
-                    <Require /> Mô tả chi tiết
-                </Col>
-            </Row>
-            <Row gutter={16}>
-                <Col span={10}>
-                    <Input
-                        name="content"
-                        value={recoment.content}
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={10}>
-                    <Input
-                        name="detailedDescription"
-                        value={recoment.detailedDescription}
-                        onChange={handleInputChange}
-                    />
-                </Col>
-                <Col span={4}>
-                    <Button
-                        className="mr-5 w-[40%] bg-green-700 text-white"
-                        onClick={handleSubmit}
-                    >
-                        Lưu
-                    </Button>
-                    <Button
-                        type="primary"
-                        danger
-                        className="w-[40%]"
-                        onClick={() =>
-                            setrecoment({
-                                proposalDate: "",
-                                content: "",
-                                note: "",
-                                type: "",
-                                detailedDescription: "",
-                            })
-                        }
-                    >
-                        Đặt lại
-                    </Button>
-                </Col>
-            </Row>
+        <>
+            <Form form={form} onFinish={handleSubmit} layout="vertical">
+                <Row gutter={16} className="mb-2">
+                    <Col span={6} className="hidden">
+                        <Form.Item name="id">
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6} className="hidden">
+                        <Form.Item name="proposalStatus">
+                            <Input value={1} />
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={6}>
+                        <Form.Item
+                            name="proposalDate"
+                            label="Ngày diễn biến"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input type="date" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="type"
+                            label="Loại"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Select
+                                className="w-full"
+                                options={[
+                                    {
+                                        value: 1,
+                                        label: "Đề xuất",
+                                    },
+                                    {
+                                        value: 2,
+                                        label: "Tham mưu",
+                                    },
+                                ]}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="note"
+                            label="Ghi chú"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={8}>
+                        <Form.Item
+                            name="content"
+                            label="Nội dung"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="detailedDescription"
+                            label="Mô tả chi tiết"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                className="mr-5 w-full  bg-green-700 text-white"
+                                htmlType="submit"
+                            >
+                                Lưu
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item label=" ">
+                            <Button
+                                type="primary"
+                                danger
+                                className="w-full"
+                                onClick={() => form.resetFields()}
+                            >
+                                Đặt lại
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
             <Row className="mt-8">
                 <Col span={24}>
                     <Table
@@ -1153,11 +1356,27 @@ const TabRecommendation = ({ recoments }) => {
                     />
                 </Col>
             </Row>
-        </form>
+            <RecomnentModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                data={data}
+                present={present}
+                setPresent={setPresent}
+                employee={employee}
+            />
+        </>
     );
 };
 
-const RecomnentModal = ({ isModalOpen, setIsModalOpen, data }) => {
+const RecomnentModal = ({
+    isModalOpen,
+    setIsModalOpen,
+    data,
+    present,
+    setPresent,
+    employee,
+}) => {
+    console.log(isModalOpen);
     const items = [
         {
             key: "1",
@@ -1165,43 +1384,57 @@ const RecomnentModal = ({ isModalOpen, setIsModalOpen, data }) => {
             children: <RecomenetChildren data={data} />,
         },
     ];
-
+    const [openModal, setOpenModal] = useState(false);
     return (
-        <Modal
-            title="BIỂU MẪU"
-            centered
-            open={isModalOpen}
-            width={1300}
-            onCancel={() => setIsModalOpen(false)}
-            footer={
-                <div className="text-center">
-                    <Button
-                        key="cancel"
-                        type="primary"
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        Trình lãnh đạo
-                    </Button>
-                    <Button
-                        key="cancel"
-                        type="primary"
-                        danger
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        Hủy
-                    </Button>
+        <>
+            <Modal
+                title="BIỂU MẪU"
+                centered
+                open={present || isModalOpen}
+                width={1300}
+                onCancel={() => {
+                    {
+                        setIsModalOpen(false);
+                        setPresent(false);
+                    }
+                }}
+                footer={
+                    <div className="text-center">
+                        {present && (
+                            <Button
+                                key="cancel"
+                                type="primary"
+                                onClick={() => setOpenModal(true)}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
+                        <Button
+                            key="cancel"
+                            type="primary"
+                            danger
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
+            >
+                <div className="mt-10">
+                    <Tabs
+                        defaultActiveKey="1"
+                        items={items}
+                        tabPosition={"left"}
+                        style={{ height: 600, overflowY: "scroll" }}
+                    />
                 </div>
-            }
-        >
-            <div className="mt-10">
-                <Tabs
-                    defaultActiveKey="1"
-                    items={items}
-                    tabPosition={"left"}
-                    style={{ height: 600, overflowY: "scroll" }}
-                />
-            </div>
-        </Modal>
+            </Modal>
+            <SentLeader
+                employee={employee}
+                openSendLeader={openModal}
+                setOpenSendLeader={setOpenModal}
+            />
+        </>
     );
 };
 const RecomenetChildren = ({ data }) => {
@@ -1281,12 +1514,5 @@ const RecomenetChildren = ({ data }) => {
                 </Row>
             </div>
         </div>
-    );
-};
-export const Require = () => {
-    return (
-        <span className="text-red-500">
-            <b>*</b>
-        </span>
     );
 };

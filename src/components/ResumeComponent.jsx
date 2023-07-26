@@ -240,6 +240,7 @@ const ResumeComponent = (props) => {
     const handleAccept = async () => {
         //Duyệt nhân viên
         try {
+            profile.submitProfileStatus = "3";
             const res = await acceptEmployee(profile);
             setIsApproveOpen(false);
             info(res?.data?.message);
@@ -250,6 +251,7 @@ const ResumeComponent = (props) => {
     const additionalRequestTermination = async () => {
         //Thêm nội dung yêu cầu bổ sung
         try {
+            profile.submitProfileStatus = "4";
             const res = await acceptEmployee(profile);
             setIsAdditionalRequestOpen(false);
             info(res?.data?.message);
@@ -260,7 +262,7 @@ const ResumeComponent = (props) => {
     const handleRejectProfile = async () => {
         //reject profile
         try {
-            profile.reasonForRefuseEndProfile = value;
+            profile.reasonForRejection = value;
             profile.submitProfileStatus = "5";
             const res = await acceptEmployee(profile);
             setIsRejectOpen(false);
@@ -438,7 +440,7 @@ const ResumeComponent = (props) => {
             >
                 <TextArea
                     onChange={(e) =>
-                        (profile.additionalRequestTermination = e.target.value)
+                        (profile.additionalRequest = e.target.value)
                     }
                     placeholder="Nhập nội dung"
                     autoSize={{

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutHomePage from "./pages/layouts/LayoutHomePage";
@@ -6,12 +6,31 @@ import Employee from "./pages/manager/Employee";
 import SignIn from "./pages/signin/Signin";
 import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
-import Release from "./pages/release/Release";
-import UpdateHappeningManage from "./pages/update_happening/UpdateHappeningManage";
 import AddUserPage from "./pages/user/AddUserPage";
 import RoleUserRoute from "./components/RoleUserRoute";
+import PageEnd from "./pages/manage-end/PageEnd";
+import Release from "./pages/release/Release";
+import { useDispatch, useSelector } from "react-redux";
+import { doLoginAction } from "./redux/account/accountSlice";
+import { getAccount } from "./services/api";
 
 export default function App() {
+    const dispatch = useDispatch();
+    const { isAuthenticated, role } = useSelector((state) => state.account);
+
+    const getRoleAccount = async () => {
+        if (window.location.pathname === "/login") {
+            return;
+        }
+        const res = await getAccount();
+        if (res?.status === 200) {
+            dispatch(doLoginAction(res?.data[0]));
+        }
+    };
+    useEffect(() => {
+        getRoleAccount();
+    }, []);
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -27,12 +46,12 @@ export default function App() {
                     element: <Employee></Employee>,
                 },
                 {
-                    path: "/update_appening",
-                    element: <UpdateHappeningManage></UpdateHappeningManage>,
-                },
-                {
                     path: "/release",
-                    element: <Release></Release>,
+                    element: (
+                        <>
+                            <PageEnd></PageEnd>
+                        </>
+                    ),
                 },
                 {
                     path: "/awaiting_approval",
@@ -74,7 +93,11 @@ export default function App() {
     ]);
     return (
         <>
-            <RouterProvider router={router} />
+            {isAuthenticated || window.location.pathname === "/login" ? (
+                <RouterProvider router={router} />
+            ) : (
+                <>Loading...</>
+            )}
         </>
     );
 }
