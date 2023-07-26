@@ -30,9 +30,13 @@ const itemUser = [
     ]),
 ];
 const itemManage = [
+    getItem("Quản lí", "sub1", <MailOutlined />, [
+        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "5"),
+        getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
+    ]),
     getItem("Lãnh đạo", "sub1", <MailOutlined />, [
         getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "8"),
-        getItem(<Link to={"/release"}>Kết thúc</Link>, "9"),
+        getItem(<Link to={"/release"}>Đã duyệt</Link>, "9"),
     ]),
 ];
 const MenuComponent = ({ collapsed }) => {
