@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    useNavigate,
+} from "react-router-dom";
 import LayoutHomePage from "./pages/layouts/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import SignIn from "./pages/signin/Signin";
@@ -15,21 +19,24 @@ import { doLoginAction } from "./redux/account/accountSlice";
 import { getAccount } from "./services/api";
 
 export default function App() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isAuthenticated, role } = useSelector((state) => state.account);
+    const { isAuthenticated } = useSelector((state) => state.account);
 
     const getRoleAccount = async () => {
-        if (window.location.pathname === "/login") {
-            return;
-        }
+        // if (window.location.pathname === "/login") {
+        //     return;
+        // }
         const res = await getAccount();
         if (res?.status === 200) {
             dispatch(doLoginAction(res?.data[0]));
+        } else {
+            navigate("/login");
         }
     };
     useEffect(() => {
         getRoleAccount();
-    }, []);
+    }, [dispatch]);
 
     const router = createBrowserRouter([
         {
@@ -93,7 +100,7 @@ export default function App() {
     ]);
     return (
         <>
-            {isAuthenticated || window.location.pathname === "/login" ? (
+            {isAuthenticated ? (
                 <RouterProvider router={router} />
             ) : (
                 <>Loading...</>
