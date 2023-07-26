@@ -27,12 +27,14 @@ export default function App() {
         // if (window.location.pathname === "/login") {
         //     return;
         // }
+        console.log(isAuthenticated);
         const res = await getAccount();
         if (res?.status === 200) {
             dispatch(doLoginAction(res?.data[0]));
         } else {
             navigate("/login");
         }
+        console.log(isAuthenticated);
     };
     useEffect(() => {
         getRoleAccount();
