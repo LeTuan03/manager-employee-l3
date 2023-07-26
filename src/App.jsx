@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
+
 import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
+    createBrowserRouter,
+    RouterProvider,
     useNavigate,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { doLoginAction } from "./redux/account/accountSlice";
-import { getAccount } from "./services/api";
-
 import LayoutHomePage from "./pages/layouts/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import SignIn from "./pages/signin/Signin";
@@ -17,55 +13,95 @@ import Approved from "./pages/approved/Approved";
 import AddUserPage from "./pages/user/AddUserPage";
 import RoleUserRoute from "./components/RoleUserRoute";
 import PageEnd from "./pages/manage-end/PageEnd";
+import { useDispatch, useSelector } from "react-redux";
+import { doLoginAction } from "./redux/account/accountSlice";
+import { getAccount } from "./services/api";
 
 export default function App() {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.account);
 
     const getRoleAccount = async () => {
+        // if (window.location.pathname === "/login") {
+        //     return;
+        // }
+
         const res = await getAccount();
         if (res?.status === 200) {
             dispatch(doLoginAction(res?.data[0]));
         }
     };
-
     useEffect(() => {
         getRoleAccount();
-        if (!isAuthenticated) {
-            const navigate = useNavigate();
-            navigate("/login");
-        }
-    }, [dispatch, isAuthenticated]);
+    }, [dispatch]);
 
-    return isAuthenticated || window.location.pathname === "/login" ? (
-        <Router>
-            <Routes>
-                <Route path="/" element={<LayoutHomePage />}>
-                    <Route index element={<></>} />
-                    <Route path="manage_employee" element={<Employee />} />
-                    <Route path="release" element={<PageEnd />} />
-                    <Route
-                        path="awaiting_approval"
-                        element={<AwaitingApproval />}
-                    />
-                    <Route path="approved" element={<Approved />} />
-                    <Route
-                        path="addnew_employee"
-                        element={
-                            <RoleUserRoute>
-                                <AddUserPage />
-                            </RoleUserRoute>
-                        }
-                    />
-                </Route>
-                <Route path="admin" element={<></>}>
-                    <Route index element={<></>} />
-                    <Route path="user" element={<></>} />
-                </Route>
-                <Route path="login" element={<SignIn />} />
-            </Routes>
-        </Router>
-    ) : (
-        <>Loading...</>
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <LayoutHomePage></LayoutHomePage>,
+            errorElement: <>Not Found</>,
+            children: [
+                {
+                    index: true,
+                    element: <></>,
+                },
+                {
+                    path: "/manage_employee",
+                    element: <Employee></Employee>,
+                },
+                {
+                    path: "/release",
+                    element: (
+                        <>
+                            <PageEnd></PageEnd>
+                        </>
+                    ),
+                },
+                {
+                    path: "/awaiting_approval",
+                    element: <AwaitingApproval></AwaitingApproval>,
+                },
+                {
+                    path: "/approved",
+                    element: <Approved></Approved>,
+                },
+                {
+                    path: "/addnew_employee",
+                    element: (
+                        <RoleUserRoute>
+                            <AddUserPage></AddUserPage>
+                        </RoleUserRoute>
+                    ),
+                },
+            ],
+        },
+        {
+            path: "/admin",
+            element: <></>,
+            errorElement: <></>,
+            children: [
+                {
+                    index: true,
+                    element: <></>,
+                },
+                {
+                    path: "user",
+                    element: <>Manage User</>,
+                },
+            ],
+        },
+        {
+            path: "/login",
+            element: <SignIn />,
+        },
+    ]);
+    return (
+        <>
+            {isAuthenticated || window.location.pathname === "/login" ? (
+                <RouterProvider router={router} />
+            ) : (
+                <>Loading...</>
+            )}
+        </>
     );
 }
