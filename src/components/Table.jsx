@@ -155,7 +155,7 @@ const TableComponet = (props) => {
                     {["9", "8", "5", "4"].includes(
                         employee.submitProfileStatus
                     ) && <InfoCircleOutlined className="text-orange-500" />}
-                    {["2", "0", "8", "6", "7", "3"].includes(
+                    {["2", "0", "8", "6", "7"].includes(
                         employee.submitProfileStatus
                     ) && (
                         <EyeOutlined

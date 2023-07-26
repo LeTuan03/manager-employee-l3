@@ -1,8 +1,8 @@
 import {
+    CheckCircleOutlined,
     DeleteOutlined,
     EditOutlined,
     EyeOutlined,
-    FastBackwardOutlined,
 } from "@ant-design/icons";
 import {
     Button,
@@ -86,7 +86,7 @@ export default function UpdateHappeningModal({ employee }) {
                     handleGetRecomentByEmp();
                 }}
             >
-                <FastBackwardOutlined className="text-green-600 text-lg" />
+                <CheckCircleOutlined className="text-green-600 text-lg" />
             </span>
             <Modal
                 title="CẬP NHẬT DIỄN BIẾN"
