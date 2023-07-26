@@ -18,22 +18,22 @@ import { doLoginAction } from "./redux/account/accountSlice";
 import { getAccount } from "./services/api";
 
 export default function App() {
-    const dispatch = useDispatch();
-    const { isAuthenticated } = useSelector((state) => state.account);
+    // const dispatch = useDispatch();
+    // const { isAuthenticated } = useSelector((state) => state.account);
 
-    const getRoleAccount = async () => {
-        // if (window.location.pathname === "/login") {
-        //     return;
-        // }
+    // const getRoleAccount = async () => {
+    //     // if (window.location.pathname === "/login") {
+    //     //     return;
+    //     // }
 
-        const res = await getAccount();
-        if (res?.status === 200) {
-            dispatch(doLoginAction(res?.data[0]));
-        }
-    };
-    useEffect(() => {
-        getRoleAccount();
-    }, [dispatch]);
+    //     const res = await getAccount();
+    //     if (res?.status === 200) {
+    //         dispatch(doLoginAction(res?.data[0]));
+    //     }
+    // };
+    // useEffect(() => {
+    //     getRoleAccount();
+    // }, [dispatch]);
 
     const router = createBrowserRouter([
         {
@@ -97,11 +97,11 @@ export default function App() {
     ]);
     return (
         <>
-            {isAuthenticated || window.location.pathname === "/login" ? (
-                <RouterProvider router={router} />
-            ) : (
+            {/* {isAuthenticated || window.location.pathname === "/login" ? ( */}
+            <RouterProvider router={router} />
+            {/* ) : (
                 <>Loading...</>
-            )}
+            )} */}
         </>
     );
 }
