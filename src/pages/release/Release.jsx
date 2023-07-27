@@ -20,9 +20,8 @@ export default function Release() {
         <div>
             <TableComponet
                 listEmployee={listEmployee}
-                // getAllEmployee={getAllEmployee}
+                getAllEmployee={getAllEmployee}
                 loading={loading}
-                type="Release"
             ></TableComponet>
         </div>
     );

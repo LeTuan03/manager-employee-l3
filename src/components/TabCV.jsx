@@ -81,10 +81,7 @@ const TabCV = ({ employee }) => {
         {
             label: "3. Ngày sinh: ",
             span: 12,
-            value: format(
-                new Date(employee.dateOfBirth).getTime(),
-                "dd-MM-yyy"
-            ),
+            value: new Date(employee.dateOfBirth).getTime(),
         },
         {
             label: "4. Nơi sinh: ",

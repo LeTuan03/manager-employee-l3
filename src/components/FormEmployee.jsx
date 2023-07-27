@@ -146,7 +146,6 @@ const FormEmployee = ({
                 religion: employee.religion,
             });
             setUserAvatar(employee.image);
-            console.log(employee);
         }
         return () => {
             form.resetFields();

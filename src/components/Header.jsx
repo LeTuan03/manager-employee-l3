@@ -62,7 +62,7 @@ const Header = ({ toggleCollapsed, collapsed }) => {
                         placement="bottom"
                         style={{ width: "300px" }}
                     >
-                        <Avatar size={50} icon={<UserOutlined />} />
+                        <Avatar size={40} icon={<UserOutlined />} />
                     </Dropdown>
                 </div>
             </div>

@@ -6,8 +6,6 @@ import { acceptEmployee } from "../services/api";
 
 export default function ModalReject({
     isRejectOpen,
-    handleRejectOk,
-    handleRejectCancel,
     setIsRejectOpen,
     profile,
     type,
@@ -32,8 +30,8 @@ export default function ModalReject({
             title="Nội dung từ chối"
             centered
             open={isRejectOpen}
-            onOk={handleRejectOk}
-            onCancel={handleRejectCancel}
+            onOk={() => setIsRejectOpen(false)}
+            onCancel={() => setIsRejectOpen(false)}
             footer={
                 type === "awaiting-approval" ? (
                     <>

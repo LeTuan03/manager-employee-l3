@@ -7,7 +7,6 @@ export default function SaveResume({
     isResumeOpen,
     setIsResumeOpen,
     employeeId,
-    setIsOpenResume,
 }) {
     const [profile, setProfile] = useState({});
     const handleGetProfile = async () => {
@@ -16,11 +15,6 @@ export default function SaveResume({
     };
     useEffect(() => {
         handleGetProfile();
-        if (profile.submitProfileStatus === "7") {
-            setIsOpenResume(true);
-        } else {
-            setIsOpenResume(false);
-        }
     }, [employeeId]);
 
     const handleDecisionDay = async () => {

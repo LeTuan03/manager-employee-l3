@@ -52,11 +52,13 @@ export default function EmployeeProfile({
     return (
         <>
             <Tabs tabPosition={"left"} defaultActiveKey="1" items={items} />
-            <SendLeader
-                setOpenSendLeader={setOpenSendLeader}
-                openSendLeader={openSendLeader}
-                employee={employee}
-            ></SendLeader>
+            {openSendLeader && (
+                <SendLeader
+                    setOpenSendLeader={setOpenSendLeader}
+                    openSendLeader={openSendLeader}
+                    employee={employee}
+                ></SendLeader>
+            )}
         </>
     );
 }

@@ -1,18 +1,8 @@
 import React, { useState } from "react";
-import {
-    Button,
-    Checkbox,
-    Table,
-    Tag,
-    Modal,
-    Space,
-    message,
-    DatePicker,
-} from "antd";
+import { Button, Table, Tag, Modal, message } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
-    acceptEmployee,
     deleteEmployee,
     getCertificateByEmployee,
     getEmployeeById,
@@ -22,6 +12,7 @@ import EmployeeProfile from "./EmployeeProfile";
 import ModalAccept from "./ModalAccept";
 import ModalAdditional from "./ModalAdditional";
 import ModalReject from "./ModalReject";
+import { useSelector } from "react-redux";
 
 const ResumeComponent = (props) => {
     const {
@@ -33,6 +24,7 @@ const ResumeComponent = (props) => {
         setOpen,
     } = props;
 
+    const { role } = useSelector((state) => state.account);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
@@ -54,31 +46,9 @@ const ResumeComponent = (props) => {
         setProfile(user);
     };
 
-    const handleApproveOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleApproveCancel = () => {
-        setIsApproveOpen(false);
-    };
-    const handleAdditionalRequestOk = () => {
-        setIsAdditionalRequestOpen(true);
-    };
-    const handleAdditionalRequestCancel = () => {
-        setIsAdditionalRequestOpen(false);
-    };
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
     const handleCancel = () => {
         setIsModalOpen(false);
         setIsApproveOpen(false);
-    };
-    const handleRejectOk = () => {
-        setIsRejectOpen(false);
-    };
-    const handleRejectCancel = () => {
-        setIsRejectOpen(false);
     };
 
     const handleGetCerByEmp = async (id) => {
@@ -103,15 +73,13 @@ const ResumeComponent = (props) => {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            sorter: true,
-            width: 300,
+            width: 250,
             render: (text) => <a>{text}</a>,
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
-            sorter: true,
             render: (dateOfBirth) => (
                 <>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
             ),
@@ -120,20 +88,17 @@ const ResumeComponent = (props) => {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
-            sorter: true,
             render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
-            sorter: true,
         },
         {
-            title: "Team",
+            title: "Nhóm",
             dataIndex: "team",
             key: "team",
-            sorter: true,
             render: (team) => (
                 <Tag color={team === 1 ? "green" : "geekblue"}>
                     {team === 1 ? "Back-end" : "Front-end"}
@@ -144,16 +109,14 @@ const ResumeComponent = (props) => {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
-            sorter: true,
             render: (address) => {
-                const addressText = useTruncateText(address, 20);
+                const addressText = useTruncateText(address, 25);
                 return <span>{addressText}</span>;
             },
         },
         {
             title: "Trạng thái",
             key: "submitProfileStatus",
-            sorter: true,
             dataIndex: "submitProfileStatus",
             render: (status) => {
                 switch (status) {
@@ -190,7 +153,7 @@ const ResumeComponent = (props) => {
                     default:
                         break;
                 }
-                const statusText = useTruncateText(status, 20);
+                const statusText = useTruncateText(status, 25);
                 return <>{statusText}</>;
             },
         },
@@ -199,8 +162,7 @@ const ResumeComponent = (props) => {
             key: "action",
             render: (_, user) => (
                 <div className="flex justify-center gap-3">
-                    {user.submitProfileStatus === "1" &&
-                    localStorage.getItem("role") === "5" ? (
+                    {user.submitProfileStatus === "1" && role === 5 ? (
                         <>
                             <span
                                 className="cursor-pointer"
@@ -325,32 +287,27 @@ const ResumeComponent = (props) => {
                 }
             >
                 <EmployeeProfile
-                    profile={profile}
-                    certificate={certificate}
-                    resume={resume}
+                // profile={profile}
+                // certificate={certificate}
+                // resume={resume}
                 />
             </Modal>
             {/* Phê duyệt nhân viên */}
             <ModalAccept
                 isApproveOpen={isApproveOpen}
                 setIsApproveOpen={setIsApproveOpen}
-                handleApproveOk={handleApproveOk}
-                handleApproveCancel={handleApproveCancel}
+                setIsModalOpen={setIsModalOpen}
                 profile={profile}
                 type={type}
             />
             <ModalAdditional
                 isAdditionalRequestOpen={isAdditionalRequestOpen}
-                handleAdditionalRequestOk={handleAdditionalRequestOk}
-                handleAdditionalRequestCancel={handleAdditionalRequestCancel}
                 setIsAdditionalRequestOpen={setIsAdditionalRequestOpen}
                 profile={profile}
                 type={type}
             />
             <ModalReject
                 isRejectOpen={isRejectOpen}
-                handleRejectOk={handleRejectOk}
-                handleRejectCancel={handleRejectCancel}
                 setIsRejectOpen={setIsRejectOpen}
                 profile={profile}
                 type={type}

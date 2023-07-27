@@ -19,7 +19,7 @@ const itemAdmin = [
     ]),
     getItem("Lãnh đạo", "sub2", <AppstoreOutlined />, [
         getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "8"),
-        getItem(<Link to={"/release"}>Đã duyệt</Link>, "9"),
+        getItem(<Link to={"/approved"}>Đã duyệt</Link>, "9"),
     ]),
 ];
 const itemUser = [
@@ -36,7 +36,7 @@ const itemManage = [
     ]),
     getItem("Lãnh đạo", "sub5", <MailOutlined />, [
         getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "15"),
-        getItem(<Link to={"/release"}>Đã duyệt</Link>, "16"),
+        getItem(<Link to={"/approved"}>Đã duyệt</Link>, "16"),
     ]),
 ];
 const MenuComponent = ({ collapsed }) => {
@@ -45,6 +45,7 @@ const MenuComponent = ({ collapsed }) => {
         <>
             <div className="w-full pt-12">
                 <Menu
+                    defaultActiveFirst={false}
                     mode="inline"
                     className="bg-transparent text-white"
                     inlineCollapsed={collapsed}

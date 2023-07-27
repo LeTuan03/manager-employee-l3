@@ -10,6 +10,7 @@ import {
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
 import UpdateHappeningModal from "./UpdateHappeningModal";
+import { useSelector } from "react-redux";
 const TableComponet = (props) => {
     const {
         listEmployee,
@@ -30,14 +31,12 @@ const TableComponet = (props) => {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            sorter: true,
-            render: (text) => <a>{text}</a>,
+            render: (text) => <a> {useTruncateText(text, 25)}</a>,
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
-            sorter: true,
             render: (dateOfBirth) => (
                 <>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
             ),
@@ -46,23 +45,27 @@ const TableComponet = (props) => {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
-            sorter: true,
             render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
-            sorter: true,
         },
         {
             title: "Nhóm",
             dataIndex: "team",
             key: "team",
-            sorter: true,
             render: (team) => (
-                <Tag color={team === 1 ? "green" : "geekblue"}>
-                    {team === 1 ? "Back-end" : "Front-end"}
+                <Tag
+                    className="w-full text-center"
+                    color={team === 1 ? "green" : "geekblue"}
+                >
+                    {team === 1
+                        ? "Back-end"
+                        : team === 2
+                        ? "Front-end"
+                        : "Tester"}
                 </Tag>
             ),
         },
@@ -70,16 +73,14 @@ const TableComponet = (props) => {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
-            sorter: true,
             render: (address) => {
-                const addressText = useTruncateText(address, 20);
+                const addressText = useTruncateText(address, 25);
                 return <span>{addressText}</span>;
             },
         },
         {
             title: "Trạng thái",
             key: "submitProfileStatus",
-            sorter: true,
             dataIndex: "submitProfileStatus",
             render: (status) => {
                 switch (status) {
@@ -116,7 +117,7 @@ const TableComponet = (props) => {
                     default:
                         break;
                 }
-                const statusText = useTruncateText(status, 20);
+                const statusText = useTruncateText(status, 25);
                 return <>{statusText}</>;
             },
         },
@@ -160,7 +161,7 @@ const TableComponet = (props) => {
                             }}
                         />
                     )}
-                    {employee.submitProfileStatus === "3" && (
+                    {employee.submitProfileStatus === "3" && role === 4 && (
                         <UpdateHappeningModal
                             employee={employee}
                         ></UpdateHappeningModal>
@@ -169,6 +170,7 @@ const TableComponet = (props) => {
             ),
         },
     ];
+    const { role } = useSelector((state) => state.account);
     const handleDeleteEmployee = async (id) => {
         const res = await deleteEmployee(id);
         if (res?.data?.code === 200) {

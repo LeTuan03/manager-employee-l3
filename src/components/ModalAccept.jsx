@@ -6,9 +6,7 @@ import { acceptEmployee } from "../services/api";
 export default function ModalAccept({
     isApproveOpen,
     setIsApproveOpen,
-    handleApproveOk,
-    handleApproveCancel,
-    // handleAccept,
+    setIsModalOpen,
     profile,
     type,
 }) {
@@ -29,8 +27,8 @@ export default function ModalAccept({
             title="Phê duyệt nhân viên"
             centered
             open={isApproveOpen}
-            onOk={handleApproveOk}
-            onCancel={handleApproveCancel}
+            onOk={() => setIsModalOpen(false)}
+            onCancel={() => setIsApproveOpen(false)}
             footer={
                 type === "awaiting-approval" ? (
                     <>

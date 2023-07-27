@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 const PageEnd = () => {
     const { role } = useSelector((state) => state.account);
     const [isResumeOpen, setIsResumeOpen] = useState(false);
-    const [isOpenResume, setIsOpenResume] = useState(false);
     const [listEmployee, setListEmployee] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(null);
@@ -32,7 +31,6 @@ const PageEnd = () => {
         <>
             <ModalInput
                 open={open}
-                // setSend={setSend}
                 setEmployeeId={setEmployeeId}
                 employeeId={employeeId}
                 setOpen={setOpen}
@@ -62,6 +60,14 @@ const PageEnd = () => {
                     }}
                     footer={
                         <div className="flex justify-center">
+                            {
+                                <Button
+                                    type="primary"
+                                    onClick={() => setIsResumeOpen(true)}
+                                >
+                                    Nộp lưu hồ sơ
+                                </Button>
+                            }
                             <Button
                                 type="primary"
                                 danger
@@ -71,16 +77,6 @@ const PageEnd = () => {
                             >
                                 Hủy
                             </Button>
-                            {role !== 5
-                                ? isOpenResume && (
-                                      <Button
-                                          type="primary"
-                                          onClick={() => setIsResumeOpen(true)}
-                                      >
-                                          Nộp lưu hồ sơ
-                                      </Button>
-                                  )
-                                : ""}
                         </div>
                     }
                 >
@@ -91,7 +87,6 @@ const PageEnd = () => {
                     ></EmployeeProfile>
 
                     <SaveResume
-                        setIsOpenResume={setIsOpenResume}
                         employeeId={employeeId}
                         isResumeOpen={isResumeOpen}
                         setIsResumeOpen={setIsResumeOpen}

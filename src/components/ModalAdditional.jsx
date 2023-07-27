@@ -5,8 +5,6 @@ import { acceptEmployee } from "../services/api";
 
 export default function ModalAdditional({
     isAdditionalRequestOpen,
-    handleAdditionalRequestOk,
-    handleAdditionalRequestCancel,
     setIsAdditionalRequestOpen,
     profile,
     type,
@@ -28,10 +26,10 @@ export default function ModalAdditional({
             title="Nội dung yêu cầu bổ sung"
             centered
             open={isAdditionalRequestOpen}
-            onOk={handleAdditionalRequestOk}
-            onCancel={handleAdditionalRequestCancel}
+            onOk={() => setIsAdditionalRequestOpen(true)}
+            onCancel={() => setIsAdditionalRequestOpen(false)}
             footer={
-                type === "awaiting-approval" ? (
+                type === "awaiting-approval" && (
                     <>
                         <Button
                             key="cancel"
@@ -51,8 +49,6 @@ export default function ModalAdditional({
                             Xác nhận
                         </Button>
                     </>
-                ) : (
-                    " "
                 )
             }
         >
