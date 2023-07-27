@@ -1,41 +1,12 @@
+import { EyeOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
+import React, { useState } from "react";
 import {
-    DeleteOutlined,
-    EditOutlined,
-    EyeOutlined,
-    FastBackwardOutlined,
-} from "@ant-design/icons";
-import {
-    Button,
-    Card,
-    Col,
-    Form,
-    Image,
-    Input,
-    Modal,
-    Row,
-    Select,
-    Table,
-    Tabs,
-    message,
-} from "antd";
-import React, { useEffect, useState } from "react";
-import {
-    addProcessByEmp,
-    addSalaryByEmp,
-    deleteProcess,
-    deleteProposal,
-    deleteSalary,
-    updateProposal,
-    getEmployeeById,
     getProcessByEmp,
     getProposalByEmp,
     getSalaryByEmp,
-    updateProcess,
-    updateSalary,
-    addProposalByEmp,
 } from "../services/api";
 import { format } from "date-fns";
-import SentLeader from "./SendLeader";
 import TabIncreaseSalary from "./TabIncreaseSalary";
 import TabProcess from "./TabProcess";
 import TabRecommendation from "./TabRecommendation";
@@ -89,7 +60,7 @@ export default function UpdateHappeningModal({ employee }) {
                     handleGetRecomentByEmp();
                 }}
             >
-                <FastBackwardOutlined className="text-green-600 text-lg" />
+                <EyeOutlined className="text-green-600 text-lg" />
             </span>
             <Modal
                 title="CẬP NHẬT DIỄN BIẾN"

@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    useNavigate,
+} from "react-router-dom";
 import LayoutHomePage from "./pages/layouts/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import SignIn from "./pages/signin/Signin";
@@ -15,12 +19,13 @@ import { getAccount } from "./services/api";
 
 export default function App() {
     const dispatch = useDispatch();
+    // const navigate = useNavigate();
     const { isAuthenticated } = useSelector((state) => state.account);
 
     const getRoleAccount = async () => {
-        // if (window.location.pathname === "/login") {
-        //     return;
-        // }
+        if (window.location.pathname === "/login") {
+            return;
+        }
         try {
             const res = await getAccount(); // Replace this with your actual API call
             if (res?.status === 200) {
@@ -96,7 +101,9 @@ export default function App() {
             {/* {isAuthenticated || window.location.pathname === "/login" ? ( */}
             <RouterProvider router={router} />
             {/* ) : (
-                <>Loading...</>
+                <>
+                    <Button>Go To SIGNIN</Button>
+                </>
             )} */}
         </>
     );
