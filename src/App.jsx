@@ -16,15 +16,21 @@ import { getAccount } from "./services/api";
 export default function App() {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.account);
+
     const getRoleAccount = async () => {
-        if (window.location.pathname === "/login") {
-            return;
-        }
-        const res = await getAccount();
-        if (res?.status === 200) {
-            dispatch(doLoginAction(res?.data[0]));
+        // if (window.location.pathname === "/login") {
+        //     return;
+        // }
+        try {
+            const res = await getAccount(); // Replace this with your actual API call
+            if (res?.status === 200) {
+                dispatch(doLoginAction(res?.data[0]));
+            }
+        } catch (error) {
+            console.error("Error fetching account data:", error);
         }
     };
+
     useEffect(() => {
         getRoleAccount();
     }, []);
