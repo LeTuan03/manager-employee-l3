@@ -8,8 +8,10 @@ import {
 } from "../services/api";
 import { format } from "date-fns";
 import ResumeModal from "./ResumeModal";
+import { useSelector } from "react-redux";
 
 export default function IncreaseSalary() {
+    const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,7 +106,7 @@ export default function IncreaseSalary() {
     ];
     return (
         <div>
-            {localStorage.getItem("role") === "5" ? (
+            {role === 5 ? (
                 <>
                     <Table
                         columns={columns}

@@ -6,7 +6,9 @@ import { Button, Modal } from "antd";
 import EmployeeProfile from "../../components/EmployeeProfile";
 import ModalEnd from "../../components/ModalEnd";
 import SaveResume from "../../components/SaveResume";
+import { useSelector } from "react-redux";
 const PageEnd = () => {
+    const { role } = useSelector((state) => state.account);
     const [isResumeOpen, setIsResumeOpen] = useState(false);
     const [isOpenResume, setIsOpenResume] = useState(false);
     const [listEmployee, setListEmployee] = useState([]);
@@ -14,7 +16,6 @@ const PageEnd = () => {
     const [employeeId, setEmployeeId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [send, setSend] = useState(false);
     const [openSendLeader, setOpenSendLeader] = useState(false);
     const getAllEmployee = async () => {
         setLoading(true);
@@ -70,14 +71,16 @@ const PageEnd = () => {
                             >
                                 Hủy
                             </Button>
-                            {isOpenResume && (
-                                <Button
-                                    type="primary"
-                                    onClick={() => setIsResumeOpen(true)}
-                                >
-                                    Nộp lưu hồ sơ
-                                </Button>
-                            )}
+                            {role !== 5
+                                ? isOpenResume && (
+                                      <Button
+                                          type="primary"
+                                          onClick={() => setIsResumeOpen(true)}
+                                      >
+                                          Nộp lưu hồ sơ
+                                      </Button>
+                                  )
+                                : ""}
                         </div>
                     }
                 >

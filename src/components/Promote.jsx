@@ -8,8 +8,10 @@ import {
 } from "../services/api";
 import { format } from "date-fns";
 import ResumeModal from "./ResumeModal";
+import { useSelector } from "react-redux";
 
 export default function Promote() {
+    const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [processEmp, setProcessEmp] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,11 +54,43 @@ export default function Promote() {
             title: "Chức vụ cũ",
             key: "currentPosition",
             dataIndex: "currentPosition",
+            render: (currentPosition) => {
+                switch (currentPosition) {
+                    case 0:
+                        return "Giám đốc";
+                    case 1:
+                        return "Trưởng phòng";
+                    case 2:
+                        return "Trưởng phòng";
+                    case 3:
+                        return "Trưởng phòng";
+                    case 4:
+                        return "Quản lí";
+                    default:
+                        return "Giám đốc";
+                }
+            },
         },
         {
             title: "Chức vụ hiện tại",
             key: "newPosition",
             dataIndex: "newPosition",
+            render: (newPosition) => {
+                switch (newPosition) {
+                    case 0:
+                        return "Giám đốc";
+                    case 1:
+                        return "Trưởng phòng";
+                    case 2:
+                        return "Trưởng phòng";
+                    case 3:
+                        return "Trưởng phòng";
+                    case 4:
+                        return "Quản lí";
+                    default:
+                        return "Giám đốc";
+                }
+            },
         },
         {
             title: "Ghi chú",
@@ -98,7 +132,7 @@ export default function Promote() {
     ];
     return (
         <div>
-            {localStorage.getItem("role") === "5" ? (
+            {role === 5 ? (
                 <>
                     <Table
                         columns={columns}

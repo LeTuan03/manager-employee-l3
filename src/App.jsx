@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 
-import {
-    createBrowserRouter,
-    RouterProvider,
-    useNavigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutHomePage from "./pages/layouts/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import SignIn from "./pages/signin/Signin";

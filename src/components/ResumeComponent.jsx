@@ -19,7 +19,9 @@ import {
 } from "../services/api";
 import { format } from "date-fns";
 import EmployeeProfile from "./EmployeeProfile";
-import TextArea from "antd/es/input/TextArea";
+import ModalAccept from "./ModalAccept";
+import ModalAdditional from "./ModalAdditional";
+import ModalReject from "./ModalReject";
 
 const ResumeComponent = (props) => {
     const {
@@ -39,7 +41,6 @@ const ResumeComponent = (props) => {
     const [profile, setProfile] = useState({});
     const [certificate, setCertificate] = useState([]);
     const [resume, setResume] = useState({});
-    const [value, setValue] = useState("");
 
     const [messageApi, contextHolder] = message.useMessage();
     const info = (message) => {
@@ -171,16 +172,21 @@ const ResumeComponent = (props) => {
                     case "4":
                         status = "Yêu cầu bổ sung";
                         break;
+                    case "5":
+                        status = "Từ chối";
+                        break;
                     case "6":
                         status = "Yêu cầu kết thúc hồ sơ";
+                        break;
                     case "7":
-                        status = "Yêu cầu kết thúc đã được chấp nhận";
+                        status = "Chấp nhận yêu cầu kết thúc hồ sơ";
                         break;
                     case "8":
                         status = "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
                         break;
                     case "9":
                         status = "Từ chối yêu cầu kết thúc hồ sơ";
+                        break;
                     default:
                         break;
                 }
@@ -237,40 +243,7 @@ const ResumeComponent = (props) => {
             await getAllEmployee();
         }
     };
-    const handleAccept = async () => {
-        //Duyệt nhân viên
-        try {
-            profile.submitProfileStatus = "3";
-            const res = await acceptEmployee(profile);
-            setIsApproveOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const additionalRequestTermination = async () => {
-        //Thêm nội dung yêu cầu bổ sung
-        try {
-            profile.submitProfileStatus = "4";
-            const res = await acceptEmployee(profile);
-            setIsAdditionalRequestOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const handleRejectProfile = async () => {
-        //reject profile
-        try {
-            profile.reasonForRejection = value;
-            profile.submitProfileStatus = "5";
-            const res = await acceptEmployee(profile);
-            setIsRejectOpen(false);
-            info(res?.data?.message);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+
     return (
         <>
             <Table
@@ -290,7 +263,7 @@ const ResumeComponent = (props) => {
                 title="Hồ sơ nhân viên"
                 centered
                 open={isModalOpen}
-                onOk={handleOk}
+                onOk={() => setIsModalOpen(false)}
                 onCancel={handleCancel}
                 footer={
                     type === "awaiting-approval" ? (
@@ -358,150 +331,31 @@ const ResumeComponent = (props) => {
                 />
             </Modal>
             {/* Phê duyệt nhân viên */}
-            <Modal
-                title="Phê duyệt nhân viên"
-                centered
-                open={isApproveOpen}
-                onOk={handleApproveOk}
-                onCancel={handleApproveCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() => setIsApproveOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => handleAccept()}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                Ngày hẹn:
-                <Space direction="vertical" size={12} className="mt-1 mb-4">
-                    <DatePicker
-                        placeholder="Chọn ngày"
-                        style={{ width: "470px" }}
-                        onChange={(e) =>
-                            (profile.terminationAppointmentDate = format(
-                                e.$d,
-                                "yyyy-MM-dd"
-                            ))
-                        }
-                    />
-                </Space>
-                <Checkbox>Đã đủ điều kiện phê duyệt</Checkbox>
-            </Modal>
-            {/* Nội dung yêu cầu bổ sung */}
-            <Modal
-                title="Nội dung yêu cầu bổ sung"
-                centered
-                open={isAdditionalRequestOpen}
-                onOk={handleAdditionalRequestOk}
-                onCancel={handleAdditionalRequestCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() =>
-                                    setIsAdditionalRequestOpen(false)
-                                }
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => {
-                                    additionalRequestTermination();
-                                }}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                <TextArea
-                    onChange={(e) =>
-                        (profile.additionalRequest = e.target.value)
-                    }
-                    placeholder="Nhập nội dung"
-                    autoSize={{
-                        minRows: 3,
-                    }}
-                />
-            </Modal>
-            {/* Nội dung từ chối */}
-            <Modal
-                title="Nội dung từ chối"
-                centered
-                open={isRejectOpen}
-                onOk={handleRejectOk}
-                onCancel={handleRejectCancel}
-                footer={
-                    type === "awaiting-approval" ? (
-                        <>
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() => setIsRejectOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                            <Button
-                                key="submit"
-                                type="primary"
-                                onClick={() => handleRejectProfile()}
-                            >
-                                Xác nhận
-                            </Button>
-                        </>
-                    ) : (
-                        " "
-                    )
-                }
-            >
-                Ngày từ chối *
-                <Space direction="vertical" size={12} className="mt-1 mb-4">
-                    <DatePicker
-                        placeholder="Chọn ngày"
-                        style={{ width: "470px" }}
-                        onChange={(e) =>
-                            (profile.rejectionDate = new Date(
-                                e.target.value
-                            ).getTime())
-                        }
-                    />
-                </Space>
-                Lí do:
-                <TextArea
-                    className="mt-1"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    placeholder="Nhập nội dung ..."
-                    autoSize={{
-                        minRows: 3,
-                    }}
-                />
-            </Modal>
+            <ModalAccept
+                isApproveOpen={isApproveOpen}
+                setIsApproveOpen={setIsApproveOpen}
+                handleApproveOk={handleApproveOk}
+                handleApproveCancel={handleApproveCancel}
+                profile={profile}
+                type={type}
+            />
+            <ModalAdditional
+                isAdditionalRequestOpen={isAdditionalRequestOpen}
+                handleAdditionalRequestOk={handleAdditionalRequestOk}
+                handleAdditionalRequestCancel={handleAdditionalRequestCancel}
+                setIsAdditionalRequestOpen={setIsAdditionalRequestOpen}
+                profile={profile}
+                type={type}
+            />
+            <ModalReject
+                isRejectOpen={isRejectOpen}
+                handleRejectOk={handleRejectOk}
+                handleRejectCancel={handleRejectCancel}
+                setIsRejectOpen={setIsRejectOpen}
+                profile={profile}
+                type={type}
+            />
+
             {contextHolder}
         </>
     );

@@ -18,7 +18,6 @@ export default function SignIn() {
             const response = await getToken(values);
             localStorage.setItem("access_token", response.access_token);
             const role = await getCurrentRole();
-            localStorage.setItem("role", role?.data[0]);
             dispatch(doLoginAction(role?.data[0]));
             navigate("/");
         } catch (error) {

@@ -21,7 +21,7 @@ export default function SaveResume({
         } else {
             setIsOpenResume(false);
         }
-    }, [employeeId, profile]);
+    }, [employeeId]);
 
     const handleDecisionDay = async () => {
         try {

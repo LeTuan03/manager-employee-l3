@@ -23,20 +23,20 @@ const itemAdmin = [
     ]),
 ];
 const itemUser = [
-    getItem("Quản lí", "sub1", <MailOutlined />, [
-        getItem(<Link to={"/addnew_employee"}>Thêm mới nhân viên</Link>, "1"),
-        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "2"),
-        getItem(<Link to={"/release"}>Kết thúc</Link>, "3"),
+    getItem("Quản lí", "sub3", <MailOutlined />, [
+        getItem(<Link to={"/addnew_employee"}>Thêm mới nhân viên</Link>, "10"),
+        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "11"),
+        getItem(<Link to={"/release"}>Kết thúc</Link>, "12"),
     ]),
 ];
 const itemManage = [
-    getItem("Quản lí", "sub1", <MailOutlined />, [
-        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "5"),
-        getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
+    getItem("Quản lí", "sub4", <MailOutlined />, [
+        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "13"),
+        getItem(<Link to={"/release"}>Kết thúc</Link>, "14"),
     ]),
-    getItem("Lãnh đạo", "sub1", <MailOutlined />, [
-        getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "8"),
-        getItem(<Link to={"/release"}>Đã duyệt</Link>, "9"),
+    getItem("Lãnh đạo", "sub5", <MailOutlined />, [
+        getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "15"),
+        getItem(<Link to={"/release"}>Đã duyệt</Link>, "16"),
     ]),
 ];
 const MenuComponent = ({ collapsed }) => {
@@ -45,8 +45,6 @@ const MenuComponent = ({ collapsed }) => {
         <>
             <div className="w-full pt-12">
                 <Menu
-                    defaultSelectedKeys={["1"]}
-                    defaultOpenKeys={["sub1"]}
                     mode="inline"
                     className="bg-transparent text-white"
                     inlineCollapsed={collapsed}

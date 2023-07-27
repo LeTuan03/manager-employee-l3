@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
@@ -10,8 +10,6 @@ import {
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
 import UpdateHappeningModal from "./UpdateHappeningModal";
-import EmployeeProfile from "./EmployeeProfile";
-import SaveResume from "./SaveResume";
 const TableComponet = (props) => {
     const {
         listEmployee,
@@ -20,10 +18,6 @@ const TableComponet = (props) => {
         setOpen,
         setEmployeeId,
         setIsModalOpen,
-        employeeId,
-        setIsResumeOpen,
-        isResumeOpen,
-        type,
     } = props;
     const columns = [
         {
@@ -163,7 +157,6 @@ const TableComponet = (props) => {
                             onClick={() => {
                                 setIsModalOpen(true);
                                 setEmployeeId(employee.id);
-                                // setIsResumeOpen(true);
                             }}
                         />
                     )}
