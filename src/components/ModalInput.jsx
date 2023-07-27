@@ -74,7 +74,7 @@ const ModalInput = ({
                 >
                     Hủy
                 </Button>
-                {employee.submitProfileStatus && (
+                {
                     <Button
                         onClick={() => {
                             setIsModalOpen(true);
@@ -82,7 +82,7 @@ const ModalInput = ({
                     >
                         Đăng kí
                     </Button>
-                )}
+                }
                 <Button
                     type="primary"
                     onClick={() => {
