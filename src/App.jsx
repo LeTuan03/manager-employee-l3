@@ -87,11 +87,11 @@ export default function App() {
     ]);
     return (
         <>
-            {isAuthenticated || window.location.pathname === "/login" ? (
-                <RouterProvider router={router} />
-            ) : (
+            {/* {isAuthenticated || window.location.pathname === "/login" ? ( */}
+            <RouterProvider router={router} />
+            {/* ) : (
                 <>Loading...</>
-            )}
+            )} */}
         </>
     );
 }
