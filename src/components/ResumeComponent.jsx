@@ -230,7 +230,7 @@ const ResumeComponent = (props) => {
                 footer={
                     type === "awaiting-approval" ? (
                         <div className="flex justify-center">
-                            {localStorage.getItem("role") === "5" ? (
+                            {role === 5 ? (
                                 <>
                                     <Button
                                         className="bg-green-700 text-white"
@@ -287,9 +287,9 @@ const ResumeComponent = (props) => {
                 }
             >
                 <EmployeeProfile
-                // profile={profile}
-                // certificate={certificate}
-                // resume={resume}
+                    profile={profile}
+                    certificate={certificate}
+                    resume={resume}
                 />
             </Modal>
             {/* Phê duyệt nhân viên */}
