@@ -16,7 +16,7 @@ export default function ModalReject({
         //reject profile
         try {
             profile.reasonForRejection = value;
-            profile.submitProfileStatus = "5";
+            profile.salaryIncreaseStatus = "5";
             const res = await acceptEmployee(profile);
             setIsRejectOpen(false);
             message.success(res?.data?.message);

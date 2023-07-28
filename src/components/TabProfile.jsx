@@ -73,10 +73,10 @@ const TabProfile = ({ employee }) => {
         }
     };
     useEffect(() => {
-        handleGetExp(); 
+        handleGetExp();
     }, [employee]);
     return (
-        <div >
+        <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
                 <div className=" bg-white flex flex-row min-h-[720px] p-[6%_10%] ">
                     <div className="basis-1/4 p-10">
@@ -103,28 +103,44 @@ const TabProfile = ({ employee }) => {
                             {employee?.gender === 1
                                 ? "Nam"
                                 : employee?.gender === 2
-                                    ? "Nữ"
-                                    : "Khác"}
+                                ? "Nữ"
+                                : "Khác"}
                         </div>
                         <div className="birth"></div>
                         <h2 className="my-5">Kĩ năng</h2>
                         <Col className="relative pr-4 mb-3">
-                            <Input bordered={false} placeholder="Kĩ năng của bạn !" value={employee?.skill || ""}></Input>
-                            <div className='border-0 border-b border-dotted absolute 
-                                        top-[65%] w-full left-1'></div>
+                            <Input
+                                bordered={false}
+                                placeholder="Kĩ năng của bạn !"
+                                value={employee?.skill || ""}
+                            ></Input>
+                            <div
+                                className="border-0 border-b border-dotted absolute 
+                                        top-[65%] w-full left-1"
+                            ></div>
                         </Col>
                         <h2 className="my-5">Hoạt động</h2>
                         <Col className="relative pr-4 mb-3">
-                            <Input bordered={false} placeholder="Hoạt động của bạn !" value={employee?.activity || ""}></Input>
-                            <div className='border-0 border-b border-dotted absolute 
-                                        top-[65%] w-full left-1'></div>
+                            <Input
+                                bordered={false}
+                                placeholder="Hoạt động của bạn !"
+                                value={employee?.activity || ""}
+                            ></Input>
+                            <div
+                                className="border-0 border-b border-dotted absolute 
+                                        top-[65%] w-full left-1"
+                            ></div>
                         </Col>
                     </div>
                     <div className="basis-2/4 pl-10">
                         <div className="border-l-2">
                             <h1>{employee?.name}</h1>
                             <div className="text-lg">
-                                {employee?.team === 1 ? "Back-end" : "Front-end"}
+                                {employee?.team === 1
+                                    ? "Back-end"
+                                    : employee?.team === 2
+                                    ? "Front-end"
+                                    : "Tester"}
                             </div>
                         </div>
                         <div className="border-l-2 mt-8">
@@ -260,25 +276,44 @@ const TabProfile = ({ employee }) => {
                                         <div className="flex justify-between mb-2 group">
                                             <div>
                                                 <div className="font-medium">
-                                                    {format(new Date(item.startDate), "dd/MM/yyy")} -{" "}
-                                                    {format(new Date(item.endDate), "dd/MM/yyy")}{" "}
+                                                    {format(
+                                                        new Date(
+                                                            item.startDate
+                                                        ),
+                                                        "dd/MM/yyy"
+                                                    )}{" "}
+                                                    -{" "}
+                                                    {format(
+                                                        new Date(item.endDate),
+                                                        "dd/MM/yyy"
+                                                    )}{" "}
                                                     <BankOutlined />{" "}
-                                                    <span className="uppercase">{item.companyName}</span>
+                                                    <span className="uppercase">
+                                                        {item.companyName}
+                                                    </span>
                                                 </div>
-                                                <span className="pl-5">{item.jobDescription}</span>
+                                                <span className="pl-5">
+                                                    {item.jobDescription}
+                                                </span>
                                             </div>
-                                            <div className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
-                                        justify-center gap-2 items-center p-2 rounded-md">
+                                            <div
+                                                className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
+                                        justify-center gap-2 items-center p-2 rounded-md"
+                                            >
                                                 <EditOutlined
                                                     onClick={() => {
                                                         form.setFieldsValue({
                                                             ...item,
                                                             startDate: format(
-                                                                new Date(item.startDate),
+                                                                new Date(
+                                                                    item.startDate
+                                                                ),
                                                                 "yyyy-MM-dd"
                                                             ),
                                                             endDate: format(
-                                                                new Date(item.endDate),
+                                                                new Date(
+                                                                    item.endDate
+                                                                ),
                                                                 "yyyy-MM-dd"
                                                             ),
                                                         });
@@ -287,7 +322,9 @@ const TabProfile = ({ employee }) => {
                                                 />
                                                 <DeleteOutlined
                                                     onClick={() => {
-                                                        handleDeleteExp(item.id);
+                                                        handleDeleteExp(
+                                                            item.id
+                                                        );
                                                     }}
                                                     className="text-red-600 text-lg cursor-pointer"
                                                 />

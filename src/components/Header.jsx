@@ -24,7 +24,13 @@ const Header = ({ toggleCollapsed, collapsed }) => {
                     onClick={() => handleLogOut()}
                 >
                     <LogoutOutlined className="pr-2" />
-                    Đăng Xuất
+                    {role === 5
+                        ? "Đăng Xuất"
+                        : role === 4
+                        ? "Đăng Xuất"
+                        : role === 3
+                        ? "Đăng Xuất"
+                        : " Đăng Nhập"}{" "}
                 </div>
             ),
         },
@@ -45,13 +51,14 @@ const Header = ({ toggleCollapsed, collapsed }) => {
                 </Button>
                 <div>
                     <span>
-                        Hi,{" "}
                         <strong>
                             {role === 5
-                                ? "MANAGER"
+                                ? "Hi, MANAGER"
                                 : role === 4
-                                ? "USER"
-                                : "ADMIN"}{" "}
+                                ? "Hi, USER"
+                                : role === 3
+                                ? "Hi, ADMIN"
+                                : "Lỗi Token, Quay lại đăng nhập"}{" "}
                         </strong>
                     </span>
 

@@ -1,4 +1,4 @@
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined, UpCircleOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
 import React, { useState } from "react";
 import {

@@ -150,9 +150,18 @@ const TableComponet = (props) => {
                     {["9", "8", "5", "4"].includes(
                         employee.submitProfileStatus
                     ) && <InfoCircleOutlined className="text-orange-500" />}
-                    {["2", "0", "8", "6", "7"].includes(
+                    {["2", "0", "8", "6"].includes(
                         employee.submitProfileStatus
                     ) && (
+                        <EyeOutlined
+                            className="text-green-600 text-lg"
+                            onClick={() => {
+                                setIsModalOpen(true);
+                                setEmployeeId(employee.id);
+                            }}
+                        />
+                    )}
+                    {["3", "7"].includes(employee.submitProfileStatus) && (
                         <EyeOutlined
                             className="text-green-600 text-lg"
                             onClick={() => {

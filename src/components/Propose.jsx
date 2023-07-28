@@ -104,7 +104,6 @@ export default function Propose() {
                 <div
                     className="cursor-pointer"
                     onClick={() => {
-                        console.log(user);
                         setIsModalOpen(true);
                         setProfile(user);
                     }}

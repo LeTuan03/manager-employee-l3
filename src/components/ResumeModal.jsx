@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, DatePicker, Modal, Space } from "antd";
+import { Button, Checkbox, DatePicker, Modal, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import {
@@ -25,11 +25,6 @@ export default function ResumeModal(props) {
     const [resume, setResume] = useState({});
     const [value, setValue] = useState("");
 
-    const handleAdditionalRequestOk = () => {};
-    const handleAdditionalRequestCancel = () => {
-        setIsAdditionalRequestOpen(false);
-    };
-
     const handleWatchResume = async (id) => {
         const res = await getCertificateByEmployee(id);
         setCertificate(res?.data?.data);
@@ -39,41 +34,77 @@ export default function ResumeModal(props) {
 
     // Phê duyệt
     const handleAccept = async () => {
-        if (type === "Propose") {
-            profile.proposalDate = new Date(acceptDate).getTime();
-            const res = await proposalEdit(profile);
-        } else if (type === "Promote") {
+        try {
             profile.acceptanceDate = acceptDate;
-            const res = await acceptPromote(profile);
-        } else if (type === "IncreaseSalary") {
-            profile.acceptanceDate = acceptDate;
-            const res = await salaryApprove(profile);
+            if (type === "Propose") {
+                profile.proposalStatus = "3";
+                const res = await proposalEdit(profile);
+                message.success("Phê duyệt nhân viên thành công!");
+                setIsApproveOpen(false);
+            } else if (type === "Promote") {
+                profile.processStatus = "3";
+                const res = await acceptPromote(profile);
+                message.success("Phê duyệt nhân viên thành công!");
+                setIsApproveOpen(false);
+            } else if (type === "IncreaseSalary") {
+                profile.salaryIncreaseStatus = "3";
+                const res = await salaryApprove(profile);
+                message.success("Phê duyệt nhân viên thành công!");
+                setIsApproveOpen(false);
+            }
+        } catch (error) {
+            message.error("Phê duyệt nhân viên thất bại!");
         }
     };
     // yêu cầu bổ sung
     const handleAdditionalRequest = async () => {
-        profile.additionalRequest = additional;
-        if (type === "Propose") {
-            const res = await proposalEdit(profile);
-        } else if (type === "Promote") {
-            const res = await acceptPromote(profile);
-        } else if (type === "IncreaseSalary") {
-            const res = await salaryApprove(profile);
+        try {
+            profile.additionalRequest = additional;
+            if (type === "Propose") {
+                profile.proposalStatus = "4";
+                const res = await proposalEdit(profile);
+                message.success("Yêu cầu bổ sung nhân viên thành công!");
+                setIsAdditionalRequestOpen(false);
+            } else if (type === "Promote") {
+                profile.processStatus = "4";
+                const res = await acceptPromote(profile);
+                message.success("Yêu cầu bổ sung nhân viên thành công!");
+                setIsAdditionalRequestOpen(false);
+            } else if (type === "IncreaseSalary") {
+                profile.salaryIncreaseStatus = "4";
+                const res = await salaryApprove(profile);
+                message.success("Yêu cầu bổ sung nhân viên thành công!");
+                setIsAdditionalRequestOpen(false);
+            }
+        } catch (error) {
+            message.error("Yêu cầu bổ sung nhân viên thất bại!");
         }
     };
     // yêu cầu từ chối
     const handleReject = async () => {
-        profile.rejectionDate = rejectDate;
-        profile.reasonForRefusal = value;
-        if (type === "Propose") {
-            const res = await proposalEdit(profile);
-        } else if (type === "Promote") {
-            const res = rejectPromote(profile);
-        } else if (type === "IncreaseSalary") {
-            const res = await salaryApprove(profile);
+        try {
+            profile.rejectionDate = rejectDate;
+            profile.reasonForRefusal = value;
+            if (type === "Propose") {
+                profile.proposalStatus = "5";
+                const res = await proposalEdit(profile);
+                message.success("Yêu cầu từ chối nhân viên thành công!");
+                setIsRejectOpen(false);
+            } else if (type === "Promote") {
+                profile.processStatus = "5";
+                const res = rejectPromote(profile);
+                message.success("Yêu cầu từ chối nhân viên thành công!");
+                setIsRejectOpen(false);
+            } else if (type === "IncreaseSalary") {
+                profile.salaryIncreaseStatus = "5";
+                const res = await salaryApprove(profile);
+                message.success("Yêu cầu từ chối nhân viên thành công!");
+                setIsRejectOpen(false);
+            }
+        } catch (error) {
+            message.error("Yêu cầu từ chối nhân viên thất bại!");
         }
     };
-    console.log(profile);
     return (
         <>
             <Button
@@ -169,8 +200,7 @@ export default function ResumeModal(props) {
                     title="Nội dung yêu cầu bổ sung"
                     centered
                     open={isAdditionalRequestOpen}
-                    onOk={handleAdditionalRequestOk}
-                    onCancel={handleAdditionalRequestCancel}
+                    onCancel={() => setIsAdditionalRequestOpen(false)}
                     footer={
                         <>
                             <Button
@@ -196,6 +226,7 @@ export default function ResumeModal(props) {
                     }
                 >
                     <TextArea
+                        required
                         placeholder="Nhập nội dung"
                         autoSize={{
                             minRows: 3,
