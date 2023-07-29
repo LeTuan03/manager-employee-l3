@@ -124,8 +124,8 @@ const TableComponet = (props) => {
         {
             title: "Thao tác",
             key: "action",
-            render: (_, employee) => (
-                <div className="flex justify-center gap-2">
+            render: (_, employee, index) => (
+                <div className="flex justify-center gap-2" key={index}>
                     {employee.submitProfileStatus === "1" && (
                         <span
                             className="cursor-pointer"

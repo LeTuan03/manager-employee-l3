@@ -36,7 +36,6 @@ const TabProfile = ({ employee }) => {
             startDate,
             endDate,
         };
-        console.log(data);
         if (values?.id) {
             await handleUpdate(values?.id, data);
         } else {

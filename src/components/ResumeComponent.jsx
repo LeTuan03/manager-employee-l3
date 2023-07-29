@@ -299,17 +299,20 @@ const ResumeComponent = (props) => {
                 setIsModalOpen={setIsModalOpen}
                 profile={profile}
                 type={type}
+                getAllEmployee={getAllEmployee}
             />
             <ModalAdditional
                 isAdditionalRequestOpen={isAdditionalRequestOpen}
                 setIsAdditionalRequestOpen={setIsAdditionalRequestOpen}
                 profile={profile}
+                getAllEmployee={getAllEmployee}
                 type={type}
             />
             <ModalReject
                 isRejectOpen={isRejectOpen}
                 setIsRejectOpen={setIsRejectOpen}
                 profile={profile}
+                getAllEmployee={getAllEmployee}
                 type={type}
             />
 

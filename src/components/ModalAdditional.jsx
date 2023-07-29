@@ -8,6 +8,7 @@ export default function ModalAdditional({
     setIsAdditionalRequestOpen,
     profile,
     type,
+    getAllEmployee,
 }) {
     const additionalRequestTermination = async () => {
         //Thêm nội dung yêu cầu bổ sung
@@ -16,6 +17,7 @@ export default function ModalAdditional({
             const res = await acceptEmployee(profile);
             setIsAdditionalRequestOpen(false);
             message.success(res?.data?.message);
+            await getAllEmployee();
         } catch (error) {
             console.log(error);
             message.error(error);

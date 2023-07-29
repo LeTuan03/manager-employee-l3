@@ -9,6 +9,7 @@ export default function ModalAccept({
     setIsModalOpen,
     profile,
     type,
+    getAllEmployee,
 }) {
     const handleAccept = async () => {
         //Duyệt nhân viên
@@ -17,6 +18,7 @@ export default function ModalAccept({
             const res = await acceptEmployee(profile);
             setIsApproveOpen(false);
             message.success(res?.data?.message);
+            await getAllEmployee();
         } catch (error) {
             console.log(error);
             message.error(error);

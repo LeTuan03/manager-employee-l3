@@ -39,31 +39,38 @@ export default function App() {
     const router = createBrowserRouter([
         {
             path: "/",
+            key: "/",
             element: <LayoutHomePage></LayoutHomePage>,
             errorElement: <>Not Found</>,
             children: [
                 {
                     index: true,
+                    key: "1",
                     element: <></>,
                 },
                 {
                     path: "/manage_employee",
+                    key: "2",
                     element: <Employee></Employee>,
                 },
                 {
                     path: "/release",
+                    key: "3",
                     element: <PageEnd></PageEnd>,
                 },
                 {
                     path: "/awaiting_approval",
+                    key: "4",
                     element: <AwaitingApproval></AwaitingApproval>,
                 },
                 {
                     path: "/approved",
+                    key: "5",
                     element: <Approved></Approved>,
                 },
                 {
                     path: "/addnew_employee",
+                    key: "6",
                     element: (
                         <RoleUserRoute>
                             <AddUserPage></AddUserPage>
@@ -75,20 +82,24 @@ export default function App() {
         {
             path: "/admin",
             element: <></>,
+            key: "8",
             errorElement: <></>,
             children: [
                 {
                     index: true,
+                    key: "9",
                     element: <></>,
                 },
                 {
                     path: "user",
+                    key: "10",
                     element: <>Manage User</>,
                 },
             ],
         },
         {
             path: "/login",
+            key: "11",
             element: <SignIn />,
         },
     ]);

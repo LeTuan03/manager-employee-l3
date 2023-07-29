@@ -58,7 +58,7 @@ const Header = ({ toggleCollapsed, collapsed }) => {
                                 ? "Hi, USER"
                                 : role === 3
                                 ? "Hi, ADMIN"
-                                : "Lỗi Token, Quay lại đăng nhập"}{" "}
+                                : "Lỗi , Quay lại đăng nhập"}{" "}
                         </strong>
                     </span>
 

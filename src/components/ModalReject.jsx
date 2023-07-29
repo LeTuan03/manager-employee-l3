@@ -9,6 +9,7 @@ export default function ModalReject({
     setIsRejectOpen,
     profile,
     type,
+    getAllEmployee,
 }) {
     const [value, setValue] = useState("");
 
@@ -20,6 +21,7 @@ export default function ModalReject({
             const res = await acceptEmployee(profile);
             setIsRejectOpen(false);
             message.success(res?.data?.message);
+            await getAllEmployee();
         } catch (error) {
             console.log(error);
             message.error(error);
