@@ -29,8 +29,9 @@ const TableComponet = (props) => {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
+            width: 200,
             sorter: true,
-            render: (text) => <a>{text}</a>,
+            render: (text) => <a>{useTruncateText(text, 30)}</a>,
         },
         {
             title: "Ngày sinh",
@@ -60,8 +61,15 @@ const TableComponet = (props) => {
             key: "team",
             sorter: true,
             render: (team) => (
-                <Tag color={team === 1 ? "green" : "geekblue"}>
-                    {team === 1 ? "Back-end" : "Front-end"}
+                <Tag
+                    color={team === 1 ? "green" : "geekblue"}
+                    className="w-full text-center"
+                >
+                    {team === 1
+                        ? "Back-end"
+                        : team === 2
+                        ? "Front-end"
+                        : "Tester"}
                 </Tag>
             ),
         },
@@ -138,7 +146,9 @@ const TableComponet = (props) => {
                         <span
                             onClick={() => {
                                 // setOpen({...open,modalInput:true});
-                                dispatch(setOpen({ ...open, modalInput: true }));
+                                dispatch(
+                                    setOpen({ ...open, modalInput: true })
+                                );
                                 setEmployeeId(employee.id);
                             }}
                             className="cursor-pointer"
@@ -146,10 +156,14 @@ const TableComponet = (props) => {
                             <EditOutlined className="text-blue-600 text-lg" />
                         </span>
                     )}
-                    {["9", "8", "5", "4"].includes(employee.submitProfileStatus) && (
+                    {["9", "8", "5", "4"].includes(
+                        employee.submitProfileStatus
+                    ) && (
                         <InfoCircleOutlined
                             onClick={() => {
-                                setReasonForRejection(employee?.reasonForRejection);
+                                setReasonForRejection(
+                                    employee?.reasonForRejection
+                                );
                                 setOpenReject(true);
                             }}
                             className="text-orange-500"
@@ -158,18 +172,25 @@ const TableComponet = (props) => {
                     {["2", "0", "8", "6", "7", "3"].includes(
                         employee.submitProfileStatus
                     ) && (
-                            <EyeOutlined
-                                className="text-green-600 text-lg"
-                                onClick={() => {
-                                    setEmployeeId(employee.id);
-                                    if (employee.submitProfileStatus === "3") {
-                                        dispatch(setOpen({ ...open, modalUpdateHappening: true }))
-                                    }else{
-                                        dispatch(setOpen({ ...open, modalProfile: true }));
-                                    }
-                                }}
-                            />
-                        )}
+                        <EyeOutlined
+                            className="text-green-600 text-lg"
+                            onClick={() => {
+                                setEmployeeId(employee.id);
+                                if (employee.submitProfileStatus === "3") {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalUpdateHappening: true,
+                                        })
+                                    );
+                                } else {
+                                    dispatch(
+                                        setOpen({ ...open, modalProfile: true })
+                                    );
+                                }
+                            }}
+                        />
+                    )}
                 </div>
             ),
         },
