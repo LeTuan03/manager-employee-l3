@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-import { getListApproved } from "../../services/api";
+import { searchEmployee } from "../../services/api";
 import TableComponet from "../../components/Table";
 import { Button, Modal } from "antd";
-import EmployeeProfile from "../../components/EmployeeProfile";
+import EmployeeProfile from "../../components/modal-employee-profile/EmployeeProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployee } from "../../redux/employee/employeeSlice";
+
 
 export default function Approved() {
-    const [listEmployee, setListEmployee] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(null);
-
-    const getAllEmployee = async () => {
-        setLoading(true);
-        const res = await getListApproved();
-        if (res?.status === 200) {
-            setListEmployee(res?.data?.data);
-            setLoading(false);
-        }
-    };
+    const dispatch = useDispatch()
+    const { open } = useSelector((state) => state.employee)
     useEffect(() => {
-        getAllEmployee();
+        dispatch(getAllEmployee("3,7"))
     }, []);
     return (
         <div>
             <TableComponet
                 setEmployeeId={setEmployeeId}
-                listEmployee={listEmployee}
-                getAllEmployee={getAllEmployee}
-                loading={loading}
-                setIsModalOpen={setIsModalOpen}
-                type={"approved"}
             ></TableComponet>
             {employeeId && (
                 <Modal
@@ -38,20 +26,19 @@ export default function Approved() {
                     className="max-h-[720px] overflow-y-hidden"
                     title="Hồ sơ nhân viên"
                     centered
-                    open={isModalOpen}
+                    open={open.modalProfile}
                     onOk={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     onCancel={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     footer={
                         <div className="flex justify-center">
                             <Button
-                                type="primary"
                                 danger
                                 onClick={() => {
-                                    setIsModalOpen(false);
+                                    dispatch(setOpen({ ...open, modalProfile: false }))
                                 }}
                             >
                                 Hủy

@@ -1,49 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
-import { searchEmployee } from "../../services/api";
-import ModalInput from "../../components/ModalInput";
+import ModalInput from "../../components/modal-add-new/ModalInput";
 import { Button, Modal } from "antd";
-import EmployeeProfile from "../../components/EmployeeProfile";
-import ModalEnd from "../../components/ModalEnd";
-import SaveResume from "../../components/SaveResume";
-import { useSelector } from "react-redux";
+import EmployeeProfile from "../../components/modal-employee-profile/EmployeeProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import SaveResume from '../../components/resume/SaveResume'
 const PageEnd = () => {
-    const { role } = useSelector((state) => state.account);
-    const [isResumeOpen, setIsResumeOpen] = useState(false);
-    const [listEmployee, setListEmployee] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [openSendLeader, setOpenSendLeader] = useState(false);
-    const getAllEmployee = async () => {
-        setLoading(true);
-        const res = await searchEmployee("7,0");
-        if (res?.status === 200) {
-            setListEmployee(res?.data?.data);
-            setLoading(false);
-        }
-    };
+    const [isResumeOpen, setIsResumeOpen] = useState(false);
+    const dispatch = useDispatch()
+    const { open } = useSelector((state) => state.employee)
     useEffect(() => {
-        getAllEmployee();
+        dispatch(getAllEmployee("7,0"))
     }, []);
     return (
         <>
             <ModalInput
-                open={open}
                 setEmployeeId={setEmployeeId}
                 employeeId={employeeId}
-                setOpen={setOpen}
-                setIsModalOpen={setIsModalOpen}
             ></ModalInput>
             <Table
-                employeeId={employeeId}
                 setEmployeeId={setEmployeeId}
-                setOpen={setOpen}
-                listEmployee={listEmployee}
-                getAllEmployee={getAllEmployee}
-                loading={loading}
-                setIsModalOpen={setIsModalOpen}
             ></Table>
             {employeeId && (
                 <Modal
@@ -51,41 +29,50 @@ const PageEnd = () => {
                     className="max-h-[720px] overflow-y-hidden"
                     title="Hồ sơ nhân viên"
                     centered
-                    open={isModalOpen}
+                    open={open.modalProfile}
                     onOk={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     onCancel={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     footer={
                         <div className="flex justify-center">
-                            {
-                                <Button
-                                    type="primary"
-                                    onClick={() => setIsResumeOpen(true)}
-                                >
-                                    Nộp lưu hồ sơ
-                                </Button>
-                            }
                             <Button
-                                type="primary"
                                 danger
                                 onClick={() => {
-                                    setIsModalOpen(false);
+                                    dispatch(setOpen({ ...open, modalProfile: false }))
                                 }}
                             >
                                 Hủy
                             </Button>
+                            <Button
+                                type="primary"
+                                onClick={() => setIsResumeOpen(true)}
+                            >
+                                Nộp lưu hồ sơ
+                            </Button>
+                            <Button //3,4,9
+                                danger
+                                onClick={() => {
+                                    dispatch(setOpen({ ...open, modalEnd: true }))
+                                }}
+                            >
+                                Kết thúc
+                            </Button>
+                            <Button
+                                htmlType="submit"
+                                type="primary"
+                                onClick={() => {
+                                    dispatch(setOpen({ ...open, modalSendLeader: true }))
+                                }}
+                            >
+                                Trình lãnh đạo
+                            </Button>
                         </div>
                     }
                 >
-                    <EmployeeProfile
-                        setOpenSendLeader={setOpenSendLeader}
-                        openSendLeader={openSendLeader}
-                        employeeId={employeeId}
-                    ></EmployeeProfile>
-
+                    <EmployeeProfile employeeId={employeeId}></EmployeeProfile>
                     <SaveResume
                         employeeId={employeeId}
                         isResumeOpen={isResumeOpen}
@@ -93,7 +80,6 @@ const PageEnd = () => {
                     ></SaveResume>
                 </Modal>
             )}
-            <ModalEnd></ModalEnd>
         </>
     );
 };

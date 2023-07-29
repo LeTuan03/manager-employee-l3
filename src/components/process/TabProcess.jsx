@@ -2,10 +2,15 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
 import { format } from "date-fns";
 import { useState } from "react";
-import { deleteProposal, updateProposal } from "../services/api";
-import RecomnentModal from "./RecomnentModal";
+import {
+    addProcessByEmp,
+    deleteProcess,
+    updateProcess,
+} from "../../services/api";
+import ProcessModal from "./ProcessModal";
 
-const TabRecommendation = ({ recoments, employee }) => {
+const TabProcess = ({ processs, employee,handleGetProcessByEmp }) => {
+    console.log(employee)
     const columns = [
         {
             title: "STT",
@@ -14,70 +19,69 @@ const TabRecommendation = ({ recoments, employee }) => {
             render: (_, item, index) => <>{index + 1}</>,
         },
         {
-            title: "Ngày diễn biến",
-            dataIndex: "proposalDate",
-            key: "proposalDate",
-            render: (_, { proposalDate }) => (
-                <a>{format(new Date(proposalDate).getTime(), "yyyy/MM/dd")}</a>
+            title: "Ngày thăng chức",
+            dataIndex: "promotionDay",
+            key: "promotionDay",
+            render: (_, { promotionDay }) => (
+                <a>{format(new Date(promotionDay).getTime(), "yyyy/MM/dd")}</a>
             ),
         },
         {
-            title: "Loại ",
-            dataIndex: "type",
-            key: "type",
+            title: "Lần thứ",
+            dataIndex: "times",
+            key: "times",
+        },
+        {
+            title: "Chức vụ cũ",
+            dataIndex: "currentPosition",
+            key: "currentPosition",
         },
         {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
         },
-
-        {
-            title: "Mô tả chi tiết",
-            dataIndex: "detailedDescription",
-            key: "detailedDescription",
-        },
         {
             title: "Trạng thái",
-            dataIndex: "proposalStatus",
-            key: "proposalStatus",
-            render: (proposalStatus) => {
-                switch (proposalStatus) {
+            dataIndex: "processStatus",
+            key: "processStatus",
+            render: (processStatus) => {
+                switch (processStatus) {
                     case "0":
-                        proposalStatus = "Nộp lưu hồ sơ";
+                        processStatus = "Nộp lưu hồ sơ";
                         break;
                     case "1":
-                        proposalStatus = "Lưu mới";
+                        processStatus = "Lưu mới";
                         break;
                     case "2":
-                        proposalStatus = "Chờ xử lí";
+                        processStatus = "Chờ xử lí";
                         break;
                     case "3":
-                        proposalStatus = "Đã được chấp nhận";
+                        processStatus = "Đã được chấp nhận";
                         break;
                     case "4":
-                        proposalStatus = "Yêu cầu bổ sung";
+                        processStatus = "Yêu cầu bổ sung";
                         break;
                     case "5":
-                        proposalStatus = "Từ chối";
+                        processStatus = "Từ chối";
                         break;
                     case "6":
-                        proposalStatus = "Gửi yêu cầu kết thúc hồ sơ";
+                        processStatus = "Gửi yêu cầu kết thúc hồ sơ";
                         break;
                     case "7":
-                        proposalStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
+                        processStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
                         break;
                     case "8":
-                        proposalStatus =
+                        processStatus =
                             "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
                         break;
                     case "9":
-                        proposalStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                        processStatus = "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        proposalStatus = "Chờ xử lí";
+                        processStatus = "Chờ xử lí";
                         break;
                 }
-                return <a>{proposalStatus}</a>;
+                return <a>{processStatus}</a>;
             },
         },
         {
@@ -86,15 +90,15 @@ const TabRecommendation = ({ recoments, employee }) => {
             key: "action",
             render: (_, employee) => (
                 <div>
-                    {employee.proposalStatus === 1 ? (
+                    {employee.processStatus === "1" ? (
                         <div>
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
-                                        employee.proposalDate = format(
+                                        employee.promotionDay = format(
                                             new Date(
-                                                employee.proposalDate
+                                                employee.promotionDay
                                             ).getTime(),
                                             "yyyy-MM-dd"
                                         );
@@ -106,7 +110,7 @@ const TabRecommendation = ({ recoments, employee }) => {
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
                                     onClick={() =>
-                                        handleDeleteRecoment(employee.id)
+                                        handleDeletePromote(employee.id)
                                     }
                                 />
                             </span>
@@ -128,58 +132,67 @@ const TabRecommendation = ({ recoments, employee }) => {
     ];
 
     const [form] = Form.useForm();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [present, setPresent] = useState(false);
-    const [data, setData] = useState({});
 
-    const handleDeleteRecoment = async (id) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [data, setData] = useState({});
+    const [present, setPresent] = useState(false);
+
+    const handleDeletePromote = async (id) => {
         try {
-            const res = await deleteProposal(id);
-            message.success("Xóa thành công!");
+            const res = await deleteProcess(id);
+            console.log(res)
+            handleGetProcessByEmp()
+            // message.success("Xóa thành công !");
         } catch (error) {
-            message.error("Xóa thất bại!");
+            message.error("Xóa thất bại !");
         }
     };
+
     const handleSubmit = async (value) => {
         try {
             if (value.id) {
-                const res = await updateProposal(value);
-                message.success("Cập nhật thành công!");
+                const res = await updateProcess(value);
+                console.log(res)
+                message.success("Cập nhật thành công !");
             } else {
-                const res = await addProposalByEmp(recoments[0].employeeId, [
+                const res = await addProcessByEmp(employee?.id, [
                     value,
                 ]);
-                message.success("Thêm mới thành công!");
+                console.log(res)
+                message.success("Thêm mới thành công !");
             }
+            handleGetProcessByEmp()
             handleOpenPresent();
             form.resetFields();
         } catch (error) {
-            message.error(error);
+            message.error("Cập nhật thất bại !");
+            console.log(error)
         }
     };
+
     const handleOpenPresent = () => {
         setIsModalOpen(true);
         setPresent(true);
     };
+
     return (
         <>
             <Form form={form} onFinish={handleSubmit} layout="vertical">
                 <Row gutter={16} className="mb-2">
-                    <Col span={6} className="hidden">
+                    <Col span={4} className="hidden">
                         <Form.Item name="id">
                             <Input />
                         </Form.Item>
                     </Col>
-                    <Col span={6} className="hidden">
-                        <Form.Item name="proposalStatus">
+                    <Col span={4} className="hidden">
+                        <Form.Item name="processStatus">
                             <Input value={1} />
                         </Form.Item>
                     </Col>
-
-                    <Col span={6}>
+                    <Col span={4}>
                         <Form.Item
-                            name="proposalDate"
-                            label="Ngày diễn biến"
+                            name="promotionDay"
+                            label="Ngày thăng chức"
                             rules={[
                                 {
                                     required: true,
@@ -187,13 +200,13 @@ const TabRecommendation = ({ recoments, employee }) => {
                                 },
                             ]}
                         >
-                            <Input type="date" />
+                            <Input name="promotionDay" type="date" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={4}>
                         <Form.Item
-                            name="type"
-                            label="Loại"
+                            name="newPosition"
+                            label="Chức vụ mới"
                             rules={[
                                 {
                                     required: true,
@@ -205,12 +218,16 @@ const TabRecommendation = ({ recoments, employee }) => {
                                 className="w-full"
                                 options={[
                                     {
-                                        value: 1,
-                                        label: "Đề xuất",
+                                        value: 2,
+                                        label: "Giám đốc",
                                     },
                                     {
-                                        value: 2,
-                                        label: "Tham mưu",
+                                        value: 1,
+                                        label: "Trưởng phòng",
+                                    },
+                                    {
+                                        value: 3,
+                                        label: "Quản lí",
                                     },
                                 ]}
                             />
@@ -230,40 +247,10 @@ const TabRecommendation = ({ recoments, employee }) => {
                             <Input />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
-                        <Form.Item
-                            name="content"
-                            label="Nội dung"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="detailedDescription"
-                            label="Mô tả chi tiết"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="mr-5 w-full  bg-green-700 text-white"
+                                className="mr-5 w-full bg-green-700 text-white"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -288,12 +275,12 @@ const TabRecommendation = ({ recoments, employee }) => {
                 <Col span={24}>
                     <Table
                         columns={columns}
-                        dataSource={recoments}
+                        dataSource={processs}
                         pagination={false}
                     />
                 </Col>
             </Row>
-            <RecomnentModal
+            <ProcessModal
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
@@ -305,4 +292,4 @@ const TabRecommendation = ({ recoments, employee }) => {
     );
 };
 
-export default TabRecommendation;
+export default TabProcess;

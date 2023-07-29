@@ -1,18 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isAuthenticated: false,
-    role: null,
+    role: null
 };
 
 export const accountSlice = createSlice({
-    name: "account",
+    name: 'account',
     initialState,
     reducers: {
         doLoginAction: (state, action) => {
-            state.isAuthenticated = true;
-            state.role = action.payload;
-        },
+            state.isAuthenticated = true,
+            state.role = action.payload
+        }
     },
 });
 

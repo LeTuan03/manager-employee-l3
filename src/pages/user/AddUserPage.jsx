@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
-import { searchEmployee } from "../../services/api";
-import ModalInput from "../../components/ModalInput";
+import ModalInput from "../../components/modal-add-new/ModalInput";
 import { Button, Modal } from "antd";
-import EmployeeProfile from "../../components/EmployeeProfile";
-import ModalEnd from "../../components/ModalEnd";
+import EmployeeProfile from "../../components/modal-employee-profile/EmployeeProfile";
+import ModalEnd from "../../components/modal-quit-job/ModalEnd";
+import SendLeader from "../../components/modal-send-leader/SendLeader";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+
 const AddUserPage = () => {
-    const [listEmployee, setListEmployee] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [openSendLeader, setOpenSendLeader] = useState(false);
-    const getAllEmployee = async () => {
-        setLoading(true);
-        const res = await searchEmployee("1,2");
-        if (res?.status === 200) {
-            setListEmployee(res?.data?.data);
-            setLoading(false);
-        }
-    };
+    const [reasonForEnding, setReasonForEnding] = useState("");
+    const dispatch = useDispatch()
+    const { open } = useSelector((state) => state.employee)
     useEffect(() => {
-        getAllEmployee();
+        dispatch(getAllEmployee("1,2,4,5"));
     }, []);
     return (
         <>
@@ -29,26 +22,18 @@ const AddUserPage = () => {
                 type="primary"
                 className="mb-5"
                 onClick={() => {
-                    setOpen(true);
+                    dispatch(setOpen({ ...open, modalInput: true }));
                 }}
             >
                 Thêm mới
             </Button>
             <ModalInput
-                open={open}
-                // setSend={setSend}
                 setEmployeeId={setEmployeeId}
                 employeeId={employeeId}
-                setOpen={setOpen}
-                setIsModalOpen={setIsModalOpen}
             ></ModalInput>
             <Table
                 setEmployeeId={setEmployeeId}
-                setOpen={setOpen}
-                listEmployee={listEmployee}
                 getAllEmployee={getAllEmployee}
-                loading={loading}
-                setIsModalOpen={setIsModalOpen}
             ></Table>
             {employeeId && (
                 <Modal
@@ -56,28 +41,36 @@ const AddUserPage = () => {
                     className="max-h-[720px] overflow-y-hidden"
                     title="Hồ sơ nhân viên"
                     centered
-                    open={isModalOpen}
+                    open={open.modalProfile}
                     onOk={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     onCancel={() => {
-                        setIsModalOpen(false);
+                        dispatch(setOpen({ ...open, modalProfile: false }))
                     }}
                     footer={
                         <div className="flex justify-center">
                             <Button
-                                type="primary"
                                 danger
                                 onClick={() => {
-                                    setIsModalOpen(false);
+                                    dispatch(setOpen({ ...open, modalProfile: false }))
                                 }}
                             >
                                 Hủy
                             </Button>
                             <Button
+                                danger
+                                onClick={() => {
+                                    dispatch(setOpen({ ...open, modalEnd: true }))
+                                }}
+                            >
+                                Kết thúc
+                            </Button>
+                            <Button
+                                htmlType="submit"
                                 type="primary"
                                 onClick={() => {
-                                    setOpenSendLeader(true);
+                                    dispatch(setOpen({ ...open, modalSendLeader: true }))
                                 }}
                             >
                                 Trình lãnh đạo
@@ -85,14 +78,18 @@ const AddUserPage = () => {
                         </div>
                     }
                 >
-                    <EmployeeProfile
-                        setOpenSendLeader={setOpenSendLeader}
-                        openSendLeader={openSendLeader}
-                        employeeId={employeeId}
-                    ></EmployeeProfile>
+                    <EmployeeProfile employeeId={employeeId}></EmployeeProfile>
                 </Modal>
             )}
-            <ModalEnd></ModalEnd>
+            <ModalEnd
+                employeeId={employeeId}
+                setReasonForEnding={setReasonForEnding}
+                reasonForEnding={reasonForEnding}
+            ></ModalEnd>
+            <SendLeader
+                employeeId={employeeId}
+                reasonForEnding={reasonForEnding}
+            ></SendLeader>
         </>
     );
 };

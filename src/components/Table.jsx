@@ -1,5 +1,5 @@
-import React from "react";
-import { Table, Tag } from "antd";
+import React, { useState } from "react";
+import { Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
     DeleteOutlined,
@@ -9,17 +9,15 @@ import {
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
-import UpdateHappeningModal from "./UpdateHappeningModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployee, setOpen } from "../redux/employee/employeeSlice";
+import { STATUS } from "../constants/constants";
 const TableComponet = (props) => {
-    const {
-        listEmployee,
-        loading,
-        getAllEmployee,
-        setOpen,
-        setEmployeeId,
-        setIsModalOpen,
-    } = props;
+    const [reasonForRejection, setReasonForRejection] = useState("");
+    const [openReject, setOpenReject] = useState(false);
+    const dispatch = useDispatch();
+    const { open, listEmployee } = useSelector((state) => state.employee);
+    const { loading, setEmployeeId } = props;
     const columns = [
         {
             title: "STT",
@@ -31,12 +29,14 @@ const TableComponet = (props) => {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            render: (text) => <a> {useTruncateText(text, 25)}</a>,
+            sorter: true,
+            render: (text) => <a>{text}</a>,
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
+            sorter: true,
             render: (dateOfBirth) => (
                 <>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
             ),
@@ -45,27 +45,23 @@ const TableComponet = (props) => {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
+            sorter: true,
             render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
+            sorter: true,
         },
         {
-            title: "Nhóm",
+            title: "Team",
             dataIndex: "team",
             key: "team",
+            sorter: true,
             render: (team) => (
-                <Tag
-                    className="w-full text-center"
-                    color={team === 1 ? "green" : "geekblue"}
-                >
-                    {team === 1
-                        ? "Back-end"
-                        : team === 2
-                        ? "Front-end"
-                        : "Tester"}
+                <Tag color={team === 1 ? "green" : "geekblue"}>
+                    {team === 1 ? "Back-end" : "Front-end"}
                 </Tag>
             ),
         },
@@ -73,14 +69,16 @@ const TableComponet = (props) => {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
+            sorter: true,
             render: (address) => {
-                const addressText = useTruncateText(address, 25);
+                const addressText = useTruncateText(address, 20);
                 return <span>{addressText}</span>;
             },
         },
         {
             title: "Trạng thái",
             key: "submitProfileStatus",
+            sorter: true,
             dataIndex: "submitProfileStatus",
             render: (status) => {
                 switch (status) {
@@ -117,15 +115,15 @@ const TableComponet = (props) => {
                     default:
                         break;
                 }
-                const statusText = useTruncateText(status, 25);
+                const statusText = useTruncateText(status, 20);
                 return <>{statusText}</>;
             },
         },
         {
             title: "Thao tác",
             key: "action",
-            render: (_, employee, index) => (
-                <div className="flex justify-center gap-2" key={index}>
+            render: (_, employee) => (
+                <div className="flex justify-center gap-2">
                     {employee.submitProfileStatus === "1" && (
                         <span
                             className="cursor-pointer"
@@ -136,10 +134,11 @@ const TableComponet = (props) => {
                             <DeleteOutlined className="text-red-600 text-lg" />
                         </span>
                     )}
-                    {["1", "4"].includes(employee.submitProfileStatus) && (
+                    {["1", "5", "4"].includes(employee.submitProfileStatus) && (
                         <span
                             onClick={() => {
-                                setOpen(true);
+                                // setOpen({...open,modalInput:true});
+                                dispatch(setOpen({ ...open, modalInput: true }));
                                 setEmployeeId(employee.id);
                             }}
                             className="cursor-pointer"
@@ -147,43 +146,38 @@ const TableComponet = (props) => {
                             <EditOutlined className="text-blue-600 text-lg" />
                         </span>
                     )}
-                    {["9", "8", "5", "4"].includes(
-                        employee.submitProfileStatus
-                    ) && <InfoCircleOutlined className="text-orange-500" />}
-                    {["2", "0", "8", "6"].includes(
+                    {["9", "8", "5", "4"].includes(employee.submitProfileStatus) && (
+                        <InfoCircleOutlined
+                            onClick={() => {
+                                setReasonForRejection(employee?.reasonForRejection);
+                                setOpenReject(true);
+                            }}
+                            className="text-orange-500"
+                        />
+                    )}
+                    {["2", "0", "8", "6", "7", "3"].includes(
                         employee.submitProfileStatus
                     ) && (
-                        <EyeOutlined
-                            className="text-green-600 text-lg"
-                            onClick={() => {
-                                setIsModalOpen(true);
-                                setEmployeeId(employee.id);
-                            }}
-                        />
-                    )}
-                    {["3", "7"].includes(employee.submitProfileStatus) && (
-                        <EyeOutlined
-                            className="text-green-600 text-lg"
-                            onClick={() => {
-                                setIsModalOpen(true);
-                                setEmployeeId(employee.id);
-                            }}
-                        />
-                    )}
-                    {employee.submitProfileStatus === "3" && role === 4 && (
-                        <UpdateHappeningModal
-                            employee={employee}
-                        ></UpdateHappeningModal>
-                    )}
+                            <EyeOutlined
+                                className="text-green-600 text-lg"
+                                onClick={() => {
+                                    setEmployeeId(employee.id);
+                                    if (employee.submitProfileStatus === "3") {
+                                        dispatch(setOpen({ ...open, modalUpdateHappening: true }))
+                                    }else{
+                                        dispatch(setOpen({ ...open, modalProfile: true }));
+                                    }
+                                }}
+                            />
+                        )}
                 </div>
             ),
         },
     ];
-    const { role } = useSelector((state) => state.account);
     const handleDeleteEmployee = async (id) => {
         const res = await deleteEmployee(id);
-        if (res?.data?.code === 200) {
-            await getAllEmployee();
+        if (res?.data?.code === STATUS.SUCCESS) {
+            dispatch(getAllEmployee("1,2,4,5"));
         }
     };
     return (
@@ -198,6 +192,17 @@ const TableComponet = (props) => {
                     pageSizeOptions: ["1", "10", "20", "30"],
                 }}
             />
+            <Modal
+                centered
+                footer={<></>}
+                title="LÍ DO TỪ CHỐI"
+                onCancel={() => {
+                    setOpenReject(false);
+                }}
+                open={openReject}
+            >
+                {reasonForRejection}
+            </Modal>
         </>
     );
 };

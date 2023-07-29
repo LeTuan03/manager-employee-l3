@@ -91,6 +91,12 @@ const TabProcess = ({ processs, employee }) => {
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
+                                        employee.promotionDay = format(
+                                            new Date(
+                                                employee.promotionDay
+                                            ).getTime(),
+                                            "yyyy-MM-dd"
+                                        );
                                         form.setFieldsValue(employee);
                                     }}
                                 />

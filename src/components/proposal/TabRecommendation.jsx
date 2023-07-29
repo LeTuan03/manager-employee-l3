@@ -2,10 +2,10 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
 import { format } from "date-fns";
 import { useState } from "react";
-import { deleteProposal, updateProposal } from "../services/api";
+import { addProposalByEmp, deleteProposal, updateProposal } from "../../services/api";
 import RecomnentModal from "./RecomnentModal";
 
-const TabRecommendation = ({ recoments, employee }) => {
+const TabRecommendation = ({ recoments, employee,handleGetRecomentByEmp }) => {
     const columns = [
         {
             title: "STT",
@@ -136,6 +136,7 @@ const TabRecommendation = ({ recoments, employee }) => {
         try {
             const res = await deleteProposal(id);
             message.success("Xóa thành công!");
+            handleGetRecomentByEmp()
         } catch (error) {
             message.error("Xóa thất bại!");
         }
@@ -144,17 +145,21 @@ const TabRecommendation = ({ recoments, employee }) => {
         try {
             if (value.id) {
                 const res = await updateProposal(value);
+                console.log(res)
                 message.success("Cập nhật thành công!");
             } else {
-                const res = await addProposalByEmp(recoments[0].employeeId, [
+                const res = await addProposalByEmp(employee?.id, [
                     value,
                 ]);
+                console.log(res)
                 message.success("Thêm mới thành công!");
             }
+            handleGetRecomentByEmp()
             handleOpenPresent();
             form.resetFields();
         } catch (error) {
-            message.error(error);
+            // message.error(error);
+            console.log(error)
         }
     };
     const handleOpenPresent = () => {

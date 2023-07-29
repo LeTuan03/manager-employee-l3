@@ -1,9 +1,9 @@
 import React from "react";
 import { Tabs } from "antd";
-import IncreaseSalary from "../../components/IncreaseSalary";
-import Promote from "../../components/Promote";
-import Propose from "../../components/Propose";
-import Resume from "../../components/Resume";
+import IncreaseSalary from "../../components/awaiting-approval/IncreaseSalary";
+import Promote from "../../components/awaiting-approval/Promote";
+import Propose from "../../components/awaiting-approval/Propose";
+import Resume from "../../components/awaiting-approval/Resume";
 
 export default function AwaitingApproval() {
     const items = [

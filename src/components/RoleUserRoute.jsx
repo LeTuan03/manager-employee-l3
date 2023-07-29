@@ -5,7 +5,7 @@ const RoleUserRoute = (props) => {
     const { role } = useSelector((state) => state.account);
     return (
         <>
-            { role===4 ? <>{props.children}</> :<>User moi vao dc</> }
+            {role === props.role ? <>{props.children}</> : <>403</>}
         </>
     );
 };

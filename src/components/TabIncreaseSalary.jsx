@@ -102,6 +102,12 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
+                                        employee.startDate = format(
+                                            new Date(
+                                                employee.startDate
+                                            ).getTime(),
+                                            "yyyy-MM-dd"
+                                        );
                                         form.setFieldsValue(employee);
                                     }}
                                 />
@@ -194,7 +200,7 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 },
                             ]}
                         >
-                            <Input name="startDate" type="date" />
+                            <Input type="date" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -208,7 +214,7 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 },
                             ]}
                         >
-                            <Input type="number" name="oldSalary" />
+                            <Input type="number" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -222,7 +228,7 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 },
                             ]}
                         >
-                            <Input name="newSalary" />
+                            <Input />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -239,7 +245,7 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 },
                             ]}
                         >
-                            <Input name="note" />
+                            <Input />
                         </Form.Item>
                     </Col>
                     <Col span={11}>
@@ -253,7 +259,7 @@ const TabIncreaseSalary = ({ salary, employee }) => {
                                 },
                             ]}
                         >
-                            <Input name="reason" />
+                            <Input />
                         </Form.Item>
                     </Col>
                     <Col span={2}>

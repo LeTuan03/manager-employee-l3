@@ -1,42 +1,23 @@
-import React, { useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { getCurrentRole, getToken } from "../../services/api";
-import { doLoginAction } from "../../redux/account/accountSlice";
+import { getAccount, getToken } from "../../services/api";
 import { useDispatch } from "react-redux";
+import { doLoginAction } from "../../redux/account/accountSlice";
+
 
 export default function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const [messageApi, contextHolder] = message.useMessage();
-    const notify = (message) => {
-        messageApi.error(message);
-    };
     const onFinish = async (values) => {
-        try {
             const response = await getToken(values);
             localStorage.setItem("access_token", response.access_token);
-            const role = await getCurrentRole();
-            dispatch(doLoginAction(role?.data[0]));
+            const role = await getAccount();
+            dispatch(doLoginAction(role?.data[0]))
             navigate("/");
-        } catch (error) {
-            notify("Sai tên tài khoản hoặc mật khẩu !!!");
-        }
     };
     const onFinishFailed = (errorInfo) => {
         console.log(errorInfo);
     };
-    useEffect(() => {
-        const accessToken = localStorage.getItem("access_token");
-        if (accessToken) {
-            navigate("/");
-        } else {
-            navigate("/login");
-            localStorage.removeItem("access_token");
-        }
-    }, [navigate]);
-
     return (
         <div className="flex justify-center items-center h-screen bg-slate-900 text-white ">
             <div className="flex justify-center items-center bg-white p-4 rounded-xl pr-10 ">
@@ -67,7 +48,6 @@ export default function SignIn() {
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         label="Mật khẩu"
                         name="password"
@@ -88,7 +68,6 @@ export default function SignIn() {
                     </Form.Item>
                 </Form>
             </div>
-            {contextHolder}
         </div>
     );
 }

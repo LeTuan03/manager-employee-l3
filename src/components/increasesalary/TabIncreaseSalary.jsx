@@ -1,11 +1,11 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
-import { format } from "date-fns";
 import { useState } from "react";
-import { deleteProposal, updateProposal } from "../services/api";
-import RecomnentModal from "./RecomnentModal";
+import { format } from "date-fns";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { Col, Form, Input, Row, Table, Button, message } from "antd";
+import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
+import TabSalary from "./TabSalary";
 
-const TabRecommendation = ({ recoments, employee }) => {
+const TabIncreaseSalary = ({ salary, employee,handleGetSalaryByEmp }) => {
     const columns = [
         {
             title: "STT",
@@ -14,70 +14,80 @@ const TabRecommendation = ({ recoments, employee }) => {
             render: (_, item, index) => <>{index + 1}</>,
         },
         {
-            title: "Ngày diễn biến",
-            dataIndex: "proposalDate",
-            key: "proposalDate",
-            render: (_, { proposalDate }) => (
-                <a>{format(new Date(proposalDate).getTime(), "yyyy/MM/dd")}</a>
+            title: "Ngày tăng lương",
+            dataIndex: "startDate",
+            key: "startDate",
+            render: (text) => (
+                <a>{format(new Date(text).getTime(), "yyyy/MM/dd")}</a>
             ),
         },
         {
-            title: "Loại ",
-            dataIndex: "type",
-            key: "type",
+            title: "Lần thứ",
+            dataIndex: "times",
+            key: "times",
+        },
+        {
+            title: "Lương cũ",
+            dataIndex: "oldSalary",
+            key: "oldSalary",
+        },
+        {
+            title: "Lương mới",
+            dataIndex: "newSalary",
+            key: "newSalary",
         },
         {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
         },
-
         {
-            title: "Mô tả chi tiết",
-            dataIndex: "detailedDescription",
-            key: "detailedDescription",
+            title: "Lý do",
+            dataIndex: "reason",
+            key: "reason",
         },
         {
             title: "Trạng thái",
-            dataIndex: "proposalStatus",
-            key: "proposalStatus",
-            render: (proposalStatus) => {
-                switch (proposalStatus) {
-                    case "0":
-                        proposalStatus = "Nộp lưu hồ sơ";
+            dataIndex: "salaryIncreaseStatus",
+            key: "salaryIncreaseStatus",
+            render: (salaryIncreaseStatus) => {
+                switch (salaryIncreaseStatus) {
+                    case 0:
+                        salaryIncreaseStatus = "Nộp lưu hồ sơ";
                         break;
-                    case "1":
-                        proposalStatus = "Lưu mới";
+                    case 1:
+                        salaryIncreaseStatus = "Lưu mới";
                         break;
-                    case "2":
-                        proposalStatus = "Chờ xử lí";
+                    case 2:
+                        salaryIncreaseStatus = "Chờ xử lí";
                         break;
-                    case "3":
-                        proposalStatus = "Đã được chấp nhận";
+                    case 3:
+                        salaryIncreaseStatus = "Đã được chấp nhận";
                         break;
-                    case "4":
-                        proposalStatus = "Yêu cầu bổ sung";
+                    case 4:
+                        salaryIncreaseStatus = "Yêu cầu bổ sung";
                         break;
-                    case "5":
-                        proposalStatus = "Từ chối";
+                    case 5:
+                        salaryIncreaseStatus = "Từ chối";
                         break;
-                    case "6":
-                        proposalStatus = "Gửi yêu cầu kết thúc hồ sơ";
+                    case 6:
+                        salaryIncreaseStatus = "Gửi yêu cầu kết thúc hồ sơ";
                         break;
-                    case "7":
-                        proposalStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
+                    case 7:
+                        salaryIncreaseStatus =
+                            "Chấp nhận yêu cầu kết thúc hồ sơ";
                         break;
-                    case "8":
-                        proposalStatus =
+                    case 8:
+                        salaryIncreaseStatus =
                             "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
                         break;
-                    case "9":
-                        proposalStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                    case 9:
+                        salaryIncreaseStatus = "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        proposalStatus = "Chờ xử lí";
+                        salaryIncreaseStatus = "Chờ xử lí";
                         break;
                 }
-                return <a>{proposalStatus}</a>;
+                return <a>{salaryIncreaseStatus}</a>;
             },
         },
         {
@@ -86,15 +96,15 @@ const TabRecommendation = ({ recoments, employee }) => {
             key: "action",
             render: (_, employee) => (
                 <div>
-                    {employee.proposalStatus === 1 ? (
+                    {employee.salaryIncreaseStatus === 1 ? (
                         <div>
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
-                                        employee.proposalDate = format(
+                                        employee.startDate = format(
                                             new Date(
-                                                employee.proposalDate
+                                                employee.startDate
                                             ).getTime(),
                                             "yyyy-MM-dd"
                                         );
@@ -105,9 +115,7 @@ const TabRecommendation = ({ recoments, employee }) => {
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
-                                    onClick={() =>
-                                        handleDeleteRecoment(employee.id)
-                                    }
+                                    onClick={() => handleDelete(employee.id)}
                                 />
                             </span>
                         </div>
@@ -116,6 +124,7 @@ const TabRecommendation = ({ recoments, employee }) => {
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
+                                    setPresent(false);
                                     setIsModalOpen(true);
                                     setData(employee);
                                 }}
@@ -132,54 +141,63 @@ const TabRecommendation = ({ recoments, employee }) => {
     const [present, setPresent] = useState(false);
     const [data, setData] = useState({});
 
-    const handleDeleteRecoment = async (id) => {
+    const handleDelete = async (value) => {
         try {
-            const res = await deleteProposal(id);
+            const res = await deleteSalary(value);
+            console.log(res)
+            handleGetSalaryByEmp()
             message.success("Xóa thành công!");
         } catch (error) {
             message.error("Xóa thất bại!");
         }
     };
+
     const handleSubmit = async (value) => {
         try {
             if (value.id) {
-                const res = await updateProposal(value);
-                message.success("Cập nhật thành công!");
+                const res = await updateSalary(value);
+                // message.success("Cập nhật thành công!");
+                console.log(res)
             } else {
-                const res = await addProposalByEmp(recoments[0].employeeId, [
-                    value,
-                ]);
-                message.success("Thêm mới thành công!");
+                const res = await addSalaryByEmp(salary[0].employeeId, [value]);
+                // message.success("Thêm mới thành công!");
+                console.log(res)
             }
+            handleGetSalaryByEmp()
             handleOpenPresent();
             form.resetFields();
         } catch (error) {
-            message.error(error);
+            console.log(error);
+            message.error("Cập  nhật thất bại!");
         }
     };
     const handleOpenPresent = () => {
         setIsModalOpen(true);
         setPresent(true);
     };
+
     return (
         <>
             <Form form={form} onFinish={handleSubmit} layout="vertical">
-                <Row gutter={16} className="mb-2">
-                    <Col span={6} className="hidden">
-                        <Form.Item name="id">
+                <Row gutter={16} className="hidden">
+                    <Col span={8}>
+                        <Form.Item name={"id"}>
                             <Input />
                         </Form.Item>
                     </Col>
-                    <Col span={6} className="hidden">
-                        <Form.Item name="proposalStatus">
+                </Row>
+                <Row gutter={16} className="hidden">
+                    <Col span={8}>
+                        <Form.Item name={"salaryIncreaseStatus"}>
                             <Input value={1} />
                         </Form.Item>
                     </Col>
-
-                    <Col span={6}>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={8}>
                         <Form.Item
-                            name="proposalDate"
-                            label="Ngày diễn biến"
+                            name="startDate"
+                            label="Ngày tăng lương"
                             rules={[
                                 {
                                     required: true,
@@ -190,10 +208,10 @@ const TabRecommendation = ({ recoments, employee }) => {
                             <Input type="date" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         <Form.Item
-                            name="type"
-                            label="Loại"
+                            name="oldSalary"
+                            label="Lương cũ"
                             rules={[
                                 {
                                     required: true,
@@ -201,22 +219,27 @@ const TabRecommendation = ({ recoments, employee }) => {
                                 },
                             ]}
                         >
-                            <Select
-                                className="w-full"
-                                options={[
-                                    {
-                                        value: 1,
-                                        label: "Đề xuất",
-                                    },
-                                    {
-                                        value: 2,
-                                        label: "Tham mưu",
-                                    },
-                                ]}
-                            />
+                            <Input type="number" />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
+                        <Form.Item
+                            name="newSalary"
+                            label="Lương mới"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Không được bỏ trống trường này !",
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={16} className="mb-2">
+                    <Col span={9}>
                         <Form.Item
                             name="note"
                             label="Ghi chú"
@@ -230,26 +253,10 @@ const TabRecommendation = ({ recoments, employee }) => {
                             <Input />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
+                    <Col span={11}>
                         <Form.Item
-                            name="content"
-                            label="Nội dung"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="detailedDescription"
-                            label="Mô tả chi tiết"
+                            name="reason"
+                            label="Lý do"
                             rules={[
                                 {
                                     required: true,
@@ -263,7 +270,7 @@ const TabRecommendation = ({ recoments, employee }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="mr-5 w-full  bg-green-700 text-white"
+                                className="w-full bg-green-700 text-white"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -288,12 +295,12 @@ const TabRecommendation = ({ recoments, employee }) => {
                 <Col span={24}>
                     <Table
                         columns={columns}
-                        dataSource={recoments}
+                        dataSource={salary}
                         pagination={false}
                     />
                 </Col>
             </Row>
-            <RecomnentModal
+            <TabSalary
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
@@ -304,5 +311,4 @@ const TabRecommendation = ({ recoments, employee }) => {
         </>
     );
 };
-
-export default TabRecommendation;
+export default TabIncreaseSalary;
