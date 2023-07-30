@@ -1,10 +1,10 @@
-import { Button, Modal, Tabs } from "antd";
+import { Button, Modal, Tabs, message } from "antd";
 import React from "react";
 import QuitJob from "./QuitJob";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
 
-const ModalEnd = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
+const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
     const dispatch = useDispatch()
     const { open } = useSelector((state) => state.employee)
     const items = [
@@ -15,7 +15,6 @@ const ModalEnd = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
                 <QuitJob
                     reasonForEnding={reasonForEnding}
                     setReasonForEnding={setReasonForEnding}
-                    employeeId={employeeId}
                 ></QuitJob>
             ),
         },
@@ -28,11 +27,7 @@ const ModalEnd = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
                 title="ĐƠN XIN NGHỈ VIỆC"
                 centered
                 open={open.modalEnd}
-                // onOk={() => {
-                //     setIsModalOpen(false);
-                // }}
                 onCancel={() => {
-                    // setOpen({...open,modalEnd:false})
                     dispatch(setOpen({ ...open, modalEnd: false }))
                 }}
                 footer={
@@ -42,7 +37,6 @@ const ModalEnd = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
                             danger
                             onClick={() => {
                                 dispatch(setOpen({ ...open, modalEnd: false }))
-                                // setOpen({...open,modalEnd:false})
                             }}
                         >
                             Hủy
@@ -50,9 +44,11 @@ const ModalEnd = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
                         <Button
                             type="primary"
                             onClick={() => {
-                                // setOpenSendLeader(true);
-                                // setOpen({...open,modalSendLeader:true})
-                                dispatch(setOpen({ ...open, modalSendLeader: true }))
+                                if(reasonForEnding){
+                                    dispatch(setOpen({ ...open, modalSendLeader: true }))
+                                }else{
+                                    message.error("Vui lòng nhập lí do")
+                                }
                             }}
                         >
                             Trình lãnh đạo

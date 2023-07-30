@@ -5,7 +5,7 @@ import { Col, Form, Input, Row, Table, Button, message } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import TabSalary from "./TabSalary";
 
-const TabIncreaseSalary = ({ salary, employee,handleGetSalaryByEmp }) => {
+const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
     const columns = [
         {
             title: "STT",
@@ -144,8 +144,7 @@ const TabIncreaseSalary = ({ salary, employee,handleGetSalaryByEmp }) => {
     const handleDelete = async (value) => {
         try {
             const res = await deleteSalary(value);
-            console.log(res)
-            handleGetSalaryByEmp()
+            handleGetSalaryByEmp();
             message.success("Xóa thành công!");
         } catch (error) {
             message.error("Xóa thất bại!");
@@ -156,14 +155,12 @@ const TabIncreaseSalary = ({ salary, employee,handleGetSalaryByEmp }) => {
         try {
             if (value.id) {
                 const res = await updateSalary(value);
-                // message.success("Cập nhật thành công!");
-                console.log(res)
+                message.success("Cập nhật thành công!");
             } else {
-                const res = await addSalaryByEmp(salary[0].employeeId, [value]);
-                // message.success("Thêm mới thành công!");
-                console.log(res)
+                const res = await addSalaryByEmp(employee.id, [value]);
+                message.success("Thêm mới thành công!");
             }
-            handleGetSalaryByEmp()
+            handleGetSalaryByEmp();
             handleOpenPresent();
             form.resetFields();
         } catch (error) {

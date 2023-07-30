@@ -4,15 +4,16 @@ import { getAccount, getToken } from "../../services/api";
 import { useDispatch } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
 
+
 export default function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const onFinish = async (values) => {
-        const response = await getToken(values);
-        localStorage.setItem("access_token", response.access_token);
-        const role = await getAccount();
-        dispatch(doLoginAction(role?.data[0]));
-        navigate("/");
+            const response = await getToken(values);
+            localStorage.setItem("access_token", response.access_token);
+            const role = await getAccount();
+            dispatch(doLoginAction(role?.data[0]))
+            navigate("/");
     };
     const onFinishFailed = (errorInfo) => {
         console.log(errorInfo);

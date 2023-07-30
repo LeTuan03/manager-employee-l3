@@ -9,8 +9,8 @@ import {
 } from "../../services/api";
 import ProcessModal from "./ProcessModal";
 
-const TabProcess = ({ processs, employee,handleGetProcessByEmp }) => {
-    console.log(employee)
+const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
+    console.log(employee);
     const columns = [
         {
             title: "STT",
@@ -140,9 +140,9 @@ const TabProcess = ({ processs, employee,handleGetProcessByEmp }) => {
     const handleDeletePromote = async (id) => {
         try {
             const res = await deleteProcess(id);
-            console.log(res)
-            handleGetProcessByEmp()
-            // message.success("Xóa thành công !");
+            console.log(res);
+            handleGetProcessByEmp();
+            message.success("Xóa thành công !");
         } catch (error) {
             message.error("Xóa thất bại !");
         }
@@ -152,21 +152,18 @@ const TabProcess = ({ processs, employee,handleGetProcessByEmp }) => {
         try {
             if (value.id) {
                 const res = await updateProcess(value);
-                console.log(res)
                 message.success("Cập nhật thành công !");
             } else {
-                const res = await addProcessByEmp(employee?.id, [
-                    value,
-                ]);
-                console.log(res)
+                const res = await addProcessByEmp(employee?.id, [value]);
+                console.log(res);
                 message.success("Thêm mới thành công !");
             }
-            handleGetProcessByEmp()
+            handleGetProcessByEmp();
             handleOpenPresent();
             form.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
-            console.log(error)
+            console.log(error);
         }
     };
 

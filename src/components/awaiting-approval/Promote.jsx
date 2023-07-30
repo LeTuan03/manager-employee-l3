@@ -41,9 +41,7 @@ export default function Promote() {
             title: "Ngày thăng chức",
             key: "promotionDay",
             dataIndex: "promotionDay",
-            render: (date, index) => (
-                <p key={index}>{format(date, "dd/MM/yyyy")}</p>
-            ),
+            render: (date) => <a>{format(date, "dd/MM/yyyy")}</a>,
         },
         {
             title: "Lần thứ",
@@ -101,15 +99,31 @@ export default function Promote() {
             title: "Trạng thái",
             key: "processStatus",
             dataIndex: "processStatus",
-            render: (_, status, index) => {
-                let statusProcess;
+            render: (_, status) => {
                 switch (status.processStatus) {
+                    case "0":
+                        return <p>Nộp lưu hồ sơ</p>;
+                    case "1":
+                        return <p>Lưu mới</p>;
                     case "2":
-                        statusProcess = "Chờ xử lý";
+                        return <p>Chờ xử lí</p>;
+                    case "3":
+                        return <p>Đã được chấp nhận</p>;
+                    case "4":
+                        return <p>Yêu cầu bổ sung</p>;
+                    case "5":
+                        return <p>Từ chối</p>;
+                    case "6":
+                        return <p>Yêu cầu kết thúc hồ sơ</p>;
+                    case "7":
+                        return <p>Chấp nhận yêu cầu kết thúc hồ sơ</p>;
+                    case "8":
+                        return <p>Yêu cầu bổ sung vào đơn kết thúc hồ sơ</p>;
+                    case "9":
+                        return <p>Từ chối yêu cầu kết thúc hồ sơ</p>;
                     default:
-                        statusProcess = "Chờ xử lý";
+                        break;
                 }
-                return <p key={index}>{statusProcess}</p>;
             },
         },
         {
@@ -153,7 +167,11 @@ export default function Promote() {
                         centered
                         footer={
                             <div className="text-center flex justify-center">
-                                <ResumeModal profile={profile} type="Promote" />
+                                <ResumeModal
+                                    profile={profile}
+                                    type="Promote"
+                                    handleGetProcess={handleGetProcess}
+                                />
                                 <Button
                                     className="ml-2"
                                     type="primary"

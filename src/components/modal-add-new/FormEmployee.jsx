@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
-import { Form, Input, message, Row, Col, Avatar, Upload, Button, Modal, Image, Select } from "antd";
+import { Form, Input, message, Row, Col, Avatar, Upload, Button, Image, Select } from "antd";
 import { format } from 'date-fns';
 import _ from 'lodash';
 import { STATUS } from '../../constants/constants'
 import { createEmployee, postAvatar, updateEmployee } from '../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllEmployee, setOpen } from '../../redux/employee/employeeSlice';
-const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
+const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId }) => {
     const [userAvatar, setUserAvatar] = useState("")
     const [urlAvatar, setUrlAvatar] = useState("")
     // const values = Form.useWatch([], form);
     const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
+    const { open,employee } = useSelector((state) => state.employee)
     const onFinish = async (values) => {
         const { name, code, gender, dateOfBirth, address, team, email, phone,
             citizenIdentificationNumber, ethnic, religion, dateOfIssuanceCard, placeOfIssueCard } = values;
@@ -33,6 +33,7 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
             religion,
             dateOfIssuanceCard,
             placeOfIssueCard,
+            submitProfileStatus: "1"
         };
         if (employeeId) {
             await handleUpdateEmployee(data)
@@ -45,13 +46,34 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
     };
     const handleCreateEmployee = async (data) => {
         const res = await createEmployee(data);
-        if (res?.data?.code === STATUS.SUCCESS  ) {
-            dispatch(setOpen({ ...open, modalInput: false }))
+        if (res?.data?.code === STATUS.SUCCESS) {
+            // dispatch(setOpen({ ...open, modalInput: false }))
             dispatch(getAllEmployee("1,2,4,5"))
+            setEmployeeId(res?.data?.data?.id)
+            form.setFieldsValue({
+                name: employee.name,
+                code: employee.code,
+                gender: employee.gender,
+                dateOfBirth: format(new Date(employee.dateOfBirth), "yyyy-MM-dd"),
+                address: employee.address,
+                team: employee.team,
+                email: employee.email,
+                phone: employee.phone,
+                citizenIdentificationNumber: employee.citizenIdentificationNumber,
+                dateOfIssuanceCard: format(new Date(employee.dateOfIssuanceCard), "yyyy-MM-dd"),
+                placeOfIssueCard: employee.placeOfIssueCard,
+                ethnic: employee.ethnic,
+                religion: employee.religion,
+            })
+            setUserAvatar(employee.image)
         }
     };
     const handleUpdateEmployee = async (data) => {
         const res = await updateEmployee(employeeId, data)
+        if (res?.data?.code === STATUS.SUCCESS) {
+            dispatch(setOpen({ ...open, modalInput: false }))
+            dispatch(getAllEmployee("1,2,4,5"))
+        }
     }
     const handleUploadAvatar = async ({ file, onSuccess, onError }) => {
         const res = await postAvatar(file)
@@ -122,7 +144,6 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
     return (
         <>
             <Form
-                disabled={employeeId}
                 layout={'vertical'}
                 form={form}
                 name="basic"
@@ -154,6 +175,12 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 <Form.Item
                                     name="code"
                                     label="Mã nhân viên"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui lòng nhập mã nhân viên!",
+                                        },
+                                    ]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -162,6 +189,12 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 <Form.Item
                                     name="gender"
                                     label="Giới tính"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui chọn giới tính!",
+                                        },
+                                    ]}
                                 >
                                     <Select
                                         options={[
@@ -214,6 +247,12 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 <Form.Item
                                     name="religion"
                                     label="Tôn giáo"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui lòng nhập tôn giáo!",
+                                        },
+                                    ]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -231,7 +270,7 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                         }, {
                                             min: 9, max: 12,
                                             message: "CMT phải là 9 số, CCCD phải là 12 số!",
-                                        },
+                                        }
                                     ]}
                                 >
                                     <Input />
@@ -241,6 +280,12 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 <Form.Item
                                     name="dateOfIssuanceCard"
                                     label="Ngày cấp"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui lòng nhập ngày cấp!",
+                                        },
+                                    ]}
                                 >
                                     <Input type="date" ></Input>
                                 </Form.Item>
@@ -249,6 +294,12 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 <Form.Item
                                     name="placeOfIssueCard"
                                     label="Nơi cấp"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui lòng nhập nơi cấp!",
+                                        },
+                                    ]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -346,9 +397,9 @@ const FormEmployee = ({ form, employee, family, certificate, employeeId }) => {
                                 className="rounded-full overflow-hidden"
                                 src={userAvatar}
                             /> : <Avatar className='cursor-pointer' size={200} icon={<UserOutlined />} />}
-                            {!employeeId && <Upload {...propUploads}>
+                            <Upload {...propUploads}>
                                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                            </Upload>}
+                            </Upload>
                         </div>
                     </Col>
                 </Row>

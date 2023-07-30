@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import RecomenetChildren from "./RecomenetChildren";
 import SendLeader from "../modal-send-leader/SendLeader";
+import { useDispatch } from "react-redux";
+import { setOpen } from "../../redux/employee/employeeSlice";
 
 const RecomnentModal = ({
     isModalOpen,
@@ -12,6 +14,7 @@ const RecomnentModal = ({
     setPresent,
     employee,
 }) => {
+    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -19,7 +22,6 @@ const RecomnentModal = ({
             children: <RecomenetChildren data={data} />,
         },
     ];
-    const [openModal, setOpenModal] = useState(false);
     return (
         <>
             <Modal
@@ -39,7 +41,14 @@ const RecomnentModal = ({
                             <Button
                                 key="cancel"
                                 type="primary"
-                                onClick={() => setOpenModal(true)}
+                                onClick={() => {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
+                                }}
                             >
                                 Trình lãnh đạo
                             </Button>
@@ -64,11 +73,7 @@ const RecomnentModal = ({
                     />
                 </div>
             </Modal>
-            <SendLeader
-                employee={employee}
-                openSendLeader={openModal}
-                setOpenSendLeader={setOpenModal}
-            />
+            <SendLeader open={open} />
         </>
     );
 };

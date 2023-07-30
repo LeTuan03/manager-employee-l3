@@ -15,14 +15,11 @@ import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
 import { STATUS } from "../../constants/constants";
-const TabProfile = ({ employee }) => {
+import { useSelector } from "react-redux";
+const TabProfile = ({ setThreeInfo, threeInfo }) => {
+    const { employee } = useSelector((state) => state.employee);
     const [form] = Form.useForm();
     const values = Form.useWatch([], form);
-    const [threeInfo, setThreeInfo] = useState({
-        knowledge: "",
-        skill: "",
-        activity: "",
-    });
     const [openForm, setOpenForm] = useState(false);
     const [exp, setExp] = useState([]);
     const onFinish = async (values) => {
@@ -124,13 +121,14 @@ const TabProfile = ({ employee }) => {
                         <h2 className="my-5">Kĩ năng</h2>
                         <Col className="relative pr-4 mb-3">
                             <Input
+                                disabled={employee.submitProfileStatus !== "1"}
                                 bordered={false}
                                 placeholder="Kĩ năng của bạn !"
                                 name="skill"
                                 onChange={(e) => {
                                     handleChange(e);
                                 }}
-                                value={threeInfo.skill}
+                                value={threeInfo?.skill}
                             ></Input>
                             <div
                                 className="border-0 border-b border-dotted absolute 
@@ -140,13 +138,14 @@ const TabProfile = ({ employee }) => {
                         <h2 className="my-5">Hoạt động</h2>
                         <Col className="relative pr-4 mb-3">
                             <Input
+                                disabled={employee.submitProfileStatus !== "1"}
                                 bordered={false}
                                 name="activity"
                                 onChange={(e) => {
                                     handleChange(e);
                                 }}
                                 placeholder="Hoạt động của bạn !"
-                                value={threeInfo.activity}
+                                value={threeInfo?.activity}
                             ></Input>
                             <div
                                 className="border-0 border-b border-dotted absolute 
@@ -171,11 +170,12 @@ const TabProfile = ({ employee }) => {
                                     <TextArea
                                         placeholder="Học vấn của bạn!"
                                         autoSize
+                                        disabled={employee.submitProfileStatus !== "1"}
                                         name="knowledge"
                                         onChange={(e) => {
                                             handleChange(e);
                                         }}
-                                        value={threeInfo.knowledge}
+                                        value={threeInfo?.knowledge}
                                         className="bg-slate-200 pl-7 border-none py-3 !min-h-[50px]"
                                     />
                                     <span className="absolute right-[8px] bottom-[-10px] text-3xl z-50">
@@ -186,12 +186,14 @@ const TabProfile = ({ employee }) => {
                         </div>
                         <div className="border-l-2 flex justify-between items-center mt-10">
                             <div className="text-lg">KINH NGHIỆM LÀM VIỆC</div>
-                            <PlusOutlined
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    setOpenForm(!openForm);
-                                }}
-                            />
+                            {employee.submitProfileStatus === "1" && (
+                                <PlusOutlined
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        setOpenForm(!openForm);
+                                    }}
+                                />
+                            )}
                         </div>
                         <Form
                             className={openForm ? "" : "hidden"}
@@ -306,34 +308,36 @@ const TabProfile = ({ employee }) => {
                                                 </div>
                                                 <span className="pl-5">{item.jobDescription}</span>
                                             </div>
-                                            <div
-                                                className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
+                                            {employee.submitProfileStatus === "1" && (
+                                                <div
+                                                    className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
                                         justify-center gap-2 items-center p-2 rounded-md"
-                                            >
-                                                <EditOutlined
-                                                    onClick={() => {
-                                                        form.setFieldsValue({
-                                                            ...item,
-                                                            startDate: format(
-                                                                new Date(item.startDate),
-                                                                "yyyy-MM-dd"
-                                                            ),
-                                                            endDate: format(
-                                                                new Date(item.endDate),
-                                                                "yyyy-MM-dd"
-                                                            ),
-                                                        });
-                                                        setOpenForm(true);
-                                                    }}
-                                                    className="text-blue-600 text-lg cursor-pointer"
-                                                />
-                                                <DeleteOutlined
-                                                    onClick={() => {
-                                                        handleDeleteExp(item.id);
-                                                    }}
-                                                    className="text-red-600 text-lg cursor-pointer"
-                                                />
-                                            </div>
+                                                >
+                                                    <EditOutlined
+                                                        onClick={() => {
+                                                            form.setFieldsValue({
+                                                                ...item,
+                                                                startDate: format(
+                                                                    new Date(item.startDate),
+                                                                    "yyyy-MM-dd"
+                                                                ),
+                                                                endDate: format(
+                                                                    new Date(item.endDate),
+                                                                    "yyyy-MM-dd"
+                                                                ),
+                                                            });
+                                                            setOpenForm(true);
+                                                        }}
+                                                        className="text-blue-600 text-lg cursor-pointer"
+                                                    />
+                                                    <DeleteOutlined
+                                                        onClick={() => {
+                                                            handleDeleteExp(item.id);
+                                                        }}
+                                                        className="text-red-600 text-lg cursor-pointer"
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     </>
                                 );

@@ -1,21 +1,11 @@
 import { Col, Input, Row } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { getEmployeeById } from "../../services/api";
+import { useSelector } from "react-redux";
 
-const QuitJob = ({ employeeId, reasonForEnding, setReasonForEnding }) => {
+const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
     const [date, setDate] = useState({});
-    const [employee, setEmployee] = useState({});
-
-    const getEmployee = async () => {
-        if (employeeId !== null) {
-            const res = await getEmployeeById(employeeId);
-            setEmployee(res?.data?.data);
-        }
-    };
-    useEffect(() => {
-        getEmployee();
-    }, [employeeId]);
+    const {employee } = useSelector((state) => state.employee)
     const getTodayDate = () => {
         const date = new Date();
         const day = date.getDate();

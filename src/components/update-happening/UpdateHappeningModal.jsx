@@ -12,64 +12,77 @@ import {
 } from "../../services/api";
 import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
+import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import _ from "lodash";
 
 export default function UpdateHappeningModal({ employeeId }) {
-    const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
+    const dispatch = useDispatch();
+    const { open } = useSelector((state) => state.employee);
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
-    const [employee, setEmployee] = useState({})
+    const [employee, setEmployee] = useState({});
 
     const getEmployee = async () => {
         const res = await getEmployeeById(employeeId);
         setEmployee(res?.data?.data);
-
     };
     const handleGetSalaryByEmp = async () => {
         try {
             const res = await getSalaryByEmp(employeeId);
             setSalary(res?.data?.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
     const handleGetProcessByEmp = async () => {
         try {
             const res = await getProcessByEmp(employeeId);
             setProcesss(res?.data?.data);
-            console.log(res)
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-
     };
     const handleGetRecomentByEmp = async () => {
         try {
             const res = await getProposalByEmp(employeeId);
             setRecoments(res?.data?.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
     const items = [
         {
             key: "1",
             label: `TĂNG LƯƠNG`,
-            children: <TabIncreaseSalary handleGetSalaryByEmp={handleGetSalaryByEmp} employee={employee} salary={salary} />,
+            children: (
+                <TabIncreaseSalary
+                    handleGetSalaryByEmp={handleGetSalaryByEmp}
+                    employee={employee}
+                    salary={salary}
+                />
+            ),
         },
         {
             key: "2",
             label: `THĂNG CHỨC`,
-            children: <TabProcess handleGetProcessByEmp={handleGetProcessByEmp} employee={employee} processs={processs} />,
+            children: (
+                <TabProcess
+                    handleGetProcessByEmp={handleGetProcessByEmp}
+                    employee={employee}
+                    processs={processs}
+                />
+            ),
         },
         {
             key: "3",
             label: `ĐỀ XUẤT/THAM MƯU`,
             children: (
-                <TabRecommendation handleGetRecomentByEmp={handleGetRecomentByEmp} employee={employee} recoments={recoments} />
+                <TabRecommendation
+                    handleGetRecomentByEmp={handleGetRecomentByEmp}
+                    employee={employee}
+                    recoments={recoments}
+                />
             ),
         },
     ];
@@ -79,9 +92,9 @@ export default function UpdateHappeningModal({ employeeId }) {
             handleGetSalaryByEmp();
             handleGetProcessByEmp();
             handleGetRecomentByEmp();
-            getEmployee()
+            getEmployee();
         }
-    }, [employeeId])
+    }, [employeeId]);
     return (
         <>
             <Modal
@@ -89,17 +102,34 @@ export default function UpdateHappeningModal({ employeeId }) {
                 centered
                 open={open.modalUpdateHappening}
                 width={1300}
-                onCancel={() => dispatch(setOpen({ ...open, modalUpdateHappening: false }))}
+                onCancel={() => {
+                    dispatch(setOpen({ ...open, modalUpdateHappening: false }));
+                    dispatch(resetEmployee());
+                }}
                 footer={
                     <div className="text-center">
-                        <Button key="submit" type="primary">
+                        <Button
+                            key="submit"
+                            type="primary"
+                            onClick={() => {
+                                dispatch(setOpen({ ...open, modalEnd: true }));
+                            }}
+                        >
                             Kết thúc
                         </Button>
                         <Button
                             key="cancel"
                             type="primary"
                             danger
-                            onClick={() => dispatch(setOpen({ ...open, modalUpdateHappening: false }))}
+                            onClick={() => {
+                                dispatch(resetEmployee());
+                                dispatch(
+                                    setOpen({
+                                        ...open,
+                                        modalUpdateHappening: false,
+                                    })
+                                );
+                            }}
                         >
                             Hủy
                         </Button>
@@ -114,8 +144,8 @@ export default function UpdateHappeningModal({ employeeId }) {
                             {employee.currentPosition === 3
                                 ? "Front-end"
                                 : employee.currentPosition === 2
-                                    ? "Back-end"
-                                    : "Tester"}
+                                ? "Back-end"
+                                : "Tester"}
                         </b>
                     </Col>
                     <Col span={16}>
@@ -158,12 +188,15 @@ export default function UpdateHappeningModal({ employeeId }) {
                                 </Col>
                                 <Col span={8}>
                                     <Input
-                                        value={employee.id && format(
-                                            new Date(
-                                                employee.dateOfBirth
-                                            ).getTime(),
-                                            "yyyy/MM/dd"
-                                        )}
+                                        value={
+                                            employee.id &&
+                                            format(
+                                                new Date(
+                                                    employee.dateOfBirth
+                                                ).getTime(),
+                                                "yyyy/MM/dd"
+                                            )
+                                        }
                                     />
                                 </Col>
                             </Row>

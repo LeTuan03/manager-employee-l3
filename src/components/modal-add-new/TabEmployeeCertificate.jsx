@@ -20,11 +20,12 @@ import {
     updateCertificate,
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
-const TabEmployeeCertificate = ({ employee, setCertificate, certificate }) => {
+const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);
     const [loading, setLoading] = useState(false);
     const { role } = useSelector((state) => state.account);
+    const {employee } = useSelector((state) => state.employee)
     const onFinish = async (values) => {
         const { certificateName, field, content, issueDate } = values;
         const data = {

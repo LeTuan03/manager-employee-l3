@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import ProcessChildren from "./ProcessChildren";
 import SendLeader from "../modal-send-leader/SendLeader";
+import { setOpen } from "../../redux/employee/employeeSlice";
+import { useDispatch } from "react-redux";
 
 const ProcessModal = ({
     isModalOpen,
@@ -12,6 +14,7 @@ const ProcessModal = ({
     setPresent,
     employee,
 }) => {
+    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -19,8 +22,6 @@ const ProcessModal = ({
             children: <ProcessChildren data={data} />,
         },
     ];
-
-    const [openModal, setOpenModal] = useState(false);
 
     return (
         <>
@@ -39,7 +40,14 @@ const ProcessModal = ({
                             <Button
                                 key="cancel"
                                 type="primary"
-                                onClick={() => setOpenModal(true)}
+                                onClick={() => {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
+                                }}
                             >
                                 Trình lãnh đạo
                             </Button>
@@ -64,11 +72,6 @@ const ProcessModal = ({
                     />
                 </div>
             </Modal>
-            <SendLeader
-                employee={employee}
-                openSendLeader={openModal}
-                setOpenSendLeader={setOpenModal}
-            />
         </>
     );
 };

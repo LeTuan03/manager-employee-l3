@@ -11,10 +11,11 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import { STATUS } from "../../constants/constants";
-const TabEmployeeFamily = ({ employee, setFamily, family }) => {
+import { useSelector } from "react-redux";
+const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
     const [update, setUpdate] = useState(null);
-
+    const {employee } = useSelector((state) => state.employee)
     const onFinish = async (values) => {
         const {
             email,

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, Modal, Tabs } from "antd";
 import IncreaseSalaryChildren from "./IncreaseSalaryChildren";
 import SendLeader from "../modal-send-leader/SendLeader";
+import { useDispatch } from "react-redux";
+import { setOpen } from "../../redux/employee/employeeSlice";
 
 const TabSalary = ({
     isModalOpen,
@@ -9,8 +11,8 @@ const TabSalary = ({
     data,
     present,
     setPresent,
-    employee,
 }) => {
+    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -19,7 +21,6 @@ const TabSalary = ({
         },
     ];
 
-    const [openModal, setOpenModal] = useState(false);
     return (
         <>
             <Modal
@@ -36,7 +37,14 @@ const TabSalary = ({
                         {present && (
                             <Button
                                 type="primary"
-                                onClick={() => setOpenModal(true)}
+                                onClick={() => {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
+                                }}
                             >
                                 Trình lãnh đạo
                             </Button>
@@ -64,11 +72,6 @@ const TabSalary = ({
                     />
                 </div>
             </Modal>
-            <SendLeader
-                employee={employee}
-                openSendLeader={openModal}
-                setOpenSendLeader={setOpenModal}
-            />
         </>
     );
 };

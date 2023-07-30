@@ -1,8 +1,10 @@
 import { Table } from 'antd';
 import { format } from 'date-fns';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const TabListCertificate = ({ employee }) => {
+const TabListCertificate = () => {
+    const { employee } = useSelector((state) => state.employee)
     const columns = [
         {
             title: "STT",

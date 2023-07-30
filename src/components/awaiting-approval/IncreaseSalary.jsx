@@ -45,7 +45,7 @@ export default function IncreaseSalary() {
             title: "Ngày tăng lương",
             key: "startDate",
             dataIndex: "startDate",
-            render: (date) => format(date, "dd/MM/yyyy"),
+            render: (date) => <a>{format(date, "dd/MM/yyyy")}</a>,
         },
         {
             title: "Lần thứ",
@@ -77,14 +77,30 @@ export default function IncreaseSalary() {
             key: "salaryIncreaseStatus",
             dataIndex: "salaryIncreaseStatus",
             render: (_, status) => {
-                let statusSalary;
-                switch (status.salaryIncreaseStatus) {
-                    case "2":
-                        statusSalary = "Chờ xử lý";
+                switch (status?.salaryIncreaseStatus) {
+                    case 0:
+                        return <p>Nộp lưu hồ sơ</p>;
+                    case 1:
+                        return <p>Lưu mới</p>;
+                    case 2:
+                        return <p>Chờ xử lí</p>;
+                    case 3:
+                        return <p>Đã được chấp nhận</p>;
+                    case 4:
+                        return <p>Yêu cầu bổ sung</p>;
+                    case 5:
+                        return <p>Từ chối</p>;
+                    case 6:
+                        return <p>Yêu cầu kết thúc hồ sơ</p>;
+                    case 7:
+                        return <p>Chấp nhận yêu cầu kết thúc hồ sơ</p>;
+                    case 8:
+                        return <p>Yêu cầu bổ sung vào đơn kết thúc hồ sơ</p>;
+                    case 9:
+                        return <p>Từ chối yêu cầu kết thúc hồ sơ</p>;
                     default:
-                        statusSalary = "Chờ xử lý";
+                        break;
                 }
-                return <>{statusSalary}</>;
             },
         },
         {
@@ -130,6 +146,9 @@ export default function IncreaseSalary() {
                                 <ResumeModal
                                     profile={profile}
                                     type="IncreaseSalary"
+                                    getCurrentEmpIncreaseSalary={
+                                        getCurrentEmpIncreaseSalary
+                                    }
                                 />
                                 <Button
                                     className="ml-2"
@@ -185,7 +204,7 @@ const IncreaseTab = ({ profile }) => {
                 <Row>
                     <Col flex={2} className="text-center">
                         <h3>CÔNG TY OCEAN TECH</h3>
-                        <p>Số: {profile.employeeId}</p>
+                        <p>Số: {profile?.employeeId}</p>
                     </Col>
                     <Col flex={3} className="text-center">
                         <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
@@ -223,12 +242,12 @@ const IncreaseTab = ({ profile }) => {
                     <div>
                         <div>
                             <b> Điều 1: </b> Kể từ ngày: {data?.startDate} , mức
-                            lương của Ông/Bà: {emp.name} sẽ là: {data.newSalary}{" "}
-                            đ.
+                            lương của Ông/Bà: {emp?.name} sẽ là:{" "}
+                            {data?.newSalary} đ.
                         </div>
                         <div>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: {emp.name} căn cứ quyết
+                            chính Kế toán và Ông/Bà: {emp?.name} căn cứ quyết
                             định thi hành.
                         </div>
                     </div>
@@ -242,7 +261,7 @@ const IncreaseTab = ({ profile }) => {
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i>(Ký, ghi rõ họ tên)</i>
 
-                            <b className="block mt-5">{emp.name}</b>
+                            <b className="block mt-5">{emp?.name}</b>
                         </Col>
                     </Row>
                 </div>

@@ -1,116 +1,158 @@
 import React, { useState } from "react";
-import { Button, Checkbox, DatePicker, Modal, Space, message } from "antd";
+import { Button, Checkbox, DatePicker, Form, Modal, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import {
+    acceptEmployee,
     acceptPromote,
-    getCertificateByEmployeeId,
-    getEmployeeById,
     proposalEdit,
     salaryApprove,
 } from "../../services/api";
 import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
 
-
 export default function ResumeModal(props) {
-    const { profile, type } = props;
+    const {
+        profile,
+        type,
+        getAllEmployee,
+        getCurrentEmpIncreaseSalary,
+        handleGetProcess,
+        handleGetProposal,
+    } = props;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
+    const [employeeId, setEmployeeId] = useState(false);
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
-    const [acceptDate, setAcceptDate] = useState("");
-    const [rejectDate, setRejectDate] = useState("");
-    const [additional, setAdditional] = useState("");
-    const [certificate, setCertificate] = useState([]);
-    const [resume, setResume] = useState({});
-    const [value, setValue] = useState("");
-
-    const handleWatchResume = async (id) => {
-        const res = await getCertificateByEmployeeId(id);
-        setCertificate(res?.data?.data);
-        const res2 = await getEmployeeById(id);
-        setResume(res2?.data?.data);
-    };
 
     // Phê duyệt
-    const handleAccept = async () => {
+    const onFinish = async (values) => {
         try {
-            profile.acceptanceDate = acceptDate;
+            profile.acceptanceDate = format(
+                new Date(values.acceptDay?.$d).getTime(),
+                "yyyy-MM-dd"
+            );
             if (type === "Propose") {
                 profile.proposalStatus = "3";
                 const res = await proposalEdit(profile);
                 message.success("Phê duyệt nhân viên thành công!");
+                await handleGetProposal();
                 setIsApproveOpen(false);
             } else if (type === "Promote") {
                 profile.processStatus = "3";
                 const res = await acceptPromote(profile);
                 message.success("Phê duyệt nhân viên thành công!");
+                await handleGetProcess();
                 setIsApproveOpen(false);
             } else if (type === "IncreaseSalary") {
                 profile.salaryIncreaseStatus = "3";
                 const res = await salaryApprove(profile);
                 message.success("Phê duyệt nhân viên thành công!");
+                await getCurrentEmpIncreaseSalary();
+                setIsApproveOpen(false);
+            } else if (type === "Resume") {
+                profile.submitProfileStatus = "3";
+                profile.terminationAppointmentDate = format(
+                    new Date(values.acceptDay.$d).getTime(),
+                    "yyyy-MM-dd"
+                );
+                const res = await acceptEmployee(profile);
+                message.success("Phê duyệt nhân viên thành công!");
+                await getAllEmployee();
                 setIsApproveOpen(false);
             }
         } catch (error) {
+            console.log(error);
             message.error("Phê duyệt nhân viên thất bại!");
         }
     };
     // yêu cầu bổ sung
-    const handleAdditionalRequest = async () => {
+    const onFinishAdditional = async (values) => {
         try {
-            profile.additionalRequest = additional;
+            profile.additionalRequest = values.additionalRequest;
             if (type === "Propose") {
                 profile.proposalStatus = "4";
                 const res = await proposalEdit(profile);
                 message.success("Yêu cầu bổ sung nhân viên thành công!");
+                await handleGetProposal();
                 setIsAdditionalRequestOpen(false);
             } else if (type === "Promote") {
                 profile.processStatus = "4";
                 const res = await acceptPromote(profile);
                 message.success("Yêu cầu bổ sung nhân viên thành công!");
+                await handleGetProcess();
                 setIsAdditionalRequestOpen(false);
             } else if (type === "IncreaseSalary") {
                 profile.salaryIncreaseStatus = "4";
                 const res = await salaryApprove(profile);
                 message.success("Yêu cầu bổ sung nhân viên thành công!");
+                await getCurrentEmpIncreaseSalary();
+                setIsAdditionalRequestOpen(false);
+            } else if (type === "Resume") {
+                profile.additionalRequest = values.additionalRequest;
+                profile.submitProfileStatus = "4";
+                const res = await acceptEmployee(profile);
+                message.success("Yêu cầu bổ sung nhân viên thành công!");
+                await getAllEmployee();
                 setIsAdditionalRequestOpen(false);
             }
         } catch (error) {
             message.error("Yêu cầu bổ sung nhân viên thất bại!");
         }
+        await getAllEmployee();
     };
     // yêu cầu từ chối
-    const handleReject = async () => {
+    const onFinishReject = async (values) => {
         try {
-            profile.rejectionDate = rejectDate;
-            profile.reasonForRefusal = value;
+            profile.rejectionDate = format(
+                new Date(values.rejectionDate.$d).getTime(),
+                "yyyy-MM-dd"
+            );
+            profile.reasonForRefusal = values.reasonForRefusal;
             if (type === "Propose") {
                 profile.proposalStatus = "5";
                 const res = await proposalEdit(profile);
-                message.success("Yêu cầu từ chối nhân viên thành công!");
+                message.success("Từ chối nhân viên thành công!");
+                await handleGetProposal();
                 setIsRejectOpen(false);
             } else if (type === "Promote") {
                 profile.processStatus = "5";
                 const res = rejectPromote(profile);
-                message.success("Yêu cầu từ chối nhân viên thành công!");
+                message.success("Từ chối nhân viên thành công!");
+                await handleGetProcess();
                 setIsRejectOpen(false);
             } else if (type === "IncreaseSalary") {
                 profile.salaryIncreaseStatus = "5";
                 const res = await salaryApprove(profile);
-                message.success("Yêu cầu từ chối nhân viên thành công!");
+                message.success("Từ chối nhân viên thành công!");
+                await getCurrentEmpIncreaseSalary();
                 setIsRejectOpen(false);
+            } else if (type === "Resume") {
+                profile.reasonForRejection = values.reasonForRejection;
+                profile.rejectionDate = format(
+                    new Date(values.rejectionDate.$d).getTime(),
+                    "yyyy-MM-dd"
+                );
+                profile.salaryIncreaseStatus = "5";
+                const res = await acceptEmployee(profile);
+                message.success("Từ chối nhân viên thành công!");
+                await getAllEmployee();
             }
         } catch (error) {
-            message.error("Yêu cầu từ chối nhân viên thất bại!");
+            message.error("Từ chối nhân viên thất bại!");
         }
     };
     return (
         <>
             <Button
                 className="bg-green-700 text-white"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                    setEmployeeId(
+                        type === "Resume" ? profile?.id : profile?.employeeId
+                    );
+                    setIsModalOpen(true);
+                }}
             >
                 Xem hồ sơ
             </Button>
@@ -121,7 +163,6 @@ export default function ResumeModal(props) {
                 Phê duyệt
             </Button>
             <Button
-                key="submit"
                 type="primary"
                 onClick={() => setIsAdditionalRequestOpen(true)}
             >
@@ -131,7 +172,6 @@ export default function ResumeModal(props) {
                 Từ chối
             </Button>
             <div>
-                {/* modal */}
                 {/* Hồ sơ nhân viên  */}
                 <Modal
                     width={1300}
@@ -140,32 +180,48 @@ export default function ResumeModal(props) {
                     open={isModalOpen}
                     onCancel={() => setIsModalOpen(false)}
                     footer={
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={() =>
-                                handleWatchResume(profile.employeeId)
-                            }
-                        >
-                            Hủy
-                        </Button>
+                        <div className="text-center">
+                            <Button
+                                type="primary"
+                                danger
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                Hủy
+                            </Button>
+                        </div>
                     }
                 >
-                    <EmployeeProfile
-                        profile={profile}
-                        certificate={certificate}
-                        resume={resume}
-                    />
+                    <EmployeeProfile setThreeInfo={profile} />
                 </Modal>
-
                 {/* Phê duyệt nhân viên */}
                 <Modal
                     title="Phê duyệt nhân viên"
                     centered
                     open={isApproveOpen}
                     onCancel={() => setIsApproveOpen(false)}
-                    footer={
-                        <>
+                    footer={false}
+                >
+                    <Form onFinish={onFinish} layout="vertical">
+                        <Form.Item
+                            className="mt-4"
+                            label=" Ngày hẹn:"
+                            name="acceptDay"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng chọn ngày",
+                                },
+                            ]}
+                        >
+                            <DatePicker
+                                placeholder="Chọn ngày"
+                                style={{ width: "470px" }}
+                            />
+                        </Form.Item>
+                        <Checkbox checked className="mt-2">
+                            Đã đủ điều kiện phê duyệt
+                        </Checkbox>
+                        <Form.Item className="text-center mt-8">
                             <Button
                                 key="cancel"
                                 type="primary"
@@ -175,26 +231,15 @@ export default function ResumeModal(props) {
                                 Hủy
                             </Button>
                             <Button
+                                className="ml-2"
                                 key="submit"
                                 type="primary"
-                                onClick={() => handleAccept()}
+                                htmlType="submit"
                             >
                                 Xác nhận
                             </Button>
-                        </>
-                    }
-                >
-                    Ngày hẹn:
-                    <Space direction="vertical" size={12} className="mt-1 mb-4">
-                        <DatePicker
-                            placeholder="Chọn ngày"
-                            style={{ width: "470px" }}
-                            onChange={(e) => {
-                                setAcceptDate(format(e.$d, "yyyy-MM-dd"));
-                            }}
-                        />
-                    </Space>
-                    <Checkbox checked>Đã đủ điều kiện phê duyệt</Checkbox>
+                        </Form.Item>
+                    </Form>
                 </Modal>
                 {/* Nội dung yêu cầu bổ sung */}
                 <Modal
@@ -202,10 +247,28 @@ export default function ResumeModal(props) {
                     centered
                     open={isAdditionalRequestOpen}
                     onCancel={() => setIsAdditionalRequestOpen(false)}
-                    footer={
-                        <>
+                    footer={false}
+                >
+                    <Form onFinish={onFinishAdditional} layout="vertical">
+                        <Form.Item
+                            name="additionalRequest"
+                            label="Nội dung yêu cầu"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập nội dung!",
+                                },
+                            ]}
+                        >
+                            <TextArea
+                                required
+                                autoSize={{
+                                    minRows: 3,
+                                }}
+                            />
+                        </Form.Item>
+                        <Form.Item className="text-center">
                             <Button
-                                key="cancel"
                                 type="primary"
                                 danger
                                 onClick={() =>
@@ -215,25 +278,14 @@ export default function ResumeModal(props) {
                                 Hủy
                             </Button>
                             <Button
-                                key="submit"
                                 type="primary"
-                                onClick={() => {
-                                    handleAdditionalRequest();
-                                }}
+                                htmlType="submit"
+                                className="ml-2"
                             >
                                 Xác nhận
                             </Button>
-                        </>
-                    }
-                >
-                    <TextArea
-                        required
-                        placeholder="Nhập nội dung"
-                        autoSize={{
-                            minRows: 3,
-                        }}
-                        onChange={(e) => setAdditional(e.target.value)}
-                    />
+                        </Form.Item>
+                    </Form>
                 </Modal>
                 {/* Nội dung từ chối */}
                 <Modal
@@ -241,8 +293,43 @@ export default function ResumeModal(props) {
                     centered
                     open={isRejectOpen}
                     onCancel={() => setIsRejectOpen(false)}
-                    footer={
-                        <>
+                    footer={false}
+                >
+                    <Form layout="vertical" onFinish={onFinishReject}>
+                        <Form.Item
+                            name="rejectionDate"
+                            label="Ngày từ chối"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng chọn ngày!",
+                                },
+                            ]}
+                        >
+                            <DatePicker
+                                placeholder="Chọn ngày"
+                                style={{ width: "470px" }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Lí do"
+                            name="reasonForRefusal"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập nội dung!",
+                                },
+                            ]}
+                        >
+                            <TextArea
+                                className="mt-1"
+                                placeholder="Nhập nội dung ..."
+                                autoSize={{
+                                    minRows: 3,
+                                }}
+                            />
+                        </Form.Item>
+                        <Form.Item className="text-center mt-8">
                             <Button
                                 key="cancel"
                                 type="primary"
@@ -254,33 +341,13 @@ export default function ResumeModal(props) {
                             <Button
                                 key="submit"
                                 type="primary"
-                                onClick={() => handleReject()}
+                                htmlType="submit"
+                                className="ml-2"
                             >
                                 Xác nhận
                             </Button>
-                        </>
-                    }
-                >
-                    Ngày từ chối *
-                    <Space direction="vertical" size={12} className="mt-1 mb-4">
-                        <DatePicker
-                            placeholder="Chọn ngày"
-                            style={{ width: "470px" }}
-                            onChange={(e) =>
-                                setRejectDate(format(e.$d, "yyyy/MM/dd"))
-                            }
-                        />
-                    </Space>
-                    Lí do:
-                    <TextArea
-                        className="mt-1"
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        placeholder="Nhập nội dung ..."
-                        autoSize={{
-                            minRows: 3,
-                        }}
-                    />
+                        </Form.Item>
+                    </Form>
                 </Modal>
             </div>
         </>

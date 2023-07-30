@@ -1,19 +1,16 @@
 import { Col, Form, Input, Modal, Row, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { getAllLeader, getEmployeeById, updateEmployee } from "../../services/api";
+import { getAllLeader, updateEmployee } from "../../services/api";
 import { format } from "date-fns";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 
 const SendLeader = (props) => {
-    const { employeeId } = props;
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
-    const [employee, setEmployee] = useState({});
-    const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
-
+    const dispatch = useDispatch();
+    const { open, employee } = useSelector((state) => state.employee);
     const handleGetAllLeader = async () => {
         const res = await getAllLeader();
         if (res?.data?.code) {
@@ -27,22 +24,13 @@ const SendLeader = (props) => {
             setNameLeader(nameData);
         }
     };
-    const getEmployee = async () => {
-        if (employeeId !== null) {
-            const res = await getEmployeeById(employeeId);
-            setEmployee(res?.data?.data);
-        }
-    };
-    useEffect(() => {
-        getEmployee();
-    }, [employeeId]);
     const onFinish = async (values) => {
         const { leaderId, submitDay, submitContent } = values;
-        let submitProfileStatus = "2"
-        let reasonForEnding = ""
+        let submitProfileStatus = "2";
+        let reasonForEnding = "";
         if (props.reasonForEnding) {
-            submitProfileStatus = "6"
-            reasonForEnding = props.reasonForEnding
+            submitProfileStatus = "6";
+            reasonForEnding = props.reasonForEnding;
         }
         const data = {
             ...employee,
@@ -57,10 +45,19 @@ const SendLeader = (props) => {
     const handleSendLeader = async (data) => {
         const res = await updateEmployee(employee?.id, data);
         if (res?.data?.code === 200) {
-            dispatch(setOpen({ ...open, modalSendLeader: false, modalEnd: false, modalProfile: false }))
-            dispatch(getAllEmployee("6,3,8,9"))
+            dispatch(
+                setOpen({
+                    ...open,
+                    modalSendLeader: false,
+                    modalEnd: false,
+                    modalProfile: false,
+                    modalUpdateHappening: false,
+                    modalInput: false,
+                })
+            );
+            dispatch(getAllEmployee("6,3,8,9"));
             message.success("Trình lãnh đạo thành công");
-            form.resetFields()
+            form.resetFields();
         }
     };
     useEffect(() => {
@@ -79,7 +76,9 @@ const SendLeader = (props) => {
                     form.submit();
                 }}
                 onFinish={onFinish}
-                onCancel={() => { dispatch(setOpen({ ...open, modalSendLeader: false })) }}
+                onCancel={() => {
+                    dispatch(setOpen({ ...open, modalSendLeader: false }));
+                }}
             >
                 <Form
                     layout={"vertical"}

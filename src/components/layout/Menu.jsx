@@ -18,8 +18,8 @@ const itemAdmin = [
         getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
     ]),
     getItem("Lãnh đạo", "sub2", <AppstoreOutlined />, [
-        getItem("Chờ duyệt", "9"),
-        getItem("Đã duyệt", "10"),
+        getItem(<Link to={"/awaiting_approval"}>Chờ duyệt</Link>, "9"),
+        getItem(<Link to={"/approved"}>Đã duyệt</Link>, "10"),
     ]),
 ];
 const itemUser = [
@@ -47,7 +47,13 @@ const MenuComponent = () => {
                 <Menu
                     mode="inline"
                     className="bg-transparent text-white"
-                    items={role === 3 ? itemAdmin : role === 5 ? itemManage : itemUser}
+                    items={
+                        role === 3
+                            ? itemAdmin
+                            : role === 5
+                            ? itemManage
+                            : itemUser
+                    }
                 />
             </div>
         </>

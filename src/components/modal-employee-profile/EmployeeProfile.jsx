@@ -3,21 +3,8 @@ import { Tabs } from "antd";
 import TabListCertificate from "./TabListCertificate";
 import TabCV from "./TabCV";
 import TabProfile from "./TabProfile";
-import { getEmployeeById } from "../../services/api";
-export default function EmployeeProfile({ employeeId }) {
-    const [employee, setEmployee] = useState({});
+export default function EmployeeProfile({ setThreeInfo, threeInfo }) {
     const [tabPosition, setTabPosition] = useState('left');
-    const getEmployee = async () => {
-        if (employeeId !== null) {
-            const res = await getEmployeeById(employeeId);
-            setEmployee(res?.data?.data);
-        }
-    };
-    useEffect(() => {
-        getEmployee();
-    }, [employeeId]);
-
-
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth >= 1280) {
@@ -34,20 +21,19 @@ export default function EmployeeProfile({ employeeId }) {
             key: "1",
             label: `HỒ SƠ`,
             children: (
-                <TabProfile
-                    employee={employee}
-                ></TabProfile>
+                <TabProfile threeInfo={threeInfo}
+                    setThreeInfo={setThreeInfo}></TabProfile>
             ),
         },
         {
             key: "2",
             label: `SƠ YẾU LÍ LỊCH`,
-            children: <TabCV employee={employee}></TabCV>,
+            children: <TabCV></TabCV>,
         },
         {
             key: "3",
             label: `DANH SÁCH VĂN BẰNG`,
-            children: <TabListCertificate employee={employee}></TabListCertificate>,
+            children: <TabListCertificate></TabListCertificate>,
         },
     ];
     return (

@@ -7,11 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 
 export default function SaveResume({
-    isResumeOpen,
-    setIsResumeOpen,
     employeeId,
 }) {
     const dispatch = useDispatch()
+    const { open } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const handleGetProfile = async () => {
         const res = await getEmployeeById(employeeId);
@@ -31,7 +30,7 @@ export default function SaveResume({
             profile.submitProfileStatus = "0";
             const res = await submitAndSaveResume(profile);
             message.success("Nộp lưu hồ sơ thành công!");
-            setIsResumeOpen(false);
+            dispatch(setOpen({ ...open, modalResume: false, modalProfile: false }))
             dispatch(getAllEmployee("7,0"))
         } catch (error) {
             message.error("Nộp lưu hồ sơ thất bại!");
@@ -44,8 +43,8 @@ export default function SaveResume({
         <Modal
             title="NỘP LƯU HỒ SƠ"
             centered
-            open={isResumeOpen}
-            onCancel={() => setIsResumeOpen(false)}
+            open={open.modalResume}
+            onCancel={() => dispatch(setOpen({ ...open, modalResume: false }))}
             footer={false}
         >
             <Form
@@ -91,7 +90,7 @@ export default function SaveResume({
                     <Button
                         type="primary"
                         danger
-                        onClick={() => setIsResumeOpen(false)}
+                        onClick={() => dispatch(setOpen({ ...open, modalResume: false }))}
                     >
                         Hủy
                     </Button>

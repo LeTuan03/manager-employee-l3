@@ -3,17 +3,15 @@ import { Button, Form, Modal, Tabs } from "antd";
 import FormEmployee from "./FormEmployee";
 import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
-import { getEmployeeById } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
+import { getEmployee, resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 const ModalInput = ({ employeeId, setEmployeeId }) => {
-    // setOpen, open,
     const [form] = Form.useForm();
-    const [employee, setEmployee] = useState({});
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
     const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
+    const { open,employee } = useSelector((state) => state.employee)
+    
     const items = [
         {
             key: "1",
@@ -22,9 +20,9 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 <FormEmployee
                     family={family}
                     certificate={certificate}
-                    employee={employee}
                     form={form} setOpen={setOpen}
                     employeeId={employeeId}
+                    setEmployeeId={setEmployeeId}
                 ></FormEmployee>
             ),
         },
@@ -35,7 +33,6 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 <TabEmployeeFamily
                     family={family}
                     setFamily={setFamily}
-                    employee={employee}
                 ></TabEmployeeFamily>
             ),
         },
@@ -46,35 +43,23 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 <TabEmployeeCertificate
                     certificate={certificate}
                     setCertificate={setCertificate}
-                    employee={employee}
                 ></TabEmployeeCertificate>
             ),
         },
     ];
-    const getEmployee = async () => {
-        if (employeeId !== null) {
-            const res = await getEmployeeById(employeeId);
-            setEmployee(res?.data?.data);
-        }
-    };
-    useEffect(() => {
-        getEmployee();
-    }, [employeeId]);
     const FooterModal = () => {
         return (
             <div className="w-full flex justify-center gap-2">
                 <Button
                     onClick={() => {
                         dispatch(setOpen({ ...open, modalInput: false }))
-                        // setOpen({...open,modalInput:false});
                         setEmployeeId(null);
-                        setEmployee({});
+                        dispatch(resetEmployee())
                     }}
                 >
                     Hủy
                 </Button>
                 {employee.submitProfileStatus && <Button onClick={() => {
-                    // setOpen({...open,modalProfile:true})
                     dispatch(setOpen({ ...open, modalProfile: true }))
                 }}>Đăng kí</Button>}
                 <Button
@@ -100,10 +85,9 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 centered
                 width={1000}
                 onCancel={() => {
-                    // setOpen({...open,modalInput:false});
                     dispatch(setOpen({ ...open, modalInput: false }))
                     setEmployeeId(null);
-                    setEmployee({});
+                    dispatch(resetEmployee())
                 }}
                 footer={<FooterModal></FooterModal>}
             >

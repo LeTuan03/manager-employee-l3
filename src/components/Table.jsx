@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Table, Tag } from "antd";
+import { Button, Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
     DeleteOutlined,
@@ -31,7 +31,7 @@ const TableComponet = (props) => {
             key: "name",
             width: 200,
             sorter: true,
-            render: (text) => <a>{useTruncateText(text, 30)}</a>,
+            render: (text) => <a>{text}</a>,
         },
         {
             title: "Ngày sinh",
@@ -80,7 +80,11 @@ const TableComponet = (props) => {
             sorter: true,
             render: (address) => {
                 const addressText = useTruncateText(address, 20);
-                return <span>{addressText}</span>;
+                return (
+                    <span className="cursor-default" title={address}>
+                        {addressText}
+                    </span>
+                );
             },
         },
         {
@@ -124,7 +128,11 @@ const TableComponet = (props) => {
                         break;
                 }
                 const statusText = useTruncateText(status, 20);
-                return <>{statusText}</>;
+                return (
+                    <span className="cursor-default" title={status}>
+                        {statusText}
+                    </span>
+                );
             },
         },
         {
@@ -161,15 +169,13 @@ const TableComponet = (props) => {
                     ) && (
                         <InfoCircleOutlined
                             onClick={() => {
-                                setReasonForRejection(
-                                    employee?.reasonForRejection
-                                );
+                                setReasonForRejection(employee);
                                 setOpenReject(true);
                             }}
                             className="text-orange-500"
                         />
                     )}
-                    {["2", "0", "8", "6", "7", "3"].includes(
+                    {["2", "0", "8", "6", "7", "3", "9"].includes(
                         employee.submitProfileStatus
                     ) && (
                         <EyeOutlined
@@ -215,14 +221,30 @@ const TableComponet = (props) => {
             />
             <Modal
                 centered
-                footer={<></>}
-                title="LÍ DO TỪ CHỐI"
+                title={
+                    reasonForRejection?.submitProfileStatus === "8"
+                        ? "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC"
+                        : "LÝ DO TỪ CHỐI YÊU CẦU KẾT THÚC HỒ SƠ"
+                }
                 onCancel={() => {
                     setOpenReject(false);
                 }}
                 open={openReject}
+                footer={
+                    <div className="w-full text-center">
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => setOpenReject(false)}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
             >
-                {reasonForRejection}
+                {reasonForRejection?.submitProfileStatus === "8"
+                    ? reasonForRejection?.additionalRequestTermination
+                    : reasonForRejection?.reasonForRejection}
             </Modal>
         </>
     );
