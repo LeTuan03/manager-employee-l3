@@ -27,6 +27,7 @@ const SendLeader2 = (props) => {
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
     const [employee, setEmployee] = useState({});
+    const [idLeader, setIdLeader] = useState({ id: null, label: "" });
 
     const handleGetAllLeader = async () => {
         const res = await getAllLeader();
@@ -83,6 +84,13 @@ const SendLeader2 = (props) => {
             message.success("Trình lãnh đạo thành công");
         }
     };
+    const handleChange = (value) => {
+        if (value === 1) {
+            setIdLeader({ ...idLeader, label: "Giám đốc" });
+        } else if (value === 2) {
+            setIdLeader({ ...idLeader, label: "Trưởng phòng" });
+        }
+    };
     useEffect(() => {
         handleGetAllLeader();
     }, []);
@@ -113,7 +121,7 @@ const SendLeader2 = (props) => {
                         <Col span={8}>
                             <Form.Item
                                 label="Ngày trình"
-                                name="appointmentDate"
+                                name="submitDay"
                                 rules={[
                                     {
                                         required: true,
@@ -126,12 +134,21 @@ const SendLeader2 = (props) => {
                         </Col>
                         <Col span={8}>
                             <Form.Item name="leaderId" label="Tên lãnh đạo">
-                                <Select options={nameLeader} />
+                                <Select
+                                    options={nameLeader}
+                                    onChange={(value) => {
+                                        handleChange(value);
+                                    }}
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Chức vụ">
-                                <Select></Select>
+                                <Select value={null}>
+                                    <option value={idLeader.value}>
+                                        {idLeader.label}
+                                    </option>
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>
