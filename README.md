@@ -1,6 +1,6 @@
 # manager-employee-l3
 tài khoản chức vụ manage: username: manage, pasword : admin
-tài khoản chức vụ admin: username: admin, pasword : admin
+tài khoản chức vụ user: username: user, pasword : admin
 
 Mô tả các luồng chức năng
 1. Luồng quản lý nhân viên
