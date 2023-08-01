@@ -169,7 +169,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <ModalInfo type="req" message={employee} />
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-5"
+                                    className="text-blue-600 text-lg ml-5"
                                     onClick={() => {
                                         employee.promotionDay = format(
                                             new Date(
@@ -189,7 +189,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <ModalInfo message={employee} />
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-5"
+                                    className="text-blue-600 text-lg ml-5"
                                     onClick={() => {
                                         employee.promotionDay = format(
                                             new Date(

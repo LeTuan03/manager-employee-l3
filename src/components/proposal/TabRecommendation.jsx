@@ -167,7 +167,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             <ModalInfo type="req" message={employee} />
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-5"
+                                    className="text-blue-600 text-lg ml-5"
                                     onClick={() => {
                                         employee.proposalDate = format(
                                             new Date(
@@ -188,7 +188,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             <ModalInfo message={employee} />
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-5"
+                                    className="text-blue-600 text-lg ml-5"
                                     onClick={() => {
                                         employee.proposalDate = format(
                                             new Date(
