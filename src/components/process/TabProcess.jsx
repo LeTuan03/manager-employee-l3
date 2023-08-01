@@ -9,6 +9,7 @@ import {
 } from "../../services/api";
 import ProcessModal from "./ProcessModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
+import useTruncateText from "../../hook/useTruncateText";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     const [form] = Form.useForm();
@@ -18,10 +19,10 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
 
     const handleDeletePromote = async (id) => {
         try {
-            const res = await deleteProcess(id);
-            console.log(res);
-            handleGetProcessByEmp();
+            await deleteProcess(id);
             message.success("Xóa thành công !");
+            handleGetProcessByEmp();
+            form.resetFields();
         } catch (error) {
             message.error("Xóa thất bại !");
         }
@@ -52,35 +53,51 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             title: "STT",
             dataIndex: "stt",
             key: "stt",
-            render: (_, item, index) => <>{index + 1}</>,
+            width: 60,
+            align: "center",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Ngày thăng chức",
             dataIndex: "promotionDay",
             key: "promotionDay",
-            render: (_, { promotionDay }) => (
-                <a>{format(new Date(promotionDay).getTime(), "yyyy/MM/dd")}</a>
-            ),
+            width: 150,
+            align: "center",
+            render: (_, { promotionDay }) =>
+                format(new Date(promotionDay).getTime(), "yyyy/MM/dd"),
         },
         {
             title: "Lần thứ",
             dataIndex: "times",
             key: "times",
+            width: 100,
+            align: "center",
         },
         {
             title: "Chức vụ cũ",
             dataIndex: "currentPosition",
             key: "currentPosition",
+            width: 200,
+            align: "center",
+            render: (currentPosition) =>
+                currentPosition === 2
+                    ? "Giám đốc"
+                    : currentPosition === 1
+                    ? "Trưởng phòng"
+                    : "Quản lí",
         },
         {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
+            render: (note) => useTruncateText(note || "", 60),
         },
         {
             title: "Trạng thái",
             dataIndex: "processStatus",
             key: "processStatus",
+            width: 190,
+            align: "center",
             render: (processStatus) => {
                 switch (processStatus) {
                     case "0":
@@ -114,16 +131,17 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     case "9":
                         processStatus = "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        processStatus = "Chờ xử lí";
                         break;
                 }
-                return <a>{processStatus}</a>;
+                return useTruncateText(processStatus || "", 25);
             },
         },
         {
             title: "Thao tác",
             dataIndex: "action",
             key: "action",
+            width: 130,
+            align: "center",
             render: (_, employee) => (
                 <div>
                     {employee.processStatus === "1" && (

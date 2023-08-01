@@ -1,66 +1,70 @@
 import axios from "../utils/axios-customize";
 export const searchEmployee = async (status) => {
-    return await axios(`/employee/search?pageIndex=1&pageSize=50&listStatus=${status}`)
-}
+    return await axios(
+        `/employee/search?pageIndex=1&pageSize=50&listStatus=${status}`
+    );
+};
 export const deleteEmployee = async (id) => {
-    return await axios.delete(`/employee/${id}`)
-}
+    return await axios.delete(`/employee/${id}`);
+};
 export const createEmployee = (data) => {
-    return axios.post('/employee', data)
-}
+    return axios.post("/employee", data);
+};
 export const updateEmployee = (id, data) => {
-    return axios.put(`/employee/${id}`, data)
-}
+    return axios.put(`/employee/${id}`, data);
+};
 export const getEmployeeById = (id) => {
-    return axios(`/employee/${id}`)
-}
+    return axios(`/employee/${id}`);
+};
 export const getFamilyByEmployeeId = (id) => {
-    return axios(`/employee-family?employeeId=${id}`)
-}
+    return axios(`/employee-family?employeeId=${id}`);
+};
 export const getCertificateByEmployeeId = (id) => {
-    return axios(`/certificate?employeeId=${id}`)
-}
+    return axios(`/certificate?employeeId=${id}`);
+};
 export const getAccount = async () => {
-    return await axios('/employee/current-role')
-}
+    return await axios("/employee/current-role");
+};
 export const updateCertificate = (id, data) => {
-    return axios.put(`/certificate/${id}`, data)
-}
+    return axios.put(`/certificate/${id}`, data);
+};
 export const deleteCertificate = (id) => {
-    return axios.delete(`/certificate/${id}`)
-}
+    return axios.delete(`/certificate/${id}`);
+};
 export const createCertificate = (id, data) => {
-    return axios.post(`/certificate?employeeId=${id}`, data)
-}
+    return axios.post(`/certificate?employeeId=${id}`, data);
+};
 export const createFamily = (id, data) => {
-    return axios.post(`/employee-family?employeeId=${id}`, data)
-}
+    return axios.post(`/employee-family?employeeId=${id}`, data);
+};
 export const updateFamily = (id, data) => {
-    return axios.put(`/employee-family/${id}`, data)
-}
+    return axios.put(`/employee-family/${id}`, data);
+};
 export const deleteFamily = (id) => {
-    return axios.delete(`/employee-family/${id}`)
-}
+    return axios.delete(`/employee-family/${id}`);
+};
 export const getAvatar = (img) => {
-    return axios(`/employee/upload-image/${img}`)
-}
+    return axios(`/employee/upload-image/${img}`);
+};
 export const postAvatar = (img) => {
     let data = new FormData();
-    data.append('file', img);
-    return axios.post(`/employee/upload-image`, data, { headers: { "Content-Type": "multipart/form-data" } })
-}
+    data.append("file", img);
+    return axios.post(`/employee/upload-image`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+};
 export const postExp = (id, data) => {
-    return axios.post(`/experience?employeeId=${id}`, data)
-}
+    return axios.post(`/experience?employeeId=${id}`, data);
+};
 export const deleteExp = (id) => {
-    return axios.delete(`/experience/${id}`)
-}
+    return axios.delete(`/experience/${id}`);
+};
 export const updateExp = (id, data) => {
-    return axios.put(`/experience/${id}`, data)
-}
+    return axios.put(`/experience/${id}`, data);
+};
 export const getExp = (id) => {
-    return axios(`/experience?employeeId=${id}`)
-}
+    return axios(`/experience?employeeId=${id}`);
+};
 export const getAllLeader = async () => {
     return await axios("/leader");
 };
@@ -83,8 +87,6 @@ export const getToken = async (user) => {
     );
     return response.data;
 };
-
-
 
 export const getSalaryByEmp = async (id) => {
     return await axios.get(`/salary-increase?employeeId=${id}`);
@@ -121,10 +123,7 @@ export const getProposalByEmp = async (id) => {
 };
 
 export const addProposalByEmp = async (id, data) => {
-    return await axios.post(
-        `/proposal?employeeId=${id}&page=1&size=20`,
-        data
-    );
+    return await axios.post(`/proposal?employeeId=${id}&page=1&size=20`, data);
 };
 export const updateProposal = async (data) => {
     return await axios.put(`/proposal/${data.id}`, data);
@@ -186,4 +185,3 @@ export const proposalEdit = async (data) => {
 export const acceptEmployee = async (data) => {
     return await axios.put(`/employee/${data.id}`, data);
 };
-

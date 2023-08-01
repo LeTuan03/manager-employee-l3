@@ -9,6 +9,7 @@ import {
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
+import useTruncateText from "../../hook/useTruncateText";
 
 export default function Promote() {
     const { role } = useSelector((state) => state.account);
@@ -41,29 +42,33 @@ export default function Promote() {
             title: "Ngày thăng chức",
             key: "promotionDay",
             dataIndex: "promotionDay",
-            render: (date, index) => (
-                <p key={index}>{format(date, "dd/MM/yyyy")}</p>
-            ),
+            align: "center",
+            width: 150,
+            render: (date, index) => format(date, "dd/MM/yyyy"),
         },
         {
             title: "Lần thứ",
             key: "times",
             dataIndex: "times",
+            width: 90,
+            align: "center",
         },
         {
             title: "Chức vụ cũ",
             key: "currentPosition",
             dataIndex: "currentPosition",
+            align: "center",
+            width: 160,
             render: (currentPosition) => {
                 switch (currentPosition) {
                     case 0:
                         return "Giám đốc";
                     case 1:
-                        return "Trưởng phòng";
+                        return "Giám đốc";
                     case 2:
                         return "Trưởng phòng";
                     case 3:
-                        return "Trưởng phòng";
+                        return "Quản lí";
                     case 4:
                         return "Quản lí";
                     default:
@@ -75,6 +80,8 @@ export default function Promote() {
             title: "Chức vụ hiện tại",
             key: "newPosition",
             dataIndex: "newPosition",
+            align: "center",
+            width: 160,
             render: (newPosition) => {
                 switch (newPosition) {
                     case 0:
@@ -96,26 +103,46 @@ export default function Promote() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
+            render: (note) => useTruncateText(note || "", 40),
         },
         {
             title: "Trạng thái",
             key: "processStatus",
             dataIndex: "processStatus",
+            align: "center",
+            width: 200,
             render: (_, status, index) => {
-                let statusProcess;
                 switch (status.processStatus) {
+                    case "0":
+                        return "Nộp lưu hồ sơ";
+                    case "1":
+                        return "Lưu mới";
                     case "2":
-                        statusProcess = "Chờ xử lý";
+                        return "Chờ xử lí";
+                    case "3":
+                        return "Đã được chấp nhận";
+                    case "4":
+                        return "Yêu cầu bổ sung";
+                    case "5":
+                        return "Từ chối";
+                    case "6":
+                        return "Yêu cầu kết thúc hồ sơ";
+                    case "7":
+                        return "Chấp nhận yêu cầu kết thúc hồ sơ";
+                    case "8":
+                        return "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
+                    case "9":
+                        return "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        statusProcess = "Chờ xử lý";
+                        break;
                 }
-                return <p key={index}>{statusProcess}</p>;
             },
         },
         {
             title: "Thao tác",
             key: "action",
             align: "center",
+            width: 130,
             render: (_, user, index) => (
                 <div
                     key={index}
@@ -153,7 +180,12 @@ export default function Promote() {
                         centered
                         footer={
                             <div className="text-center flex justify-center">
-                                <ResumeModal profile={profile} type="Promote" />
+                                <ResumeModal
+                                    handleGetProcess={handleGetProcess}
+                                    setIsOpen={setIsModalOpen}
+                                    profile={profile}
+                                    type="Promote"
+                                />
                                 <Button
                                     className="ml-2"
                                     type="primary"
@@ -202,7 +234,13 @@ const PromoteTab = ({ profile }) => {
         handleGetDetailPromote();
     }, [profile]);
     return (
-        <div className="p-[35px] bg-[#e7e7e7]">
+        <div
+            className="p-[35px] bg-[#e7e7e7] font"
+            style={{
+                fontFamily: "Tinos",
+            }}
+            s
+        >
             <div className="bg-white p-[64px]">
                 <Row>
                     <Col flex={2} className="text-center">

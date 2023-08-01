@@ -1,37 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     MailOutlined,
     WifiOutlined,
     WhatsAppOutlined,
     UserOutlined,
     PlusOutlined,
-    BankOutlined,
-    EditOutlined,
-    DeleteOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Form, Image, Input, Row, Space } from "antd";
+import { Col, Image, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
-import { format } from "date-fns";
-import { STATUS } from "../../constants/constants";
 const TabProfile = ({ employee }) => {
-    const [exp, setExp] = useState([]);
-
-    const handleGetExp = async () => {
-        try {
-            if (!_.isEmpty(employee)) {
-                const res = await getExp(employee?.id);
-                setExp(res?.data?.data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        handleGetExp();
-    }, [employee]);
     return (
         <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">

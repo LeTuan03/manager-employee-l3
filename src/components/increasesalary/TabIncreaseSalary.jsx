@@ -1,31 +1,26 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import {
-    DeleteOutlined,
-    EditOutlined,
-    ExclamationCircleOutlined,
-    UserOutlined,
-    EyeOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Col, Form, Input, Row, Table, Button, message } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import TabSalary from "./TabSalary";
 import ModalInfo from "../modal-update-happening/ModalInfo";
+import useTruncateText from "../../hook/useTruncateText";
 
 const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
-    const [validate, setValidate] = useState(false);
 
     const handleDelete = async (value) => {
         try {
-            const res = await deleteSalary(value);
-            console.log(res);
-            handleGetSalaryByEmp();
+            await deleteSalary(value);
             message.success("Xóa thành công!");
+            form.resetFields();
+            handleGetSalaryByEmp();
         } catch (error) {
             message.error("Xóa thất bại!");
+            console.log(error);
         }
     };
 
@@ -54,45 +49,57 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             title: "STT",
             dataIndex: "stt",
             key: "stt",
-            render: (_, item, index) => <>{index + 1}</>,
+            width: 60,
+            align: "center",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Ngày tăng lương",
             dataIndex: "startDate",
             key: "startDate",
-            render: (text) => (
-                <a>{format(new Date(text).getTime(), "yyyy/MM/dd")}</a>
-            ),
+            width: 140,
+            align: "center",
+            render: (text) => format(new Date(text).getTime(), "yyyy/MM/dd"),
         },
         {
             title: "Lần thứ",
             dataIndex: "times",
             key: "times",
+            width: 90,
+            align: "center",
         },
         {
             title: "Lương cũ",
             dataIndex: "oldSalary",
             key: "oldSalary",
+            width: 130,
+            align: "center",
         },
         {
             title: "Lương mới",
             dataIndex: "newSalary",
             key: "newSalary",
+            width: 130,
+            align: "center",
         },
         {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
+            render: (note) => useTruncateText(note || "", 25),
         },
         {
             title: "Lý do",
             dataIndex: "reason",
             key: "reason",
+            render: (reason) => useTruncateText(reason || "", 25),
         },
         {
             title: "Trạng thái",
             dataIndex: "salaryIncreaseStatus",
             key: "salaryIncreaseStatus",
+            width: 130,
+            align: "center",
             render: (salaryIncreaseStatus) => {
                 switch (salaryIncreaseStatus) {
                     case 0:
@@ -130,13 +137,15 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                         salaryIncreaseStatus = "Chờ xử lí";
                         break;
                 }
-                return <a>{salaryIncreaseStatus}</a>;
+                return useTruncateText(salaryIncreaseStatus || "", 25);
             },
         },
         {
             title: "Thao tác",
             dataIndex: "action",
             key: "action",
+            width: 130,
+            align: "center",
             render: (_, employee) => (
                 <div>
                     {employee.salaryIncreaseStatus === 1 && (

@@ -16,7 +16,12 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
         getTodayDate();
     }, []);
     return (
-        <div>
+        <div
+            className="font"
+            style={{
+                fontFamily: "Tinos",
+            }}
+        >
             <div className="bg-[#e7e7e7] p-14 max-h-[520px] overflow-y-scroll">
                 <div className=" bg-white py-10 pb-20">
                     <Row>

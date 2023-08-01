@@ -48,8 +48,8 @@ export default function EmployeeProfile({ employeeId }) {
     return (
         <>
             <Tabs
-                tabPosition={tabPosition}
                 defaultActiveKey="1"
+                tabPosition={tabPosition}
                 items={items}
             />
         </>

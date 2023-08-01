@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, DatePicker, Form, Modal, message } from "antd";
+import { Button, Checkbox, Form, Input, Modal, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import {
@@ -15,32 +15,33 @@ export default function ResumeModal(props) {
     const {
         profile,
         type,
+        setIsOpen,
         getAllEmployee,
         getCurrentEmpIncreaseSalary,
         handleGetProcess,
         handleGetProposal,
     } = props;
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
     const [employeeId, setEmployeeId] = useState(false);
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
 
-    const handleActionSuccess = (type) => {
+    const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
             case "Propose":
-                handleGetProposal();
+                await handleGetProposal();
                 break;
             case "Promote":
-                handleGetProcess();
+                await handleGetProcess();
                 break;
             case "IncreaseSalary":
-                getCurrentEmpIncreaseSalary();
+                await getCurrentEmpIncreaseSalary();
                 break;
             case "Resume":
-                getAllEmployee();
+                await getAllEmployee();
                 break;
             default:
                 break;
@@ -49,41 +50,46 @@ export default function ResumeModal(props) {
 
     const handleActionFailure = (error) => {
         console.error(error);
-        // message.error("Action failed!");
     };
 
     const onFinish = async (values) => {
         try {
-            profile.acceptanceDate = format(
-                new Date(values.acceptDay?.$d).getTime(),
-                "yyyy-MM-dd"
-            );
             switch (type) {
                 case "Propose":
+                    profile.acceptanceDate = values.acceptDay;
                     profile.proposalStatus = "3";
                     await proposalEdit(profile);
+                    setIsApproveOpen(false);
+                    setIsOpen(false);
+                    await handleActionSuccess(type);
                     break;
                 case "Promote":
+                    profile.acceptanceDate = values.acceptDay;
                     profile.processStatus = "3";
                     await acceptPromote(profile);
+                    setIsApproveOpen(false);
+                    setIsOpen(false);
+                    await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
+                    profile.acceptanceDate = values.acceptDay;
                     profile.salaryIncreaseStatus = "3";
                     await salaryApprove(profile);
+                    setIsApproveOpen(false);
+                    setIsOpen(false);
+                    await handleActionSuccess(type);
                     break;
                 case "Resume":
                     profile.submitProfileStatus = "3";
-                    profile.terminationAppointmentDate = format(
-                        new Date(values.acceptDay.$d).getTime(),
-                        "yyyy-MM-dd"
-                    );
+                    profile.terminationAppointmentDate = values.acceptDay;
                     await acceptEmployee(profile);
+                    setIsApproveOpen(false);
+                    setIsOpen(false);
+                    await handleActionSuccess(type);
                     break;
                 default:
                     break;
             }
-            handleActionSuccess(type);
-            setIsApproveOpen(false);
         } catch (error) {
             handleActionFailure(error);
         }
@@ -96,80 +102,83 @@ export default function ResumeModal(props) {
                 case "Propose":
                     profile.proposalStatus = "4";
                     await proposalEdit(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "Promote":
                     profile.processStatus = "4";
                     await acceptPromote(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
                     profile.salaryIncreaseStatus = "4";
                     await salaryApprove(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "Resume":
                     profile.submitProfileStatus = "4";
                     await acceptEmployee(profile);
+                    await handleActionSuccess(type);
                     break;
                 default:
                     break;
             }
-            handleActionSuccess(type);
             setIsAdditionalRequestOpen(false);
+            setIsOpen(false);
         } catch (error) {
             handleActionFailure(error);
         }
-        await getAllEmployee();
     };
 
     const onFinishReject = async (values) => {
         try {
-            profile.rejectionDate = format(
-                new Date(values.rejectionDate.$d).getTime(),
-                "yyyy-MM-dd"
-            );
+            profile.rejectionDate = values.rejectionDate;
             profile.reasonForRefusal = values.reasonForRejection;
             switch (type) {
                 case "Propose":
                     profile.proposalStatus = "5";
                     await proposalEdit(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "Promote":
                     profile.processStatus = "5";
                     await rejectPromote(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
                     profile.salaryIncreaseStatus = "5";
                     await salaryApprove(profile);
+                    await handleActionSuccess(type);
                     break;
                 case "Resume":
                     profile.submitProfileStatus = "5";
                     await acceptEmployee(profile);
+                    await handleActionSuccess(type);
                     break;
                 default:
                     break;
             }
-            handleActionSuccess(type);
             setIsRejectOpen(false);
+            setIsOpen(false);
         } catch (error) {
             handleActionFailure(error);
         }
     };
+    const [form] = Form.useForm();
+    const [form2] = Form.useForm();
     return (
         <>
-            {type !== "Resume" && (
-                <Button
-                    className="bg-green-700 text-white"
-                    onClick={() => {
-                        setEmployeeId(
-                            type === "Resume"
-                                ? profile?.id
-                                : profile?.employeeId
-                        );
-                        setIsModalOpen(true);
-                    }}
-                >
-                    Xem hồ sơ
-                </Button>
-            )}
+            <Button
+                className="bg-green-700 text-white"
+                onClick={() => {
+                    setEmployeeId(
+                        type === "Resume" ? profile?.id : profile?.employeeId
+                    );
+                    setOpen(true);
+                }}
+            >
+                Xem hồ sơ
+            </Button>
+
             <Button
                 className="bg-green-700 text-white"
                 onClick={() => setIsApproveOpen(true)}
@@ -191,14 +200,14 @@ export default function ResumeModal(props) {
                     width={1300}
                     title="Hồ sơ nhân viên"
                     centered
-                    open={isModalOpen}
-                    onCancel={() => setIsModalOpen(false)}
+                    open={open}
+                    onCancel={() => setOpen(false)}
                     footer={
                         <div className="text-center">
                             <Button
                                 type="primary"
                                 danger
-                                onClick={() => setIsModalOpen(false)}
+                                onClick={() => setOpen(false)}
                             >
                                 Hủy
                             </Button>
@@ -215,7 +224,14 @@ export default function ResumeModal(props) {
                     onCancel={() => setIsApproveOpen(false)}
                     footer={false}
                 >
-                    <Form onFinish={onFinish} layout="vertical">
+                    <Form
+                        onFinish={onFinish}
+                        layout="vertical"
+                        initialValues={{
+                            remember: true,
+                            acceptDay: format(new Date(), "yyyy-MM-dd"),
+                        }}
+                    >
                         <Form.Item
                             className="mt-4"
                             label=" Ngày hẹn:"
@@ -227,7 +243,8 @@ export default function ResumeModal(props) {
                                 },
                             ]}
                         >
-                            <DatePicker
+                            <Input
+                                type="date"
                                 placeholder="Chọn ngày"
                                 style={{ width: "470px" }}
                             />
@@ -260,10 +277,17 @@ export default function ResumeModal(props) {
                     title="Nội dung yêu cầu bổ sung"
                     centered
                     open={isAdditionalRequestOpen}
-                    onCancel={() => setIsAdditionalRequestOpen(false)}
+                    onCancel={() => {
+                        setIsAdditionalRequestOpen(false);
+                        form.resetFields();
+                    }}
                     footer={false}
                 >
-                    <Form onFinish={onFinishAdditional} layout="vertical">
+                    <Form
+                        onFinish={onFinishAdditional}
+                        layout="vertical"
+                        form={form}
+                    >
                         <Form.Item
                             name="additionalRequest"
                             label="Nội dung yêu cầu"
@@ -285,9 +309,10 @@ export default function ResumeModal(props) {
                             <Button
                                 type="primary"
                                 danger
-                                onClick={() =>
-                                    setIsAdditionalRequestOpen(false)
-                                }
+                                onClick={() => {
+                                    setIsAdditionalRequestOpen(false);
+                                    form.resetFields();
+                                }}
                             >
                                 Hủy
                             </Button>
@@ -306,10 +331,21 @@ export default function ResumeModal(props) {
                     title="Nội dung từ chối"
                     centered
                     open={isRejectOpen}
-                    onCancel={() => setIsRejectOpen(false)}
+                    onCancel={() => {
+                        setIsRejectOpen(false);
+                        form2.resetFields();
+                    }}
                     footer={false}
                 >
-                    <Form layout="vertical" onFinish={onFinishReject}>
+                    <Form
+                        layout="vertical"
+                        onFinish={onFinishReject}
+                        initialValues={{
+                            remember: true,
+                            rejectionDate: format(new Date(), "yyyy-MM-dd"),
+                        }}
+                        form={form2}
+                    >
                         <Form.Item
                             name="rejectionDate"
                             label="Ngày từ chối"
@@ -320,9 +356,10 @@ export default function ResumeModal(props) {
                                 },
                             ]}
                         >
-                            <DatePicker
+                            <Input
                                 placeholder="Chọn ngày"
                                 style={{ width: "470px" }}
+                                type="date"
                             />
                         </Form.Item>
                         <Form.Item
@@ -348,7 +385,10 @@ export default function ResumeModal(props) {
                                 key="cancel"
                                 type="primary"
                                 danger
-                                onClick={() => setIsRejectOpen(false)}
+                                onClick={() => {
+                                    setIsRejectOpen(false);
+                                    form2.resetFields();
+                                }}
                             >
                                 Hủy
                             </Button>

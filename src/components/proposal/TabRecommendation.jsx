@@ -9,6 +9,7 @@ import {
 } from "../../services/api";
 import RecomnentModal from "./RecomnentModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
+import useTruncateText from "../../hook/useTruncateText";
 
 const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
@@ -18,11 +19,13 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
 
     const handleDeleteRecoment = async (id) => {
         try {
-            const res = await deleteProposal(id);
+            await deleteProposal(id);
             message.success("Xóa thành công!");
+            form.resetFields();
             handleGetRecomentByEmp();
         } catch (error) {
             message.error("Xóa thất bại!");
+            console.log(error);
         }
     };
     const handleSubmit = async (value) => {
@@ -40,7 +43,6 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             setIsModalOpen(true);
             form.resetFields();
         } catch (error) {
-            // message.error(error);
             console.log(error);
         }
     };
@@ -50,36 +52,45 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             title: "STT",
             dataIndex: "stt",
             key: "stt",
-            render: (_, item, index) => <>{index + 1}</>,
+            width: 60,
+            align: "center",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Ngày diễn biến",
             dataIndex: "proposalDate",
             key: "proposalDate",
-            render: (_, { proposalDate }) => (
-                <a>{format(new Date(proposalDate).getTime(), "yyyy/MM/dd")}</a>
-            ),
+            width: 130,
+            align: "center",
+            render: (_, { proposalDate }) =>
+                format(new Date(proposalDate).getTime(), "yyyy/MM/dd"),
         },
         {
             title: "Loại ",
             dataIndex: "type",
             key: "type",
+            render: (type) => (type === 2 ? "Tham mưu" : "Đề xuất"),
         },
         {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
+            render: (note) => useTruncateText(note || "", 30),
         },
 
         {
             title: "Mô tả chi tiết",
             dataIndex: "detailedDescription",
             key: "detailedDescription",
+            render: (detailedDescription) =>
+                useTruncateText(detailedDescription || "", 30),
         },
         {
             title: "Trạng thái",
             dataIndex: "proposalStatus",
             key: "proposalStatus",
+            width: 190,
+            align: "center",
             render: (proposalStatus) => {
                 switch (proposalStatus) {
                     case 0:
@@ -115,7 +126,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                     default:
                         break;
                 }
-                return <a>{proposalStatus}</a>;
+                return useTruncateText(proposalStatus || "", 25);
             },
         },
         {

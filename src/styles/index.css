@@ -1,40 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;1,400;1,700&display=swap");
 @tailwind components;
 @tailwind utilities;
 ::-webkit-scrollbar {
-  width: 0px;
+    width: 0px;
 }
 .border-table {
-  border: #515151 2px double !important;
+    border: #515151 2px double !important;
 }
 th {
-  border-radius: 0% !important;
+    border-radius: 0% !important;
 }
-th.ant-table-cell,td.ant-table-cell {
-  border-top: 0px !important;
-  border-left: 0px !important;
+th.ant-table-cell,
+td.ant-table-cell {
+    border-top: 0px !important;
+    border-left: 0px !important;
 }
 
-th.ant-table-cell:last-child,td.ant-table-cell:last-child {
-  border-right: 0px !important;
+th.ant-table-cell:last-child,
+td.ant-table-cell:last-child {
+    border-right: 0px !important;
 }
-tr.ant-table-row:last-child>td{
-  border-bottom: 0px !important;
+tr.ant-table-row:last-child > td {
+    border-bottom: 0px !important;
 }
 .dotted-border::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 100%;
-  border-bottom: 1px dotted #000;
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px dotted #000;
 }
 .dotted::after {
-  content: "";
-  left: 0;
-  top: 80%;
-  position: absolute;
-  width: 100%;
-  border-bottom: 1px dotted #000;
+    content: "";
+    left: 0;
+    top: 80%;
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px dotted #000;
 }
-*{
-  margin: 0;
+* {
+    margin: 0;
+}
+.table-s > div > div > div > div > .ant-table-thead {
+    color: white !important;
+    background-color: #1677ff !important;
+}
+.font {
+    font-family: "Tinos", sans-serif; /* Thay "Tinos" bằng font-family bạn muốn sử dụng */
+}
+
+.font * {
+    font-family: inherit;
+    font-size: medium;
 }

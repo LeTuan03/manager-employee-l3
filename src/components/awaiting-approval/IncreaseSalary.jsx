@@ -9,6 +9,7 @@ import {
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
+import useTruncateText from "../../hook/useTruncateText";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);
@@ -45,52 +46,81 @@ export default function IncreaseSalary() {
             title: "Ngày tăng lương",
             key: "startDate",
             dataIndex: "startDate",
+            align: "center",
+            width: 150,
             render: (date) => format(date, "dd/MM/yyyy"),
         },
         {
             title: "Lần thứ",
             key: "times",
             dataIndex: "times",
+            width: 90,
+            align: "center",
         },
         {
             title: "Lương cũ",
             key: "oldSalary",
             dataIndex: "oldSalary",
+            align: "center",
+            width: 130,
         },
         {
             title: "Lương mới",
             key: "newSalary",
             dataIndex: "newSalary",
+            align: "center",
+            width: 130,
         },
         {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
+            render: (note) => useTruncateText(note || "", 25),
         },
         {
             title: "Lý do",
             key: "reason",
             dataIndex: "reason",
+            render: (reason) => useTruncateText(reason || "", 25),
         },
         {
             title: "Trạng thái",
             key: "salaryIncreaseStatus",
             dataIndex: "salaryIncreaseStatus",
+            align: "center",
+            width: 200,
             render: (_, status) => {
-                let statusSalary;
                 switch (status.salaryIncreaseStatus) {
-                    case "2":
-                        statusSalary = "Chờ xử lý";
+                    case 0:
+                        return "Nộp lưu hồ sơ";
+                    case 1:
+                        return "Lưu mới";
+                    case 2:
+                        return "Chờ xử lí";
+                    case 3:
+                        return "Đã được chấp nhận";
+                    case 4:
+                        return "Yêu cầu bổ sung";
+                    case 5:
+                        return "Từ chối";
+                    case 6:
+                        return "Yêu cầu kết thúc hồ sơ";
+                    case 7:
+                        return "Chấp nhận yêu cầu kết thúc hồ sơ";
+                    case 8:
+                        return "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
+                    case 9:
+                        return "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        statusSalary = "Chờ xử lý";
+                        break;
                 }
-                return <>{statusSalary}</>;
             },
         },
         {
             title: "Thao tác",
             key: "action",
             align: "center",
+            width: 130,
             render: (_, user) => (
                 <div
                     className="cursor-pointer"
@@ -104,6 +134,7 @@ export default function IncreaseSalary() {
             ),
         },
     ];
+
     return (
         <div>
             {role === 5 ? (
@@ -128,6 +159,10 @@ export default function IncreaseSalary() {
                         footer={
                             <div className="text-center flex justify-center">
                                 <ResumeModal
+                                    getCurrentEmpIncreaseSalary={
+                                        getCurrentEmpIncreaseSalary
+                                    }
+                                    setIsOpen={setIsModalOpen}
                                     profile={profile}
                                     type="IncreaseSalary"
                                 />
@@ -180,7 +215,12 @@ const IncreaseTab = ({ profile }) => {
     }, [profile]);
 
     return (
-        <div className="p-[35px] bg-[#e7e7e7]">
+        <div
+            className="p-[35px] bg-[#e7e7e7] font"
+            style={{
+                fontFamily: "Tinos",
+            }}
+        >
             <div className="bg-white p-[64px]">
                 <Row>
                     <Col flex={2} className="text-center">
@@ -222,9 +262,11 @@ const IncreaseTab = ({ profile }) => {
                 <div className="flex justify-center leading-10">
                     <div>
                         <div>
-                            <b> Điều 1: </b> Kể từ ngày: {data?.startDate} , mức
-                            lương của Ông/Bà: {emp.name} sẽ là: {data.newSalary}{" "}
-                            đ.
+                            <b> Điều 1: </b> Kể từ ngày:{" "}
+                            {data?.startDate &&
+                                format(data?.startDate, "yyyy/MM/dd")}{" "}
+                            , mức lương của Ông/Bà: {emp.name} sẽ là:{" "}
+                            {data.newSalary} đ.
                         </div>
                         <div>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài

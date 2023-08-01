@@ -24,55 +24,75 @@ const TableComponet = (props) => {
             title: "STT",
             dataIndex: "stt",
             key: "stt",
-            render: (_, item, index) => <>{index + 1}</>,
+            width: 60,
+            align: "center",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            sorter: true,
-            render: (text) => <a>{text}</a>,
+            width: 200,
+            render: (name) => useTruncateText(name, 30),
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
-            sorter: true,
+            width: 120,
+            align: "center",
             render: (dateOfBirth) => (
-                <>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
+                <p className="text-center">
+                    {format(new Date(dateOfBirth), "dd/MM/yyyy")}
+                </p>
             ),
         },
         {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
-            sorter: true,
-            render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
+            align: "center",
+            width: 90,
+            render: (gender) => (
+                <p className="text-center">{gender === 1 ? "Nữ" : "Nam"} </p>
+            ),
         },
         {
             title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
-            sorter: true,
+            align: "center",
+            width: 130,
+            render: (phone) => <p className="text-center">{phone} </p>,
         },
         {
-            title: "Team",
+            title: "Nhóm",
             dataIndex: "team",
             key: "team",
-            sorter: true,
+            align: "center",
+            width: 90,
             render: (team) => (
-                <Tag color={team === 1 ? "green" : "geekblue"}>
-                    {team === 1 ? "Back-end" : "Front-end"}
-                </Tag>
+                <div className="text-center">
+                    <Tag
+                        color={team === 1 ? "green" : "geekblue"}
+                        className="w-full text-center"
+                    >
+                        {team === 1
+                            ? "Back-end"
+                            : team === 2
+                            ? "Front-end"
+                            : "Tester"}
+                    </Tag>
+                </div>
             ),
         },
         {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
-            sorter: true,
+
             render: (address) => {
-                const addressText = useTruncateText(address, 20);
+                const addressText = useTruncateText(address, 30);
                 return (
                     <span className="cursor-default" title={address}>
                         {addressText}
@@ -83,8 +103,9 @@ const TableComponet = (props) => {
         {
             title: "Trạng thái",
             key: "submitProfileStatus",
-            sorter: true,
             dataIndex: "submitProfileStatus",
+            width: 200,
+            align: "center",
             render: (status) => {
                 switch (status) {
                     case "0":
@@ -131,6 +152,8 @@ const TableComponet = (props) => {
         {
             title: "Thao tác",
             key: "action",
+            width: 100,
+            align: "center",
             render: (_, employee) => (
                 <div className="flex justify-center gap-2">
                     {employee.submitProfileStatus === "1" && (
@@ -160,15 +183,17 @@ const TableComponet = (props) => {
                     {["9", "8", "5", "4"].includes(
                         employee.submitProfileStatus
                     ) && (
-                        <InfoCircleOutlined
-                            onClick={() => {
-                                setReasonForRejection(
-                                    employee?.reasonForRejection
-                                );
-                                setOpenReject(true);
-                            }}
-                            className="text-orange-500"
-                        />
+                        <span>
+                            <InfoCircleOutlined
+                                onClick={() => {
+                                    setReasonForRejection(
+                                        employee?.reasonForRejection
+                                    );
+                                    setOpenReject(true);
+                                }}
+                                className="text-orange-500"
+                            />
+                        </span>
                     )}
                     {["2", "0", "8", "6", "7", "3", "9"].includes(
                         employee.submitProfileStatus

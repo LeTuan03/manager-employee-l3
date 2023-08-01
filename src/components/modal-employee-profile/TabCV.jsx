@@ -83,7 +83,9 @@ const TabCV = () => {
         {
             label: "3. Ngày sinh: ",
             span: 12,
-            value: format(new Date(employee.dateOfBirth), "dd-MM-yyy"),
+            value:
+                employee.dateOfBirth &&
+                format(new Date(employee.dateOfBirth), "dd-MM-yyy"),
         },
         {
             label: "4. Nơi sinh: ",

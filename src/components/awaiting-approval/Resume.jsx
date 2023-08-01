@@ -11,21 +11,15 @@ import {
 } from "@ant-design/icons";
 import useTruncateText from "../../hook/useTruncateText";
 import { format } from "date-fns";
-import EmployeeProfile from "../modal-employee-profile/EmployeeProfile2";
+import QuitJob from "../modal-quit-job/QuitJob";
 
 export default function Resume() {
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
+    const [reasonForEnding, setReasonForEnding] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [listEmployee, setListEmployee] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
 
     const getAllEmployee = async () => {
         setLoading(true);
@@ -53,12 +47,15 @@ export default function Resume() {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            render: (text) => <a>{text}</a>,
+            width: 150,
+            render: (text) => useTruncateText(text, 30),
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
+            width: 130,
+            align: "center",
             render: (dateOfBirth) => (
                 <>{format(new Date(dateOfBirth).getTime(), "dd/MM/yyyy")}</>
             ),
@@ -67,19 +64,28 @@ export default function Resume() {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
+            width: 90,
+            align: "center",
             render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Số điện thoại",
             dataIndex: "phone",
             key: "phone",
+            width: 130,
+            align: "center",
         },
         {
             title: "Nhóm",
             dataIndex: "team",
             key: "team",
+            width: 120,
+            align: "center",
             render: (team) => (
-                <Tag color={team === 1 ? "green" : "geekblue"}>
+                <Tag
+                    color={team === 1 ? "green" : "geekblue"}
+                    className="w-full text-center"
+                >
                     {team === 1
                         ? "Back-end"
                         : team === 2
@@ -93,7 +99,7 @@ export default function Resume() {
             dataIndex: "address",
             key: "address",
             render: (address) => {
-                const addressText = useTruncateText(address, 25);
+                const addressText = useTruncateText(address, 50);
                 return <span>{addressText}</span>;
             },
         },
@@ -101,6 +107,8 @@ export default function Resume() {
             title: "Trạng thái",
             key: "submitProfileStatus",
             dataIndex: "submitProfileStatus",
+            width: 200,
+            align: "center",
             render: (status) => {
                 switch (status) {
                     case "0":
@@ -158,6 +166,8 @@ export default function Resume() {
         {
             title: "Thao tác",
             key: "action",
+            width: 100,
+            align: "center",
             render: (_, user) => (
                 <div className="flex justify-center gap-3">
                     {user.submitProfileStatus === "1" && role === 5 ? (
@@ -184,6 +194,7 @@ export default function Resume() {
                             className="cursor-pointer"
                             onClick={() => {
                                 setProfile(user);
+                                setReasonForEnding(user?.reasonForEnding);
                                 setIsModalOpen(true);
                             }}
                         >
@@ -211,15 +222,16 @@ export default function Resume() {
                             }}
                         />
                         <Modal
-                            title="HỒ SƠ NHÂN VIÊN"
+                            title="BIỂU MẪU"
                             open={isModalOpen}
-                            onOk={handleOk}
-                            onCancel={handleCancel}
+                            onOk={() => setIsModalOpen(false)}
+                            onCancel={() => setIsModalOpen(false)}
                             width={1300}
                             centered
                             footer={
                                 <div className="text-center flex justify-center">
                                     <ResumeModal
+                                        setIsOpen={setIsModalOpen}
                                         profile={profile}
                                         type="Resume"
                                         getAllEmployee={getAllEmployee}
@@ -235,7 +247,27 @@ export default function Resume() {
                                 </div>
                             }
                         >
-                            <EmployeeProfile employeeId={profile.id} />
+                            <Tabs
+                                defaultActiveKey="1"
+                                tabPosition="left"
+                                items={[
+                                    {
+                                        key: "1",
+                                        label: `ĐƠN XIN NGHỈ VIỆC`,
+                                        children: (
+                                            <QuitJob
+                                                reasonForEnding={
+                                                    reasonForEnding
+                                                }
+                                                setReasonForEnding={
+                                                    setReasonForEnding
+                                                }
+                                                employees={profile}
+                                            />
+                                        ),
+                                    },
+                                ]}
+                            />
                         </Modal>
                     </>
                 ) : (

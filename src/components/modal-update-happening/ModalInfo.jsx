@@ -7,7 +7,7 @@ export default function ModalInfo({ message, type }) {
         <>
             <span>
                 <FrownOutlined
-                    className="text-orange-500 text-lg mr-2"
+                    className="text-orange-500 text-lg mr-5"
                     onClick={() => {
                         setIsModalOpen(true);
                     }}

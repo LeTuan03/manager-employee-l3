@@ -110,10 +110,10 @@ const SendLeader2 = (props) => {
                     layout={"vertical"}
                     form={form}
                     name="basic"
-                    initialValues={{
-                        remember: true,
-                        submitDay: format(new Date(), "yyyy-MM-dd"),
-                    }}
+                    // initialValues={{
+                    //     remember: true,
+                    //     submitDay: format(new Date(), "yyyy-MM-dd"),
+                    // }}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
