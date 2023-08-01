@@ -4,6 +4,7 @@ import {
     DeleteOutlined,
     EditOutlined,
     ExclamationCircleOutlined,
+    UserOutlined,
     EyeOutlined,
 } from "@ant-design/icons";
 import { Col, Form, Input, Row, Table, Button, message } from "antd";
@@ -15,6 +16,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
+    const [validate, setValidate] = useState(false);
 
     const handleDelete = async (value) => {
         try {
@@ -138,10 +140,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             render: (_, employee) => (
                 <div>
                     {employee.salaryIncreaseStatus === 1 && (
-                        <div className="text-center">
+                        <div>
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-5"
+                                    className="text-blue-600 text-lg mr-2"
                                     onClick={() => {
                                         employee.startDate = format(
                                             new Date(
@@ -163,7 +165,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                         </div>
                     )}
                     {employee.salaryIncreaseStatus === 2 && (
-                        <div className="text-center">
+                        <div className="">
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
@@ -174,11 +176,11 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                         </div>
                     )}
                     {employee.salaryIncreaseStatus === 4 && (
-                        <div className="text-center">
+                        <div>
                             <ModalInfo message={employee} type="req" />{" "}
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg ml-5"
+                                    className="text-blue-600 text-lg"
                                     onClick={() => {
                                         employee.startDate = format(
                                             new Date(
@@ -194,11 +196,11 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                         </div>
                     )}
                     {employee.salaryIncreaseStatus === 5 && (
-                        <div className="text-center">
+                        <div>
                             <ModalInfo message={employee} />{" "}
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg ml-5"
+                                    className="text-blue-600 text-lg"
                                     onClick={() => {
                                         employee.startDate = format(
                                             new Date(
@@ -261,7 +263,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input type="number" />
+                            <Input type="number" suffix="VND" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -275,7 +277,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input type="number" suffix="VND" />
                         </Form.Item>
                     </Col>
                 </Row>

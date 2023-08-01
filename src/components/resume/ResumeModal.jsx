@@ -153,20 +153,23 @@ export default function ResumeModal(props) {
             handleActionFailure(error);
         }
     };
-
     return (
         <>
-            <Button
-                className="bg-green-700 text-white"
-                onClick={() => {
-                    setEmployeeId(
-                        type === "Resume" ? profile?.id : profile?.employeeId
-                    );
-                    setIsModalOpen(true);
-                }}
-            >
-                Xem hồ sơ
-            </Button>
+            {type !== "Resume" && (
+                <Button
+                    className="bg-green-700 text-white"
+                    onClick={() => {
+                        setEmployeeId(
+                            type === "Resume"
+                                ? profile?.id
+                                : profile?.employeeId
+                        );
+                        setIsModalOpen(true);
+                    }}
+                >
+                    Xem hồ sơ
+                </Button>
+            )}
             <Button
                 className="bg-green-700 text-white"
                 onClick={() => setIsApproveOpen(true)}
