@@ -42,21 +42,12 @@ export default function Propose() {
             title: "Ngày diễn biến",
             key: "proposalDate",
             dataIndex: "proposalDate",
-            render: (date) => <a>{format(date, "dd/MM/yyyy")}</a>,
+            render: (date) => format(date, "dd/MM/yyyy"),
         },
         {
             title: "Loại",
             key: "type",
             dataIndex: "type",
-            render: (type) => (
-                <p>
-                    {type === 2
-                        ? "Tham mưu"
-                        : type === 1
-                        ? "Đề xuất"
-                        : "Tham mưu"}
-                </p>
-            ),
         },
         {
             title: "Ghi chú",
@@ -81,27 +72,27 @@ export default function Propose() {
             render: (_, status) => {
                 switch (status.proposalStatus) {
                     case 0:
-                        return <p>Nộp lưu hồ sơ</p>;
+                        return "Nộp lưu hồ sơ";
                     case 1:
-                        return <p>Lưu mới</p>;
+                        return "Lưu mới";
                     case 2:
-                        return <p>Chờ xử lí</p>;
+                        return "Chờ xử lí";
                     case 3:
-                        return <p>Đã được chấp nhận</p>;
+                        return "Đã được chấp nhận";
                     case 4:
-                        return <p>Yêu cầu bổ sung</p>;
+                        return "Yêu cầu bổ sung";
                     case 5:
-                        return <p>Từ chối</p>;
+                        return "Từ chối";
                     case 6:
-                        return <p>Yêu cầu kết thúc hồ sơ</p>;
+                        return "Yêu cầu kết thúc hồ sơ";
                     case 7:
-                        return <p>Chấp nhận yêu cầu kết thúc hồ sơ</p>;
+                        return "Chấp nhận yêu cầu kết thúc hồ sơ";
                     case 8:
-                        return <p>Yêu cầu bổ sung vào đơn kết thúc hồ sơ</p>;
+                        return "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
                     case 9:
-                        return <p>Từ chối yêu cầu kết thúc hồ sơ</p>;
+                        return "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
-                        return <p>Nộp lưu hồ sơ</p>;
+                        return "Nộp lưu hồ sơ";
                 }
             },
         },
@@ -145,11 +136,7 @@ export default function Propose() {
                         centered
                         footer={
                             <div className="text-center flex justify-center">
-                                <ResumeModal
-                                    profile={profile}
-                                    type="Propose"
-                                    handleGetProposal={handleGetProposal}
-                                />
+                                <ResumeModal profile={profile} type="Propose" />
                                 <Button
                                     className="ml-2"
                                     type="primary"

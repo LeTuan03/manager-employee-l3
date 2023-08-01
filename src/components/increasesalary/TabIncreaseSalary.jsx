@@ -1,11 +1,52 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+    DeleteOutlined,
+    EditOutlined,
+    ExclamationCircleOutlined,
+    EyeOutlined,
+} from "@ant-design/icons";
 import { Col, Form, Input, Row, Table, Button, message } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import TabSalary from "./TabSalary";
+import ModalInfo from "../modal-update-happening/ModalInfo";
 
 const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
+    const [form] = Form.useForm();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [data, setData] = useState({});
+
+    const handleDelete = async (value) => {
+        try {
+            const res = await deleteSalary(value);
+            console.log(res);
+            handleGetSalaryByEmp();
+            message.success("Xóa thành công!");
+        } catch (error) {
+            message.error("Xóa thất bại!");
+        }
+    };
+
+    const handleSubmit = async (value) => {
+        try {
+            if (value.id) {
+                const res = await updateSalary(value);
+                message.success("Cập nhật thành công!");
+                setData(res?.data?.data);
+            } else {
+                const res = await addSalaryByEmp(employee.id, [value]);
+                message.success("Thêm mới thành công!");
+                setData(res?.data?.data[0]);
+            }
+            handleGetSalaryByEmp();
+            setIsModalOpen(true);
+            form.resetFields();
+        } catch (error) {
+            console.log(error);
+            message.error("Cập nhật thất bại!");
+        }
+    };
+
     const columns = [
         {
             title: "STT",
@@ -96,8 +137,8 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             key: "action",
             render: (_, employee) => (
                 <div>
-                    {employee.salaryIncreaseStatus === 1 ? (
-                        <div>
+                    {employee.salaryIncreaseStatus === 1 && (
+                        <div className="text-center">
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
@@ -108,10 +149,11 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                             ).getTime(),
                                             "yyyy-MM-dd"
                                         );
+                                        setData(employee);
                                         form.setFieldsValue(employee);
                                     }}
                                 />
-                            </span>
+                            </span>{" "}
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
@@ -119,59 +161,62 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 />
                             </span>
                         </div>
-                    ) : (
-                        <div>
+                    )}
+                    {employee.salaryIncreaseStatus === 2 && (
+                        <div className="text-center">
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
-                                    setPresent(false);
                                     setIsModalOpen(true);
                                     setData(employee);
                                 }}
                             />
                         </div>
                     )}
+                    {employee.salaryIncreaseStatus === 4 && (
+                        <div className="text-center">
+                            <ModalInfo message={employee} type="req" />{" "}
+                            <span>
+                                <EditOutlined
+                                    className="text-blue-600 text-lg mr-5"
+                                    onClick={() => {
+                                        employee.startDate = format(
+                                            new Date(
+                                                employee.startDate
+                                            ).getTime(),
+                                            "yyyy-MM-dd"
+                                        );
+                                        setData(employee);
+                                        form.setFieldsValue(employee);
+                                    }}
+                                />
+                            </span>
+                        </div>
+                    )}
+                    {employee.salaryIncreaseStatus === 5 && (
+                        <div className="text-center">
+                            <ModalInfo message={employee} />{" "}
+                            <span>
+                                <EditOutlined
+                                    className="text-blue-600 text-lg mr-5"
+                                    onClick={() => {
+                                        employee.startDate = format(
+                                            new Date(
+                                                employee.startDate
+                                            ).getTime(),
+                                            "yyyy-MM-dd"
+                                        );
+                                        setData(employee);
+                                        form.setFieldsValue(employee);
+                                    }}
+                                />
+                            </span>
+                        </div>
+                    )}
                 </div>
             ),
         },
     ];
-
-    const [form] = Form.useForm();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [present, setPresent] = useState(false);
-    const [data, setData] = useState({});
-
-    const handleDelete = async (value) => {
-        try {
-            const res = await deleteSalary(value);
-            handleGetSalaryByEmp();
-            message.success("Xóa thành công!");
-        } catch (error) {
-            message.error("Xóa thất bại!");
-        }
-    };
-
-    const handleSubmit = async (value) => {
-        try {
-            if (value.id) {
-                const res = await updateSalary(value);
-                message.success("Cập nhật thành công!");
-            } else {
-                const res = await addSalaryByEmp(employee.id, [value]);
-                message.success("Thêm mới thành công!");
-            }
-            handleGetSalaryByEmp();
-            handleOpenPresent();
-            form.resetFields();
-        } catch (error) {
-            console.log(error);
-            message.error("Cập  nhật thất bại!");
-        }
-    };
-    const handleOpenPresent = () => {
-        setIsModalOpen(true);
-        setPresent(true);
-    };
 
     return (
         <>
@@ -301,9 +346,8 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
-                present={present}
-                setPresent={setPresent}
                 employee={employee}
+                handleGetSalaryByEmp={handleGetSalaryByEmp}
             />
         </>
     );

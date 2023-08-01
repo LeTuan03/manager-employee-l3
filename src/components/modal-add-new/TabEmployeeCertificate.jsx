@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-    Form,
-    Input,
-    message,
-    Row,
-    Col,
-    Button,
-    Table,
-} from "antd";
+import { Form, Input, message, Row, Col, Button, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import _ from "lodash"
-import { STATUS } from '../../constants/constants'
+import _ from "lodash";
+import { STATUS } from "../../constants/constants";
 import {
     createCertificate,
     deleteCertificate,
@@ -25,7 +17,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const [id, setId] = useState(null);
     const [loading, setLoading] = useState(false);
     const { role } = useSelector((state) => state.account);
-    const {employee } = useSelector((state) => state.employee)
+    const { employee } = useSelector((state) => state.employee);
     const onFinish = async (values) => {
         const { certificateName, field, content, issueDate } = values;
         const data = {
@@ -40,7 +32,6 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
         } else {
             await handleCreateCertificate(data);
         }
-        console.log("id", values?.test)
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -70,28 +61,27 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
 
     const handleUpdateCertificate = async (data) => {
-        const cloneCertificate = _.cloneDeep(certificate)
-        const index = cloneCertificate.findIndex(item => item.uid === id)
+        const cloneCertificate = _.cloneDeep(certificate);
+        const index = cloneCertificate.findIndex((item) => item.uid === id);
         if (index === -1) {
             try {
                 const res = await updateCertificate(id, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setId(null);
                     handleGetCertificateById();
-                    formCertificate.resetFields()
+                    formCertificate.resetFields();
                     message.success("Sửa thành công văn bằng");
                 }
             } catch (error) {
                 console.log(error);
             }
         } else {
-            cloneCertificate[index] = data
-            setCertificate(cloneCertificate)
+            cloneCertificate[index] = data;
+            setCertificate(cloneCertificate);
             setId(null);
-            formCertificate.resetFields()
+            formCertificate.resetFields();
             message.success("Sửa thành công văn bằng");
         }
-
     };
     const handleDeleteCertificate = async (id) => {
         try {
@@ -141,8 +131,8 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     <>
                         <span
                             onClick={() => {
-                                item.id ?
-                                    handleDeleteCertificate(item.id)
+                                item.id
+                                    ? handleDeleteCertificate(item.id)
                                     : handleDeleteByUid(item.uid);
                             }}
                             className="cursor-pointer"
@@ -151,8 +141,14 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         </span>
                         <span
                             onClick={() => {
-                                formCertificate.setFieldsValue({ ...item, issueDate: format(new Date(item.issueDate), "yyyy-MM-dd") });
-                                setId(item.id || item.uid)
+                                formCertificate.setFieldsValue({
+                                    ...item,
+                                    issueDate: format(
+                                        new Date(item.issueDate),
+                                        "yyyy-MM-dd"
+                                    ),
+                                });
+                                setId(item.id || item.uid);
                             }}
                             className="cursor-pointer"
                         >
@@ -178,7 +174,9 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "issueDate",
             key: "issueDate",
             align: "center",
-            render: (issueDate) => <>{issueDate && format(new Date(issueDate), "dd/MM/yyyy")}</>,
+            render: (issueDate) => (
+                <>{issueDate && format(new Date(issueDate), "dd/MM/yyyy")}</>
+            ),
         },
         {
             title: "Lĩnh vực",
@@ -219,36 +217,55 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             <Input />
                         </Form.Item>
                     </Col>
-                    <Form.Item
-                        name="test"
-                        hidden
-                    >
-                        <Input hidden />
-                    </Form.Item>
                     <Col span={6}>
                         <Form.Item
                             name="issueDate"
                             label="Ngày cấp"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
                         >
                             <Input type="date"></Input>
                         </Form.Item>
                     </Col>
                     <Col span={9}>
-                        <Form.Item name="field" label="Lĩnh vực">
+                        <Form.Item
+                            name="field"
+                            label="Lĩnh vực"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Input />
                         </Form.Item>
                     </Col>
                 </Row>
-                {/* <Form.Item className="hidden" name="id">
-                    <Input type="hidden" />
-                </Form.Item> */}
                 <Row gutter={15}>
                     <Col lg={20} span={24}>
-                        <Form.Item name="content" label="Nội dung văn bằng">
+                        <Form.Item
+                            name="content"
+                            label="Nội dung văn bằng"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Input />
                         </Form.Item>
                     </Col>
-                    <Col className="flex justify-center items-center gap-2" lg={4} span={24}>
+                    <Col
+                        className="flex justify-center items-center gap-2"
+                        lg={4}
+                        span={24}
+                    >
                         <Button type="primary" htmlType="submit">
                             {id ? "Sửa" : "Thêm"}
                         </Button>

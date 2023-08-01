@@ -1,10 +1,10 @@
-import { Table } from 'antd';
-import { format } from 'date-fns';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { Table } from "antd";
+import { format } from "date-fns";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const TabListCertificate = () => {
-    const { employee } = useSelector((state) => state.employee)
+    const { employee } = useSelector((state) => state.employee);
     const columns = [
         {
             title: "STT",
@@ -48,11 +48,10 @@ const TabListCertificate = () => {
                         dataSource={employee?.certificatesDto}
                         columns={columns}
                         pagination={false}
-                        style={{border: "#515151 2px double"}}
+                        style={{ border: "#515151 2px double" }}
                     />
                 </div>
             </div>
-
         </>
     );
 };

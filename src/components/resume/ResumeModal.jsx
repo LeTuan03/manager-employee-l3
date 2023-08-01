@@ -6,9 +6,10 @@ import {
     acceptEmployee,
     acceptPromote,
     proposalEdit,
+    rejectPromote,
     salaryApprove,
 } from "../../services/api";
-import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
+import EmployeeProfile from "../modal-employee-profile/EmployeeProfile2";
 
 export default function ResumeModal(props) {
     const {
@@ -109,7 +110,7 @@ export default function ResumeModal(props) {
                 new Date(values.rejectionDate.$d).getTime(),
                 "yyyy-MM-dd"
             );
-            profile.reasonForRefusal = values.reasonForRefusal;
+            profile.reasonForRejection = values.reasonForRejection;
             if (type === "Propose") {
                 profile.proposalStatus = "5";
                 const res = await proposalEdit(profile);
@@ -129,17 +130,13 @@ export default function ResumeModal(props) {
                 await getCurrentEmpIncreaseSalary();
                 setIsRejectOpen(false);
             } else if (type === "Resume") {
-                profile.reasonForRejection = values.reasonForRejection;
-                profile.rejectionDate = format(
-                    new Date(values.rejectionDate.$d).getTime(),
-                    "yyyy-MM-dd"
-                );
-                profile.salaryIncreaseStatus = "5";
+                profile.submitProfileStatus = "5";
                 const res = await acceptEmployee(profile);
                 message.success("Từ chối nhân viên thành công!");
                 await getAllEmployee();
             }
         } catch (error) {
+            console.log(error);
             message.error("Từ chối nhân viên thất bại!");
         }
     };
@@ -191,7 +188,7 @@ export default function ResumeModal(props) {
                         </div>
                     }
                 >
-                    <EmployeeProfile setThreeInfo={profile} />
+                    <EmployeeProfile employeeId={employeeId} />
                 </Modal>
                 {/* Phê duyệt nhân viên */}
                 <Modal
@@ -313,7 +310,7 @@ export default function ResumeModal(props) {
                         </Form.Item>
                         <Form.Item
                             label="Lí do"
-                            name="reasonForRefusal"
+                            name="reasonForRejection"
                             rules={[
                                 {
                                     required: true,

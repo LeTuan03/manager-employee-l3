@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Table, Tag } from "antd";
+import { Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
     DeleteOutlined,
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../redux/employee/employeeSlice";
 import { STATUS } from "../constants/constants";
 const TableComponet = (props) => {
+    const { role } = useSelector((state) => state.account);
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);
     const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const TableComponet = (props) => {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            width: 200,
             sorter: true,
             render: (text) => <a>{text}</a>,
         },
@@ -61,15 +61,8 @@ const TableComponet = (props) => {
             key: "team",
             sorter: true,
             render: (team) => (
-                <Tag
-                    color={team === 1 ? "green" : "geekblue"}
-                    className="w-full text-center"
-                >
-                    {team === 1
-                        ? "Back-end"
-                        : team === 2
-                        ? "Front-end"
-                        : "Tester"}
+                <Tag color={team === 1 ? "green" : "geekblue"}>
+                    {team === 1 ? "Back-end" : "Front-end"}
                 </Tag>
             ),
         },
@@ -169,7 +162,9 @@ const TableComponet = (props) => {
                     ) && (
                         <InfoCircleOutlined
                             onClick={() => {
-                                setReasonForRejection(employee);
+                                setReasonForRejection(
+                                    employee?.reasonForRejection
+                                );
                                 setOpenReject(true);
                             }}
                             className="text-orange-500"
@@ -183,10 +178,28 @@ const TableComponet = (props) => {
                             onClick={() => {
                                 setEmployeeId(employee.id);
                                 if (employee.submitProfileStatus === "3") {
+                                    {
+                                        role === 5
+                                            ? dispatch(
+                                                  setOpen({
+                                                      ...open,
+                                                      modalProfile: true,
+                                                  })
+                                              )
+                                            : dispatch(
+                                                  setOpen({
+                                                      ...open,
+                                                      modalUpdateHappening: true,
+                                                  })
+                                              );
+                                    }
+                                } else if (
+                                    employee.submitProfileStatus === "7"
+                                ) {
                                     dispatch(
                                         setOpen({
                                             ...open,
-                                            modalUpdateHappening: true,
+                                            modalProfile: true,
                                         })
                                     );
                                 } else {
@@ -221,30 +234,14 @@ const TableComponet = (props) => {
             />
             <Modal
                 centered
-                title={
-                    reasonForRejection?.submitProfileStatus === "8"
-                        ? "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC"
-                        : "LÝ DO TỪ CHỐI YÊU CẦU KẾT THÚC HỒ SƠ"
-                }
+                footer={<></>}
+                title="LÍ DO TỪ CHỐI"
                 onCancel={() => {
                     setOpenReject(false);
                 }}
                 open={openReject}
-                footer={
-                    <div className="w-full text-center">
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={() => setOpenReject(false)}
-                        >
-                            Hủy
-                        </Button>
-                    </div>
-                }
             >
-                {reasonForRejection?.submitProfileStatus === "8"
-                    ? reasonForRejection?.additionalRequestTermination
-                    : reasonForRejection?.reasonForRejection}
+                {reasonForRejection}
             </Modal>
         </>
     );

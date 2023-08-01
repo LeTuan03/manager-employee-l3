@@ -17,7 +17,6 @@ export default function Resume() {
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [employeeId, setEmployeeId] = useState(null);
     const [reasonForEnding, setReasonForEnding] = useState(null);
     const [listEmployee, setListEmployee] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -176,7 +175,6 @@ export default function Resume() {
                                 className="cursor-pointer"
                                 onClick={() => {
                                     setOpen(true);
-                                    setEmployeeId(user.id);
                                 }}
                             >
                                 <EditOutlined className="text-blue-600 text-lg" />
@@ -188,7 +186,6 @@ export default function Resume() {
                             onClick={() => {
                                 setProfile(user);
                                 setReasonForEnding(user?.reasonForEnding);
-                                setEmployeeId(user.id);
                                 setIsModalOpen(true);
                             }}
                         >
@@ -250,7 +247,7 @@ export default function Resume() {
                                         label: `ĐƠN XIN NGHỈ VIỆC`,
                                         children: (
                                             <QuitJob
-                                                employeeId={employeeId}
+                                                employees={profile}
                                                 reasonForEnding={
                                                     reasonForEnding
                                                 }

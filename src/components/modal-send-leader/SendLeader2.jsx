@@ -1,21 +1,33 @@
-import { Col, Form, Input, Modal, Row, Select, message } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { getAllLeader, updateEmployee } from "../../services/api";
+import {
+    getAllLeader,
+    getEmployeeById,
+    updateProcess,
+    updateProposal,
+    updateSalary,
+} from "../../services/api";
 import { format } from "date-fns";
 import _ from "lodash";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    getAllEmployee,
-    resetEmployee,
-    setOpen,
-} from "../../redux/employee/employeeSlice";
+import { useDispatch } from "react-redux";
 
-const SendLeader = (props) => {
+const SendLeader2 = (props) => {
+    const dispatch = useDispatch();
+    const {
+        employeeId,
+        openLeader,
+        setOpenLeader,
+        data,
+        type,
+        handleGetSalaryByEmp,
+        handleGetProcessByEmp,
+        handleGetRecomentByEmp,
+        setIsModalOpen,
+    } = props;
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
-    const dispatch = useDispatch();
-    const { open, employee } = useSelector((state) => state.employee);
-    const [idLeader, setIdLeader] = useState({ id: null, label: "" });
+    const [employee, setEmployee] = useState({});
+
     const handleGetAllLeader = async () => {
         const res = await getAllLeader();
         if (res?.data?.code) {
@@ -29,54 +41,46 @@ const SendLeader = (props) => {
             setNameLeader(nameData);
         }
     };
-    const onFinish = async (values) => {
-        const { leaderId, submitDay, submitContent } = values;
-        let submitProfileStatus = "2";
-        let reasonForEnding = "";
-        if (props.reasonForEnding) {
-            submitProfileStatus = "6";
-            reasonForEnding = props.reasonForEnding;
+    const getEmployee = async () => {
+        if (employeeId !== null) {
+            const res = await getEmployeeById(employeeId);
+            setEmployee(res?.data?.data);
         }
+    };
+    useEffect(() => {
+        getEmployee();
+    }, [employeeId]);
+
+    const onFinish = async (values) => {
+        const { leaderId, appointmentDate, submitContent } = values;
         const data = {
             ...employee,
             leaderId,
-            submitDay,
-            submitContent,
-            submitProfileStatus,
-            reasonForEnding,
         };
         await handleSendLeader(data);
+        form.resetFields();
+        setOpenLeader(false);
+        setIsModalOpen(false);
     };
-    const handleSendLeader = async (data) => {
-        const res = await updateEmployee(employee?.id, data);
-        if (res?.data?.code === 200) {
-            dispatch(
-                setOpen({
-                    ...open,
-                    modalSendLeader: false,
-                    modalEnd: false,
-                    modalProfile: false,
-                    modalUpdateHappening: false,
-                    modalInput: false,
-                })
-            );
-            if (res?.data?.data?.submitProfileStatus === "2") {
-                dispatch(getAllEmployee("1,2,4,5"));
-            } else {
-                dispatch(getAllEmployee("6,3,8,9"));
-            }
-            dispatch(resetEmployee());
-            setIdLeader({ id: null, label: "" });
-            props.setReasonForEnding("");
+    const handleSendLeader = async (datas) => {
+        if (type === "salary") {
+            data.salaryIncreaseStatus = "2";
+            data.leaderId = datas.leaderId;
+            const res = await updateSalary(data);
+            await handleGetSalaryByEmp();
             message.success("Trình lãnh đạo thành công");
-            form.resetFields();
-        }
-    };
-    const handleChange = (value) => {
-        if (value === 1) {
-            setIdLeader({ ...idLeader, label: "Giám đốc" });
-        } else if (value === 2) {
-            setIdLeader({ ...idLeader, label: "Trưởng phòng" });
+        } else if (type === "process") {
+            data.processStatus = "2";
+            data.leaderId = datas.leaderId;
+            const res = await updateProcess(data);
+            await handleGetProcessByEmp();
+            message.success("Trình lãnh đạo thành công");
+        } else if (type === "recoment") {
+            data.proposalStatus = "2";
+            data.leaderId = datas.leaderId;
+            const res = await updateProposal(data);
+            await handleGetRecomentByEmp();
+            message.success("Trình lãnh đạo thành công");
         }
     };
     useEffect(() => {
@@ -87,17 +91,12 @@ const SendLeader = (props) => {
             <Modal
                 width={760}
                 centered
-                cancelText={"Hủy"}
-                okText={"Trình lãnh đạo"}
                 title="Trình lãnh đạo"
-                open={open.modalSendLeader}
-                onOk={() => {
-                    form.submit();
-                }}
-                onFinish={onFinish}
+                open={openLeader}
                 onCancel={() => {
-                    dispatch(setOpen({ ...open, modalSendLeader: false }));
+                    setOpenLeader(false);
                 }}
+                footer={false}
             >
                 <Form
                     layout={"vertical"}
@@ -114,7 +113,7 @@ const SendLeader = (props) => {
                         <Col span={8}>
                             <Form.Item
                                 label="Ngày trình"
-                                name="submitDay"
+                                name="appointmentDate"
                                 rules={[
                                     {
                                         required: true,
@@ -127,21 +126,12 @@ const SendLeader = (props) => {
                         </Col>
                         <Col span={8}>
                             <Form.Item name="leaderId" label="Tên lãnh đạo">
-                                <Select
-                                    options={nameLeader}
-                                    onChange={(value) => {
-                                        handleChange(value);
-                                    }}
-                                />
+                                <Select options={nameLeader} />
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Chức vụ">
-                                <Select value={null}>
-                                    <option value={idLeader.value}>
-                                        {idLeader.label}
-                                    </option>
-                                </Select>
+                                <Select></Select>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -161,10 +151,26 @@ const SendLeader = (props) => {
                             </Form.Item>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col span={24}>
+                            <Form.Item className="text-center">
+                                <Button
+                                    htmlType="submit"
+                                    type="primary"
+                                    className="mr-2"
+                                >
+                                    Trình lãnh đạo
+                                </Button>
+                                <Button type="primary" danger>
+                                    Hủy
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Form>
             </Modal>
         </>
     );
 };
 
-export default SendLeader;
+export default SendLeader2;

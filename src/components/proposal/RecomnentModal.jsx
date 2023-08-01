@@ -1,20 +1,15 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
-
 import RecomenetChildren from "./RecomenetChildren";
-import SendLeader from "../modal-send-leader/SendLeader";
-import { useDispatch } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
+import SendLeader2 from "../modal-send-leader/SendLeader2";
 
 const RecomnentModal = ({
     isModalOpen,
     setIsModalOpen,
     data,
-    present,
-    setPresent,
     employee,
+    handleGetRecomentByEmp,
 }) => {
-    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -22,39 +17,27 @@ const RecomnentModal = ({
             children: <RecomenetChildren data={data} />,
         },
     ];
+    const [openLeader, setOpenLeader] = useState("");
+
     return (
         <>
             <Modal
                 title="BIỂU MẪU"
                 centered
-                open={present || isModalOpen}
+                open={isModalOpen}
                 width={1300}
-                onCancel={() => {
-                    {
-                        setIsModalOpen(false);
-                        setPresent(false);
-                    }
-                }}
+                onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {present && (
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                onClick={() => {
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalSendLeader: true,
-                                        })
-                                    );
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
-                        )}
                         <Button
-                            key="cancel"
+                            type="primary"
+                            onClick={() => {
+                                setOpenLeader(true);
+                            }}
+                        >
+                            Trình lãnh đạo
+                        </Button>
+                        <Button
                             type="primary"
                             danger
                             onClick={() => setIsModalOpen(false)}
@@ -73,7 +56,15 @@ const RecomnentModal = ({
                     />
                 </div>
             </Modal>
-            <SendLeader open={open} />
+            <SendLeader2
+                type="recoment"
+                data={data}
+                employeeId={employee.id}
+                openLeader={openLeader}
+                setOpenLeader={setOpenLeader}
+                handleGetRecomentByEmp={handleGetRecomentByEmp}
+                setIsModalOpen={setIsModalOpen}
+            />
         </>
     );
 };

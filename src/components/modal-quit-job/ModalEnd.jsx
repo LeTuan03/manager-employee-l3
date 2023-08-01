@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
 
 const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
-    const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
+    const dispatch = useDispatch();
+    const { open } = useSelector((state) => state.employee);
     const items = [
         {
             key: "1",
@@ -28,7 +28,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                 centered
                 open={open.modalEnd}
                 onCancel={() => {
-                    dispatch(setOpen({ ...open, modalEnd: false }))
+                    dispatch(setOpen({ ...open, modalEnd: false }));
                 }}
                 footer={
                     <div className="flex justify-center">
@@ -36,7 +36,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                             type="primary"
                             danger
                             onClick={() => {
-                                dispatch(setOpen({ ...open, modalEnd: false }))
+                                dispatch(setOpen({ ...open, modalEnd: false }));
                             }}
                         >
                             Hủy
@@ -44,10 +44,15 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                         <Button
                             type="primary"
                             onClick={() => {
-                                if(reasonForEnding){
-                                    dispatch(setOpen({ ...open, modalSendLeader: true }))
-                                }else{
-                                    message.error("Vui lòng nhập lí do")
+                                if (reasonForEnding) {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
+                                } else {
+                                    message.error("Vui lòng nhập lí do");
                                 }
                             }}
                         >

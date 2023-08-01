@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TableComponet from "../../components/Table";
 import { Button, Modal } from "antd";
-import EmployeeProfile from "../../components/modal-employee-profile/EmployeeProfile";
+import EmployeeProfile from "../../components/modal-employee-profile/EmployeeProfile2";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 

@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
     const [update, setUpdate] = useState(null);
-    const {employee } = useSelector((state) => state.employee)
+    const { employee } = useSelector((state) => state.employee);
     const onFinish = async (values) => {
         const {
             email,
@@ -242,7 +242,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 {
                                     min: 9,
                                     max: 12,
-                                    message: "CMT phải là 9 số, CCCD phải là 12 số!",
+                                    message:
+                                        "CMT phải là 9 số, CCCD phải là 12 số!",
                                 },
                             ]}
                         >
@@ -250,12 +251,30 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         </Form.Item>
                     </Col>
                     <Col md={5} span={8}>
-                        <Form.Item name="dateOfBirth" label="Ngày sinh">
+                        <Form.Item
+                            name="dateOfBirth"
+                            label="Ngày sinh"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Input type="date"></Input>
                         </Form.Item>
                     </Col>
                     <Col md={5} span={8}>
-                        <Form.Item name="relationShip" label="Quan hệ">
+                        <Form.Item
+                            name="relationShip"
+                            label="Quan hệ"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Select
                                 options={[
                                     {
@@ -275,7 +294,16 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         </Form.Item>
                     </Col>
                     <Col md={4} span={8}>
-                        <Form.Item name="gender" label="Giới tính">
+                        <Form.Item
+                            name="gender"
+                            label="Giới tính"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Select
                                 options={[
                                     {
@@ -321,7 +349,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                                 {
                                     pattern: /^0\d{9}$/,
-                                    message: "Định dạng số điện thoại chưa đúng",
+                                    message:
+                                        "Định dạng số điện thoại chưa đúng",
                                 },
                             ]}
                         >
@@ -329,7 +358,16 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         </Form.Item>
                     </Col>
                     <Col md={8} span={24}>
-                        <Form.Item name="address" label="Địa chỉ cụ thể">
+                        <Form.Item
+                            name="address"
+                            label="Địa chỉ cụ thể"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn cần nhập trường này",
+                                },
+                            ]}
+                        >
                             <Input />
                         </Form.Item>
                     </Col>

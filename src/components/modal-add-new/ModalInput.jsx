@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Modal, Tabs } from "antd";
 import FormEmployee from "./FormEmployee";
 import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import { setOpen } from "../../redux/employee/employeeSlice";
 const ModalInput = ({ employeeId, setEmployeeId }) => {
     const [form] = Form.useForm();
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
-    const dispatch = useDispatch()
-    const { open,employee } = useSelector((state) => state.employee)
-    
+    const dispatch = useDispatch();
+    const { open, employee } = useSelector((state) => state.employee);
+
     const items = [
         {
             key: "1",
@@ -20,7 +20,8 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 <FormEmployee
                     family={family}
                     certificate={certificate}
-                    form={form} setOpen={setOpen}
+                    form={form}
+                    setOpen={setOpen}
                     employeeId={employeeId}
                     setEmployeeId={setEmployeeId}
                 ></FormEmployee>
@@ -52,16 +53,21 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
             <div className="w-full flex justify-center gap-2">
                 <Button
                     onClick={() => {
-                        dispatch(setOpen({ ...open, modalInput: false }))
+                        dispatch(setOpen({ ...open, modalInput: false }));
                         setEmployeeId(null);
-                        dispatch(resetEmployee())
                     }}
                 >
                     Hủy
                 </Button>
-                {employee.submitProfileStatus && <Button onClick={() => {
-                    dispatch(setOpen({ ...open, modalProfile: true }))
-                }}>Đăng kí</Button>}
+                {employee.submitProfileStatus && (
+                    <Button
+                        onClick={() => {
+                            dispatch(setOpen({ ...open, modalProfile: true }));
+                        }}
+                    >
+                        Đăng kí
+                    </Button>
+                )}
                 <Button
                     type="primary"
                     onClick={() => {
@@ -85,9 +91,8 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 centered
                 width={1000}
                 onCancel={() => {
-                    dispatch(setOpen({ ...open, modalInput: false }))
+                    dispatch(setOpen({ ...open, modalInput: false }));
                     setEmployeeId(null);
-                    dispatch(resetEmployee())
                 }}
                 footer={<FooterModal></FooterModal>}
             >

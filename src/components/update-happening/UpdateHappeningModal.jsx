@@ -39,6 +39,7 @@ export default function UpdateHappeningModal({ employeeId }) {
         try {
             const res = await getProcessByEmp(employeeId);
             setProcesss(res?.data?.data);
+            console.log(res);
         } catch (error) {
             console.log(error);
         }
@@ -118,7 +119,6 @@ export default function UpdateHappeningModal({ employeeId }) {
                             Kết thúc
                         </Button>
                         <Button
-                            key="cancel"
                             type="primary"
                             danger
                             onClick={() => {

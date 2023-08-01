@@ -21,7 +21,9 @@ const ModalProfile = ({ employeeId }) => {
     const handleUpdateEmployee = async (data) => {
         const res = await updateEmployee(employeeId, data);
         if (res?.data?.code === STATUS.SUCCESS) {
-            dispatch(setOpen({ ...open, modalInput: false, modalProfile: false }));
+            dispatch(
+                setOpen({ ...open, modalInput: false, modalProfile: false })
+            );
             dispatch(getAllEmployee("1,2,4,5"));
         }
     };
@@ -39,63 +41,76 @@ const ModalProfile = ({ employeeId }) => {
                 }}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
-                    dispatch(resetEmployee())
+                    dispatch(resetEmployee());
                 }}
                 footer={
                     <div className="flex justify-center">
                         <Button
                             danger
                             onClick={() => {
-                                dispatch(setOpen({ ...open, modalProfile: false }));
-                                dispatch(resetEmployee())
+                                dispatch(
+                                    setOpen({ ...open, modalProfile: false })
+                                );
+                                dispatch(resetEmployee());
                             }}
                         >
                             Hủy
                         </Button>
-                        {
-                            ["1", "5"].includes(
-                                employee.submitProfileStatus
-                            ) && <Button
+                        {["1", "5"].includes(employee.submitProfileStatus) && (
+                            <Button
                                 danger
                                 onClick={() => {
                                     handleUpdateEmployee({
                                         ...employee,
-                                        ...threeInfo
+                                        ...threeInfo,
                                     });
                                 }}
                             >
                                 Lưu
                             </Button>
-                        }
-                        {employee.submitProfileStatus === "7" &&<Button
-                            type="primary"
-                            onClick={() => dispatch(setOpen({ ...open, modalResume: true }))}
-                        >
-                            Nộp lưu hồ sơ
-                        </Button>}
-                        {
-                            employee.submitProfileStatus === "9" && <Button
+                        )}
+                        {employee.submitProfileStatus === "7" && (
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    dispatch(
+                                        setOpen({ ...open, modalResume: true })
+                                    )
+                                }
+                            >
+                                Nộp lưu hồ sơ
+                            </Button>
+                        )}
+                        {employee.submitProfileStatus === "9" && (
+                            <Button
                                 danger
                                 onClick={() => {
-                                    dispatch(setOpen({ ...open, modalEnd: true }));
+                                    dispatch(
+                                        setOpen({ ...open, modalEnd: true })
+                                    );
                                 }}
                             >
                                 Kết thúc
                             </Button>
-                        }
-                        {
-                            ["1", "5"].includes(
-                                employee.submitProfileStatus
-                            ) && <Button
+                        )}
+                        {["1", "5", "4"].includes(
+                            employee.submitProfileStatus
+                        ) && (
+                            <Button
                                 htmlType="submit"
                                 type="primary"
                                 onClick={() => {
-                                    dispatch(setOpen({ ...open, modalSendLeader: true }));
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
                                 }}
                             >
                                 Trình lãnh đạo
                             </Button>
-                        }
+                        )}
                     </div>
                 }
             >

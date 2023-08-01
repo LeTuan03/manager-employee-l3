@@ -2,19 +2,17 @@ import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
 
 import ProcessChildren from "./ProcessChildren";
-import SendLeader from "../modal-send-leader/SendLeader";
+import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
-import { useDispatch } from "react-redux";
+import SendLeader2 from "../modal-send-leader/SendLeader2";
 
 const ProcessModal = ({
     isModalOpen,
     setIsModalOpen,
     data,
-    present,
-    setPresent,
     employee,
+    handleGetProcessByEmp,
 }) => {
-    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -22,36 +20,28 @@ const ProcessModal = ({
             children: <ProcessChildren data={data} />,
         },
     ];
+    const [openLeader, setOpenLeader] = useState("");
 
     return (
         <>
             <Modal
                 title="BIỂU MẪU"
                 centered
-                open={present || isModalOpen}
+                open={isModalOpen}
                 width={1300}
-                onCancel={() => {
-                    setIsModalOpen(false);
-                    setPresent(false);
-                }}
+                onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {present && (
-                            <Button
-                                key="cancel"
-                                type="primary"
-                                onClick={() => {
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalSendLeader: true,
-                                        })
-                                    );
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
-                        )}
+                        <Button
+                            key="cancel"
+                            type="primary"
+                            onClick={() => {
+                                setOpenLeader(true);
+                            }}
+                        >
+                            Trình lãnh đạo
+                        </Button>
+
                         <Button
                             key="cancel"
                             type="primary"
@@ -72,6 +62,15 @@ const ProcessModal = ({
                     />
                 </div>
             </Modal>
+            <SendLeader2
+                employeeId={employee.id}
+                type="process"
+                data={data}
+                openLeader={openLeader}
+                setOpenLeader={setOpenLeader}
+                handleGetProcessByEmp={handleGetProcessByEmp}
+                setIsModalOpen={setIsModalOpen}
+            />
         </>
     );
 };

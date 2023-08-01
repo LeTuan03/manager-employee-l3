@@ -2,8 +2,10 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Col, Row, Table } from "antd";
 import { format } from "date-fns";
 import React from "react";
+import { useSelector } from "react-redux";
 
-const TabCV = ({ employee }) => {
+const TabCV = () => {
+    const { employee } = useSelector((state) => state.employee);
     const columnFamily = [
         {
             title: "STT",
@@ -66,70 +68,67 @@ const TabCV = ({ employee }) => {
         {
             label: "1. Họ và tên: ",
             span: 16,
-            value: employee?.name,
+            value: employee.name,
         },
         {
             label: "2. Nam/Nữ: ",
             span: 8,
             value:
-                employee?.gender === 0
+                employee.gender === 0
                     ? "Nam"
-                    : employee?.gender === 1
+                    : employee.gender === 1
                     ? "Nữ"
                     : "Khác",
         },
         {
             label: "3. Ngày sinh: ",
             span: 12,
-            value: format(
-                new Date(employee?.dateOfBirth).getTime(),
-                "dd-MM-yyy"
-            ),
+            value: format(new Date(employee.dateOfBirth), "dd-MM-yyy"),
         },
         {
             label: "4. Nơi sinh: ",
             span: 12,
-            value: employee?.address,
+            value: employee.address,
         },
         {
             label: "5. Nguyên quán: ",
             span: 24,
-            value: employee?.address,
+            value: employee.address,
         },
         {
             label: "6. Số CCCD: ",
             span: 8,
-            value: employee?.citizenIdentificationNumber,
+            value: employee.citizenIdentificationNumber,
         },
         {
             label: "7. Ngày cấp: ",
             span: 8,
-            value: employee?.dateOfIssuanceCard,
+            value: employee.dateOfIssuanceCard,
         },
         {
             label: "8. Nơi cấp: ",
             span: 8,
-            value: employee?.placeOfIssueCard,
+            value: employee.placeOfIssueCard,
         },
         {
             label: "9. Số điện thoại: ",
             span: 24,
-            value: employee?.phone,
+            value: employee.phone,
         },
         {
             label: "10. Email: ",
             span: 24,
-            value: employee?.email,
+            value: employee.email,
         },
         {
             label: "11. Dân tộc: ",
             span: 12,
-            value: employee?.ethnic,
+            value: employee.ethnic,
         },
         {
             label: "12. Tôn giáo: ",
             span: 12,
-            value: employee?.religion,
+            value: employee.religion,
         },
     ];
     const DataRow = ({ label, value, span }) => (
@@ -191,7 +190,7 @@ const TabCV = ({ employee }) => {
                         </i>
                         <Table
                             bordered
-                            dataSource={employee?.employeeFamilyDtos}
+                            dataSource={employee.employeeFamilyDtos}
                             columns={columnFamily}
                             pagination={false}
                             style={{ border: "2px solid #000" }}
@@ -208,7 +207,7 @@ const TabCV = ({ employee }) => {
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className=" m-8 mt-3">(Ký, ghi rõ họ tên)</i>
                                 <h5 className=" my-10 text-base">
-                                    {employee?.name}
+                                    {employee.name}
                                 </h5>
                             </div>
                         </div>

@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { Button, Modal, Tabs } from "antd";
 import IncreaseSalaryChildren from "./IncreaseSalaryChildren";
-import SendLeader from "../modal-send-leader/SendLeader";
-import { useDispatch } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
+import SendLeader2 from "../modal-send-leader/SendLeader2";
 
 const TabSalary = ({
     isModalOpen,
     setIsModalOpen,
     data,
-    present,
-    setPresent,
+    employee,
+    handleGetSalaryByEmp,
 }) => {
-    const dispatch = useDispatch();
     const items = [
         {
             key: "1",
@@ -21,41 +18,33 @@ const TabSalary = ({
         },
     ];
 
+    const [openLeader, setOpenLeader] = useState("");
+
     return (
         <>
             <Modal
                 title="BIỂU MẪU"
                 centered
-                open={present || isModalOpen}
+                open={isModalOpen}
                 width={1300}
-                onCancel={() => {
-                    setIsModalOpen(false);
-                    setPresent(false);
-                }}
+                onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {present && (
-                            <Button
-                                type="primary"
-                                onClick={() => {
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalSendLeader: true,
-                                        })
-                                    );
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
-                        )}
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setOpenLeader(true);
+                            }}
+                        >
+                            Trình lãnh đạo
+                        </Button>
+
                         <Button
                             key="cancel"
                             type="primary"
                             danger
                             onClick={() => {
                                 setIsModalOpen(false);
-                                setPresent(false);
                             }}
                         >
                             Hủy
@@ -72,6 +61,15 @@ const TabSalary = ({
                     />
                 </div>
             </Modal>
+
+            <SendLeader2
+                type="salary"
+                data={data}
+                employeeId={employee.id}
+                openLeader={openLeader}
+                setOpenLeader={setOpenLeader}
+                handleGetSalaryByEmp={handleGetSalaryByEmp}
+            />
         </>
     );
 };

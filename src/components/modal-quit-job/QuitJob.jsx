@@ -3,9 +3,9 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
+const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
     const [date, setDate] = useState({});
-    const {employee } = useSelector((state) => state.employee)
+    const { employee } = useSelector((state) => state.employee);
     const getTodayDate = () => {
         const date = new Date();
         const day = date.getDate();
@@ -43,7 +43,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                     <div>Tôi tên là:</div>
                                     <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                         <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                            {employee?.name}
+                                            {employees?.name || employee?.name}
                                         </span>
                                     </div>
                                 </div>
@@ -52,7 +52,16 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                         <div>Ngày, tháng, năm sinh:</div>
                                         <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                             <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                                {employee?.dateOfBirth && format(employee?.dateOfBirth, "dd-MM-yyyy")}
+                                                {(employees?.dateOfBirth &&
+                                                    format(
+                                                        employees?.dateOfBirth,
+                                                        "dd-MM-yyyy"
+                                                    )) ||
+                                                    (employee?.dateOfBirth &&
+                                                        format(
+                                                            employee?.dateOfBirth,
+                                                            "dd-MM-yyyy"
+                                                        ))}
                                             </span>
                                         </div>
                                     </div>
@@ -60,14 +69,15 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                         <div> CCCD/CMT:</div>
                                         <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                             <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                                {employee?.citizenIdentificationNumber}
+                                                {employees?.citizenIdentificationNumber ||
+                                                    employee?.citizenIdentificationNumber}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    Tôi làm đơn này, đề nghị Ban Gián đốc cho tôi xin nghỉ việc vì
-                                    lý do:
+                                    Tôi làm đơn này, đề nghị Ban Gián đốc cho
+                                    tôi xin nghỉ việc vì lý do:
                                 </div>
                                 <Col className="relative pr-4 mb-3  ">
                                     <Input
@@ -83,12 +93,15 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                     ></div>
                                 </Col>
                                 <div className="leading-9">
-                                    Trong thời gian chờ đợi sự chấp thuận của Ban Giám đốc Công
-                                    ty, tôi sẽ tiếp tục <br /> làm việc nghiêm túc và tiến hành
-                                    bàn giao công việc cũng như tài sản cho người <br /> quản lý
-                                    trực tiếp của tôi.
+                                    Trong thời gian chờ đợi sự chấp thuận của
+                                    Ban Giám đốc Công ty, tôi sẽ tiếp tục <br />{" "}
+                                    làm việc nghiêm túc và tiến hành bàn giao
+                                    công việc cũng như tài sản cho người <br />{" "}
+                                    quản lý trực tiếp của tôi.
                                 </div>
-                                <div className="mt-5">Tôi xin chân thành cảm ơn!</div>
+                                <div className="mt-5">
+                                    Tôi xin chân thành cảm ơn!
+                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -97,11 +110,14 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                         <Col span={12} className="text-center">
                             <div>
                                 <i className="block">
-                                    Hà Nội, ngày {date.day} tháng {date.month} năm 2023
+                                    Hà Nội, ngày {date.day} tháng {date.month}{" "}
+                                    năm 2023
                                 </i>
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className="block">(Ký, ghi rõ họ tên)</i>
-                                <b className="block mt-5">{employee?.name}</b>
+                                <b className="block mt-5">
+                                    {employees?.name || employee?.name}
+                                </b>
                             </div>
                         </Col>
                     </Row>
