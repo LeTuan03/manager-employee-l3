@@ -27,119 +27,134 @@ export default function ResumeModal(props) {
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
 
-    // Phê duyệt
+    const handleActionSuccess = (type) => {
+        message.success("Action completed successfully!");
+        switch (type) {
+            case "Propose":
+                handleGetProposal();
+                break;
+            case "Promote":
+                handleGetProcess();
+                break;
+            case "IncreaseSalary":
+                getCurrentEmpIncreaseSalary();
+                break;
+            case "Resume":
+                getAllEmployee();
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleActionFailure = (error) => {
+        console.error(error);
+        // message.error("Action failed!");
+    };
+
     const onFinish = async (values) => {
         try {
             profile.acceptanceDate = format(
                 new Date(values.acceptDay?.$d).getTime(),
                 "yyyy-MM-dd"
             );
-            if (type === "Propose") {
-                profile.proposalStatus = "3";
-                const res = await proposalEdit(profile);
-                message.success("Phê duyệt nhân viên thành công!");
-                await handleGetProposal();
-                setIsApproveOpen(false);
-            } else if (type === "Promote") {
-                profile.processStatus = "3";
-                const res = await acceptPromote(profile);
-                message.success("Phê duyệt nhân viên thành công!");
-                await handleGetProcess();
-                setIsApproveOpen(false);
-            } else if (type === "IncreaseSalary") {
-                profile.salaryIncreaseStatus = "3";
-                const res = await salaryApprove(profile);
-                message.success("Phê duyệt nhân viên thành công!");
-                await getCurrentEmpIncreaseSalary();
-                setIsApproveOpen(false);
-            } else if (type === "Resume") {
-                profile.submitProfileStatus = "3";
-                profile.terminationAppointmentDate = format(
-                    new Date(values.acceptDay.$d).getTime(),
-                    "yyyy-MM-dd"
-                );
-                const res = await acceptEmployee(profile);
-                message.success("Phê duyệt nhân viên thành công!");
-                await getAllEmployee();
-                setIsApproveOpen(false);
+            switch (type) {
+                case "Propose":
+                    profile.proposalStatus = "3";
+                    await proposalEdit(profile);
+                    break;
+                case "Promote":
+                    profile.processStatus = "3";
+                    await acceptPromote(profile);
+                    break;
+                case "IncreaseSalary":
+                    profile.salaryIncreaseStatus = "3";
+                    await salaryApprove(profile);
+                    break;
+                case "Resume":
+                    profile.submitProfileStatus = "3";
+                    profile.terminationAppointmentDate = format(
+                        new Date(values.acceptDay.$d).getTime(),
+                        "yyyy-MM-dd"
+                    );
+                    await acceptEmployee(profile);
+                    break;
+                default:
+                    break;
             }
+            handleActionSuccess(type);
+            setIsApproveOpen(false);
         } catch (error) {
-            console.log(error);
-            message.error("Phê duyệt nhân viên thất bại!");
+            handleActionFailure(error);
         }
     };
-    // yêu cầu bổ sung
+
     const onFinishAdditional = async (values) => {
         try {
             profile.additionalRequest = values.additionalRequest;
-            if (type === "Propose") {
-                profile.proposalStatus = "4";
-                const res = await proposalEdit(profile);
-                message.success("Yêu cầu bổ sung nhân viên thành công!");
-                await handleGetProposal();
-                setIsAdditionalRequestOpen(false);
-            } else if (type === "Promote") {
-                profile.processStatus = "4";
-                const res = await acceptPromote(profile);
-                message.success("Yêu cầu bổ sung nhân viên thành công!");
-                await handleGetProcess();
-                setIsAdditionalRequestOpen(false);
-            } else if (type === "IncreaseSalary") {
-                profile.salaryIncreaseStatus = "4";
-                const res = await salaryApprove(profile);
-                message.success("Yêu cầu bổ sung nhân viên thành công!");
-                await getCurrentEmpIncreaseSalary();
-                setIsAdditionalRequestOpen(false);
-            } else if (type === "Resume") {
-                profile.additionalRequest = values.additionalRequest;
-                profile.submitProfileStatus = "4";
-                const res = await acceptEmployee(profile);
-                message.success("Yêu cầu bổ sung nhân viên thành công!");
-                await getAllEmployee();
-                setIsAdditionalRequestOpen(false);
+            switch (type) {
+                case "Propose":
+                    profile.proposalStatus = "4";
+                    await proposalEdit(profile);
+                    break;
+                case "Promote":
+                    profile.processStatus = "4";
+                    await acceptPromote(profile);
+                    break;
+                case "IncreaseSalary":
+                    profile.salaryIncreaseStatus = "4";
+                    await salaryApprove(profile);
+                    break;
+                case "Resume":
+                    profile.additionalRequest = values.additionalRequest;
+                    profile.submitProfileStatus = "4";
+                    await acceptEmployee(profile);
+                    break;
+                default:
+                    break;
             }
+            handleActionSuccess(type);
+            setIsAdditionalRequestOpen(false);
         } catch (error) {
-            message.error("Yêu cầu bổ sung nhân viên thất bại!");
+            handleActionFailure(error);
         }
         await getAllEmployee();
     };
-    // yêu cầu từ chối
+
     const onFinishReject = async (values) => {
         try {
             profile.rejectionDate = format(
                 new Date(values.rejectionDate.$d).getTime(),
                 "yyyy-MM-dd"
             );
-            profile.reasonForRejection = values.reasonForRejection;
-            if (type === "Propose") {
-                profile.proposalStatus = "5";
-                const res = await proposalEdit(profile);
-                message.success("Từ chối nhân viên thành công!");
-                await handleGetProposal();
-                setIsRejectOpen(false);
-            } else if (type === "Promote") {
-                profile.processStatus = "5";
-                const res = rejectPromote(profile);
-                message.success("Từ chối nhân viên thành công!");
-                await handleGetProcess();
-                setIsRejectOpen(false);
-            } else if (type === "IncreaseSalary") {
-                profile.salaryIncreaseStatus = "5";
-                const res = await salaryApprove(profile);
-                message.success("Từ chối nhân viên thành công!");
-                await getCurrentEmpIncreaseSalary();
-                setIsRejectOpen(false);
-            } else if (type === "Resume") {
-                profile.submitProfileStatus = "5";
-                const res = await acceptEmployee(profile);
-                message.success("Từ chối nhân viên thành công!");
-                await getAllEmployee();
+            profile.reasonForRefusal = values.reasonForRejection;
+            switch (type) {
+                case "Propose":
+                    profile.proposalStatus = "5";
+                    await proposalEdit(profile);
+                    break;
+                case "Promote":
+                    profile.processStatus = "5";
+                    await rejectPromote(profile);
+                    break;
+                case "IncreaseSalary":
+                    profile.salaryIncreaseStatus = "5";
+                    await salaryApprove(profile);
+                    break;
+                case "Resume":
+                    profile.submitProfileStatus = "5";
+                    await acceptEmployee(profile);
+                    break;
+                default:
+                    break;
             }
+            handleActionSuccess(type);
+            setIsRejectOpen(false);
         } catch (error) {
-            console.log(error);
-            message.error("Từ chối nhân viên thất bại!");
+            handleActionFailure(error);
         }
     };
+
     return (
         <>
             <Button
