@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
 
-const TabListCertificate = () => {
+const TabListCertificate = ({ type }) => {
     const { employee } = useSelector((state) => state.employee);
     const columns = [
         {
@@ -45,7 +45,11 @@ const TabListCertificate = () => {
                     <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
                     <Table
                         bordered
-                        dataSource={employee?.certificatesDto}
+                        dataSource={
+                            type
+                                ? type?.certificatesDto
+                                : employee?.certificatesDto
+                        }
                         columns={columns}
                         pagination={false}
                         style={{ border: "#515151 2px double" }}

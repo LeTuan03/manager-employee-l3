@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import TabListCertificate from "./TabListCertificate";
-import TabCV from "./TabCV";
 import TabProfile from "./TabProfile2";
 import { getEmployeeById } from "../../services/api";
+import TabCV2 from "./TabCV2";
 export default function EmployeeProfile({ employeeId }) {
     const [employee, setEmployee] = useState({});
     const [tabPosition, setTabPosition] = useState("left");
@@ -37,14 +37,12 @@ export default function EmployeeProfile({ employeeId }) {
         {
             key: "2",
             label: `SƠ YẾU LÍ LỊCH`,
-            children: <TabCV employee={employee}></TabCV>,
+            children: <TabCV2 employee={employee}></TabCV2>,
         },
         {
             key: "3",
             label: `DANH SÁCH VĂN BẰNG`,
-            children: (
-                <TabListCertificate employee={employee}></TabListCertificate>
-            ),
+            children: <TabListCertificate type={employee}></TabListCertificate>,
         },
     ];
     return (

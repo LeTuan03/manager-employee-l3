@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { searchEmployee } from "../../services/api";
 import ResumeModal from "../resume/ResumeModal";
-import QuitJob from "../modal-quit-job/QuitJob";
 import { useSelector } from "react-redux";
 import { Button, Modal, Result, Table, Tabs, Tag } from "antd";
 import {
@@ -12,12 +11,12 @@ import {
 } from "@ant-design/icons";
 import useTruncateText from "../../hook/useTruncateText";
 import { format } from "date-fns";
+import EmployeeProfile from "../modal-employee-profile/EmployeeProfile2";
 
 export default function Resume() {
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [reasonForEnding, setReasonForEnding] = useState(null);
     const [listEmployee, setListEmployee] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -185,7 +184,6 @@ export default function Resume() {
                             className="cursor-pointer"
                             onClick={() => {
                                 setProfile(user);
-                                setReasonForEnding(user?.reasonForEnding);
                                 setIsModalOpen(true);
                             }}
                         >
@@ -213,7 +211,7 @@ export default function Resume() {
                             }}
                         />
                         <Modal
-                            title="ĐƠN XIN NGHỈ VIỆC"
+                            title="HỒ SƠ NHÂN VIÊN"
                             open={isModalOpen}
                             onOk={handleOk}
                             onCancel={handleCancel}
@@ -237,28 +235,7 @@ export default function Resume() {
                                 </div>
                             }
                         >
-                            <Tabs
-                                style={{ height: 600, overflowY: "scroll" }}
-                                tabPosition="left"
-                                defaultActiveKey="1"
-                                items={[
-                                    {
-                                        key: "1",
-                                        label: `ĐƠN XIN NGHỈ VIỆC`,
-                                        children: (
-                                            <QuitJob
-                                                employees={profile}
-                                                reasonForEnding={
-                                                    reasonForEnding
-                                                }
-                                                setReasonForEnding={
-                                                    setReasonForEnding
-                                                }
-                                            />
-                                        ),
-                                    },
-                                ]}
-                            />
+                            <EmployeeProfile employeeId={profile.id} />
                         </Modal>
                     </>
                 ) : (
