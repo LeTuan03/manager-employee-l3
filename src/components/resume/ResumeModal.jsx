@@ -28,7 +28,7 @@ export default function ResumeModal(props) {
     const [isRejectOpen, setIsRejectOpen] = useState(false);
 
     const handleActionSuccess = (type) => {
-        message.success("Action completed successfully!");
+        message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
             case "Propose":
                 handleGetProposal();
@@ -106,7 +106,6 @@ export default function ResumeModal(props) {
                     await salaryApprove(profile);
                     break;
                 case "Resume":
-                    profile.additionalRequest = values.additionalRequest;
                     profile.submitProfileStatus = "4";
                     await acceptEmployee(profile);
                     break;

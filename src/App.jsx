@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import LayoutHomePage from "./components/layout/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import { getAccount } from "./services/api";
@@ -14,66 +17,71 @@ import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
 import { STATUS } from "./constants/constants";
 export default function App() {
-    // const dispatch = useDispatch();
-    // const { isAuthenticated } = useSelector((state) => state.account);
-    // const getRoleAccount = async () => {
-    //     if (window.location.pathname === "/login") {
-    //       return
-    //     }
-    //     const res = await getAccount()
-    //     if (res?.status === STATUS.SUCCESS) {
-    //       dispatch(doLoginAction(res?.data[0]));
-    //     }
-    // }
-    // useEffect(() => {
-    //   getRoleAccount()
-    // }, [])
-    const router = createBrowserRouter([
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.account);
+  const getRoleAccount = async () => {
+      if (window.location.pathname === "/login") {
+        return
+      }
+      const res = await getAccount()
+      if (res?.status === STATUS.SUCCESS) {
+        dispatch(doLoginAction(res?.data[0]));
+      }
+  }
+  useEffect(() => {
+    getRoleAccount()
+  }, [])
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <LayoutHomePage></LayoutHomePage>,
+      errorElement: <>Not Found</>,
+      children: [
         {
-            path: "/",
-            element: <LayoutHomePage></LayoutHomePage>,
-            errorElement: <>Not Found</>,
-            children: [
-                {
-                    index: true,
-                    element: <></>,
-                },
-                {
-                    path: "/manage_employee",
-                    element: <Employee></Employee>,
-                },
-                {
-                    path: "/release",
-                    element: <PageEnd></PageEnd>,
-                },
-                {
-                    path: "/awaiting_approval",
-                    element: <AwaitingApproval></AwaitingApproval>,
-                },
-                {
-                    path: "/approved",
-                    element: <Approved></Approved>,
-                },
-                {
-                    path: "/addnew_employee",
-                    element: (
-                        <RoleUserRoute role={4}>
-                            <AddUserPage></AddUserPage>
-                        </RoleUserRoute>
-                    ),
-                },
-            ],
+          index: true,
+          element: <></>,
         },
         {
-            path: "/login",
-            element: <Signin></Signin>,
+          path: "/manage_employee",
+          element: (
+            <Employee></Employee>
+          ),
         },
-    ]);
-    return (
-        <>
-            {/* isAuthenticated ||
+        {
+          path: "/release",
+          element: <PageEnd></PageEnd>,
+        },
+        {
+          path: "/awaiting_approval",
+          element: <AwaitingApproval></AwaitingApproval>,
+        },
+        {
+          path: "/approved",
+          element: <Approved></Approved>,
+        }
+        ,
+        {
+          path: "/addnew_employee",
+          element: (
+            <RoleUserRoute role={4}>
+              <AddUserPage></AddUserPage>
+            </RoleUserRoute>
+          ),
+        }
+      ],
+    },
+    {
+      path: "/login",
+      element: <Signin></Signin>,
+    }
+  ]);
+  return (
+    <>
+      
+        {/* isAuthenticated ||
           window.location.pathname === "/login" ? <RouterProvider router={router} /> : <>Loading...</> */}
-            <RouterProvider router={router} />
-        </>
-    );
+          <RouterProvider router={router} />
+      
+    </>
+  );
 }
