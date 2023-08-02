@@ -161,16 +161,18 @@ export default function Promote() {
         <div>
             {role === 5 ? (
                 <>
-                    <Table
-                        columns={columns}
-                        dataSource={processEmp}
-                        pagination={{
-                            pageSize: 10,
-                        }}
-                        scroll={{
-                            y: 490,
-                        }}
-                    />
+                    <div className="main-table">
+                        <Table
+                            columns={columns}
+                            dataSource={processEmp}
+                            pagination={{
+                                pageSize: 10,
+                            }}
+                            scroll={{
+                                y: 490,
+                            }}
+                        />
+                    </div>
                     <Modal
                         title="Biểu mẫu"
                         open={isModalOpen}

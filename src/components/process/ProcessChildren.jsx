@@ -12,7 +12,10 @@ const ProcessChildren = ({ data }) => {
         handleGetEmp();
     }, [data]);
     return (
-        <div className="bg-slate-300 p-10">
+        <div
+            className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
+            style={{ fontFamily: "Tinos" }}
+        >
             <div className="bg-white p-10">
                 <Row>
                     <Col span={12} className="text-center">

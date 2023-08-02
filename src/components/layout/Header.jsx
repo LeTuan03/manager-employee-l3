@@ -1,9 +1,6 @@
 import React from "react";
 import { Button, Dropdown, Avatar } from "antd";
-import {
-    LogoutOutlined,
-    UserOutlined,
-} from "@ant-design/icons";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 const Header = () => {
@@ -34,15 +31,8 @@ const Header = () => {
         },
     ];
     return (
-        <div className="border-b shadow-lg">
-            <div className="flex justify-between p-3 cursor-pointer">
-                <Button
-                    type="primary"
-                    style={{
-                        marginBottom: 16,
-                    }}
-                >
-                </Button>
+        <div className="border-b shadow-lg py-2 fixed top-0 w-[85%] z-10 bg-white">
+            <div className="text-right mr-4">
                 <div>
                     <span>
                         <strong>

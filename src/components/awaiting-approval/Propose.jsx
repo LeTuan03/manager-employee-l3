@@ -131,16 +131,18 @@ export default function Propose() {
         <div>
             {role === 5 ? (
                 <>
-                    <Table
-                        columns={columns}
-                        dataSource={proposeEmp}
-                        pagination={{
-                            pageSize: 10,
-                        }}
-                        scroll={{
-                            y: 490,
-                        }}
-                    />
+                    <div className="main-table">
+                        <Table
+                            columns={columns}
+                            dataSource={proposeEmp}
+                            pagination={{
+                                pageSize: 10,
+                            }}
+                            scroll={{
+                                y: 490,
+                            }}
+                        />
+                    </div>
                     <Modal
                         title="Biểu mẫu"
                         open={isModalOpen}

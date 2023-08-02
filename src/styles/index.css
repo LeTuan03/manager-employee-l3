@@ -53,3 +53,27 @@ tr.ant-table-row:last-child > td {
     font-family: inherit;
     font-size: medium;
 }
+.ant-modal-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: white;
+    z-index: 99;
+    padding: 10px 0;
+}
+.main-table .ant-table-wrapper .ant-table-thead > tr > th {
+    background-color: #1677ff;
+    color: #ffffff;
+}
+.ant-table-wrapper .ant-table-thead > tr > th {
+    background-color: #ffffff;
+}
+.login-r {
+    position: absolute;
+    top: 50%;
+    left: 56%;
+    background: rgb(255, 255, 255);
+    width: 8%;
+    height: 10%;
+    transform: translateY(-50%);
+}

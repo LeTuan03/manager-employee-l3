@@ -29,14 +29,16 @@ const RecomnentModal = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        <Button
-                            type="primary"
-                            onClick={() => {
-                                setOpenLeader(true);
-                            }}
-                        >
-                            Trình lãnh đạo
-                        </Button>
+                        {data.proposalStatus === 1 && (
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    setOpenLeader(true);
+                                }}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
                         <Button
                             type="primary"
                             danger

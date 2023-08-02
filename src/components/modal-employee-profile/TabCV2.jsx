@@ -2,7 +2,6 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Col, Row, Table } from "antd";
 import { format } from "date-fns";
 import React from "react";
-import { useSelector } from "react-redux";
 
 const TabCV2 = ({ employee }) => {
     const columnFamily = [

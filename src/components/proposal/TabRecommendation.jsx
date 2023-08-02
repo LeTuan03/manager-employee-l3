@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     addProposalByEmp,
     deleteProposal,
@@ -10,12 +10,20 @@ import {
 import RecomnentModal from "./RecomnentModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import useTruncateText from "../../hook/useTruncateText";
+import validateCodeInput from "../../hook/ValidateCodeInput";
+import { useSelector } from "react-redux";
 
 const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const [data, setData] = useState({});
+
+    const { open } = useSelector((state) => state.employee);
+    useEffect(() => {
+        if (!open.modalUpdateHappening) {
+            form.resetFields();
+        }
+    }, [open.modalUpdateHappening]);
 
     const handleDeleteRecoment = async (id) => {
         try {
@@ -69,6 +77,8 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             title: "Loại ",
             dataIndex: "type",
             key: "type",
+            width: 130,
+            align: "center",
             render: (type) => (type === 2 ? "Tham mưu" : "Đề xuất"),
         },
         {
@@ -126,13 +136,15 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                     default:
                         break;
                 }
-                return useTruncateText(proposalStatus || "", 25);
+                return useTruncateText(proposalStatus || "", 13);
             },
         },
         {
             title: "Thao tác",
             dataIndex: "action",
             key: "action",
+            width: 130,
+            align: "center",
             render: (_, employee) => (
                 <div>
                     {employee.proposalStatus === 1 && (
@@ -167,8 +179,19 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
-                                    setIsModalOpen(true);
                                     setData(employee);
+                                    setIsModalOpen(true);
+                                }}
+                            />
+                        </div>
+                    )}
+                    {employee.proposalStatus === 3 && (
+                        <div>
+                            <EyeOutlined
+                                className="text-green-600 text-lg"
+                                onClick={() => {
+                                    setData(employee);
+                                    setIsModalOpen(true);
                                 }}
                             />
                         </div>
@@ -284,6 +307,15 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
+                                {
+                                    max: 150,
+                                    message: "Nội dung bạn nhập quá dài !",
+                                },
+                                {
+                                    validator: validateCodeInput,
+                                    message:
+                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
+                                },
                             ]}
                         >
                             <Input />
@@ -300,6 +332,15 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
+                                {
+                                    max: 150,
+                                    message: "Nội dung bạn nhập quá dài !",
+                                },
+                                {
+                                    validator: validateCodeInput,
+                                    message:
+                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
+                                },
                             ]}
                         >
                             <Input />
@@ -314,6 +355,15 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
+                                {
+                                    max: 150,
+                                    message: "Nội dung bạn nhập quá dài !",
+                                },
+                                {
+                                    validator: validateCodeInput,
+                                    message:
+                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
+                                },
                             ]}
                         >
                             <Input />
@@ -322,7 +372,8 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="mr-5 w-full  bg-green-700 text-white"
+                                type="primary"
+                                className="w-full"
                                 htmlType="submit"
                             >
                                 Lưu

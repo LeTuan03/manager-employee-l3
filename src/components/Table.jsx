@@ -33,7 +33,7 @@ const TableComponet = (props) => {
             dataIndex: "name",
             key: "name",
             width: 200,
-            render: (name) => useTruncateText(name, 30),
+            render: (name) => useTruncateText(name, 22),
         },
         {
             title: "Ngày sinh",
@@ -169,7 +169,6 @@ const TableComponet = (props) => {
                     {["1", "5", "4"].includes(employee.submitProfileStatus) && (
                         <span
                             onClick={() => {
-                                // setOpen({...open,modalInput:true});
                                 dispatch(
                                     setOpen({ ...open, modalInput: true })
                                 );
@@ -247,16 +246,17 @@ const TableComponet = (props) => {
     };
     return (
         <>
-            <Table
-                bordered
-                columns={columns}
-                dataSource={listEmployee}
-                loading={loading}
-                pagination={{
-                    showSizeChanger: true,
-                    pageSizeOptions: ["1", "10", "20", "30"],
-                }}
-            />
+            <div className="main-table">
+                <Table
+                    bordered
+                    columns={columns}
+                    dataSource={listEmployee}
+                    loading={loading}
+                    pagination={{
+                        pageSizeOptions: ["1", "10", "20", "30"],
+                    }}
+                />
+            </div>
             <Modal
                 centered
                 footer={<></>}

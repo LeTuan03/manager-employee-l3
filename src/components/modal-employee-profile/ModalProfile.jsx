@@ -45,19 +45,9 @@ const ModalProfile = ({ employeeId }) => {
                 }}
                 footer={
                     <div className="flex justify-center">
-                        <Button
-                            danger
-                            onClick={() => {
-                                dispatch(
-                                    setOpen({ ...open, modalProfile: false })
-                                );
-                                dispatch(resetEmployee());
-                            }}
-                        >
-                            Hủy
-                        </Button>
                         {["1", "5"].includes(employee.submitProfileStatus) && (
                             <Button
+                                type="primary"
                                 danger
                                 onClick={() => {
                                     handleUpdateEmployee({
@@ -72,11 +62,11 @@ const ModalProfile = ({ employeeId }) => {
                         {employee.submitProfileStatus === "7" && (
                             <Button
                                 type="primary"
-                                onClick={() =>
+                                onClick={() => {
                                     dispatch(
                                         setOpen({ ...open, modalResume: true })
-                                    )
-                                }
+                                    );
+                                }}
                             >
                                 Nộp lưu hồ sơ
                             </Button>
@@ -111,6 +101,18 @@ const ModalProfile = ({ employeeId }) => {
                                 Trình lãnh đạo
                             </Button>
                         )}
+                        <Button
+                            danger
+                            type="primary"
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalProfile: false })
+                                );
+                                dispatch(resetEmployee());
+                            }}
+                        >
+                            Hủy
+                        </Button>
                     </div>
                 }
             >

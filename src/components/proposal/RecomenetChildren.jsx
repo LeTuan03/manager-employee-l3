@@ -12,7 +12,10 @@ const RecomenetChildren = ({ data }) => {
         handleGetEmp();
     }, [data]);
     return (
-        <div className="bg-slate-300 p-10">
+        <div
+            className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
+            style={{ fontFamily: "Tinos" }}
+        >
             <div className="bg-white p-10">
                 <Row>
                     <Col span={12} className="text-center">
@@ -42,7 +45,6 @@ const RecomenetChildren = ({ data }) => {
                             </p>
                             <p className="block">
                                 Tôi tên là: {empData?.name} sinh ngày:{" "}
-                                {/* {format(empData.dateOfBirth, "yyyy-MM-dd")} */}
                             </p>
                             <p className="block">
                                 Tôi xin trình bày với nội dung sự việc như sau:

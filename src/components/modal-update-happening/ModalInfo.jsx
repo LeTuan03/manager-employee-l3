@@ -20,7 +20,11 @@ export default function ModalInfo({ message, type }) {
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        <Button type="primary" danger>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => setIsModalOpen(false)}
+                        >
                             Hủy
                         </Button>
                     </div>

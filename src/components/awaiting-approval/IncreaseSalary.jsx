@@ -139,16 +139,19 @@ export default function IncreaseSalary() {
         <div>
             {role === 5 ? (
                 <>
-                    <Table
-                        columns={columns}
-                        dataSource={dataSalary}
-                        pagination={{
-                            pageSize: 10,
-                        }}
-                        scroll={{
-                            y: 490,
-                        }}
-                    />
+                    <div className="main-table">
+                        <Table
+                            columns={columns}
+                            dataSource={dataSalary}
+                            pagination={{
+                                showSizeChanger: false,
+                                pageSize: 10,
+                            }}
+                            scroll={{
+                                y: 490,
+                            }}
+                        />
+                    </div>
                     <Modal
                         title="Biểu mẫu"
                         open={isModalOpen}

@@ -2,8 +2,6 @@ import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
 
 import ProcessChildren from "./ProcessChildren";
-import { useDispatch, useSelector } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
 import SendLeader2 from "../modal-send-leader/SendLeader2";
 
 const ProcessModal = ({
@@ -32,18 +30,17 @@ const ProcessModal = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
+                        {data.processStatus === "1" && (
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    setOpenLeader(true);
+                                }}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
                         <Button
-                            key="cancel"
-                            type="primary"
-                            onClick={() => {
-                                setOpenLeader(true);
-                            }}
-                        >
-                            Trình lãnh đạo
-                        </Button>
-
-                        <Button
-                            key="cancel"
                             type="primary"
                             danger
                             onClick={() => setIsModalOpen(false)}

@@ -90,6 +90,7 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
+            form3.resetFields();
         } catch (error) {
             handleActionFailure(error);
         }
@@ -103,27 +104,34 @@ export default function ResumeModal(props) {
                     profile.proposalStatus = "4";
                     await proposalEdit(profile);
                     await handleActionSuccess(type);
+                    setIsAdditionalRequestOpen(false);
+                    setIsOpen(false);
                     break;
                 case "Promote":
                     profile.processStatus = "4";
                     await acceptPromote(profile);
                     await handleActionSuccess(type);
+                    setIsAdditionalRequestOpen(false);
+                    setIsOpen(false);
                     break;
                 case "IncreaseSalary":
                     profile.salaryIncreaseStatus = "4";
                     await salaryApprove(profile);
                     await handleActionSuccess(type);
+                    setIsAdditionalRequestOpen(false);
+                    setIsOpen(false);
                     break;
                 case "Resume":
                     profile.submitProfileStatus = "4";
                     await acceptEmployee(profile);
                     await handleActionSuccess(type);
+                    setIsAdditionalRequestOpen(false);
+                    setIsOpen(false);
                     break;
                 default:
                     break;
             }
-            setIsAdditionalRequestOpen(false);
-            setIsOpen(false);
+            form.resetFields();
         } catch (error) {
             handleActionFailure(error);
         }
@@ -138,25 +146,34 @@ export default function ResumeModal(props) {
                     profile.proposalStatus = "5";
                     await proposalEdit(profile);
                     await handleActionSuccess(type);
+                    setIsRejectOpen(false);
+                    setIsOpen(false);
                     break;
                 case "Promote":
                     profile.processStatus = "5";
                     await rejectPromote(profile);
                     await handleActionSuccess(type);
+                    setIsRejectOpen(false);
+                    setIsOpen(false);
                     break;
                 case "IncreaseSalary":
                     profile.salaryIncreaseStatus = "5";
                     await salaryApprove(profile);
                     await handleActionSuccess(type);
+                    setIsRejectOpen(false);
+                    setIsOpen(false);
                     break;
                 case "Resume":
                     profile.submitProfileStatus = "5";
                     await acceptEmployee(profile);
                     await handleActionSuccess(type);
+                    setIsRejectOpen(false);
+                    setIsOpen(false);
                     break;
                 default:
                     break;
             }
+            form2.resetFields();
             setIsRejectOpen(false);
             setIsOpen(false);
         } catch (error) {
@@ -165,6 +182,7 @@ export default function ResumeModal(props) {
     };
     const [form] = Form.useForm();
     const [form2] = Form.useForm();
+    const [form3] = Form.useForm();
     return (
         <>
             <Button
@@ -231,6 +249,7 @@ export default function ResumeModal(props) {
                             remember: true,
                             acceptDay: format(new Date(), "yyyy-MM-dd"),
                         }}
+                        form={form3}
                     >
                         <Form.Item
                             className="mt-4"

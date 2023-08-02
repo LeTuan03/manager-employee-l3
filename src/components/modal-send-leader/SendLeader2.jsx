@@ -8,11 +8,8 @@ import {
     updateSalary,
 } from "../../services/api";
 import { format } from "date-fns";
-import _ from "lodash";
-import { useDispatch } from "react-redux";
 
 const SendLeader2 = (props) => {
-    const dispatch = useDispatch();
     const {
         employeeId,
         openLeader,

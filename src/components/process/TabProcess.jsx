@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     addProcessByEmp,
     deleteProcess,
@@ -10,10 +10,17 @@ import {
 import ProcessModal from "./ProcessModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import useTruncateText from "../../hook/useTruncateText";
+import validateCodeInput from "../../hook/ValidateCodeInput";
+import { useSelector } from "react-redux";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     const [form] = Form.useForm();
-
+    const { open } = useSelector((state) => state.employee);
+    useEffect(() => {
+        if (!open.modalUpdateHappening) {
+            form.resetFields();
+        }
+    }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
 
@@ -70,19 +77,32 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             title: "Lần thứ",
             dataIndex: "times",
             key: "times",
-            width: 100,
+            width: 90,
             align: "center",
         },
         {
             title: "Chức vụ cũ",
             dataIndex: "currentPosition",
             key: "currentPosition",
-            width: 200,
+            width: 140,
             align: "center",
             render: (currentPosition) =>
-                currentPosition === 2
+                currentPosition === 0
                     ? "Giám đốc"
                     : currentPosition === 1
+                    ? "Trưởng phòng"
+                    : "Quản lí",
+        },
+        {
+            title: "Chức vụ hiện tại",
+            dataIndex: "newPosition",
+            key: "newPosition",
+            width: 140,
+            align: "center",
+            render: (newPosition) =>
+                newPosition === 0
+                    ? "Giám đốc"
+                    : newPosition === 1
                     ? "Trưởng phòng"
                     : "Quản lí",
         },
@@ -90,7 +110,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => useTruncateText(note || "", 60),
+            render: (note) => useTruncateText(note || "", 40),
         },
         {
             title: "Trạng thái",
@@ -133,7 +153,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     default:
                         break;
                 }
-                return useTruncateText(processStatus || "", 25);
+                return useTruncateText(processStatus || "", 13);
             },
         },
         {
@@ -148,7 +168,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                         <div>
                             <span>
                                 <EditOutlined
-                                    className="text-blue-600 text-lg mr-2"
+                                    className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
                                         employee.promotionDay = format(
                                             new Date(
@@ -176,8 +196,19 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
-                                    setIsModalOpen(true);
                                     setData(employee);
+                                    setIsModalOpen(true);
+                                }}
+                            />
+                        </div>
+                    )}
+                    {employee.processStatus === "3" && (
+                        <div>
+                            <EyeOutlined
+                                className="text-green-600 text-lg"
+                                onClick={() => {
+                                    setData(employee);
+                                    setIsModalOpen(true);
                                 }}
                             />
                         </div>
@@ -270,7 +301,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                 className="w-full"
                                 options={[
                                     {
-                                        value: 2,
+                                        value: 0,
                                         label: "Giám đốc",
                                     },
                                     {
@@ -278,7 +309,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                         label: "Trưởng phòng",
                                     },
                                     {
-                                        value: 3,
+                                        value: 2,
                                         label: "Quản lí",
                                     },
                                 ]}
@@ -294,6 +325,15 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
+                                {
+                                    max: 150,
+                                    message: "Nội dung bạn nhập quá dài !",
+                                },
+                                {
+                                    validator: validateCodeInput,
+                                    message:
+                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
+                                },
                             ]}
                         >
                             <Input />
@@ -302,7 +342,8 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="mr-5 w-full bg-green-700 text-white"
+                                type="primary"
+                                className="w-full"
                                 htmlType="submit"
                             >
                                 Lưu

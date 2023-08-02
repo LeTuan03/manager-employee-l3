@@ -19,7 +19,6 @@ const TabSalary = ({
     ];
 
     const [openLeader, setOpenLeader] = useState("");
-
     return (
         <>
             <Modal
@@ -30,17 +29,18 @@ const TabSalary = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        <Button
-                            type="primary"
-                            onClick={() => {
-                                setOpenLeader(true);
-                            }}
-                        >
-                            Trình lãnh đạo
-                        </Button>
+                        {data?.salaryIncreaseStatus === 1 && (
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    setOpenLeader(true);
+                                }}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
 
                         <Button
-                            key="cancel"
                             type="primary"
                             danger
                             onClick={() => {

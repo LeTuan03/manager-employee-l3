@@ -12,7 +12,6 @@ import Signin from "./pages/signin/Signin";
 import PageEnd from "./pages/manage-end/PageEnd";
 import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
-import { STATUS } from "./constants/constants";
 export default function App() {
     // const dispatch = useDispatch();
     // const { isAuthenticated } = useSelector((state) => state.account);

@@ -210,17 +210,19 @@ export default function Resume() {
             <div>
                 {role === 5 ? (
                     <>
-                        <Table
-                            loading={loading}
-                            columns={columns}
-                            dataSource={listEmployee}
-                            pagination={{
-                                pageSize: 10,
-                            }}
-                            scroll={{
-                                y: 490,
-                            }}
-                        />
+                        <div className="main-table">
+                            <Table
+                                loading={loading}
+                                columns={columns}
+                                dataSource={listEmployee}
+                                pagination={{
+                                    pageSize: 10,
+                                }}
+                                scroll={{
+                                    y: 490,
+                                }}
+                            />
+                        </div>
                         <Modal
                             title="BIỂU MẪU"
                             open={isModalOpen}

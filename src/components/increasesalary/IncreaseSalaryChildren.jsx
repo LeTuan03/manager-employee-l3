@@ -12,8 +12,13 @@ const IncreaseSalaryChildren = ({ data }) => {
         handleGetEmp();
     }, [data]);
     return (
-        <div className="bg-slate-300 p-10">
-            <div className="bg-white p-10">
+        <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
+            <div
+                className="bg-white p-10 font"
+                style={{
+                    fontFamily: "Tinos",
+                }}
+            >
                 <Row>
                     <Col span={12} className="text-center">
                         <h3>CÔNG TY OCEAN TECH</h3>

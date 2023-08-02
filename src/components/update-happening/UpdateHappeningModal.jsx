@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
+import { Button, Card, Col, Image, Input, Modal, Row, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 
 import { format } from "date-fns";
@@ -13,7 +13,6 @@ import {
 import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
-import _ from "lodash";
 
 export default function UpdateHappeningModal({ employeeId }) {
     const dispatch = useDispatch();
@@ -99,16 +98,22 @@ export default function UpdateHappeningModal({ employeeId }) {
     return (
         <>
             <Modal
-                title="CẬP NHẬT DIỄN BIẾN"
+                title={<p className="sticky top-0 z-10">CẬP NHẬT DIỄN BIẾN</p>}
                 centered
                 open={open.modalUpdateHappening}
-                width={1300}
+                width="84%"
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalUpdateHappening: false }));
                     dispatch(resetEmployee());
                 }}
                 footer={
-                    <div className="text-center">
+                    <div
+                        className="text-center bg-white fixed bottom-0 w-[84%] py-5"
+                        style={{
+                            right: "50%",
+                            transform: "translateX(50%)",
+                        }}
+                    >
                         <Button
                             key="submit"
                             type="primary"
@@ -136,75 +141,91 @@ export default function UpdateHappeningModal({ employeeId }) {
                     </div>
                 }
             >
-                <Row className="mt-7">
-                    <Col span={8} className="flex flex-col items-center">
-                        <Image width={200} src={employee.image} />
-                        <h1>{employee.name}</h1>
-                        <b>
-                            {employee.currentPosition === 3
-                                ? "Front-end"
-                                : employee.currentPosition === 2
-                                ? "Back-end"
-                                : "Tester"}
-                        </b>
-                    </Col>
-                    <Col span={16}>
-                        <Card
-                            title="Thông tin nhân viên"
-                            bordered={false}
-                            className="w-full"
-                        >
-                            <Row gutter={16} className="mb-2">
-                                <Col span={8}>Họ và tên</Col>
-                                <Col span={8}>Mã nhân viên </Col>
-                                <Col span={8}>Số điện thoại</Col>
-                            </Row>
-                            <Row gutter={16} className="mb-2">
-                                <Col span={8}>
-                                    <Input value={employee.name} />
-                                </Col>
-                                <Col span={8}>
-                                    <Input value={employee.code} />
-                                </Col>
-                                <Col span={8}>
-                                    <Input value={employee.phone} />
-                                </Col>
-                            </Row>
-                            <Row gutter={16} className="mb-2">
-                                <Col span={8}>Email</Col>
-                                <Col span={8}>CCCD/CMT</Col>
-                                <Col span={8}>Ngày sinh</Col>
-                            </Row>
-                            <Row gutter={16} className="mb-2">
-                                <Col span={8}>
-                                    <Input value={employee.email} />
-                                </Col>
-                                <Col span={8}>
-                                    <Input
-                                        value={
-                                            employee.citizenIdentificationNumber
-                                        }
-                                    />
-                                </Col>
-                                <Col span={8}>
-                                    <Input
-                                        value={
-                                            employee.id &&
-                                            format(
-                                                new Date(
-                                                    employee.dateOfBirth
-                                                ).getTime(),
-                                                "yyyy/MM/dd"
-                                            )
-                                        }
-                                    />
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
-                </Row>
-                <div className="mt-10">
-                    <Tabs defaultActiveKey="1" items={items} />
+                <div className="h-full overflow-y-scroll">
+                    <Row className="mt-7">
+                        <Col span={8} className="flex flex-col items-center">
+                            <Image width={200} src={employee.image} />
+                            <h1>{employee.name}</h1>
+                            <b>
+                                {employee.currentPosition === 3
+                                    ? "Front-end"
+                                    : employee.currentPosition === 2
+                                    ? "Back-end"
+                                    : "Tester"}
+                            </b>
+                        </Col>
+                        <Col span={16}>
+                            <Card
+                                title="Thông tin nhân viên"
+                                bordered={false}
+                                className="w-full"
+                            >
+                                <Row gutter={16} className="mb-2">
+                                    <Col span={8}>Họ và tên</Col>
+                                    <Col span={8}>Mã nhân viên </Col>
+                                    <Col span={8}>Số điện thoại</Col>
+                                </Row>
+                                <Row gutter={16} className="mb-2">
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={employee.name}
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={employee.code}
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={employee.phone}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row gutter={16} className="mb-2">
+                                    <Col span={8}>Email</Col>
+                                    <Col span={8}>CCCD/CMT</Col>
+                                    <Col span={8}>Ngày sinh</Col>
+                                </Row>
+                                <Row gutter={16} className="mb-2">
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={employee.email}
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={
+                                                employee.citizenIdentificationNumber
+                                            }
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Input
+                                            className="pointer-events-none"
+                                            value={
+                                                employee.id &&
+                                                format(
+                                                    new Date(
+                                                        employee.dateOfBirth
+                                                    ).getTime(),
+                                                    "yyyy/MM/dd"
+                                                )
+                                            }
+                                        />
+                                    </Col>
+                                </Row>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <div className="mt-10 mb-20">
+                        <Tabs defaultActiveKey="1" items={items} />
+                    </div>
                 </div>
             </Modal>
         </>
