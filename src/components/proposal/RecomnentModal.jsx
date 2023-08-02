@@ -29,7 +29,7 @@ const RecomnentModal = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {data.proposalStatus === 1 && (
+                        {[1, 4, 5].includes(data.proposalStatus) && (
                             <Button
                                 type="primary"
                                 onClick={() => {

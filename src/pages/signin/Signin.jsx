@@ -31,7 +31,7 @@ export default function SignIn() {
                 >
                     <div className="login-l w-[3000px] h-[3000px] bg-[#fbfcfb]">
                         <svg
-                            className="absolute"
+                            className="absolute max-lg:top-[-8%] max-lg:left-[5%]"
                             style={{ scale: ".14" }}
                             xmlns="http://www.w3.org/2000/svg"
                             width="100%"
@@ -121,8 +121,8 @@ export default function SignIn() {
                             ></path>
                         </svg>
                     </div>
-                    <div className="w-[3000px] h-[3000px] bg-[#1a2138] text-left">
-                        <div className="login-r p-6 px-10 border-10 border-lime-700 border-dashed rounded-2xl">
+                    <div className="w-[3000px] h-[3000px] bg-[#1a2138] text-left max-lg:pl-[50%]">
+                        <div className="login-r p-6 px-10 border-10 border-lime-700 border-dashed rounded-2xl max-lg:top-[56%] max-lg:left-[48%] max-lg:w-[12%]">
                             <Form
                                 className="w-full"
                                 layout="vertical"

@@ -8,6 +8,7 @@ import {
     updateSalary,
 } from "../../services/api";
 import { format } from "date-fns";
+import validateCodeInput from "../../hook/ValidateCodeInput";
 
 const SendLeader2 = (props) => {
     const {
@@ -107,10 +108,10 @@ const SendLeader2 = (props) => {
                     layout={"vertical"}
                     form={form}
                     name="basic"
-                    // initialValues={{
-                    //     remember: true,
-                    //     submitDay: format(new Date(), "yyyy-MM-dd"),
-                    // }}
+                    initialValues={{
+                        remember: true,
+                        submitDay: format(new Date(), "yyyy-MM-dd"),
+                    }}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
@@ -158,6 +159,11 @@ const SendLeader2 = (props) => {
                                     {
                                         required: true,
                                         message: "Bạn cần nhập trường này",
+                                    },
+                                    {
+                                        validator: validateCodeInput,
+                                        message:
+                                            "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                     },
                                 ]}
                             >

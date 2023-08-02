@@ -29,7 +29,7 @@ const TabSalary = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {data?.salaryIncreaseStatus === 1 && (
+                        {[1, 4, 5].includes(data.salaryIncreaseStatus) && (
                             <Button
                                 type="primary"
                                 onClick={() => {
@@ -39,7 +39,6 @@ const TabSalary = ({
                                 Trình lãnh đạo
                             </Button>
                         )}
-
                         <Button
                             type="primary"
                             danger

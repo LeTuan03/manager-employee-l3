@@ -77,3 +77,10 @@ tr.ant-table-row:last-child > td {
     height: 10%;
     transform: translateY(-50%);
 }
+
+/* tablet  */
+@media only screen and (max-width: 1024px) {
+    .ant-tabs {
+        display: unset;
+    }
+}

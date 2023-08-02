@@ -31,7 +31,7 @@ const Header = () => {
         },
     ];
     return (
-        <div className="border-b shadow-lg py-2 fixed top-0 w-[85%] z-10 bg-white">
+        <div className="border-b shadow-lg py-2 fixed top-0 w-[85%] z-10 bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3">
             <div className="text-right mr-4">
                 <div>
                     <span>
@@ -50,7 +50,7 @@ const Header = () => {
                             items,
                         }}
                         placement="bottom"
-                        style={{ width: "300px" }}
+                        className="w-[300px]"
                     >
                         <Avatar size={40} icon={<UserOutlined />} />
                     </Dropdown>

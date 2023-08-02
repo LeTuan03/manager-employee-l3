@@ -48,7 +48,6 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 }
             } else {
                 const res = await addSalaryByEmp(employee.id, [value]);
-                console.log(res);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     message.success("Thêm mới thành công!");
                     setData(res?.data?.data[0]);
@@ -302,10 +301,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                {
-                                    max: 15,
-                                    message: "Lương không hợp lệ !",
-                                },
+                                // {
+                                //     max: 15,
+                                //     message: "Lương không hợp lệ !",
+                                // },
                             ]}
                         >
                             <Input type="number" suffix="VND" />
@@ -320,10 +319,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                {
-                                    max: 15,
-                                    message: "Lương không hợp lệ !",
-                                },
+                                // {
+                                //     max: 15,
+                                //     message: "Lương không hợp lệ !",
+                                // },
                             ]}
                         >
                             <Input type="number" suffix="VND" />

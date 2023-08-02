@@ -30,7 +30,7 @@ const ProcessModal = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center">
-                        {data.processStatus === "1" && (
+                        {["1", "4", "5"].includes(data.processStatus) && (
                             <Button
                                 type="primary"
                                 onClick={() => {
@@ -40,6 +40,7 @@ const ProcessModal = ({
                                 Trình lãnh đạo
                             </Button>
                         )}
+
                         <Button
                             type="primary"
                             danger
