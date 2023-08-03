@@ -21,7 +21,10 @@ const PageEnd = () => {
     return (
         <>
             <Table setEmployeeId={setEmployeeId}></Table>
-            <ModalProfile employeeId={employeeId}></ModalProfile>
+            <ModalProfile
+                setEmployeeId={setEmployeeId}
+                employeeId={employeeId}
+            ></ModalProfile>
             <SaveResume
                 setEmployeeId={setEmployeeId}
                 employeeId={employeeId}

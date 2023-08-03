@@ -1,4 +1,5 @@
 import { Col, Input, Row } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -84,19 +85,17 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                     Tôi làm đơn này, đề nghị Ban Gián đốc cho
                                     tôi xin nghỉ việc vì lý do:
                                 </div>
-                                <Col className="relative pr-4 mb-3  ">
-                                    <Input
+                                <div className="custom-area relative">
+                                    <TextArea
+                                        bordered={false}
+                                        autoSize={{ minRows: 1 }}
                                         value={reasonForEnding}
+                                        maxLength={240}
                                         onChange={(e) => {
                                             setReasonForEnding(e.target.value);
                                         }}
-                                        bordered={false}
-                                    ></Input>
-                                    <div
-                                        className="border-0 border-b border-dotted absolute 
-                                        top-[70%] w-full left-1"
-                                    ></div>
-                                </Col>
+                                    />
+                                </div>
                                 <div className="leading-9">
                                     Trong thời gian chờ đợi sự chấp thuận của
                                     Ban Giám đốc Công ty, tôi sẽ tiếp tục <br />{" "}

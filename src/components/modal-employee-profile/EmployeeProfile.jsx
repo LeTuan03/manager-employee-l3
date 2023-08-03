@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Tabs } from "antd";
 import TabListCertificate from "./TabListCertificate";
 import TabCV from "./TabCV";
 import TabProfile from "./TabProfile";
-export default function EmployeeProfile({ setThreeInfo, threeInfo }) {
-    const [tabPosition, setTabPosition] = useState("left");
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 1280) {
-                setTabPosition("left");
-            } else {
-                setTabPosition("top");
-            }
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+export default function EmployeeProfile({
+    setThreeInfo,
+    threeInfo,
+    activeKey,
+    setActiveKey,
+}) {
     const items = [
         {
             key: "1",
@@ -41,8 +34,9 @@ export default function EmployeeProfile({ setThreeInfo, threeInfo }) {
     return (
         <>
             <Tabs
-                tabPosition={tabPosition}
-                defaultActiveKey="1"
+                tabPosition="left"
+                activeKey={activeKey}
+                onChange={(key) => setActiveKey(key)}
                 items={items}
             />
         </>

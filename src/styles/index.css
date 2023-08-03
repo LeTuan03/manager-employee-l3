@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap");
+
 @tailwind components;
 @tailwind utilities;
 ::-webkit-scrollbar {
@@ -79,6 +81,31 @@ tr.ant-table-row:last-child > td {
 }
 .ant-modal-content {
     padding: 4px 24px 20px 24px !important;
+}
+.custom-area textarea {
+    line-height: 2.25em !important;
+    background-color: transparent !important;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 12 12"><circle cx="6" cy="6" r="1" fill="rgb(0, 0, 0)" /></svg>') !important;
+    background-position: 0 1em !important;
+    background-size: 3px 2.25em !important;
+    padding-top: 8px !important;
+    overflow: hidden !important;
+}
+.ant-table-wrapper .ant-table-tbody > tr > td {
+    border-bottom: none;
+}
+.custom-area::before {
+    content: " ";
+    width: 100%;
+    height: 9px;
+    background-color: #fff;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    z-index: 1;
+}
+.word {
+    font-family: "Playfair Display", serif !important;
 }
 
 /* tablet  */

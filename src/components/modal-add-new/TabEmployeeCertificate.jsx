@@ -12,12 +12,16 @@ import {
     updateCertificate,
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
+import ModalDelete from "../ModalDelete";
 const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);
     const [loading, setLoading] = useState(false);
     const { role } = useSelector((state) => state.account);
     const { employee } = useSelector((state) => state.employee);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [idDelete, setIdDelete] = useState(null);
+    const [uidDelete, setUidDelete] = useState(null);
     const onFinish = async (values) => {
         const { certificateName, field, content, issueDate } = values;
         const data = {
@@ -40,12 +44,16 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const handleCreateCertificate = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
+                setLoading(true)
                 const res = await createCertificate(employee.id, [data]);
                 if (res?.status === STATUS.SUCCESS) {
                     setCertificate(res?.data?.data);
                     formCertificate.resetFields();
                     message.success("Thêm thành công văn bằng");
+                } else {
+                    message.error(res?.data?.message)
                 }
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -65,13 +73,17 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
         const index = cloneCertificate.findIndex((item) => item.uid === id);
         if (index === -1) {
             try {
+                setLoading(true)
                 const res = await updateCertificate(id, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setId(null);
                     handleGetCertificateById();
                     formCertificate.resetFields();
                     message.success("Sửa thành công văn bằng");
+                } else {
+                    message.error(res?.data?.message)
                 }
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -83,13 +95,22 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             message.success("Sửa thành công văn bằng");
         }
     };
-    const handleDeleteCertificate = async (id) => {
+    const handleDeleteCertificate = async (idDelete) => {
         try {
-            const res = await deleteCertificate(id);
-            if (res?.status === STATUS.SUCCESS) {
+            setLoading(true)
+            const res = await deleteCertificate(idDelete);
+            if (res?.data?.code === STATUS.SUCCESS) {
                 handleGetCertificateById();
                 message.success("Xóa thành công văn bằng");
+                setIdDelete(null)
+                if (idDelete === id) {
+                    setId(null)
+                    formCertificate.resetFields()
+                }
+            } else {
+                message.error(res?.data?.message)
             }
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -97,14 +118,23 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const handleDeleteByUid = (uid) => {
         const newList = certificate.filter((item) => item.uid !== uid);
         setCertificate(newList);
+        setUidDelete(null)
+        if (uid === id) {
+            setId(null)
+            formCertificate.resetFields()
+        }
         message.success("Xóa thành công văn bằng");
     };
     const handleGetCertificateById = async () => {
         try {
             setLoading(true);
             const res = await getCertificateByEmployeeId(employee.id);
-            setCertificate(res?.data?.data);
-            setLoading(false);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                setCertificate(res?.data?.data);
+                setLoading(false);
+            } else {
+                message.error(res?.data?.message)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -112,6 +142,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     useEffect(() => {
         setCertificate(employee.certificatesDto);
         return () => {
+            setId(null)
             formCertificate.resetFields();
         };
     }, [employee]);
@@ -121,19 +152,22 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "stt",
             align: "center",
             key: "stt",
+            width: 60,
             render: (_, item, index) => <>{index + 1}</>,
         },
         {
             title: "Thao tác",
             align: "center",
+            width: 100,
             render: (_, item) => (
                 <div className="flex justify-center gap-3">
                     <>
                         <span
                             onClick={() => {
                                 item.id
-                                    ? handleDeleteCertificate(item.id)
-                                    : handleDeleteByUid(item.uid);
+                                    ? setIdDelete(item.id)
+                                    : setUidDelete(item.uid);
+                                setOpenDelete(true)
                             }}
                             className="cursor-pointer"
                         >
@@ -143,10 +177,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             onClick={() => {
                                 formCertificate.setFieldsValue({
                                     ...item,
-                                    issueDate: format(
-                                        new Date(item.issueDate),
-                                        "yyyy-MM-dd"
-                                    ),
+                                    issueDate: format(new Date(item.issueDate), "yyyy-MM-dd"),
                                 });
                                 setId(item.id || item.uid);
                             }}
@@ -163,17 +194,20 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "certificateName",
             key: "certificateName",
             align: "center",
+            className: "max-w-xs",
         },
         {
             title: "Nội dung văn bằng",
             dataIndex: "content",
             key: "content",
+            className: "max-w-lg"
         },
         {
             title: "Ngày cấp",
             dataIndex: "issueDate",
             key: "issueDate",
             align: "center",
+            width: 100,
             render: (issueDate) => (
                 <>{issueDate && format(new Date(issueDate), "dd/MM/yyyy")}</>
             ),
@@ -183,6 +217,8 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "field",
             key: "field",
             align: "center",
+            width: 100,
+            className: "max-w-[200px]"
         },
     ];
     if (role !== 4) {
@@ -214,7 +250,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={6}>
@@ -242,7 +278,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={50} showCount />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -258,7 +294,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={200} showCount />
                         </Form.Item>
                     </Col>
                     <Col
@@ -266,7 +302,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         lg={4}
                         span={24}
                     >
-                        <Button type="primary" htmlType="submit">
+                        <Button loading={loading} type="primary" htmlType="submit">
                             {id ? "Sửa" : "Thêm"}
                         </Button>
                         <Button
@@ -282,14 +318,21 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 </Row>
             </Form>
             <Table
-                scroll={{ y: 200 }}
+                scroll={{ x: true, y: 200 }}
                 bordered
                 dataSource={certificate}
                 columns={columns}
                 pagination={false}
                 loading={loading}
             />
-            ;
+            <ModalDelete
+                handleDeleteById={handleDeleteCertificate}
+                handleDeleteByUid={handleDeleteByUid}
+                uidDelete={uidDelete}
+                idDelete={idDelete}
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+            ></ModalDelete>
         </>
     );
 };

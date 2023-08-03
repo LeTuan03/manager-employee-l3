@@ -112,23 +112,23 @@ export default function Resume() {
             render: (status) => {
                 switch (status) {
                     case "0":
-                        return <p>{useTruncateText("Nộp lưu hồ sơ", 20)}</p>;
+                        return <p>{useTruncateText("Nộp lưu hồ sơ", 30)}</p>;
                     case "1":
-                        return <p>{useTruncateText("Lưu mới", 20)}</p>;
+                        return <p>{useTruncateText("Lưu mới", 30)}</p>;
                     case "2":
-                        return <p>{useTruncateText("Chờ xử lí", 20)}</p>;
+                        return <p>{useTruncateText("Chờ xử lí", 30)}</p>;
                     case "3":
                         return (
-                            <p>{useTruncateText("Đã được chấp nhận", 20)}</p>
+                            <p>{useTruncateText("Đã được chấp nhận", 30)}</p>
                         );
                     case "4":
-                        return <p>{useTruncateText("Yêu cầu bổ sung", 20)}</p>;
+                        return <p>{useTruncateText("Yêu cầu bổ sung", 30)}</p>;
                     case "5":
-                        return <p>{useTruncateText("Từ chối", 20)}</p>;
+                        return <p>{useTruncateText("Từ chối", 30)}</p>;
                     case "6":
                         return (
                             <p>
-                                {useTruncateText("Yêu cầu kết thúc hồ sơ", 20)}
+                                {useTruncateText("Yêu cầu kết thúc hồ sơ", 30)}
                             </p>
                         );
                     case "7":
@@ -136,7 +136,7 @@ export default function Resume() {
                             <p>
                                 {useTruncateText(
                                     "Chấp nhận yêu cầu kết thúc hồ sơ",
-                                    20
+                                    30
                                 )}
                             </p>
                         );
@@ -145,7 +145,7 @@ export default function Resume() {
                             <p>
                                 {useTruncateText(
                                     "Yêu cầu bổ sung vào đơn kết thúc hồ sơ",
-                                    20
+                                    30
                                 )}
                             </p>
                         );
@@ -154,7 +154,7 @@ export default function Resume() {
                             <p>
                                 {useTruncateText(
                                     "Từ chối yêu cầu kết thúc hồ sơ",
-                                    20
+                                    30
                                 )}
                             </p>
                         );
@@ -196,6 +196,7 @@ export default function Resume() {
                                 setProfile(user);
                                 setReasonForEnding(user?.reasonForEnding);
                                 setIsModalOpen(true);
+                                console.log(user);
                             }}
                         >
                             <EyeOutlined className="text-green-600 text-lg" />

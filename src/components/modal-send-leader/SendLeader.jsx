@@ -1,19 +1,29 @@
-import { Col, Form, Input, Modal, Row, Select, message } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { getAllLeader, updateEmployee } from "../../services/api";
 import { format } from "date-fns";
-import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getAllEmployee,
     resetEmployee,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-
-const SendLeader = (props) => {
+import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+const {
+    NEW_SAVE,
+    PENDING,
+    ADDITIONAL_REQUIREMENTS,
+    REJECT,
+    BEEN_APPEOVED,
+    REJECT_REQUEST_END_PROFILE,
+    PROFILE_END_REQUEST,
+    ADDITIONAL_REQUIREMENTS_END_PROFILE,
+} = STATUS_EMPLOYEE;
+const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
     const { open, employee } = useSelector((state) => state.employee);
     const [idLeader, setIdLeader] = useState({ id: null, label: "" });
     const handleGetAllLeader = async () => {
@@ -32,10 +42,10 @@ const SendLeader = (props) => {
     const onFinish = async (values) => {
         const { leaderId, submitDay, submitContent } = values;
         let submitProfileStatus = "2";
-        let reasonForEnding = "";
-        if (props.reasonForEnding) {
+        let reasonForEnd = "";
+        if (reasonForEnding) {
             submitProfileStatus = "6";
-            reasonForEnding = props.reasonForEnding;
+            reasonForEnd = reasonForEnding;
         }
         const data = {
             ...employee,
@@ -43,33 +53,51 @@ const SendLeader = (props) => {
             submitDay,
             submitContent,
             submitProfileStatus,
-            reasonForEnding,
+            reasonForEnding: reasonForEnd,
         };
         await handleSendLeader(data);
     };
     const handleSendLeader = async (data) => {
-        const res = await updateEmployee(employee?.id, data);
-        if (res?.data?.code === 200) {
-            dispatch(
-                setOpen({
-                    ...open,
-                    modalSendLeader: false,
-                    modalEnd: false,
-                    modalProfile: false,
-                    modalUpdateHappening: false,
-                    modalInput: false,
-                })
-            );
-            if (res?.data?.data?.submitProfileStatus === "2") {
-                dispatch(getAllEmployee("1,2,4,5"));
+        try {
+            setLoading(true);
+            const res = await updateEmployee(employee?.id, data);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                if (res?.data?.data?.submitProfileStatus === "2") {
+                    dispatch(
+                        getAllEmployee(
+                            `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
+                        )
+                    );
+                } else {
+                    dispatch(
+                        getAllEmployee(
+                            `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},
+                            ${REJECT_REQUEST_END_PROFILE}`
+                        )
+                    );
+                }
+                dispatch(resetEmployee());
+                setIdLeader({ id: null, label: "" });
+                setReasonForEnding && setReasonForEnding("");
+                setEmployeeId(null);
+                message.success("Trình lãnh đạo thành công");
+                dispatch(
+                    setOpen({
+                        ...open,
+                        modalSendLeader: false,
+                        modalEnd: false,
+                        modalProfile: false,
+                        modalUpdateHappening: false,
+                        modalInput: false,
+                    })
+                );
+                form.resetFields();
             } else {
-                dispatch(getAllEmployee("6,3,8,9"));
+                message.error(res?.data?.message);
             }
-            dispatch(resetEmployee());
-            setIdLeader({ id: null, label: "" });
-            props.setReasonForEnding("");
-            message.success("Trình lãnh đạo thành công");
-            form.resetFields();
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
         }
     };
     const handleChange = (value) => {
@@ -85,6 +113,7 @@ const SendLeader = (props) => {
     return (
         <>
             <Modal
+                zIndex={6}
                 width={760}
                 centered
                 cancelText={"Hủy"}
@@ -94,6 +123,32 @@ const SendLeader = (props) => {
                 onOk={() => {
                     form.submit();
                 }}
+                footer={
+                    <div className="flex justify-center">
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalSendLeader: false })
+                                );
+                                form.resetFields();
+                                setLoading(false);
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                        <Button
+                            type="primary"
+                            loading={loading}
+                            onClick={() => {
+                                form.submit();
+                            }}
+                        >
+                            Trình lãnh đạo
+                        </Button>
+                    </div>
+                }
                 onFinish={onFinish}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalSendLeader: false }));

@@ -1,12 +1,22 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Col, Row, Table } from "antd";
+import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useTruncateText from "../../hook/useTruncateText";
 
 const TabCV = () => {
+    const [date, setDate] = useState({});
     const { employee } = useSelector((state) => state.employee);
+    const getTodayDate = () => {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        setDate({ day, month });
+    };
+    useEffect(() => {
+        getTodayDate();
+    }, []);
     const columnFamily = [
         {
             title: "STT",
@@ -196,13 +206,16 @@ const TabCV = () => {
                             số căn cước công dân (chứng minh thư nhân dân) của
                             bố mẹ đẻ, anh chị em ruột, vợ (hoặc chồng), con)
                         </i>
-                        <Table
-                            bordered
-                            dataSource={employee.employeeFamilyDtos}
-                            columns={columnFamily}
-                            pagination={false}
-                            style={{ border: "2px solid #000" }}
-                        />
+                        <ConfigProvider renderEmpty={() => <></>}>
+                            <Table
+                                bordered
+                                dataSource={employee.employeeFamilyDtos}
+                                columns={columnFamily}
+                                pagination={false}
+                                scroll={{ x: true }}
+                                style={{ border: "2px solid #000" }}
+                            />
+                        </ConfigProvider>
                         <h4 className="text-center my-5">LỜI CAM ĐOAN</h4>
                         <p className="text-left leading-6">
                             Tôi xin cam đoan bản khai sơ yếu lý lịch trên đúng
@@ -211,7 +224,10 @@ const TabCV = () => {
                         </p>
                         <div className="flex flex-row-reverse m-5">
                             <div className="text-center pr-10">
-                                <i>Hà Nội, ngày 19 tháng 7 năm 2023</i>
+                                <i>
+                                    Hà Nội, ngày {date.day} tháng {date.month}{" "}
+                                    năm 2023
+                                </i>
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className=" m-8 mt-3">(Ký, ghi rõ họ tên)</i>
                                 <h5 className=" my-10 text-base">

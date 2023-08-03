@@ -80,7 +80,11 @@ export default function ResumeModal(props) {
                     await handleActionSuccess(type);
                     break;
                 case "Resume":
-                    profile.submitProfileStatus = "7";
+                    if (profile.submitProfileStatus === "6") {
+                        profile.submitProfileStatus = "7";
+                    } else {
+                        profile.submitProfileStatus = "3";
+                    }
                     profile.terminationAppointmentDate = values.acceptDay;
                     await acceptEmployee(profile);
                     setIsApproveOpen(false);
@@ -122,7 +126,11 @@ export default function ResumeModal(props) {
                     setIsOpen(false);
                     break;
                 case "Resume":
-                    profile.submitProfileStatus = "4";
+                    if (profile.submitProfileStatus === "6") {
+                        profile.submitProfileStatus = "9";
+                    } else {
+                        profile.submitProfileStatus = "4";
+                    }
                     await acceptEmployee(profile);
                     await handleActionSuccess(type);
                     setIsAdditionalRequestOpen(false);
@@ -164,7 +172,14 @@ export default function ResumeModal(props) {
                     setIsOpen(false);
                     break;
                 case "Resume":
-                    profile.submitProfileStatus = "5";
+                    if (profile.submitProfileStatus === "6") {
+                        profile.refuseEndProfileDay = values.rejectionDate;
+                        profile.reasonForRefuseEndProfile =
+                            values.reasonForRejection;
+                        profile.submitProfileStatus = "9";
+                    } else {
+                        profile.submitProfileStatus = "5";
+                    }
                     await acceptEmployee(profile);
                     await handleActionSuccess(type);
                     setIsRejectOpen(false);

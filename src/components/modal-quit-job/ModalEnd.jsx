@@ -22,6 +22,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
     return (
         <>
             <Modal
+                zIndex={4}
                 width={1160}
                 className="max-h-[740px] overflow-y-hidden"
                 title="ĐƠN XIN NGHỈ VIỆC"
@@ -37,6 +38,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                             danger
                             onClick={() => {
                                 dispatch(setOpen({ ...open, modalEnd: false }));
+                                setReasonForEnding("");
                             }}
                         >
                             Hủy

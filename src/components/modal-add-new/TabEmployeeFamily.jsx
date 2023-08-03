@@ -10,12 +10,17 @@ import {
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
-import { STATUS } from "../../constants/constants";
+import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
+import ModalDelete from "../ModalDelete";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
+    const [loading, setLoading] = useState(false)
     const [update, setUpdate] = useState(null);
     const { employee } = useSelector((state) => state.employee);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [idDelete, setIdDelete] = useState(null);
+    const [uidDelete, setUidDelete] = useState(null);
     const onFinish = async (values) => {
         const {
             email,
@@ -44,7 +49,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         } else {
             await handleCreateFamily(data);
         }
-        console.log(data);
     };
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
@@ -52,26 +56,40 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     useEffect(() => {
         setFamily(employee.employeeFamilyDtos);
         return () => {
+            setUpdate(null)
             formFamily.resetFields();
         };
     }, [employee]);
     const handleGetFamily = async () => {
         try {
+            setLoading(true)
             const res = await getFamilyByEmployeeId(employee.id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 setFamily(res?.data?.data);
+            } else {
+                message.error(res?.data?.message);
             }
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
     };
     const handleDeleteFamily = async (id) => {
         try {
+            setLoading(true)
             const res = await deleteFamily(id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 message.success("Xóa thành công");
                 await handleGetFamily();
+                setIdDelete(null)
+                if (id === update) {
+                    setUpdate(null)
+                    formFamily.resetFields()
+                }
+            } else {
+                message.error(res?.data?.message);
             }
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -79,16 +97,26 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     const handleDeleteByUid = (uid) => {
         const newList = family.filter((item) => item.uid !== uid);
         setFamily(newList);
+        setUidDelete(null)
+        if (uid === update) {
+            setUpdate(null)
+            formFamily.resetFields()
+        }
         message.success("Xóa thành công văn bằng");
     };
     const handleCreateFamily = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
+                setLoading(true)
                 const res = await createFamily(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setFamily(res?.data?.data);
+                    formFamily.resetFields();
                     message.success("Thêm thành công");
+                } else {
+                    message.error(res?.data?.message);
                 }
+                setLoading(false)
             } catch (error) {
                 console.log(error);
             }
@@ -107,12 +135,17 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         const index = cloneFamily.findIndex((item) => item.uid === update);
         if (index === -1) {
             try {
+                setLoading(true)
                 const res = await updateFamily(update, data);
-                if (res?.data?.code) {
+                if (res?.data?.code === STATUS.SUCCESS) {
                     await handleGetFamily();
                     formFamily.resetFields();
                     message.success("Sửa thành công");
+                } else {
+                    message.error(res?.data?.message);
                 }
+                setUpdate(null)
+                setLoading(false)
             } catch (error) {
                 console.log(error);
             }
@@ -121,7 +154,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             setFamily(cloneFamily);
             setUpdate(null);
             formFamily.resetFields();
-            message.success("Sửa thành công văn bằng");
+            message.success("Sửa thành công ");
         }
     };
     const columns = [
@@ -142,8 +175,9 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             className="cursor-pointer"
                             onClick={() => {
                                 family.id
-                                    ? handleDeleteFamily(family.id)
-                                    : handleDeleteByUid(family.uid);
+                                    ? setIdDelete(family.id)
+                                    : setUidDelete(family.uid);
+                                setOpenDelete(true)
                             }}
                         >
                             <DeleteOutlined className="text-red-600 text-lg" />
@@ -181,11 +215,27 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         {
             title: "Giới tính",
             dataIndex: "gender",
-            render: (gender) => <>{gender === 1 ? "Nữ" : "Nam"}</>,
+            render: (gender) => <>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Quan hệ",
             dataIndex: "relationShip",
+            render: (relationShip) => {
+                switch (relationShip) {
+                    case RELATIONSHIP.CHILD:
+                        relationShip = "Con";
+                        break;
+                    case RELATIONSHIP.PARENTS:
+                        relationShip = "Bố/Mẹ";
+                        break;
+                    case RELATIONSHIP.SIBLINGS:
+                        relationShip = "Anh/Chị/Em";
+                        break;
+                    default:
+                        break;
+                }
+                return <>{relationShip}</>;
+            },
         },
         {
             title: "Số CCCD/CMT",
@@ -200,7 +250,18 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "address",
         },
     ];
-
+    function validateDateOfBirth(_, value) {
+        if (value) {
+            const inputDateTime = new Date(value);
+            const currentDateTime = new Date();
+            if (inputDateTime > currentDateTime) {
+                return Promise.reject(new Error("Yêu cầu chọn trước ngày hôm nay"));
+            }
+            return Promise.resolve();
+        } else {
+            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
+        }
+    }
     return (
         <>
             <Form
@@ -225,9 +286,13 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                     required: true,
                                     message: "Bạn cần nhập trường này",
                                 },
+                                {
+                                    pattern: /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                    message: "Tên sai định dạng",
+                                },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={30} showCount />
                         </Form.Item>
                     </Col>
                     <Col md={5} span={12}>
@@ -240,10 +305,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                     message: "Vui lòng nhập số CCCD/CMT!",
                                 },
                                 {
-                                    min: 9,
-                                    max: 12,
-                                    message:
-                                        "CMT phải là 9 số, CCCD phải là 12 số!",
+                                    pattern: /^(?:\d{9}|\d{12})$/,
+                                    message: "CMT phải là 9 số, CCCD phải là 12 số!",
                                 },
                             ]}
                         >
@@ -256,8 +319,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             label="Ngày sinh"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Bạn cần nhập trường này",
+                                    validator: validateDateOfBirth,
                                 },
                             ]}
                         >
@@ -307,11 +369,11 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             <Select
                                 options={[
                                     {
-                                        value: 0,
+                                        value: GENDER.MALE,
                                         label: "Nam",
                                     },
                                     {
-                                        value: 1,
+                                        value: GENDER.FEMALE,
                                         label: "Nữ",
                                     },
                                 ]}
@@ -335,7 +397,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input showCount maxLength={30} />
                         </Form.Item>
                     </Col>
                     <Col md={6} span={12}>
@@ -349,8 +411,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                                 {
                                     pattern: /^0\d{9}$/,
-                                    message:
-                                        "Định dạng số điện thoại chưa đúng",
+                                    message: "Định dạng số điện thoại chưa đúng",
                                 },
                             ]}
                         >
@@ -368,7 +429,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col
@@ -376,7 +437,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         md={4}
                         span={24}
                     >
-                        <Button type="primary" htmlType="submit">
+                        <Button loading={loading} type="primary" htmlType="submit">
                             {update ? "Sửa" : "Thêm"}
                         </Button>
                         <Button
@@ -392,12 +453,21 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 </Row>
             </Form>
             <Table
-                scroll={{ y: 200 }}
+                loading={loading}
+                scroll={{ x: true, y: 200 }}
                 bordered
                 dataSource={family}
                 columns={columns}
                 pagination={false}
             />
+            <ModalDelete
+                handleDeleteById={handleDeleteFamily}
+                handleDeleteByUid={handleDeleteByUid}
+                uidDelete={uidDelete}
+                idDelete={idDelete}
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+            ></ModalDelete>
             ;
         </>
     );

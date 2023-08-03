@@ -10,14 +10,16 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
     const dispatch = useDispatch();
+    const [activeKey, setActiveKey] = useState("1");
     const { open, employee } = useSelector((state) => state.employee);
-
+    const [loading, setLoading] = useState(false);
     const items = [
         {
             key: "1",
             label: `THÔNG TIN NHÂN VIÊN`,
             children: (
                 <FormEmployee
+                    setLoading={setLoading}
                     family={family}
                     certificate={certificate}
                     form={form}
@@ -55,6 +57,7 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                     onClick={() => {
                         dispatch(setOpen({ ...open, modalInput: false }));
                         setEmployeeId(null);
+                        setActiveKey("1");
                     }}
                 >
                     Hủy
@@ -69,12 +72,13 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                     </Button>
                 )}
                 <Button
+                    loading={loading}
                     type="primary"
                     onClick={() => {
                         form.submit();
                     }}
                 >
-                    Thêm
+                    {employeeId ? "Sửa" : "Thêm"}
                 </Button>
             </div>
         );
@@ -82,6 +86,7 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
     return (
         <>
             <Modal
+                zIndex={1}
                 title={
                     employeeId
                         ? "CẬP NHẬT THÔNG TIN NHÂN VIÊN"
@@ -93,10 +98,15 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalInput: false }));
                     setEmployeeId(null);
+                    setActiveKey("1");
                 }}
                 footer={<FooterModal></FooterModal>}
             >
-                <Tabs defaultActiveKey="1" items={items} />
+                <Tabs
+                    activeKey={activeKey}
+                    onChange={(key) => setActiveKey(key)}
+                    items={items}
+                />
             </Modal>
         </>
     );

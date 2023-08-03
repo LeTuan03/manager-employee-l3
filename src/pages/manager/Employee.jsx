@@ -10,12 +10,23 @@ import {
 import UpdateHappeningModal from "../../components/update-happening/UpdateHappeningModal";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
 import { useDispatch } from "react-redux";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 const Employee = () => {
     const [employeeId, setEmployeeId] = useState(null);
     const [reasonForEnding, setReasonForEnding] = useState("");
+    const {
+        BEEN_APPEOVED,
+        PROFILE_END_REQUEST,
+        ADDITIONAL_REQUIREMENTS_END_PROFILE,
+        REJECT_REQUEST_END_PROFILE,
+    } = STATUS_EMPLOYEE;
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getAllEmployee("3,6,8,9"));
+        dispatch(
+            getAllEmployee(
+                `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},${REJECT_REQUEST_END_PROFILE}`
+            )
+        );
     }, []);
     useEffect(() => {
         if (employeeId) {
@@ -29,19 +40,25 @@ const Employee = () => {
                 employeeId={employeeId}
             ></ModalInput>
             <Table setEmployeeId={setEmployeeId}></Table>
-            <ModalProfile employeeId={employeeId}></ModalProfile>
+            <ModalProfile
+                setEmployeeId={setEmployeeId}
+                employeeId={employeeId}
+            ></ModalProfile>
             <ModalEnd
                 employeeId={employeeId}
                 setReasonForEnding={setReasonForEnding}
                 reasonForEnding={reasonForEnding}
             ></ModalEnd>
-            <SendLeader
-                employeeId={employeeId}
-                reasonForEnding={reasonForEnding}
-            ></SendLeader>
             <UpdateHappeningModal
+                setEmployeeId={setEmployeeId}
                 employeeId={employeeId}
             ></UpdateHappeningModal>
+            <SendLeader
+                setEmployeeId={setEmployeeId}
+                employeeId={employeeId}
+                reasonForEnding={reasonForEnding}
+                setReasonForEnding={setReasonForEnding}
+            ></SendLeader>
         </>
     );
 };

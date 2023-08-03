@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
     MailOutlined,
-    WifiOutlined,
-    WhatsAppOutlined,
     UserOutlined,
     PlusOutlined,
-    BankOutlined,
     EditOutlined,
     DeleteOutlined,
     PhoneOutlined,
     EnvironmentOutlined,
     GiftOutlined,
-    MediumCircleFilled,
     ProfileFilled,
 } from "@ant-design/icons";
 import { Button, Col, Form, Image, Input, Row, Space } from "antd";
@@ -19,11 +15,15 @@ import TextArea from "antd/es/input/TextArea";
 import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
-import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
 import useTruncateText from "../../hook/useTruncateText";
+import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import ModalDelete from "../ModalDelete";
+const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({ setThreeInfo, threeInfo }) => {
     const { employee } = useSelector((state) => state.employee);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
     const [form] = Form.useForm();
     const values = Form.useWatch([], form);
     const [openForm, setOpenForm] = useState(false);
@@ -34,13 +34,12 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             jobDescription,
             endDate,
             startDate,
-            leavingReason,
             companyAddress,
         } = values;
         const data = {
             companyName,
             jobDescription,
-            leavingReason,
+            leavingReason: "no public",
             companyAddress,
             startDate,
             endDate,
@@ -55,43 +54,69 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
         setThreeInfo({ ...threeInfo, [e.target.name]: e.target.value });
     };
     const handlePostExp = async (data) => {
-        const res = await postExp(employee?.id, [data]);
-        if (res?.data?.code === STATUS.SUCCESS) {
-            setExp(res?.data?.data);
-            setOpenForm(false);
+        try {
+            const res = await postExp(employee?.id, [data]);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                setExp(res?.data?.data);
+                setOpenForm(false);
+                form.resetFields();
+            } else {
+                message.error(res?.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
     const handleUpdate = async (id, data) => {
-        const res = await updateExp(id, data);
-        if (res?.data?.code === STATUS.SUCCESS) {
-            await handleGetExp();
-            setOpenForm(false);
+        try {
+            const res = await updateExp(id, data);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                await handleGetExp();
+                setOpenForm(false);
+                form.resetFields();
+            } else {
+                message.error(res?.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
     const handleGetExp = async () => {
         try {
-            if (!_.isEmpty(employee)) {
-                const res = await getExp(employee?.id);
+            const res = await getExp(employee?.id);
+            if (res?.data?.code === STATUS.SUCCESS) {
                 setExp(res?.data?.data);
-                console.log(res);
+            } else {
+                message.error(res?.data?.message);
             }
         } catch (error) {
             console.log(error);
         }
     };
     const handleDeleteExp = async (id) => {
-        const res = await deleteExp(id);
-        if (res?.data?.code === STATUS.SUCCESS) {
-            await handleGetExp();
+        try {
+            const res = await deleteExp(id);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                await handleGetExp();
+                if (id === values?.id) {
+                    form.resetFields();
+                }
+            } else {
+                message.error(res?.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
     useEffect(() => {
-        handleGetExp();
-        setThreeInfo({
-            knowledge: employee?.knowledge,
-            skill: employee?.skill,
-            activity: employee?.activity,
-        });
+        if (!_.isEmpty(employee)) {
+            handleGetExp();
+            setThreeInfo({
+                knowledge: employee?.knowledge,
+                skill: employee?.skill,
+                activity: employee?.activity,
+            });
+        }
     }, [employee]);
     return (
         <div>
@@ -121,11 +146,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             </div>
                             <div>
                                 <UserOutlined className="mr-3" />
-                                {employee?.gender === 1
-                                    ? "Nam"
-                                    : employee?.gender === 2
+                                {employee?.gender === GENDER.FEMALE
                                     ? "Nữ"
-                                    : "Khác"}
+                                    : "Nam"}
                             </div>
                             <div>
                                 <GiftOutlined className="mr-3" />
@@ -138,39 +161,51 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     )}
                             </div>
                         </div>
-                        <h2 className="my-5">KĨ NĂNG</h2>
-                        <Col className="relative pr-4 mb-3">
-                            <Input
-                                disabled={employee.submitProfileStatus !== "1"}
-                                bordered={false}
-                                placeholder="Kĩ năng của bạn !"
-                                name="skill"
-                                onChange={(e) => {
-                                    handleChange(e);
-                                }}
-                                value={threeInfo?.skill}
-                            ></Input>
-                            <div
-                                className="border-0 border-b border-dotted absolute 
-                                        top-[65%] w-full left-1"
-                            ></div>
+                        <h2 className="mt-5">Kĩ năng</h2>
+                        <Col className=" pr-4 mb-3">
+                            <div className="custom-area relative">
+                                <TextArea
+                                    readOnly={
+                                        ![
+                                            NEW_SAVE,
+                                            REJECT,
+                                            ADDITIONAL_REQUIREMENTS,
+                                        ].includes(employee.submitProfileStatus)
+                                    }
+                                    bordered={false}
+                                    maxLength={240}
+                                    autoSize={{ minRows: 1 }}
+                                    placeholder="Kĩ năng của bạn !"
+                                    name="skill"
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                    }}
+                                    value={threeInfo?.skill}
+                                ></TextArea>
+                            </div>
                         </Col>
-                        <h2 className="my-5">HOẠT ĐỘNG</h2>
-                        <Col className="relative pr-4 mb-3">
-                            <Input
-                                disabled={employee.submitProfileStatus !== "1"}
-                                bordered={false}
-                                name="activity"
-                                onChange={(e) => {
-                                    handleChange(e);
-                                }}
-                                placeholder="Hoạt động của bạn !"
-                                value={threeInfo?.activity}
-                            ></Input>
-                            <div
-                                className="border-0 border-b border-dotted absolute 
-                                        top-[65%] w-full left-1"
-                            ></div>
+                        <h2 className="mt-5">Hoạt động</h2>
+                        <Col className="pr-4 mb-3">
+                            <div className="custom-area relative">
+                                <TextArea
+                                    readOnly={
+                                        ![
+                                            NEW_SAVE,
+                                            REJECT,
+                                            ADDITIONAL_REQUIREMENTS,
+                                        ].includes(employee.submitProfileStatus)
+                                    }
+                                    bordered={false}
+                                    name="activity"
+                                    maxLength={240}
+                                    autoSize={{ minRows: 1 }}
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                    }}
+                                    placeholder="Hoạt động của bạn !"
+                                    value={threeInfo?.activity}
+                                ></TextArea>
+                            </div>
                         </Col>
                     </div>
                     <div className="basis-3/4 pl-10">
@@ -189,34 +224,44 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             <div>
                                 <div className="text-lg mb-3">HỌC VẤN</div>
                                 <div className="relative">
-                                    <span className="absolute top-[-4px] left-[4px] text-3xl z-50">
+                                    <span className="absolute top-[-0.4em] left-[4px] text-3xl z-50">
                                         ❝
                                     </span>
-                                    <TextArea
-                                        placeholder="Học vấn của bạn!"
-                                        autoSize
-                                        disabled={
-                                            employee.submitProfileStatus !== "1"
-                                        }
-                                        name="knowledge"
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                        value={useTruncateText(
-                                            threeInfo?.knowledge || "",
-                                            100
-                                        )}
-                                        className="bg-slate-200 pl-7 border-none py-3 !min-h-[50px]"
-                                    />
-                                    <span className="absolute right-[8px] bottom-[-10px] text-3xl z-50">
-                                        ❞
-                                    </span>
+                                    <div className="custom-area relative">
+                                        <TextArea
+                                            placeholder="Học vấn của bạn!"
+                                            bordered={false}
+                                            maxLength={240}
+                                            autoSize={{ minRows: 1 }}
+                                            readOnly={
+                                                ![
+                                                    NEW_SAVE,
+                                                    REJECT,
+                                                    ADDITIONAL_REQUIREMENTS,
+                                                ].includes(
+                                                    employee.submitProfileStatus
+                                                )
+                                            }
+                                            name="knowledge"
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                            value={threeInfo?.knowledge}
+                                        />
+                                        <span className="absolute right-[8px] bottom-[-0.6em] text-3xl z-50">
+                                            ❞
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="border-l-2 flex justify-between items-center mt-6">
                             <h2 className="my-5">KINH NGHIỆM LÀM VIỆC</h2>
-                            {employee.submitProfileStatus === "1" && (
+                            {[
+                                NEW_SAVE,
+                                REJECT,
+                                ADDITIONAL_REQUIREMENTS,
+                            ].includes(employee.submitProfileStatus) && (
                                 <PlusOutlined
                                     className="cursor-pointer"
                                     onClick={() => {
@@ -240,6 +285,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         rules={[
                                             {
                                                 required: true,
+                                                message:
+                                                    "Vui lòng chọn ngày bắt đầu!",
                                             },
                                         ]}
                                     >
@@ -268,10 +315,12 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         rules={[
                                             {
                                                 required: true,
+                                                message:
+                                                    "Vui lòng nhập tên công ty!",
                                             },
                                         ]}
                                     >
-                                        <Input />
+                                        <Input maxLength={50} />
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
@@ -281,10 +330,12 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         rules={[
                                             {
                                                 required: true,
+                                                message:
+                                                    "Vui lòng nhập địa chỉ công ty!",
                                             },
                                         ]}
                                     >
-                                        <Input />
+                                        <Input maxLength={100} />
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -295,61 +346,65 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 rules={[
                                     {
                                         required: true,
+                                        message: "Vui lòng nhập mô tả!",
                                     },
                                 ]}
                             >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                className="h-fit"
-                                name="leavingReason"
-                                label="Lí do rời "
-                                rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}
-                            >
-                                <Input />
+                                <TextArea autoSize showCount maxLength={240} />
                             </Form.Item>
                             <Form.Item hidden name="id">
                                 <Input hidden />
                             </Form.Item>
-                            <Form.Item>
+                            <Form.Item className="mt-8">
                                 <Space>
                                     <Button type="primary" htmlType="submit">
                                         {values?.id ? "Cập nhật" : "Lưu"}
                                     </Button>
-                                    <Button htmlType="reset">Reset</Button>
+                                    <Button htmlType="reset">Đặt lại</Button>
                                 </Space>
                             </Form.Item>
                         </Form>
+                        <ModalDelete
+                            handleDeleteEmployee={handleDeleteExp}
+                            employeeIdToDelete={employeeIdToDelete}
+                            openDelete={openDelete}
+                            setOpenDelete={setOpenDelete}
+                        ></ModalDelete>
                         {exp?.length > 0 &&
                             exp.map((item) => {
                                 return (
                                     <div className="flex justify-between group mb-5">
                                         <div>
                                             <div className="font-medium">
-                                                {format(
-                                                    new Date(item.startDate),
-                                                    "dd/MM/yyy"
-                                                )}{" "}
-                                                -{" "}
-                                                {format(
-                                                    new Date(item.endDate),
-                                                    "dd/MM/yyy"
-                                                )}{" "}
-                                                <ProfileFilled className="mx-2" />{" "}
-                                                <span className="uppercase">
-                                                    {item.companyName}
-                                                </span>
+                                                <div>
+                                                    {format(
+                                                        new Date(
+                                                            item.startDate
+                                                        ),
+                                                        "dd/MM/yyy"
+                                                    )}{" "}
+                                                    -{" "}
+                                                    {format(
+                                                        new Date(item.endDate),
+                                                        "dd/MM/yyy"
+                                                    )}{" "}
+                                                    <ProfileFilled className="mx-2" />{" "}
+                                                    <span className="uppercase">
+                                                        {item.companyName}
+                                                    </span>
+                                                </div>
                                             </div>
                                             <span>
                                                 Mô tả: {item.jobDescription}
                                             </span>
                                         </div>
-                                        {employee.submitProfileStatus ===
-                                            "1" && (
+                                        {[
+                                            NEW_SAVE,
+                                            REJECT,
+                                            ADDITIONAL_REQUIREMENTS,
+                                        ].includes(
+                                            employee.submitProfileStatus
+                                        ) && (
                                             <div
                                                 className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
                                         justify-center gap-2 items-center p-2 rounded-md"
@@ -377,9 +432,10 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 />
                                                 <DeleteOutlined
                                                     onClick={() => {
-                                                        handleDeleteExp(
+                                                        setEmployeeIdToDelete(
                                                             item.id
                                                         );
+                                                        setOpenDelete(true);
                                                     }}
                                                     className="text-red-600 text-lg cursor-pointer"
                                                 />

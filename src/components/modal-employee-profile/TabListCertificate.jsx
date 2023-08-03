@@ -1,9 +1,9 @@
-import { Table } from "antd";
-import { format } from "date-fns";
 import React from "react";
+import { ConfigProvider, Table } from "antd";
+import { format } from "date-fns";
 import { useSelector } from "react-redux";
 
-const TabListCertificate = ({ type }) => {
+const TabListCertificate = () => {
     const { employee } = useSelector((state) => state.employee);
     const columns = [
         {
@@ -43,17 +43,16 @@ const TabListCertificate = ({ type }) => {
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font-table">
                 <div className="min-h-[720px] p-[6%_10%] bg-white">
                     <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
-                    <Table
-                        bordered
-                        dataSource={
-                            type
-                                ? type?.certificatesDto
-                                : employee?.certificatesDto
-                        }
-                        columns={columns}
-                        pagination={false}
-                        style={{ border: "#515151 2px double" }}
-                    />
+                    <ConfigProvider renderEmpty={() => <></>}>
+                        <Table
+                            scroll={{ x: true }}
+                            bordered
+                            dataSource={employee?.certificatesDto}
+                            columns={columns}
+                            pagination={false}
+                            style={{ border: "#515151 2px double" }}
+                        />
+                    </ConfigProvider>
                 </div>
             </div>
         </>

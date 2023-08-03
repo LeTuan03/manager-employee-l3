@@ -99,6 +99,7 @@ export default function UpdateHappeningModal({ employeeId }) {
     return (
         <>
             <Modal
+                zIndex={3}
                 title={<p className="sticky top-0 z-10">CẬP NHẬT DIỄN BIẾN</p>}
                 centered
                 open={open.modalUpdateHappening}

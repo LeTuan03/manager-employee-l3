@@ -1,59 +1,60 @@
 import React, { useEffect, useState } from "react";
 import EmployeeProfile from "./EmployeeProfile";
-import { Button, Modal, Space, Tag } from "antd";
+import { Button, Modal, message } from "antd";
 import { updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    getAllEmployee,
-    resetEmployee,
-    setOpen,
-} from "../../redux/employee/employeeSlice";
-import { STATUS } from "../../constants/constants";
-import { format } from "date-fns";
+import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 
-const ModalProfile = ({ employeeId }) => {
+const {
+    NEW_SAVE,
+    PENDING,
+    ADDITIONAL_REQUIREMENTS,
+    REJECT,
+    ACCEPT_REQUEST_END_PROFILE,
+    REJECT_REQUEST_END_PROFILE,
+} = STATUS_EMPLOYEE;
+const ModalProfile = ({ employeeId, setEmployeeId }) => {
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
     const { open, employee } = useSelector((state) => state.employee);
     const [threeInfo, setThreeInfo] = useState({
-        knowledge: employee.knowledge || "",
-        skill: employee.skill || "",
-        activity: employee.activity || "",
+        knowledge: employee?.knowledge || "",
+        skill: employee?.skill || "",
+        activity: employee?.activity || "",
     });
+    const [activeKey, setActiveKey] = useState("1");
     const handleUpdateEmployee = async (data) => {
-        const res = await updateEmployee(employeeId, data);
-        if (res?.data?.code === STATUS.SUCCESS) {
-            dispatch(
-                setOpen({ ...open, modalInput: false, modalProfile: false })
-            );
-            dispatch(getAllEmployee("1,2,4,5"));
+        try {
+            setLoading(true);
+            const res = await updateEmployee(employeeId, data);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                dispatch(
+                    getAllEmployee(
+                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
+                    )
+                );
+                message.success("Đã lưu thành công");
+            } else {
+                message.error(res?.data?.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
         }
     };
-
+    useEffect(() => {
+        return () => {
+            setEmployeeId(null);
+        };
+    }, []);
     return (
         <>
             <Modal
+                zIndex={2}
                 width={1300}
                 className="max-h-[720px] overflow-y-hidden"
-                title={
-                    <div className="flex justify-between mr-10">
-                        HỒ SƠ NHÂN VIÊN
-                        {employee?.numberSaved && (
-                            <i className="text-green-600">
-                                Số lưu:{" "}
-                                <span className="font-normal">
-                                    {employee?.numberSaved}
-                                </span>{" "}
-                                - Ngày lưu:{" "}
-                                <span className="font-normal">
-                                    {format(
-                                        new Date(employee?.submitDay).getTime(),
-                                        "yyyy/MM/dd"
-                                    )}
-                                </span>
-                            </i>
-                        )}
-                    </div>
-                }
+                title="Hồ sơ nhân viên"
                 centered
                 open={open.modalProfile}
                 onOk={() => {
@@ -61,14 +62,29 @@ const ModalProfile = ({ employeeId }) => {
                 }}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
-                    dispatch(resetEmployee());
+                    setEmployeeId(null);
+                    setActiveKey("1");
                 }}
                 footer={
                     <div className="flex justify-center">
-                        {["1", "5"].includes(employee.submitProfileStatus) && (
+                        <Button
+                            danger
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalProfile: false })
+                                );
+                                setEmployeeId(null);
+                                setActiveKey("1");
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                        {[NEW_SAVE, REJECT].includes(
+                            employee.submitProfileStatus
+                        ) && (
                             <Button
-                                type="primary"
                                 danger
+                                loading={loading}
                                 onClick={() => {
                                     handleUpdateEmployee({
                                         ...employee,
@@ -79,19 +95,21 @@ const ModalProfile = ({ employeeId }) => {
                                 Lưu
                             </Button>
                         )}
-                        {employee.submitProfileStatus === "7" && (
+                        {employee.submitProfileStatus ===
+                            ACCEPT_REQUEST_END_PROFILE && (
                             <Button
                                 type="primary"
-                                onClick={() => {
+                                onClick={() =>
                                     dispatch(
                                         setOpen({ ...open, modalResume: true })
-                                    );
-                                }}
+                                    )
+                                }
                             >
                                 Nộp lưu hồ sơ
                             </Button>
                         )}
-                        {employee.submitProfileStatus === "9" && (
+                        {employee.submitProfileStatus ===
+                            REJECT_REQUEST_END_PROFILE && (
                             <Button
                                 danger
                                 onClick={() => {
@@ -103,7 +121,7 @@ const ModalProfile = ({ employeeId }) => {
                                 Kết thúc
                             </Button>
                         )}
-                        {["1", "5", "4"].includes(
+                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee.submitProfileStatus
                         ) && (
                             <Button
@@ -121,24 +139,14 @@ const ModalProfile = ({ employeeId }) => {
                                 Trình lãnh đạo
                             </Button>
                         )}
-                        <Button
-                            danger
-                            type="primary"
-                            onClick={() => {
-                                dispatch(
-                                    setOpen({ ...open, modalProfile: false })
-                                );
-                                dispatch(resetEmployee());
-                            }}
-                        >
-                            Hủy
-                        </Button>
                     </div>
                 }
             >
                 <EmployeeProfile
                     threeInfo={threeInfo}
                     setThreeInfo={setThreeInfo}
+                    activeKey={activeKey}
+                    setActiveKey={setActiveKey}
                 ></EmployeeProfile>
             </Modal>
         </>
