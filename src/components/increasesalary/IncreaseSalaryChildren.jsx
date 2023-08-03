@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEmployeeById } from "../../services/api";
 import { Col, Row } from "antd";
+import getDayMonthYear from "../common/getCurrentDay";
 
 const IncreaseSalaryChildren = ({ data }) => {
     const [empData, setEmpDate] = useState({});
@@ -11,6 +12,7 @@ const IncreaseSalaryChildren = ({ data }) => {
     useEffect(() => {
         handleGetEmp();
     }, [data]);
+    console.log(data);
     return (
         <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
             <div
@@ -66,8 +68,16 @@ const IncreaseSalaryChildren = ({ data }) => {
                 <Row className="flex justify-center">
                     <div>
                         <Col span={24}>
-                            <b>Điều 1:</b> Kể từ ngày: 24 tháng 7 năm 2023 , mức
-                            lương của Ông/Bà: {empData?.name} sẽ là:
+                            <b>Điều 1:</b> Kể từ ngày:{" "}
+                            {data.startDate &&
+                                getDayMonthYear(data.startDate).day}{" "}
+                            tháng{" "}
+                            {data.startDate &&
+                                getDayMonthYear(data.startDate).month}{" "}
+                            năm{" "}
+                            {data.startDate &&
+                                getDayMonthYear(data.startDate).year}{" "}
+                            , mức lương của Ông/Bà: {empData?.name} sẽ là:
                             {"  "} {data?.newSalary} đồng
                         </Col>
                         <Col span={24}>
@@ -82,7 +92,9 @@ const IncreaseSalaryChildren = ({ data }) => {
                     <Col span={12} className="text-center">
                         <div>
                             <i className="block">
-                                Hà Nội, ngày ... tháng ... năm 2023
+                                Hà Nội, ngày {getDayMonthYear(new Date()).day}{" "}
+                                tháng {getDayMonthYear(new Date()).month} năm{" "}
+                                {getDayMonthYear(new Date()).year}
                             </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i className="block">(Ký, ghi rõ họ tên)</i>

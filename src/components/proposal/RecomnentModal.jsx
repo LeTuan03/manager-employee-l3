@@ -1,7 +1,7 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
 import RecomenetChildren from "./RecomenetChildren";
-import SendLeader2 from "../modal-send-leader/SendLeader2";
+import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
 const RecomnentModal = ({
     isModalOpen,
@@ -58,7 +58,7 @@ const RecomnentModal = ({
                     />
                 </div>
             </Modal>
-            <SendLeader2
+            <SendLeaderUpdateHappening
                 type="recoment"
                 data={data}
                 employeeId={employee.id}

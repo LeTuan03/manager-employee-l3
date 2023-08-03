@@ -5,6 +5,7 @@ import { updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import { ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { format } from "date-fns";
 
 const {
     NEW_SAVE,
@@ -55,7 +56,23 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                 zIndex={2}
                 width={1300}
                 className="max-h-[720px] overflow-y-hidden"
-                title="Hồ sơ nhân viên"
+                title={
+                    <div className="flex justify-between">
+                        <div>Hồ sơ nhân viên</div>
+                        {employee.numberSaved && (
+                            <div className="mr-9 text-green-600">
+                                <i>
+                                    {" "}
+                                    Số lưu: {employee.numberSaved} - Ngày lưu:{" "}
+                                    {format(
+                                        new Date(employee.submitDay).getTime(),
+                                        "yyyy-MM-dd"
+                                    )}
+                                </i>
+                            </div>
+                        )}
+                    </div>
+                }
                 centered
                 open={open.modalProfile}
                 onOk={() => {

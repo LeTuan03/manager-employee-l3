@@ -1,8 +1,7 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
-
 import ProcessChildren from "./ProcessChildren";
-import SendLeader2 from "../modal-send-leader/SendLeader2";
+import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
 const ProcessModal = ({
     isModalOpen,
@@ -60,7 +59,7 @@ const ProcessModal = ({
                     />
                 </div>
             </Modal>
-            <SendLeader2
+            <SendLeaderUpdateHappening
                 employeeId={employee.id}
                 type="process"
                 data={data}

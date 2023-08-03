@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Modal, Tabs } from "antd";
 import IncreaseSalaryChildren from "./IncreaseSalaryChildren";
-import SendLeader2 from "../modal-send-leader/SendLeader2";
+import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
-const TabSalary = ({
+const SalaryModal = ({
     isModalOpen,
     setIsModalOpen,
     data,
@@ -61,7 +61,7 @@ const TabSalary = ({
                 </div>
             </Modal>
 
-            <SendLeader2
+            <SendLeaderUpdateHappening
                 type="salary"
                 data={data}
                 employeeId={employee.id}
@@ -73,4 +73,4 @@ const TabSalary = ({
     );
 };
 
-export default TabSalary;
+export default SalaryModal;

@@ -39,7 +39,6 @@ export default function UpdateHappeningModal({ employeeId }) {
         try {
             const res = await getProcessByEmp(employeeId);
             setProcesss(res?.data?.data);
-            console.log(res);
         } catch (error) {
             console.log(error);
         }

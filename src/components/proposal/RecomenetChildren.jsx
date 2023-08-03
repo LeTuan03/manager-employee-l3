@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getEmployeeById } from "../../services/api";
 import { Col, Row } from "antd";
 import { format } from "date-fns";
+import getDayMonthYear from "../common/getCurrentDay";
 
 const RecomenetChildren = ({ data }) => {
     const [empData, setEmpDate] = useState({});
@@ -12,7 +13,6 @@ const RecomenetChildren = ({ data }) => {
     useEffect(() => {
         handleGetEmp();
     }, [data]);
-    const time = format(new Date(data?.proposalDate).getTime(), "yyyy/MM/dd");
     return (
         <div
             className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
@@ -80,8 +80,9 @@ const RecomenetChildren = ({ data }) => {
                     <Col span={12} className="text-center">
                         <div>
                             <i className="block">
-                                Hà Nội, ngày {time.slice(8, 10)} tháng{" "}
-                                {time.slice(5, 7)} năm {time.slice(0, 4)}
+                                Hà Nội, ngày {getDayMonthYear(new Date()).day}{" "}
+                                tháng {getDayMonthYear(new Date()).month} năm{" "}
+                                {getDayMonthYear(new Date()).year}
                             </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i className="block">(Ký, ghi rõ họ tên)</i>

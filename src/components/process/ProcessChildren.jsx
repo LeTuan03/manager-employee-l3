@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEmployeeById } from "../../services/api";
 import { Col, Row } from "antd";
+import getDayMonthYear from "../common/getCurrentDay";
 
 const ProcessChildren = ({ data }) => {
     const [empData, setEmpDate] = useState({});
@@ -11,6 +12,7 @@ const ProcessChildren = ({ data }) => {
     useEffect(() => {
         handleGetEmp();
     }, [data]);
+    console.log(empData);
     return (
         <div
             className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
@@ -67,8 +69,15 @@ const ProcessChildren = ({ data }) => {
                             {/* {format(data.promotionDay, "yyyy-MM-dd")}. */}
                         </Col>
                         <Col span={24}>
-                            <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày
-                            ký.
+                            <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày{" "}
+                            {data.promotionDay &&
+                                getDayMonthYear(data.promotionDay).day}{" "}
+                            tháng{" "}
+                            {data.promotionDay &&
+                                getDayMonthYear(data.promotionDay).month}{" "}
+                            năm{" "}
+                            {data.promotionDay &&
+                                getDayMonthYear(data.promotionDay).year}
                         </Col>
                         <Col span={24}>
                             <b>Điều 3:</b>Các ông/bà Phòng Nhân sự, Phòng Tài
@@ -82,7 +91,9 @@ const ProcessChildren = ({ data }) => {
                     <Col span={12} className="text-center">
                         <div>
                             <i className="block">
-                                Hà Nội, ngày ... tháng ... năm 2023
+                                Hà Nội, ngày {getDayMonthYear(new Date()).day}{" "}
+                                tháng {getDayMonthYear(new Date()).month} năm{" "}
+                                {getDayMonthYear(new Date()).year}
                             </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i className="block">(Ký, ghi rõ họ tên)</i>

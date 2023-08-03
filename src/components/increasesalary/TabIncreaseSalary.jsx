@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Col, Form, Input, Row, Table, Button, message } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
-import TabSalary from "./TabSalary";
+import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import useTruncateText from "../../hook/useTruncateText";
 import validateCodeInput from "../../hook/ValidateCodeInput";
@@ -410,7 +410,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                     />
                 </Col>
             </Row>
-            <TabSalary
+            <SalaryModal
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

@@ -52,8 +52,6 @@ export default function App() {
     ]);
     return (
         <>
-            {/* isAuthenticated ||
-          window.location.pathname === "/login" ? <RouterProvider router={router} /> : <>Loading...</> */}
             <RouterProvider router={router} />
         </>
     );

@@ -10,7 +10,7 @@ import {
 import { format } from "date-fns";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 
-const SendLeader2 = (props) => {
+const SendLeaderUpdateHappening = (props) => {
     const {
         employeeId,
         openLeader,
@@ -51,7 +51,7 @@ const SendLeader2 = (props) => {
     }, [employeeId]);
 
     const onFinish = async (values) => {
-        const { leaderId, appointmentDate, submitContent } = values;
+        const { leaderId } = values;
         const data = {
             ...employee,
             leaderId,
@@ -66,17 +66,17 @@ const SendLeader2 = (props) => {
             data.leaderId = datas.leaderId;
             if (type === "salary") {
                 data.salaryIncreaseStatus = "2";
-                const res = await updateSalary(data);
+                await updateSalary(data);
                 await handleGetSalaryByEmp();
                 message.success("Trình lãnh đạo thành công");
             } else if (type === "process") {
                 data.processStatus = "2";
-                const res = await updateProcess(data);
+                await updateProcess(data);
                 await handleGetProcessByEmp();
                 message.success("Trình lãnh đạo thành công");
             } else if (type === "recoment") {
                 data.proposalStatus = "2";
-                const res = await updateProposal(data);
+                await updateProposal(data);
                 await handleGetRecomentByEmp();
                 message.success("Trình lãnh đạo thành công");
             }
@@ -211,4 +211,4 @@ const SendLeader2 = (props) => {
     );
 };
 
-export default SendLeader2;
+export default SendLeaderUpdateHappening;
