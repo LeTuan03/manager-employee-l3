@@ -12,6 +12,7 @@ import {
 import useTruncateText from "../../hook/useTruncateText";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
+import { ROLE, STATUS_EMPLOYEE } from "../../constants/constants";
 
 export default function Resume() {
     const { role } = useSelector((state) => state.account);
@@ -23,7 +24,9 @@ export default function Resume() {
 
     const getAllEmployee = async () => {
         setLoading(true);
-        const res = await searchEmployee("2,6");
+        const res = await searchEmployee(
+            `${STATUS_EMPLOYEE.PENDING},${STATUS_EMPLOYEE.PROFILE_END_REQUEST}`
+        );
         if (res?.status === 200) {
             setListEmployee(res?.data?.data);
             setLoading(false);
@@ -47,8 +50,8 @@ export default function Resume() {
             title: "Họ tên",
             dataIndex: "name",
             key: "name",
-            width: 150,
-            render: (text) => useTruncateText(text, 30),
+            width: 170,
+            render: (text) => useTruncateText(text, 20),
         },
         {
             title: "Ngày sinh",
@@ -99,7 +102,7 @@ export default function Resume() {
             dataIndex: "address",
             key: "address",
             render: (address) => {
-                const addressText = useTruncateText(address, 50);
+                const addressText = useTruncateText(address, 35);
                 return <span>{addressText}</span>;
             },
         },
@@ -170,7 +173,8 @@ export default function Resume() {
             align: "center",
             render: (_, user) => (
                 <div className="flex justify-center gap-3">
-                    {user.submitProfileStatus === "1" && role === 5 ? (
+                    {user.submitProfileStatus === "1" &&
+                    role === ROLE.MANAGE ? (
                         <>
                             <span
                                 className="cursor-pointer"
@@ -196,7 +200,6 @@ export default function Resume() {
                                 setProfile(user);
                                 setReasonForEnding(user?.reasonForEnding);
                                 setIsModalOpen(true);
-                                console.log(user);
                             }}
                         >
                             <EyeOutlined className="text-green-600 text-lg" />
@@ -225,6 +228,7 @@ export default function Resume() {
                             />
                         </div>
                         <Modal
+                            zIndex={1}
                             title="BIỂU MẪU"
                             open={isModalOpen}
                             onOk={() => setIsModalOpen(false)}

@@ -4,7 +4,7 @@ import { Button, Modal, message } from "antd";
 import { updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
-import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 
 const {
     NEW_SAVE,
@@ -16,6 +16,7 @@ const {
 } = STATUS_EMPLOYEE;
 const ModalProfile = ({ employeeId, setEmployeeId }) => {
     const dispatch = useDispatch();
+    const { role } = useSelector((state) => state.account);
     const [loading, setLoading] = useState(false);
     const { open, employee } = useSelector((state) => state.employee);
     const [threeInfo, setThreeInfo] = useState({
@@ -80,7 +81,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                             Hủy
                         </Button>
                         {[NEW_SAVE, REJECT].includes(
-                            employee.submitProfileStatus
+                            employee?.submitProfileStatus
                         ) && (
                             <Button
                                 danger
@@ -95,20 +96,24 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                                 Lưu
                             </Button>
                         )}
-                        {employee.submitProfileStatus ===
-                            ACCEPT_REQUEST_END_PROFILE && (
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    dispatch(
-                                        setOpen({ ...open, modalResume: true })
-                                    )
-                                }
-                            >
-                                Nộp lưu hồ sơ
-                            </Button>
-                        )}
-                        {employee.submitProfileStatus ===
+                        {employee?.submitProfileStatus ===
+                            ACCEPT_REQUEST_END_PROFILE &&
+                            role !== ROLE.MANAGE && (
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        dispatch(
+                                            setOpen({
+                                                ...open,
+                                                modalResume: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    Nộp lưu hồ sơ
+                                </Button>
+                            )}
+                        {employee?.submitProfileStatus ===
                             REJECT_REQUEST_END_PROFILE && (
                             <Button
                                 danger
@@ -122,7 +127,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                             </Button>
                         )}
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
-                            employee.submitProfileStatus
+                            employee?.submitProfileStatus
                         ) && (
                             <Button
                                 htmlType="submit"

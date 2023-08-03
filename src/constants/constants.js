@@ -28,7 +28,7 @@ export const RELATIONSHIP = {
     SIBLINGS: 3,
 };
 export const ROLE = {
-    USER: 1,
-    ADMIN: 2,
-    MANAGE: 3,
+    USER: 4,
+    ADMIN: 3,
+    MANAGE: 5,
 };

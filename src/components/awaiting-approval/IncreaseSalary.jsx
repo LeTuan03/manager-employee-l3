@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
 import useTruncateText from "../../hook/useTruncateText";
+import getDayMonthYear from "../common/getCurrentDay";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);
@@ -47,7 +48,7 @@ export default function IncreaseSalary() {
             key: "startDate",
             dataIndex: "startDate",
             align: "center",
-            width: 150,
+            width: 140,
             render: (date) => format(date, "dd/MM/yyyy"),
         },
         {
@@ -62,14 +63,14 @@ export default function IncreaseSalary() {
             key: "oldSalary",
             dataIndex: "oldSalary",
             align: "center",
-            width: 130,
+            width: 120,
         },
         {
             title: "Lương mới",
             key: "newSalary",
             dataIndex: "newSalary",
             align: "center",
-            width: 130,
+            width: 120,
         },
         {
             title: "Ghi chú",
@@ -88,7 +89,7 @@ export default function IncreaseSalary() {
             key: "salaryIncreaseStatus",
             dataIndex: "salaryIncreaseStatus",
             align: "center",
-            width: 200,
+            width: 170,
             render: (_, status) => {
                 switch (status.salaryIncreaseStatus) {
                     case 0:
@@ -153,6 +154,7 @@ export default function IncreaseSalary() {
                         />
                     </div>
                     <Modal
+                        zIndex={1}
                         title="Biểu mẫu"
                         open={isModalOpen}
                         onOk={handleOk}
@@ -216,7 +218,6 @@ const IncreaseTab = ({ profile }) => {
     useEffect(() => {
         handleGetDetailSalary();
     }, [profile]);
-
     return (
         <div
             className="p-[35px] bg-[#e7e7e7] font"
@@ -283,7 +284,18 @@ const IncreaseTab = ({ profile }) => {
                     <Row>
                         <Col flex={3} className="text-center"></Col>
                         <Col flex={2} className="text-center">
-                            <i>Hà Nội, ngày 21 tháng 7 năm 2023</i>
+                            <i>
+                                Hà Nội, ngày{" "}
+                                {profile.startDate &&
+                                    getDayMonthYear(profile.startDate).day}{" "}
+                                tháng{" "}
+                                {profile.startDate &&
+                                    getDayMonthYear(profile.startDate)
+                                        .month}{" "}
+                                năm{" "}
+                                {profile.startDate &&
+                                    getDayMonthYear(profile.startDate).year}
+                            </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i>(Ký, ghi rõ họ tên)</i>
 

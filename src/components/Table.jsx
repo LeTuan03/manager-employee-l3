@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Modal, Table, Tag } from "antd";
+import { Button, Input, Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
     DeleteOutlined,
@@ -7,13 +7,18 @@ import {
     EyeOutlined,
     InfoCircleOutlined,
     SearchOutlined,
-    SettingOutlined,
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../redux/employee/employeeSlice";
-import { GENDER, STATUS, STATUS_EMPLOYEE, TEAM } from "../constants/constants";
+import {
+    GENDER,
+    ROLE,
+    STATUS,
+    STATUS_EMPLOYEE,
+    TEAM,
+} from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 const TableComponet = (props) => {
     const [reasonForRejection, setReasonForRejection] = useState("");
@@ -74,7 +79,13 @@ const TableComponet = (props) => {
             align: "center",
             width: 90,
             render: (gender) => (
-                <p className="text-center">{gender === 1 ? "Nữ" : "Nam"} </p>
+                <p className="text-center">
+                    {gender === GENDER.FEMALE
+                        ? "Nữ"
+                        : gender === GENDER.MALE
+                        ? "Nam"
+                        : "Khác"}{" "}
+                </p>
             ),
         },
         {
@@ -95,17 +106,17 @@ const TableComponet = (props) => {
                 <div className="text-center">
                     <Tag
                         color={
-                            team === 1
+                            team === TEAM.BE
                                 ? "geekblue"
-                                : team === 2
+                                : team === TEAM.FE
                                 ? "green"
                                 : "red"
                         }
                         className="w-full text-center"
                     >
-                        {team === 1
+                        {team === TEAM.BE
                             ? "Back-end"
-                            : team === 2
+                            : team === TEAM.FE
                             ? "Front-end"
                             : "Tester"}
                     </Tag>
@@ -245,19 +256,21 @@ const TableComponet = (props) => {
                                     BEEN_APPEOVED
                                 ) {
                                     {
-                                        role === 5
-                                            ? dispatch(
-                                                  setOpen({
-                                                      ...open,
-                                                      modalProfile: true,
-                                                  })
-                                              )
-                                            : dispatch(
-                                                  setOpen({
-                                                      ...open,
-                                                      modalUpdateHappening: true,
-                                                  })
-                                              );
+                                        if (role === ROLE.MANAGE) {
+                                            dispatch(
+                                                setOpen({
+                                                    ...open,
+                                                    modalProfile: true,
+                                                })
+                                            );
+                                        } else {
+                                            dispatch(
+                                                setOpen({
+                                                    ...open,
+                                                    modalUpdateHappening: true,
+                                                })
+                                            );
+                                        }
                                     }
                                 } else if (
                                     employee.submitProfileStatus ===
@@ -322,7 +335,19 @@ const TableComponet = (props) => {
             </div>
             <Modal
                 centered
-                footer={<></>}
+                footer={
+                    <div className="text-center">
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                setOpenReject(false);
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
                 title="LÍ DO TỪ CHỐI"
                 onCancel={() => {
                     setOpenReject(false);

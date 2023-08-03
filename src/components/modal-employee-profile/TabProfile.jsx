@@ -170,7 +170,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             NEW_SAVE,
                                             REJECT,
                                             ADDITIONAL_REQUIREMENTS,
-                                        ].includes(employee.submitProfileStatus)
+                                        ].includes(
+                                            employee?.submitProfileStatus
+                                        )
                                     }
                                     bordered={false}
                                     maxLength={240}
@@ -193,7 +195,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             NEW_SAVE,
                                             REJECT,
                                             ADDITIONAL_REQUIREMENTS,
-                                        ].includes(employee.submitProfileStatus)
+                                        ].includes(
+                                            employee?.submitProfileStatus
+                                        )
                                     }
                                     bordered={false}
                                     name="activity"
@@ -239,7 +243,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                     REJECT,
                                                     ADDITIONAL_REQUIREMENTS,
                                                 ].includes(
-                                                    employee.submitProfileStatus
+                                                    employee?.submitProfileStatus
                                                 )
                                             }
                                             name="knowledge"
@@ -261,7 +265,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 NEW_SAVE,
                                 REJECT,
                                 ADDITIONAL_REQUIREMENTS,
-                            ].includes(employee.submitProfileStatus) && (
+                            ].includes(employee?.submitProfileStatus) && (
                                 <PlusOutlined
                                     className="cursor-pointer"
                                     onClick={() => {

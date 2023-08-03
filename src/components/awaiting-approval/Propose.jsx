@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
 import useTruncateText from "../../hook/useTruncateText";
+import getDayMonthYear from "../common/getCurrentDay";
 
 export default function Propose() {
     const { role } = useSelector((state) => state.account);
@@ -144,6 +145,7 @@ export default function Propose() {
                         />
                     </div>
                     <Modal
+                        zIndex={1}
                         title="Biểu mẫu"
                         open={isModalOpen}
                         onOk={handleOk}
@@ -256,7 +258,20 @@ const ProposeTab = ({ profile }) => {
                     <Row>
                         <Col flex={3} className="text-center"></Col>
                         <Col flex={2} className="text-center">
-                            <i>Hà Nội, ngày ... tháng ... năm 2023</i>
+                            <i>
+                                Hà Nội, ngày{" "}
+                                {profile.proposalDate &&
+                                    getDayMonthYear(profile.proposalDate)
+                                        .day}{" "}
+                                tháng{" "}
+                                {profile.proposalDate &&
+                                    getDayMonthYear(profile.proposalDate)
+                                        .month}{" "}
+                                năm{" "}
+                                {profile.proposalDate &&
+                                    getDayMonthYear(profile.proposalDate)
+                                        .year}{" "}
+                            </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i>(Ký, ghi rõ họ tên)</i>
 

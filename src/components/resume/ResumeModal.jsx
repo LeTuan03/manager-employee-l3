@@ -9,7 +9,9 @@ import {
     rejectPromote,
     salaryApprove,
 } from "../../services/api";
-import EmployeeProfile from "../modal-employee-profile/EmployeeProfile2";
+import { useDispatch, useSelector } from "react-redux";
+import { getEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import ModalProfile from "../modal-employee-profile/ModalProfile";
 
 export default function ResumeModal(props) {
     const {
@@ -21,9 +23,10 @@ export default function ResumeModal(props) {
         handleGetProcess,
         handleGetProposal,
     } = props;
-    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+    const { open } = useSelector((state) => state.employee);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
-    const [employeeId, setEmployeeId] = useState(false);
+    const [employeeId, setEmployeeId] = useState(null);
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
@@ -206,7 +209,14 @@ export default function ResumeModal(props) {
                     setEmployeeId(
                         type === "Resume" ? profile?.id : profile?.employeeId
                     );
-                    setOpen(true);
+                    dispatch(
+                        getEmployee(
+                            type === "Resume"
+                                ? profile?.id
+                                : profile?.employeeId
+                        )
+                    );
+                    dispatch(setOpen({ ...open, modalProfile: true }));
                 }}
             >
                 Xem hồ sơ
@@ -229,26 +239,10 @@ export default function ResumeModal(props) {
             </Button>
             <div>
                 {/* Hồ sơ nhân viên  */}
-                <Modal
-                    width={1300}
-                    title="Hồ sơ nhân viên"
-                    centered
-                    open={open}
-                    onCancel={() => setOpen(false)}
-                    footer={
-                        <div className="text-center">
-                            <Button
-                                type="primary"
-                                danger
-                                onClick={() => setOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                        </div>
-                    }
-                >
-                    <EmployeeProfile employeeId={employeeId} />
-                </Modal>
+                <ModalProfile
+                    employeeId={employeeId}
+                    setEmployeeId={setEmployeeId}
+                />
                 {/* Phê duyệt nhân viên */}
                 <Modal
                     title="Phê duyệt nhân viên"

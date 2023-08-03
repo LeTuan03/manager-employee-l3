@@ -31,7 +31,7 @@ const Header = () => {
         },
     ];
     return (
-        <div className="border-b shadow-lg fixed top-0 py-3 w-[85%] z-[1] bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3">
+        <div className="border-b shadow-lg fixed top-0 py-3 w-[85%] z-[1] bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3 font-mono">
             <div className="flex justify-end items-center mr-4">
                 <strong className="font-mono leading-3">
                     {role === 5
