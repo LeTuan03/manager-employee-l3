@@ -31,30 +31,26 @@ const Header = () => {
         },
     ];
     return (
-        <div className="border-b shadow-lg py-2 fixed top-0 w-[85%] z-10 bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3">
-            <div className="text-right mr-4">
-                <div>
-                    <span>
-                        <strong>
-                            {role === 5
-                                ? "Hi, MANAGER"
-                                : role === 4
-                                ? "Hi, USER"
-                                : role === 3
-                                ? "Hi, ADMIN"
-                                : "Lỗi , Quay lại đăng nhập"}{" "}
-                        </strong>
-                    </span>
-                    <Dropdown
-                        menu={{
-                            items,
-                        }}
-                        placement="bottom"
-                        className="w-[300px]"
-                    >
-                        <Avatar size={40} icon={<UserOutlined />} />
-                    </Dropdown>
-                </div>
+        <div className="border-b shadow-lg fixed top-0 py-3 w-[85%] z-10 bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3">
+            <div className="flex justify-end items-center mr-4">
+                <strong className="font-mono leading-3">
+                    {role === 5
+                        ? "Chào, MANAGER"
+                        : role === 4
+                        ? "Chào, USER"
+                        : role === 3
+                        ? "Chào, ADMIN"
+                        : "Lỗi , Quay lại đăng nhập"}{" "}
+                </strong>
+                <Dropdown
+                    menu={{
+                        items,
+                    }}
+                    placement="bottom"
+                    className="w-[300px] ml-5"
+                >
+                    <Avatar size={40} icon={<UserOutlined />} />
+                </Dropdown>
             </div>
         </div>
     );

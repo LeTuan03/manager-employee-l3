@@ -3,6 +3,7 @@ import { Avatar, Col, Row, Table } from "antd";
 import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
+import useTruncateText from "../../hook/useTruncateText";
 
 const TabCV = () => {
     const { employee } = useSelector((state) => state.employee);
@@ -90,12 +91,12 @@ const TabCV = () => {
         {
             label: "4. Nơi sinh: ",
             span: 12,
-            value: employee.address,
+            value: employee.address && useTruncateText(employee.address, 30),
         },
         {
             label: "5. Nguyên quán: ",
             span: 24,
-            value: employee.address,
+            value: employee.address && useTruncateText(employee.address, 70),
         },
         {
             label: "6. Số CCCD: ",
@@ -148,7 +149,12 @@ const TabCV = () => {
     );
     return (
         <>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
+            <div
+                className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
+                style={{
+                    fontFamily: "Tinos",
+                }}
+            >
                 <div className=" min-h-[720px] p-[6%_10%] bg-white">
                     <div className="flex">
                         <Avatar

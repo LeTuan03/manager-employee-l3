@@ -8,6 +8,11 @@ import {
     BankOutlined,
     EditOutlined,
     DeleteOutlined,
+    PhoneOutlined,
+    EnvironmentOutlined,
+    GiftOutlined,
+    MediumCircleFilled,
+    ProfileFilled,
 } from "@ant-design/icons";
 import { Button, Col, Form, Image, Input, Row, Space } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -16,6 +21,7 @@ import _ from "lodash";
 import { format } from "date-fns";
 import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
+import useTruncateText from "../../hook/useTruncateText";
 const TabProfile = ({ setThreeInfo, threeInfo }) => {
     const { employee } = useSelector((state) => state.employee);
     const [form] = Form.useForm();
@@ -67,6 +73,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             if (!_.isEmpty(employee)) {
                 const res = await getExp(employee?.id);
                 setExp(res?.data?.data);
+                console.log(res);
             }
         } catch (error) {
             console.log(error);
@@ -90,35 +97,48 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
         <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
                 <div className=" bg-white flex flex-row min-h-[720px] p-[6%_10%] ">
-                    <div className="basis-1/4 p-10">
+                    <div className="basis-1/4 pr-10">
                         <Image
                             width={200}
                             height={200}
                             className="rounded-full overflow-hidden"
                             fallback={employee?.image}
                         />
-                        <div className="mt-10">
-                            <MailOutlined className="mr-3" />
-                            {employee?.email}
+                        <div className="leading-10">
+                            <div className="mt-10">
+                                <MailOutlined className="mr-3" />
+                                {employee?.email &&
+                                    useTruncateText(employee?.email, 20)}
+                            </div>
+                            <div>
+                                <PhoneOutlined className="mr-3" />
+                                {employee?.phone}
+                            </div>
+                            <div>
+                                <EnvironmentOutlined className="mr-3" />
+                                {employee?.address &&
+                                    useTruncateText(employee?.address, 20)}
+                            </div>
+                            <div>
+                                <UserOutlined className="mr-3" />
+                                {employee?.gender === 1
+                                    ? "Nam"
+                                    : employee?.gender === 2
+                                    ? "Nữ"
+                                    : "Khác"}
+                            </div>
+                            <div>
+                                <GiftOutlined className="mr-3" />
+                                {employee?.dateOfBirth &&
+                                    format(
+                                        new Date(
+                                            employee?.dateOfBirth
+                                        ).getTime(),
+                                        "yyyy-MM-dd"
+                                    )}
+                            </div>
                         </div>
-                        <div>
-                            <WhatsAppOutlined className="mr-3" />
-                            {employee?.phone}
-                        </div>
-                        <div>
-                            <WifiOutlined className="mr-3" />
-                            {employee?.address}
-                        </div>
-                        <div>
-                            <UserOutlined className="mr-3" />
-                            {employee?.gender === 1
-                                ? "Nam"
-                                : employee?.gender === 2
-                                ? "Nữ"
-                                : "Khác"}
-                        </div>
-                        <div className="birth"></div>
-                        <h2 className="my-5">Kĩ năng</h2>
+                        <h2 className="my-5">KĨ NĂNG</h2>
                         <Col className="relative pr-4 mb-3">
                             <Input
                                 disabled={employee.submitProfileStatus !== "1"}
@@ -135,7 +155,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         top-[65%] w-full left-1"
                             ></div>
                         </Col>
-                        <h2 className="my-5">Hoạt động</h2>
+                        <h2 className="my-5">HOẠT ĐỘNG</h2>
                         <Col className="relative pr-4 mb-3">
                             <Input
                                 disabled={employee.submitProfileStatus !== "1"}
@@ -153,9 +173,12 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             ></div>
                         </Col>
                     </div>
-                    <div className="basis-2/4 pl-10">
+                    <div className="basis-3/4 pl-10">
                         <div className="border-l-2">
-                            <h1>{employee?.name}</h1>
+                            <h1>
+                                {employee?.name &&
+                                    useTruncateText(employee?.name, 25)}
+                            </h1>
                             <div className="text-lg">
                                 {employee?.team === 1
                                     ? "Back-end"
@@ -179,7 +202,10 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         onChange={(e) => {
                                             handleChange(e);
                                         }}
-                                        value={threeInfo?.knowledge}
+                                        value={useTruncateText(
+                                            threeInfo?.knowledge || "",
+                                            100
+                                        )}
                                         className="bg-slate-200 pl-7 border-none py-3 !min-h-[50px]"
                                     />
                                     <span className="absolute right-[8px] bottom-[-10px] text-3xl z-50">
@@ -188,8 +214,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="border-l-2 flex justify-between items-center mt-10">
-                            <div className="text-lg">KINH NGHIỆM LÀM VIỆC</div>
+                        <div className="border-l-2 flex justify-between items-center mt-6">
+                            <h2 className="my-5">KINH NGHIỆM LÀM VIỆC</h2>
                             {employee.submitProfileStatus === "1" && (
                                 <PlusOutlined
                                     className="cursor-pointer"
@@ -301,73 +327,65 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         {exp?.length > 0 &&
                             exp.map((item) => {
                                 return (
-                                    <>
-                                        <div className="flex justify-between mb-2 group">
-                                            <div>
-                                                <div className="font-medium">
-                                                    {format(
-                                                        new Date(
-                                                            item.startDate
-                                                        ),
-                                                        "dd/MM/yyy"
-                                                    )}{" "}
-                                                    -{" "}
-                                                    {format(
-                                                        new Date(item.endDate),
-                                                        "dd/MM/yyy"
-                                                    )}{" "}
-                                                    <BankOutlined />{" "}
-                                                    <span className="uppercase">
-                                                        {item.companyName}
-                                                    </span>
-                                                </div>
-                                                <span className="pl-5">
-                                                    {item.jobDescription}
+                                    <div className="flex justify-between group mb-5">
+                                        <div>
+                                            <div className="font-medium">
+                                                {format(
+                                                    new Date(item.startDate),
+                                                    "dd/MM/yyy"
+                                                )}{" "}
+                                                -{" "}
+                                                {format(
+                                                    new Date(item.endDate),
+                                                    "dd/MM/yyy"
+                                                )}{" "}
+                                                <ProfileFilled className="mx-2" />{" "}
+                                                <span className="uppercase">
+                                                    {item.companyName}
                                                 </span>
                                             </div>
-                                            {employee.submitProfileStatus ===
-                                                "1" && (
-                                                <div
-                                                    className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
-                                        justify-center gap-2 items-center p-2 rounded-md"
-                                                >
-                                                    <EditOutlined
-                                                        onClick={() => {
-                                                            form.setFieldsValue(
-                                                                {
-                                                                    ...item,
-                                                                    startDate:
-                                                                        format(
-                                                                            new Date(
-                                                                                item.startDate
-                                                                            ),
-                                                                            "yyyy-MM-dd"
-                                                                        ),
-                                                                    endDate:
-                                                                        format(
-                                                                            new Date(
-                                                                                item.endDate
-                                                                            ),
-                                                                            "yyyy-MM-dd"
-                                                                        ),
-                                                                }
-                                                            );
-                                                            setOpenForm(true);
-                                                        }}
-                                                        className="text-blue-600 text-lg cursor-pointer"
-                                                    />
-                                                    <DeleteOutlined
-                                                        onClick={() => {
-                                                            handleDeleteExp(
-                                                                item.id
-                                                            );
-                                                        }}
-                                                        className="text-red-600 text-lg cursor-pointer"
-                                                    />
-                                                </div>
-                                            )}
+                                            <span>
+                                                Mô tả: {item.jobDescription}
+                                            </span>
                                         </div>
-                                    </>
+                                        {employee.submitProfileStatus ===
+                                            "1" && (
+                                            <div
+                                                className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
+                                        justify-center gap-2 items-center p-2 rounded-md"
+                                            >
+                                                <EditOutlined
+                                                    onClick={() => {
+                                                        form.setFieldsValue({
+                                                            ...item,
+                                                            startDate: format(
+                                                                new Date(
+                                                                    item.startDate
+                                                                ),
+                                                                "yyyy-MM-dd"
+                                                            ),
+                                                            endDate: format(
+                                                                new Date(
+                                                                    item.endDate
+                                                                ),
+                                                                "yyyy-MM-dd"
+                                                            ),
+                                                        });
+                                                        setOpenForm(true);
+                                                    }}
+                                                    className="text-blue-600 text-lg cursor-pointer"
+                                                />
+                                                <DeleteOutlined
+                                                    onClick={() => {
+                                                        handleDeleteExp(
+                                                            item.id
+                                                        );
+                                                    }}
+                                                    className="text-red-600 text-lg cursor-pointer"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 );
                             })}
                     </div>

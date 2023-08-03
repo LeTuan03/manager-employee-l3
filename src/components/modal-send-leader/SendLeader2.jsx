@@ -62,24 +62,27 @@ const SendLeader2 = (props) => {
         setIsModalOpen(false);
     };
     const handleSendLeader = async (datas) => {
-        if (type === "salary") {
-            data.salaryIncreaseStatus = "2";
+        try {
             data.leaderId = datas.leaderId;
-            const res = await updateSalary(data);
-            await handleGetSalaryByEmp();
-            message.success("Trình lãnh đạo thành công");
-        } else if (type === "process") {
-            data.processStatus = "2";
-            data.leaderId = datas.leaderId;
-            const res = await updateProcess(data);
-            await handleGetProcessByEmp();
-            message.success("Trình lãnh đạo thành công");
-        } else if (type === "recoment") {
-            data.proposalStatus = "2";
-            data.leaderId = datas.leaderId;
-            const res = await updateProposal(data);
-            await handleGetRecomentByEmp();
-            message.success("Trình lãnh đạo thành công");
+            if (type === "salary") {
+                data.salaryIncreaseStatus = "2";
+                const res = await updateSalary(data);
+                await handleGetSalaryByEmp();
+                message.success("Trình lãnh đạo thành công");
+            } else if (type === "process") {
+                data.processStatus = "2";
+                const res = await updateProcess(data);
+                await handleGetProcessByEmp();
+                message.success("Trình lãnh đạo thành công");
+            } else if (type === "recoment") {
+                data.proposalStatus = "2";
+                const res = await updateProposal(data);
+                await handleGetRecomentByEmp();
+                message.success("Trình lãnh đạo thành công");
+            }
+        } catch (error) {
+            console.log(error);
+            message.error("Trình lãnh đạo thất bại!");
         }
     };
     const handleChange = (value) => {
@@ -101,6 +104,8 @@ const SendLeader2 = (props) => {
                 open={openLeader}
                 onCancel={() => {
                     setOpenLeader(false);
+                    form.resetFields();
+                    setIdLeader({ id: null, label: "" });
                 }}
                 footer={false}
             >
@@ -131,7 +136,16 @@ const SendLeader2 = (props) => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item name="leaderId" label="Tên lãnh đạo">
+                            <Form.Item
+                                name="leaderId"
+                                label="Tên lãnh đạo"
+                                rules={[
+                                    {
+                                        required: "true",
+                                        message: "Vui lòng chọn lãnh đạo!",
+                                    },
+                                ]}
+                            >
                                 <Select
                                     options={nameLeader}
                                     onChange={(value) => {
@@ -181,7 +195,11 @@ const SendLeader2 = (props) => {
                                 >
                                     Trình lãnh đạo
                                 </Button>
-                                <Button type="primary" danger>
+                                <Button
+                                    type="primary"
+                                    danger
+                                    onClick={() => setOpenLeader(false)}
+                                >
                                     Hủy
                                 </Button>
                             </Form.Item>

@@ -21,6 +21,7 @@ export default function UpdateHappeningModal({ employeeId }) {
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
     const [employee, setEmployee] = useState({});
+    const [activeKey, setActiveKey] = useState("1");
 
     const getEmployee = async () => {
         const res = await getEmployeeById(employeeId);
@@ -105,6 +106,7 @@ export default function UpdateHappeningModal({ employeeId }) {
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalUpdateHappening: false }));
                     dispatch(resetEmployee());
+                    setActiveKey("1");
                 }}
                 footer={
                     <div
@@ -144,7 +146,11 @@ export default function UpdateHappeningModal({ employeeId }) {
                 <div className="h-full overflow-y-scroll">
                     <Row className="mt-7">
                         <Col span={8} className="flex flex-col items-center">
-                            <Image width={200} src={employee.image} />
+                            <Image
+                                width={200}
+                                height={200}
+                                src={employee.image}
+                            />
                             <h1>{employee.name}</h1>
                             <b>
                                 {employee.currentPosition === 3
@@ -224,7 +230,11 @@ export default function UpdateHappeningModal({ employeeId }) {
                         </Col>
                     </Row>
                     <div className="mt-10 mb-20">
-                        <Tabs defaultActiveKey="1" items={items} />
+                        <Tabs
+                            activeKey={activeKey}
+                            onChange={(e) => setActiveKey(e)}
+                            items={items}
+                        />
                     </div>
                 </div>
             </Modal>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeProfile from "./EmployeeProfile";
-import { Button, Modal } from "antd";
+import { Button, Modal, Space, Tag } from "antd";
 import { updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +9,7 @@ import {
     setOpen,
 } from "../../redux/employee/employeeSlice";
 import { STATUS } from "../../constants/constants";
+import { format } from "date-fns";
 
 const ModalProfile = ({ employeeId }) => {
     const dispatch = useDispatch();
@@ -33,7 +34,26 @@ const ModalProfile = ({ employeeId }) => {
             <Modal
                 width={1300}
                 className="max-h-[720px] overflow-y-hidden"
-                title="Hồ sơ nhân viên"
+                title={
+                    <div className="flex justify-between mr-10">
+                        HỒ SƠ NHÂN VIÊN
+                        {employee?.numberSaved && (
+                            <i className="text-green-600">
+                                Số lưu:{" "}
+                                <span className="font-normal">
+                                    {employee?.numberSaved}
+                                </span>{" "}
+                                - Ngày lưu:{" "}
+                                <span className="font-normal">
+                                    {format(
+                                        new Date(employee?.submitDay).getTime(),
+                                        "yyyy/MM/dd"
+                                    )}
+                                </span>
+                            </i>
+                        )}
+                    </div>
+                }
                 centered
                 open={open.modalProfile}
                 onOk={() => {

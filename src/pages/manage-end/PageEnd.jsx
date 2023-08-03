@@ -22,7 +22,10 @@ const PageEnd = () => {
         <>
             <Table setEmployeeId={setEmployeeId}></Table>
             <ModalProfile employeeId={employeeId}></ModalProfile>
-            <SaveResume employeeId={employeeId}></SaveResume>
+            <SaveResume
+                setEmployeeId={setEmployeeId}
+                employeeId={employeeId}
+            ></SaveResume>
         </>
     );
 };

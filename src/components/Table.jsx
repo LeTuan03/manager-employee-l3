@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Table, Tag } from "antd";
+import { Input, Modal, Table, Tag } from "antd";
 import useTruncateText from "../hook/useTruncateText";
 import {
     DeleteOutlined,
     EditOutlined,
     EyeOutlined,
     InfoCircleOutlined,
+    SearchOutlined,
+    SettingOutlined,
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
@@ -74,7 +76,13 @@ const TableComponet = (props) => {
             render: (team) => (
                 <div className="text-center">
                     <Tag
-                        color={team === 1 ? "green" : "geekblue"}
+                        color={
+                            team === 1
+                                ? "geekblue"
+                                : team === 2
+                                ? "green"
+                                : "red"
+                        }
                         className="w-full text-center"
                     >
                         {team === 1
@@ -244,8 +252,20 @@ const TableComponet = (props) => {
             dispatch(getAllEmployee("1,2,4,5"));
         }
     };
+    const onSearch = (value) => console.log(value.target.value);
     return (
         <>
+            <div className="flex justify-end mb-5">
+                <div className="!w-[30%]">
+                    <Input
+                        placeholder="Tìm kiếm ..."
+                        allowClear
+                        addonAfter={<SearchOutlined />}
+                        size="large"
+                        onChange={onSearch}
+                    />
+                </div>
+            </div>
             <div className="main-table">
                 <Table
                     bordered

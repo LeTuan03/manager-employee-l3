@@ -141,7 +141,7 @@ export default function SignIn() {
                                         {
                                             required: true,
                                             message:
-                                                "Please input your username!",
+                                                "Vui lòng nhập tên đăng nhập!",
                                         },
                                     ]}
                                 >
@@ -153,14 +153,13 @@ export default function SignIn() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                "Please input your password!",
+                                            message: "Yêu cầu nhập mật khẩu!",
                                         },
                                     ]}
                                 >
                                     <Input.Password size="large" />
                                 </Form.Item>
-                                <Form.Item className="text-center">
+                                <Form.Item className="text-center mt-3">
                                     <Button
                                         type="primary"
                                         className="w-[100px]"

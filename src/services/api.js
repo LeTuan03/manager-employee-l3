@@ -1,7 +1,7 @@
 import axios from "../utils/axios-customize";
 export const searchEmployee = async (status) => {
     return await axios(
-        `/employee/search?pageIndex=1&pageSize=50&listStatus=${status}`
+        `/employee/search?pageIndex=1&pageSize=100&listStatus=${status}`
     );
 };
 export const deleteEmployee = async (id) => {

@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 
-export default function SaveResume({ employeeId }) {
+export default function SaveResume({ employeeId, setEmployeeId }) {
     const dispatch = useDispatch();
     const { open } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
@@ -32,6 +32,7 @@ export default function SaveResume({ employeeId }) {
             );
             form.resetFields();
             dispatch(getAllEmployee("7,0"));
+            setEmployeeId(null);
         } catch (error) {
             console.log(error);
             message.error("Nộp lưu hồ sơ thất bại!");

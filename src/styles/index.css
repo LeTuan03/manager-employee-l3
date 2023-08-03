@@ -77,6 +77,9 @@ tr.ant-table-row:last-child > td {
     height: 10%;
     transform: translateY(-50%);
 }
+.ant-modal-content {
+    padding: 4px 24px 20px 24px !important;
+}
 
 /* tablet  */
 @media only screen and (max-width: 1024px) {

@@ -40,7 +40,7 @@ const TabListCertificate = ({ type }) => {
     ];
     return (
         <>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font-table">
                 <div className="min-h-[720px] p-[6%_10%] bg-white">
                     <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
                     <Table

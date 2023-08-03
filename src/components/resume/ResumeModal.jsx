@@ -80,7 +80,7 @@ export default function ResumeModal(props) {
                     await handleActionSuccess(type);
                     break;
                 case "Resume":
-                    profile.submitProfileStatus = "3";
+                    profile.submitProfileStatus = "7";
                     profile.terminationAppointmentDate = values.acceptDay;
                     await acceptEmployee(profile);
                     setIsApproveOpen(false);

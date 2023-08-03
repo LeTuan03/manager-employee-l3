@@ -5,14 +5,18 @@ import { Button } from "antd";
 import ModalEnd from "../../components/modal-quit-job/ModalEnd";
 import SendLeader from "../../components/modal-send-leader/SendLeader";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, getEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    getEmployee,
+    setOpen,
+} from "../../redux/employee/employeeSlice";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
 
 const AddUserPage = () => {
     const [employeeId, setEmployeeId] = useState(null);
     const [reasonForEnding, setReasonForEnding] = useState("");
-    const dispatch = useDispatch()
-    const { open } = useSelector((state) => state.employee)
+    const dispatch = useDispatch();
+    const { open } = useSelector((state) => state.employee);
     useEffect(() => {
         dispatch(getAllEmployee("1,2,4,5"));
     }, []);
@@ -25,7 +29,6 @@ const AddUserPage = () => {
         <>
             <Button
                 type="primary"
-                className="mb-5"
                 onClick={() => {
                     dispatch(setOpen({ ...open, modalInput: true }));
                 }}

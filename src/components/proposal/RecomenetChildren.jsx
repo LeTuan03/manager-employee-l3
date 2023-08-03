@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEmployeeById } from "../../services/api";
 import { Col, Row } from "antd";
+import { format } from "date-fns";
 
 const RecomenetChildren = ({ data }) => {
     const [empData, setEmpDate] = useState({});
@@ -11,6 +12,7 @@ const RecomenetChildren = ({ data }) => {
     useEffect(() => {
         handleGetEmp();
     }, [data]);
+    const time = format(new Date(data?.proposalDate).getTime(), "yyyy/MM/dd");
     return (
         <div
             className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
@@ -31,7 +33,7 @@ const RecomenetChildren = ({ data }) => {
                 <Row>
                     <Col span={24} className="text-center mt-10">
                         <h2>QUYẾT ĐỊNH</h2>
-                        <h3>Về Việc {data?.note}</h3>
+                        <h3>Về Việc {data?.content}</h3>
                     </Col>
                 </Row>
                 <Row>
@@ -45,6 +47,13 @@ const RecomenetChildren = ({ data }) => {
                             </p>
                             <p className="block">
                                 Tôi tên là: {empData?.name} sinh ngày:{" "}
+                                {empData?.dateOfBirth &&
+                                    format(
+                                        new Date(
+                                            empData?.dateOfBirth
+                                        ).getTime(),
+                                        "yyyy/MM/dd"
+                                    )}
                             </p>
                             <p className="block">
                                 Tôi xin trình bày với nội dung sự việc như sau:
@@ -53,7 +62,7 @@ const RecomenetChildren = ({ data }) => {
                                 className="block leading-[100%]"
                                 style={{ borderBottom: "1px dotted #000" }}
                             >
-                                {data.detailedDescription}
+                                {data?.detailedDescription}
                             </p>
                             <p className="block">
                                 Tôi xin cam đoan những thông tin mà tôi đã nêu
@@ -71,7 +80,8 @@ const RecomenetChildren = ({ data }) => {
                     <Col span={12} className="text-center">
                         <div>
                             <i className="block">
-                                Hà Nội, ngày ... tháng ... năm 2023
+                                Hà Nội, ngày {time.slice(8, 10)} tháng{" "}
+                                {time.slice(5, 7)} năm {time.slice(0, 4)}
                             </i>
                             <h3>NGƯỜI LÀM ĐƠN</h3>
                             <i className="block">(Ký, ghi rõ họ tên)</i>
