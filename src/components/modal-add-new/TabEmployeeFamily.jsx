@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [update, setUpdate] = useState(null);
     const { employee } = useSelector((state) => state.employee);
     const [openDelete, setOpenDelete] = useState(false);
@@ -56,40 +56,40 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     useEffect(() => {
         setFamily(employee.employeeFamilyDtos);
         return () => {
-            setUpdate(null)
+            setUpdate(null);
             formFamily.resetFields();
         };
     }, [employee]);
     const handleGetFamily = async () => {
         try {
-            setLoading(true)
+            setLoading(true);
             const res = await getFamilyByEmployeeId(employee.id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 setFamily(res?.data?.data);
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
     };
     const handleDeleteFamily = async (id) => {
         try {
-            setLoading(true)
+            setLoading(true);
             const res = await deleteFamily(id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 message.success("Xóa thành công");
                 await handleGetFamily();
-                setIdDelete(null)
+                setIdDelete(null);
                 if (id === update) {
-                    setUpdate(null)
-                    formFamily.resetFields()
+                    setUpdate(null);
+                    formFamily.resetFields();
                 }
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -97,17 +97,17 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     const handleDeleteByUid = (uid) => {
         const newList = family.filter((item) => item.uid !== uid);
         setFamily(newList);
-        setUidDelete(null)
+        setUidDelete(null);
         if (uid === update) {
-            setUpdate(null)
-            formFamily.resetFields()
+            setUpdate(null);
+            formFamily.resetFields();
         }
         message.success("Xóa thành công văn bằng");
     };
     const handleCreateFamily = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await createFamily(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setFamily(res?.data?.data);
@@ -116,7 +116,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 } else {
                     message.error(res?.data?.message);
                 }
-                setLoading(false)
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -135,7 +135,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         const index = cloneFamily.findIndex((item) => item.uid === update);
         if (index === -1) {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await updateFamily(update, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     await handleGetFamily();
@@ -144,8 +144,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 } else {
                     message.error(res?.data?.message);
                 }
-                setUpdate(null)
-                setLoading(false)
+                setUpdate(null);
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -177,7 +177,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 family.id
                                     ? setIdDelete(family.id)
                                     : setUidDelete(family.uid);
-                                setOpenDelete(true)
+                                setOpenDelete(true);
                             }}
                         >
                             <DeleteOutlined className="text-red-600 text-lg" />
@@ -255,7 +255,9 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             const inputDateTime = new Date(value);
             const currentDateTime = new Date();
             if (inputDateTime > currentDateTime) {
-                return Promise.reject(new Error("Yêu cầu chọn trước ngày hôm nay"));
+                return Promise.reject(
+                    new Error("Yêu cầu chọn trước ngày hôm nay")
+                );
             }
             return Promise.resolve();
         } else {
@@ -287,7 +289,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern: /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                    pattern:
+                                        /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
                                     message: "Tên sai định dạng",
                                 },
                             ]}
@@ -306,7 +309,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                                 {
                                     pattern: /^(?:\d{9}|\d{12})$/,
-                                    message: "CMT phải là 9 số, CCCD phải là 12 số!",
+                                    message:
+                                        "CMT phải là 9 số, CCCD phải là 12 số!",
                                 },
                             ]}
                         >
@@ -411,7 +415,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                                 {
                                     pattern: /^0\d{9}$/,
-                                    message: "Định dạng số điện thoại chưa đúng",
+                                    message:
+                                        "Định dạng số điện thoại chưa đúng",
                                 },
                             ]}
                         >
@@ -437,10 +442,17 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         md={4}
                         span={24}
                     >
-                        <Button loading={loading} type="primary" htmlType="submit">
+                        <Button
+                            className="bg-green-600 text-white hover:!text-white"
+                            loading={loading}
+                            type="primary"
+                            htmlType="submit"
+                        >
                             {update ? "Sửa" : "Thêm"}
                         </Button>
                         <Button
+                            type="primary"
+                            danger
                             htmlType="button"
                             onClick={() => {
                                 formFamily.resetFields();

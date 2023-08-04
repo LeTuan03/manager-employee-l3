@@ -118,6 +118,20 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             });
         }
     }, [employee]);
+    function validateDate(_, value) {
+        if (value) {
+            const inputDateTime = new Date(value);
+            const currentDateTime = new Date();
+            if (inputDateTime > currentDateTime) {
+                return Promise.reject(
+                    new Error("Yêu cầu chọn trước ngày hôm nay")
+                );
+            }
+            return Promise.resolve();
+        } else {
+            return Promise.reject(new Error(`Vui lòng nhập ngày`));
+        }
+    }
     return (
         <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
@@ -165,6 +179,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className=" pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
+                                    className="!pt-[8px]"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -190,6 +205,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
+                                    className="!pt-[8px]"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -233,6 +249,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     </span>
                                     <div className="custom-area relative">
                                         <TextArea
+                                            className="!pt-[8px]"
                                             placeholder="Học vấn của bạn!"
                                             bordered={false}
                                             maxLength={240}
@@ -288,9 +305,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         label="Ngày bắt đầu"
                                         rules={[
                                             {
-                                                required: true,
-                                                message:
-                                                    "Vui lòng chọn ngày bắt đầu!",
+                                                validator: validateDate,
                                             },
                                         ]}
                                     >
@@ -303,7 +318,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         label="Ngày kết thúc"
                                         rules={[
                                             {
-                                                required: true,
+                                                validator: validateDate,
                                             },
                                         ]}
                                     >

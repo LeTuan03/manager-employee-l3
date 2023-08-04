@@ -12,11 +12,14 @@ import ModalInfo from "../modal-update-happening/ModalInfo";
 import useTruncateText from "../../hook/useTruncateText";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
+import ModalDelete from "../ModalDelete";
 
 const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
+    const [openDelete, setOpenDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const { open } = useSelector((state) => state.employee);
     useEffect(() => {
@@ -167,9 +170,10 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
-                                    onClick={() =>
-                                        handleDeleteRecoment(employee.id)
-                                    }
+                                    onClick={() => {
+                                        setEmployeeIdToDelete(employee.id);
+                                        setOpenDelete(true);
+                                    }}
                                 />
                             </span>
                         </div>
@@ -318,7 +322,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -343,7 +347,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -366,14 +370,14 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
                                 type="primary"
-                                className="w-full"
+                                className="w-full bg-green-600 text-white hover:!text-white"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -409,6 +413,12 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                 data={data}
                 employee={employee}
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
+            />
+            <ModalDelete
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+                employeeIdToDelete={employeeIdToDelete}
+                handleDeleteEmployee={handleDeleteRecoment}
             />
         </>
     );

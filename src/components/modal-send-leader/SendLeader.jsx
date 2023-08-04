@@ -9,6 +9,7 @@ import {
     setOpen,
 } from "../../redux/employee/employeeSlice";
 import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import TextArea from "antd/es/input/TextArea";
 const {
     NEW_SAVE,
     PENDING,
@@ -71,8 +72,7 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                 } else {
                     dispatch(
                         getAllEmployee(
-                            `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},
-                            ${REJECT_REQUEST_END_PROFILE}`
+                            `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},${REJECT_REQUEST_END_PROFILE}`
                         )
                     );
                 }
@@ -107,6 +107,20 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
             setIdLeader({ ...idLeader, label: "Trưởng phòng" });
         }
     };
+    function validateDate(_, value) {
+        if (value) {
+            const inputDateTime = new Date(value);
+            const currentDateTime = new Date();
+            if (inputDateTime > currentDateTime) {
+                return Promise.reject(
+                    new Error("Yêu cầu chọn trước ngày hôm nay")
+                );
+            }
+            return Promise.resolve();
+        } else {
+            return Promise.reject(new Error(`Vui lòng nhập ngày`));
+        }
+    }
     useEffect(() => {
         handleGetAllLeader();
     }, []);
@@ -152,6 +166,7 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                 onFinish={onFinish}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalSendLeader: false }));
+                    form.resetFields();
                 }}
             >
                 <Form
@@ -172,8 +187,7 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                                 name="submitDay"
                                 rules={[
                                     {
-                                        required: true,
-                                        message: "Bạn cần nhập trường này",
+                                        validator: validateDate,
                                     },
                                 ]}
                             >
@@ -212,7 +226,11 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <TextArea
+                                    maxLength={100}
+                                    showCount
+                                    autoSize={false}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>

@@ -1,27 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { UploadOutlined, UserOutlined } from '@ant-design/icons';
-import { Form, Input, message, Row, Col, Avatar, Upload, Button, Image, Select } from "antd";
-import { format } from 'date-fns';
-import _ from 'lodash';
-import { GENDER, STATUS, TEAM } from '../../constants/constants'
-import { createEmployee, postAvatar, updateEmployee } from '../../services/api';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployee, setOpen } from '../../redux/employee/employeeSlice';    
+import React, { useEffect, useState } from "react";
+import { UploadOutlined, UserOutlined } from "@ant-design/icons";
+import {
+    Form,
+    Input,
+    message,
+    Row,
+    Col,
+    Avatar,
+    Upload,
+    Button,
+    Image,
+    Select,
+} from "antd";
+import { format } from "date-fns";
+import _ from "lodash";
+import { GENDER, STATUS, TEAM } from "../../constants/constants";
+import { createEmployee, postAvatar, updateEmployee } from "../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
-const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, setLoading }) => {
-    const [userAvatar, setUserAvatar] = useState("")
-    const [urlAvatar, setUrlAvatar] = useState("")
-    const dispatch = useDispatch()
-    const { open, employee } = useSelector((state) => state.employee)
-    const {
-        NEW_SAVE,
-        PENDING,
-        ADDITIONAL_REQUIREMENTS,
-        REJECT
-    } = STATUS_EMPLOYEE;
+const FormEmployee = ({
+    form,
+    family,
+    certificate,
+    employeeId,
+    setEmployeeId,
+    setLoading,
+}) => {
+    const [userAvatar, setUserAvatar] = useState("");
+    const [urlAvatar, setUrlAvatar] = useState("");
+    const dispatch = useDispatch();
+    const { open, employee } = useSelector((state) => state.employee);
+    const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } =
+        STATUS_EMPLOYEE;
     const onFinish = async (values) => {
-        const { name, code, gender, dateOfBirth, address, team, email, phone,
-            citizenIdentificationNumber, ethnic, religion, dateOfIssuanceCard, placeOfIssueCard } = values;
+        const {
+            name,
+            code,
+            gender,
+            dateOfBirth,
+            address,
+            team,
+            email,
+            phone,
+            citizenIdentificationNumber,
+            ethnic,
+            religion,
+            dateOfIssuanceCard,
+            placeOfIssueCard,
+        } = values;
         const data = {
             name,
             code,
@@ -30,7 +57,9 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
             address,
             team,
             email,
-            image: `${import.meta.env.VITE_BACKEND_URL}/public/image/${urlAvatar}`,
+            image: `${
+                import.meta.env.VITE_BACKEND_URL
+            }/public/image/${urlAvatar}`,
             phone,
             citizenIdentificationNumber,
             employeeFamilyDtos: family || [],
@@ -39,12 +68,12 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
             religion,
             dateOfIssuanceCard,
             placeOfIssueCard,
-            submitProfileStatus: "1"
+            submitProfileStatus: "1",
         };
         if (employeeId) {
-            await handleUpdateEmployee(data)
+            await handleUpdateEmployee(data);
         } else {
-            await handleCreateEmployee(data)
+            await handleCreateEmployee(data);
         }
     };
     const onFinishFailed = (errorInfo) => {
@@ -52,73 +81,90 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
     };
     const handleCreateEmployee = async (data) => {
         try {
-            setLoading(true)
+            setLoading(true);
             const res = await createEmployee(data);
             if (res?.data?.code === STATUS.SUCCESS) {
-                dispatch(getAllEmployee(`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`))
-                setEmployeeId(res?.data?.data?.id)
+                dispatch(
+                    getAllEmployee(
+                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
+                    )
+                );
+                setEmployeeId(res?.data?.data?.id);
                 form.setFieldsValue({
                     name: employee.name,
                     code: employee.code,
                     gender: employee.gender,
-                    dateOfBirth: employee.dateOfBirth && format(new Date(employee.dateOfBirth), "yyyy-MM-dd"),
+                    dateOfBirth:
+                        employee.dateOfBirth &&
+                        format(new Date(employee.dateOfBirth), "yyyy-MM-dd"),
                     address: employee.address,
                     team: employee.team,
                     email: employee.email,
                     phone: employee.phone,
-                    citizenIdentificationNumber: employee.citizenIdentificationNumber,
-                    dateOfIssuanceCard: employee.dateOfBirth && format(new Date(employee.dateOfIssuanceCard), "yyyy-MM-dd"),
+                    citizenIdentificationNumber:
+                        employee.citizenIdentificationNumber,
+                    dateOfIssuanceCard:
+                        employee.dateOfBirth &&
+                        format(
+                            new Date(employee.dateOfIssuanceCard),
+                            "yyyy-MM-dd"
+                        ),
                     placeOfIssueCard: employee.placeOfIssueCard,
                     ethnic: employee.ethnic,
                     religion: employee.religion,
-                })
-                setUserAvatar(employee.image)
-                message.success("Thêm nhân viên thành công")
+                });
+                setUserAvatar(employee.image);
+                message.success("Thêm nhân viên thành công");
             } else {
-                message.error(res?.data?.message)
+                message.error(res?.data?.message);
             }
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
     const handleUpdateEmployee = async (data) => {
         try {
-            setLoading(true)
-            const res = await updateEmployee(employeeId, data)
+            setLoading(true);
+            const res = await updateEmployee(employeeId, data);
             if (res?.data?.code === STATUS.SUCCESS) {
-                dispatch(setOpen({ ...open, modalInput: false }))
-                dispatch(getAllEmployee(`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`))
+                dispatch(setOpen({ ...open, modalInput: false }));
+                dispatch(
+                    getAllEmployee(
+                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
+                    )
+                );
             } else {
-                message.error(res?.data?.message)
+                message.error(res?.data?.message);
             }
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
     const handleUploadAvatar = async ({ file, onSuccess, onError }) => {
-        const res = await postAvatar(file)
+        const res = await postAvatar(file);
         if (res) {
-            onSuccess('ok')
-            setUrlAvatar(res?.data?.name)
+            onSuccess("ok");
+            setUrlAvatar(res?.data?.name);
         } else {
-            onError('Error')
+            onError("Error");
         }
-    }
+    };
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
+        reader.addEventListener("load", () => callback(reader.result));
         reader.readAsDataURL(img);
     };
     const beforeUpload = (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isJpgOrPng =
+            file.type === "image/jpeg" || file.type === "image/png";
         if (!isJpgOrPng) {
-            message.error('Chỉ được tải lên tệp có dạng JPG/PNG !');
+            message.error("Chỉ được tải lên tệp có dạng JPG/PNG !");
         }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-            message.error('Ảnh phải nhỏ hơn 2MB!');
+            message.error("Ảnh phải nhỏ hơn 2MB!");
         }
         return isJpgOrPng && isLt2M;
     };
@@ -130,12 +176,12 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
         beforeUpload,
         customRequest: handleUploadAvatar,
         onChange(info) {
-            if (info.file.status === 'done') {
+            if (info.file.status === "done") {
                 message.success(`${info.file.name} file uploaded successfully`);
                 getBase64(info.file.originFileObj, (url) => {
-                    setUserAvatar(url)
-                })
-            } else if (info.file.status === 'error') {
+                    setUserAvatar(url);
+                });
+            } else if (info.file.status === "error") {
                 message.error(`${info.file.name} file upload failed.`);
             }
         },
@@ -147,53 +193,75 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                 name: employee.name,
                 code: employee.code,
                 gender: employee.gender,
-                dateOfBirth: format(new Date(employee.dateOfBirth), "yyyy-MM-dd"),
+                dateOfBirth: format(
+                    new Date(employee.dateOfBirth),
+                    "yyyy-MM-dd"
+                ),
                 address: employee.address,
                 team: employee.team,
                 email: employee.email,
                 phone: employee.phone,
-                citizenIdentificationNumber: employee.citizenIdentificationNumber,
-                dateOfIssuanceCard: format(new Date(employee.dateOfIssuanceCard), "yyyy-MM-dd"),
+                citizenIdentificationNumber:
+                    employee.citizenIdentificationNumber,
+                dateOfIssuanceCard: format(
+                    new Date(employee.dateOfIssuanceCard),
+                    "yyyy-MM-dd"
+                ),
                 placeOfIssueCard: employee.placeOfIssueCard,
                 ethnic: employee.ethnic,
                 religion: employee.religion,
-            })
-            setUserAvatar(employee.image)
+            });
+            setUserAvatar(employee.image);
         }
         return () => {
-            form.resetFields()
-            setUserAvatar("")
-        }
-    }, [employee])
+            form.resetFields();
+            setUserAvatar("");
+        };
+    }, [employee]);
     const validateAge = (_, value) => {
         if (value) {
             const today = new Date();
             const inputDate = new Date(value);
             const ageDiff = today.getFullYear() - inputDate.getFullYear();
-            const isOver18 = ageDiff > 18 || (ageDiff === 18 && today.getMonth() > inputDate.getMonth())
-                || (ageDiff === 18 && today.getMonth() === inputDate.getMonth() && today.getDate() >= inputDate.getDate());
+            const monthDiff = today.getMonth() - inputDate.getMonth();
+            const dayDiff = today.getDate() - inputDate.getDate();
+            const isOver18 =
+                ageDiff > 18 ||
+                (ageDiff === 18 && monthDiff > 0) ||
+                (ageDiff === 18 && monthDiff === 0 && dayDiff >= 0);
+            const isUnder60 =
+                ageDiff < 60 ||
+                (ageDiff === 60 && monthDiff < 0) ||
+                (ageDiff === 60 && monthDiff === 0 && dayDiff < 0);
             if (!isOver18) {
-                return Promise.reject(new Error('Yêu cầu trên 18 tuổi!'));
+                return Promise.reject(new Error("Tuổi phải lớn hơn 18 "));
+            } else if (!isUnder60) {
+                return Promise.reject(new Error("Tuổi phải nhỏ hơn 60!"));
+            } else {
+                return Promise.resolve();
             }
-            return Promise.resolve();
         } else {
-            return Promise.reject(new Error('Vui lòng nhập ngày sinh'));
+            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
         }
     };
     function validateEmployeeCode(_, value) {
         if (value) {
-            let regexString = '^NV';
+            let regexString = "^NV";
             const year = new Date().getFullYear().toString().slice(-2);
             regexString += year;
-            regexString += '\\d{3}$';
+            regexString += "\\d{3}$";
             const employeeCodeRegex = new RegExp(regexString);
-            const check = employeeCodeRegex.test(value)
+            const check = employeeCodeRegex.test(value);
             if (!check) {
-                return Promise.reject(new Error('Mã nhân viên phải có định dạng NV-YY-XXX ví dụ: NV23001'))
+                return Promise.reject(
+                    new Error(
+                        "Mã nhân viên phải có định dạng NV-YY-XXX ví dụ: NV23001"
+                    )
+                );
             }
             return Promise.resolve();
         } else {
-            return Promise.reject(new Error('Vui lòng nhập mã nhân viên'));
+            return Promise.reject(new Error("Vui lòng nhập mã nhân viên"));
         }
     }
     function validateDateOfBirth(_, value) {
@@ -201,21 +269,23 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
             const inputDateTime = new Date(value);
             const currentDateTime = new Date();
             if (inputDateTime > currentDateTime) {
-                return Promise.reject(new Error("Yêu cầu chọn trước ngày hôm nay"));
+                return Promise.reject(
+                    new Error("Yêu cầu chọn trước ngày hôm nay")
+                );
             }
             return Promise.resolve();
         } else {
-            return Promise.reject(new Error('Vui lòng nhập ngày sinh'));
+            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
         }
     }
     return (
         <>
             <Form
-                layout={'vertical'}
+                layout={"vertical"}
                 form={form}
                 name="basic"
                 initialValues={{
-                    remember: true
+                    remember: true,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -231,12 +301,14 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Vui lòng nhập tên nhân viên!",
+                                            message:
+                                                "Vui lòng nhập tên nhân viên!",
                                         },
                                         {
-                                            pattern: /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                            pattern:
+                                                /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
                                             message: "Tên sai định dạng",
-                                        }
+                                        },
                                     ]}
                                 >
                                     <Input maxLength={40} showCount />
@@ -248,7 +320,7 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     label="Mã nhân viên"
                                     rules={[
                                         {
-                                            validator: validateEmployeeCode
+                                            validator: validateEmployeeCode,
                                         },
                                     ]}
                                 >
@@ -289,10 +361,10 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     rules={[
                                         {
                                             validator: validateAge,
-                                        }
+                                        },
                                     ]}
                                 >
-                                    <Input type="date" ></Input>
+                                    <Input type="date"></Input>
                                 </Form.Item>
                             </Col>
                             <Col md={8} span={12}>
@@ -332,11 +404,14 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Vui lòng nhập số CCCD/CMT!",
-                                        }, {
+                                            message:
+                                                "Vui lòng nhập số CCCD/CMT!",
+                                        },
+                                        {
                                             pattern: /^(?:\d{9}|\d{12})$/,
-                                            message: "CMT phải là 9 số, CCCD phải là 12 số!",
-                                        }
+                                            message:
+                                                "CMT phải là 9 số, CCCD phải là 12 số!",
+                                        },
                                     ]}
                                 >
                                     <Input />
@@ -348,11 +423,11 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     label="Ngày cấp"
                                     rules={[
                                         {
-                                            validator: validateDateOfBirth
+                                            validator: validateDateOfBirth,
                                         },
                                     ]}
                                 >
-                                    <Input type="date" ></Input>
+                                    <Input type="date"></Input>
                                 </Form.Item>
                             </Col>
                             <Col md={8} span={12}>
@@ -366,7 +441,7 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                         },
                                     ]}
                                 >
-                                    <Input />
+                                    <Input maxLength={50} showCount />
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -381,9 +456,10 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                             message: "Vui lòng nhập email!",
                                         },
                                         {
-                                            type: 'email',
-                                            message: "Định dạng email chưa đúng!",
-                                        }
+                                            type: "email",
+                                            message:
+                                                "Định dạng email chưa đúng!",
+                                        },
                                     ]}
                                 >
                                     <Input />
@@ -396,12 +472,14 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Vui lòng nhập số điện thoại!",
+                                            message:
+                                                "Vui lòng nhập số điện thoại!",
                                         },
                                         {
                                             pattern: /^0\d{9}$/,
-                                            message: "Định dạng số điện thoại chưa đúng",
-                                        }
+                                            message:
+                                                "Định dạng số điện thoại chưa đúng",
+                                        },
                                     ]}
                                 >
                                     <Input />
@@ -431,7 +509,7 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                                             {
                                                 value: TEAM.TESTER,
                                                 label: "Tester",
-                                            }
+                                            },
                                         ]}
                                     />
                                 </Form.Item>
@@ -454,16 +532,30 @@ const FormEmployee = ({ form, family, certificate, employeeId, setEmployeeId, se
                             </Col>
                         </Row>
                     </Col>
-                    <Col className='flex justify-center items-start' lg={6} span={24}>
-                        <div className='flex justify-center flex-col gap-3 items-center'>
-                            {userAvatar ? <Image
-                                width={200}
-                                height={200}
-                                className="rounded-full overflow-hidden"
-                                src={userAvatar}
-                            /> : <Avatar className='cursor-pointer' size={200} icon={<UserOutlined />} />}
+                    <Col
+                        className="flex justify-center items-start"
+                        lg={6}
+                        span={24}
+                    >
+                        <div className="flex justify-center flex-col gap-3 items-center">
+                            {userAvatar ? (
+                                <Image
+                                    width={200}
+                                    height={200}
+                                    className="rounded-full overflow-hidden"
+                                    src={userAvatar}
+                                />
+                            ) : (
+                                <Avatar
+                                    className="cursor-pointer"
+                                    size={200}
+                                    icon={<UserOutlined />}
+                                />
+                            )}
                             <Upload {...propUploads}>
-                                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                <Button icon={<UploadOutlined />}>
+                                    Click to Upload
+                                </Button>
                             </Upload>
                         </div>
                     </Col>

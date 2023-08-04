@@ -44,14 +44,14 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const handleCreateCertificate = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await createCertificate(employee.id, [data]);
                 if (res?.status === STATUS.SUCCESS) {
                     setCertificate(res?.data?.data);
                     formCertificate.resetFields();
                     message.success("Thêm thành công văn bằng");
                 } else {
-                    message.error(res?.data?.message)
+                    message.error(res?.data?.message);
                 }
                 setLoading(false);
             } catch (error) {
@@ -73,7 +73,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
         const index = cloneCertificate.findIndex((item) => item.uid === id);
         if (index === -1) {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await updateCertificate(id, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setId(null);
@@ -81,7 +81,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     formCertificate.resetFields();
                     message.success("Sửa thành công văn bằng");
                 } else {
-                    message.error(res?.data?.message)
+                    message.error(res?.data?.message);
                 }
                 setLoading(false);
             } catch (error) {
@@ -97,18 +97,18 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
     const handleDeleteCertificate = async (idDelete) => {
         try {
-            setLoading(true)
+            setLoading(true);
             const res = await deleteCertificate(idDelete);
             if (res?.data?.code === STATUS.SUCCESS) {
                 handleGetCertificateById();
                 message.success("Xóa thành công văn bằng");
-                setIdDelete(null)
+                setIdDelete(null);
                 if (idDelete === id) {
-                    setId(null)
-                    formCertificate.resetFields()
+                    setId(null);
+                    formCertificate.resetFields();
                 }
             } else {
-                message.error(res?.data?.message)
+                message.error(res?.data?.message);
             }
             setLoading(false);
         } catch (error) {
@@ -118,10 +118,10 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const handleDeleteByUid = (uid) => {
         const newList = certificate.filter((item) => item.uid !== uid);
         setCertificate(newList);
-        setUidDelete(null)
+        setUidDelete(null);
         if (uid === id) {
-            setId(null)
-            formCertificate.resetFields()
+            setId(null);
+            formCertificate.resetFields();
         }
         message.success("Xóa thành công văn bằng");
     };
@@ -133,7 +133,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 setCertificate(res?.data?.data);
                 setLoading(false);
             } else {
-                message.error(res?.data?.message)
+                message.error(res?.data?.message);
             }
         } catch (error) {
             console.log(error);
@@ -142,7 +142,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     useEffect(() => {
         setCertificate(employee.certificatesDto);
         return () => {
-            setId(null)
+            setId(null);
             formCertificate.resetFields();
         };
     }, [employee]);
@@ -167,7 +167,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 item.id
                                     ? setIdDelete(item.id)
                                     : setUidDelete(item.uid);
-                                setOpenDelete(true)
+                                setOpenDelete(true);
                             }}
                             className="cursor-pointer"
                         >
@@ -177,7 +177,10 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             onClick={() => {
                                 formCertificate.setFieldsValue({
                                     ...item,
-                                    issueDate: format(new Date(item.issueDate), "yyyy-MM-dd"),
+                                    issueDate: format(
+                                        new Date(item.issueDate),
+                                        "yyyy-MM-dd"
+                                    ),
                                 });
                                 setId(item.id || item.uid);
                             }}
@@ -200,7 +203,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             title: "Nội dung văn bằng",
             dataIndex: "content",
             key: "content",
-            className: "max-w-lg"
+            className: "max-w-lg",
         },
         {
             title: "Ngày cấp",
@@ -218,7 +221,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             key: "field",
             align: "center",
             width: 100,
-            className: "max-w-[200px]"
+            className: "max-w-[200px]",
         },
     ];
     if (role !== 4) {
@@ -302,10 +305,17 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         lg={4}
                         span={24}
                     >
-                        <Button loading={loading} type="primary" htmlType="submit">
+                        <Button
+                            className="bg-green-600 text-white hover:!text-white"
+                            loading={loading}
+                            type="primary"
+                            htmlType="submit"
+                        >
                             {id ? "Sửa" : "Thêm"}
                         </Button>
                         <Button
+                            type="primary"
+                            danger
                             htmlType="button"
                             onClick={() => {
                                 formCertificate.resetFields();

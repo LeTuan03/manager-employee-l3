@@ -122,7 +122,7 @@ export default function SignIn() {
                         </svg>
                     </div>
                     <div className="w-[3000px] h-[3000px] bg-[#1a2138] text-left max-lg:pl-[50%]">
-                        <div className="login-r p-6 px-10 border-10 border-lime-700 border-dashed rounded-2xl max-lg:top-[56%] max-lg:left-[48%] max-lg:w-[12%]">
+                        <div className="login-r p-6 px-10 border-8 border-[#1a2138] border-dashed rounded-2xl max-lg:top-[56%] max-lg:left-[48%] max-lg:w-[12%]">
                             <Form
                                 className="w-full"
                                 layout="vertical"

@@ -24,15 +24,20 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
             footer={
                 <>
                     <div className="flex justify-center">
-                        <Button onClick={() => setOpenDelete(false)}>
-                            Hủy
-                        </Button>
                         <Button
+                            type="primary"
                             onClick={() => {
                                 handleOK();
                             }}
                         >
                             Xác nhận
+                        </Button>
+                        <Button
+                            onClick={() => setOpenDelete(false)}
+                            type="primary"
+                            danger
+                        >
+                            Hủy
                         </Button>
                     </div>
                 </>

@@ -112,11 +112,12 @@ export default function UpdateHappeningModal({ employeeId }) {
                     <div
                         className="text-center bg-white fixed bottom-0 w-[84%] py-5"
                         style={{
-                            right: "50%",
-                            transform: "translateX(50%)",
+                            width: "80%",
+                            transform: "translateX(0)",
                         }}
                     >
                         <Button
+                            className="min-w-[100px]"
                             key="submit"
                             type="primary"
                             onClick={() => {
@@ -126,6 +127,7 @@ export default function UpdateHappeningModal({ employeeId }) {
                             Kết thúc
                         </Button>
                         <Button
+                            className="min-w-[100px]"
                             type="primary"
                             danger
                             onClick={() => {
@@ -143,7 +145,7 @@ export default function UpdateHappeningModal({ employeeId }) {
                     </div>
                 }
             >
-                <div className="h-full overflow-y-scroll">
+                <div className="h-full overflow-y-scroll happening-scroll">
                     <Row className="mt-7">
                         <Col span={8} className="flex flex-col items-center">
                             <Image

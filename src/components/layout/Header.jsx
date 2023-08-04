@@ -3,6 +3,7 @@ import { Button, Dropdown, Avatar } from "antd";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ROLE } from "../../constants/constants";
 const Header = () => {
     const { role } = useSelector((state) => state.account);
     const navigate = useNavigate();
@@ -19,11 +20,11 @@ const Header = () => {
                     onClick={() => handleLogOut()}
                 >
                     <LogoutOutlined className="pr-2" />
-                    {role === 5
+                    {role === ROLE.MANAGE
                         ? "Đăng Xuất"
-                        : role === 4
+                        : role === ROLE.USER
                         ? "Đăng Xuất"
-                        : role === 3
+                        : role === ROLE.ADMIN
                         ? "Đăng Xuất"
                         : " Đăng Nhập"}{" "}
                 </div>
@@ -34,11 +35,11 @@ const Header = () => {
         <div className="border-b shadow-lg fixed top-0 py-3 w-[85%] z-[1] bg-white max-lg:w-full max-md:w-full max-md:mr-10 max-lg:mr-3 font-mono">
             <div className="flex justify-end items-center mr-4">
                 <strong className="font-mono leading-3">
-                    {role === 5
+                    {role === ROLE.MANAGE
                         ? "Chào, MANAGER"
-                        : role === 4
+                        : role === ROLE.USER
                         ? "Chào, USER"
-                        : role === 3
+                        : role === ROLE.ADMIN
                         ? "Chào, ADMIN"
                         : "Lỗi , Quay lại đăng nhập"}{" "}
                 </strong>

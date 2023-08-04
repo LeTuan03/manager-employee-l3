@@ -3,10 +3,12 @@ import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { ROLE } from "../../constants/constants";
 
 const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
     const [date, setDate] = useState({});
     const { employee } = useSelector((state) => state.employee);
+    const { role } = useSelector((state) => state.account);
     const getTodayDate = () => {
         const date = new Date();
         const day = date.getDate();
@@ -87,6 +89,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                 </div>
                                 <div className="custom-area relative">
                                     <TextArea
+                                        className="!pt-[11px]"
                                         bordered={false}
                                         autoSize={{ minRows: 1 }}
                                         value={reasonForEnding}
@@ -94,6 +97,8 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                         onChange={(e) => {
                                             setReasonForEnding(e.target.value);
                                         }}
+                                        spellCheck={false}
+                                        readOnly={role === ROLE.MANAGE}
                                     />
                                 </div>
                                 <div className="leading-9">

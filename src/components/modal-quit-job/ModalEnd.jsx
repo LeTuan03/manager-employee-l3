@@ -30,6 +30,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                 open={open.modalEnd}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalEnd: false }));
+                    setReasonForEnding("");
                 }}
                 footer={
                     <div className="flex justify-center">

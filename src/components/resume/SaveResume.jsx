@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Modal, message } from "antd";
+import { Button, DatePicker, Form, Input, Modal, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
 import { getEmployeeById, submitAndSaveResume } from "../../services/api";
@@ -42,20 +42,33 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
         console.log("Received values of form: ", values);
     };
     const validateNumberSaved = (_, values) => {
-        const regexString = values;
-        const escapedRegexString = regexString.replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&"
-        );
-        const regexPattern = new RegExp("^" + escapedRegexString + "$");
-        const testString = `NL${new Date()
-            .getFullYear()
-            .toString()
-            .slice(-2)}${profile.code.slice(-3)}`;
-        if (regexPattern.test(testString)) {
-            return Promise.resolve();
+        if (values) {
+            const regexString = values;
+            const escapedRegexString = regexString.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            );
+            const regexPattern = new RegExp("^" + escapedRegexString + "$");
+            const testString = `NL${new Date()
+                .getFullYear()
+                .toString()
+                .slice(-2)}${profile.code.slice(-3)}`;
+            if (regexPattern.test(testString)) {
+                return Promise.resolve();
+            } else {
+                return Promise.reject(
+                    new Error(
+                        `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${new Date()
+                            .getFullYear()
+                            .toString()
+                            .slice(-2)}${profile?.code?.slice(-3)}`
+                    )
+                );
+            }
         } else {
-            return Promise.reject(new Error("Nội dung không hợp lệ."));
+            return Promise.reject(
+                new Error("Không được để trống trường này!.")
+            );
         }
     };
     return (
@@ -74,6 +87,10 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                 layout={"vertical"}
                 name="basic"
                 onFinishFailed={onFinishFailed}
+                initialValues={{
+                    remember: true,
+                    decisionDay: format(new Date(), "yyyy-MM-dd"),
+                }}
                 form={form}
             >
                 <Form.Item
@@ -86,9 +103,10 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                         },
                     ]}
                 >
-                    <DatePicker
+                    <Input
                         placeholder="Chọn ngày"
                         style={{ width: "470px" }}
+                        type="date"
                     />
                 </Form.Item>
 
@@ -97,15 +115,7 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                     name={"numberSaved"}
                     rules={[
                         {
-                            required: true,
-                            message: `Không được bỏ trống trường này`,
-                        },
-                        {
                             validator: validateNumberSaved,
-                            message: `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${new Date()
-                                .getFullYear()
-                                .toString()
-                                .slice(-2)}${profile?.code?.slice(-3)}`,
                         },
                     ]}
                 >

@@ -12,6 +12,7 @@ import ModalInfo from "../modal-update-happening/ModalInfo";
 import useTruncateText from "../../hook/useTruncateText";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
+import ModalDelete from "../ModalDelete";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     const [form] = Form.useForm();
@@ -23,6 +24,8 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
+    const [openDelete, setOpenDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDeletePromote = async (id) => {
         try {
@@ -184,9 +187,10 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
-                                    onClick={() =>
-                                        handleDeletePromote(employee.id)
-                                    }
+                                    onClick={() => {
+                                        setEmployeeIdToDelete(employee.id);
+                                        setOpenDelete(true);
+                                    }}
                                 />
                             </span>
                         </div>
@@ -336,14 +340,14 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
+                                className="w-full bg-green-600 text-white hover:!text-white"
                                 type="primary"
-                                className="w-full"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -379,6 +383,12 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                 data={data}
                 employee={employee}
                 handleGetProcessByEmp={handleGetProcessByEmp}
+            />
+            <ModalDelete
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+                employeeIdToDelete={employeeIdToDelete}
+                handleDeleteEmployee={handleDeletePromote}
             />
         </>
     );

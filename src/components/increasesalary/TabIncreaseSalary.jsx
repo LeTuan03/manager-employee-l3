@@ -9,6 +9,7 @@ import useTruncateText from "../../hook/useTruncateText";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
+import ModalDelete from "../ModalDelete";
 
 const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
     const { open } = useSelector((state) => state.employee);
@@ -17,9 +18,12 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             form.resetFields();
         }
     }, [open.modalUpdateHappening]);
+
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
+    const [openDelete, setOpenDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDelete = async (value) => {
         try {
@@ -188,7 +192,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             <span>
                                 <DeleteOutlined
                                     className="text-red-600 text-lg"
-                                    onClick={() => handleDelete(employee.id)}
+                                    onClick={() => {
+                                        setEmployeeIdToDelete(employee.id);
+                                        setOpenDelete(true);
+                                    }}
                                 />
                             </span>
                         </div>
@@ -301,10 +308,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                // {
-                                //     max: 15,
-                                //     message: "Lương không hợp lệ !",
-                                // },
+                                {
+                                    max: 100000000000,
+                                    message: "Lương không hợp lệ !",
+                                },
                             ]}
                         >
                             <Input type="number" suffix="VND" />
@@ -319,10 +326,10 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                // {
-                                //     max: 15,
-                                //     message: "Lương không hợp lệ !",
-                                // },
+                                {
+                                    max: 100000000000,
+                                    message: "Lương không hợp lệ !",
+                                },
                             ]}
                         >
                             <Input type="number" suffix="VND" />
@@ -350,7 +357,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={11}>
@@ -373,14 +380,14 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input maxLength={240} showCount />
                         </Form.Item>
                     </Col>
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
+                                className="w-full bg-green-600 text-white hover:!text-white"
                                 type="primary"
-                                className="w-full"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -416,6 +423,12 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 data={data}
                 employee={employee}
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
+            />
+            <ModalDelete
+                openDelete={openDelete}
+                setOpenDelete={setOpenDelete}
+                employeeIdToDelete={employeeIdToDelete}
+                handleDeleteEmployee={handleDelete}
             />
         </>
     );

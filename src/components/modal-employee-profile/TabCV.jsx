@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useTruncateText from "../../hook/useTruncateText";
+import { GENDER, RELATIONSHIP } from "../../constants/constants";
 
 const TabCV = () => {
     const [date, setDate] = useState({});
@@ -22,6 +23,7 @@ const TabCV = () => {
             title: "STT",
             key: "index",
             className: "border-table",
+            align: "center",
             render: (text, record, index) => index + 1,
         },
         {
@@ -29,44 +31,65 @@ const TabCV = () => {
             dataIndex: "name",
             key: "name",
             className: "border-table",
+            render: (name) => <p className="w-[90px]"> {name}</p>,
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
             className: "border-table",
+            align: "center",
+            render: (dateOfBirth) =>
+                dateOfBirth &&
+                format(new Date(dateOfBirth).getTime(), "yyyy-MM-dd"),
         },
         {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
             className: "border-table",
-            render: (gender) =>
-                gender === 2 ? "Nữ" : gender === 1 ? "Nam" : "Khác",
+            align: "center",
+            render: (gender) => (gender === GENDER.FEMALE ? "Nữ" : "Nam"),
         },
         {
             title: "Quan hệ",
             dataIndex: "relationShip",
             key: "relationShip",
             className: "border-table",
-            render: (relationShip) =>
-                relationShip == 2
-                    ? "Mẹ"
-                    : relationShip === 1
-                    ? "Bố"
-                    : "Người trong gia đình",
+            align: "center",
+            render: (relationShip) => {
+                switch (relationShip) {
+                    case RELATIONSHIP.CHILD:
+                        relationShip = "Con";
+                        break;
+                    case RELATIONSHIP.PARENTS:
+                        relationShip = "Bố/Mẹ";
+                        break;
+                    case RELATIONSHIP.SIBLINGS:
+                        relationShip = "Anh/Chị/Em";
+                        break;
+                    default:
+                        break;
+                }
+                return <>{relationShip}</>;
+            },
         },
         {
             title: "Số điện thoại",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
             className: "border-table",
+            align: "center",
+            render: (phoneNumber) => <p className="w-[60px]">{phoneNumber}</p>,
         },
         {
             title: "Số CCCD/CMT",
             dataIndex: "citizenIdentificationNumber",
             key: "citizenIdentificationNumber",
             className: "border-table",
+            render: (citizenIdentificationNumber) => (
+                <p className="w-[60px]">{citizenIdentificationNumber}</p>
+            ),
         },
         {
             title: "Địa chỉ",
@@ -85,9 +108,9 @@ const TabCV = () => {
             label: "2. Nam/Nữ: ",
             span: 8,
             value:
-                employee.gender === 0
+                employee.gender === GENDER.MALE
                     ? "Nam"
-                    : employee.gender === 1
+                    : employee.gender === GENDER.FEMALE
                     ? "Nữ"
                     : "Khác",
         },
@@ -110,17 +133,17 @@ const TabCV = () => {
         },
         {
             label: "6. Số CCCD: ",
-            span: 8,
+            span: 12,
             value: employee.citizenIdentificationNumber,
         },
         {
             label: "7. Ngày cấp: ",
-            span: 8,
+            span: 12,
             value: employee.dateOfIssuanceCard,
         },
         {
             label: "8. Nơi cấp: ",
-            span: 8,
+            span: 24,
             value: employee.placeOfIssueCard,
         },
         {

@@ -320,6 +320,7 @@ const TableComponet = (props) => {
             </div>
             <div className="main-table">
                 <Table
+                    scroll={{ x: true }}
                     bordered
                     columns={columns}
                     dataSource={listEmployee}

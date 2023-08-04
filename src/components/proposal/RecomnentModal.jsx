@@ -31,6 +31,7 @@ const RecomnentModal = ({
                     <div className="text-center">
                         {[1, 4, 5].includes(data.proposalStatus) && (
                             <Button
+                                className="min-w-[100px]"
                                 type="primary"
                                 onClick={() => {
                                     setOpenLeader(true);
@@ -40,6 +41,7 @@ const RecomnentModal = ({
                             </Button>
                         )}
                         <Button
+                            className="min-w-[100px]"
                             type="primary"
                             danger
                             onClick={() => setIsModalOpen(false)}
@@ -54,7 +56,6 @@ const RecomnentModal = ({
                         defaultActiveKey="1"
                         items={items}
                         tabPosition={"left"}
-                        style={{ height: 600, overflowY: "scroll" }}
                     />
                 </div>
             </Modal>

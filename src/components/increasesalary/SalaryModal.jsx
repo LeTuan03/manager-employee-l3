@@ -31,6 +31,7 @@ const SalaryModal = ({
                     <div className="text-center">
                         {[1, 4, 5].includes(data.salaryIncreaseStatus) && (
                             <Button
+                                className="min-w-[100px]"
                                 type="primary"
                                 onClick={() => {
                                     setOpenLeader(true);
@@ -40,6 +41,7 @@ const SalaryModal = ({
                             </Button>
                         )}
                         <Button
+                            className="min-w-[100px]"
                             type="primary"
                             danger
                             onClick={() => {
@@ -56,11 +58,9 @@ const SalaryModal = ({
                         defaultActiveKey="1"
                         items={items}
                         tabPosition={"left"}
-                        style={{ height: 600, overflowY: "scroll" }}
                     />
                 </div>
             </Modal>
-
             <SendLeaderUpdateHappening
                 type="salary"
                 data={data}

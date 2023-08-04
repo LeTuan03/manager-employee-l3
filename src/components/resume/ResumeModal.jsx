@@ -204,7 +204,7 @@ export default function ResumeModal(props) {
     return (
         <>
             <Button
-                className="bg-green-700 text-white"
+                className="bg-green-700 text-white min-w-[100px]"
                 onClick={() => {
                     setEmployeeId(
                         type === "Resume" ? profile?.id : profile?.employeeId
@@ -223,18 +223,24 @@ export default function ResumeModal(props) {
             </Button>
 
             <Button
-                className="bg-green-700 text-white"
+                className="bg-green-700 text-white min-w-[100px]"
                 onClick={() => setIsApproveOpen(true)}
             >
                 Phê duyệt
             </Button>
             <Button
+                className="min-w-[100px]"
                 type="primary"
                 onClick={() => setIsAdditionalRequestOpen(true)}
             >
                 Yêu cầu bổ sung
             </Button>
-            <Button type="primary" danger onClick={() => setIsRejectOpen(true)}>
+            <Button
+                className="min-w-[100px]"
+                type="primary"
+                danger
+                onClick={() => setIsRejectOpen(true)}
+            >
                 Từ chối
             </Button>
             <div>
@@ -282,7 +288,7 @@ export default function ResumeModal(props) {
                         </Checkbox>
                         <Form.Item className="text-center mt-8">
                             <Button
-                                key="cancel"
+                                className="min-w-[100px]"
                                 type="primary"
                                 danger
                                 onClick={() => setIsApproveOpen(false)}
@@ -290,7 +296,7 @@ export default function ResumeModal(props) {
                                 Hủy
                             </Button>
                             <Button
-                                className="ml-2"
+                                className="ml-2 min-w-[100px]"
                                 key="submit"
                                 type="primary"
                                 htmlType="submit"
@@ -318,7 +324,7 @@ export default function ResumeModal(props) {
                     >
                         <Form.Item
                             name="additionalRequest"
-                            label="Nội dung yêu cầu"
+                            label="Nội dung yêu cầu bổ sung:"
                             rules={[
                                 {
                                     required: true,
@@ -331,10 +337,13 @@ export default function ResumeModal(props) {
                                 autoSize={{
                                     minRows: 3,
                                 }}
+                                maxLength={240}
+                                showCount
                             />
                         </Form.Item>
                         <Form.Item className="text-center">
                             <Button
+                                className="min-w-[100px]"
                                 type="primary"
                                 danger
                                 onClick={() => {
@@ -345,9 +354,9 @@ export default function ResumeModal(props) {
                                 Hủy
                             </Button>
                             <Button
+                                className="min-w-[100px] ml-2"
                                 type="primary"
                                 htmlType="submit"
-                                className="ml-2"
                             >
                                 Xác nhận
                             </Button>
@@ -406,10 +415,13 @@ export default function ResumeModal(props) {
                                 autoSize={{
                                     minRows: 3,
                                 }}
+                                maxLength={240}
+                                showCount
                             />
                         </Form.Item>
                         <Form.Item className="text-center mt-8">
                             <Button
+                                className="min-w-[100px]"
                                 key="cancel"
                                 type="primary"
                                 danger
@@ -421,10 +433,10 @@ export default function ResumeModal(props) {
                                 Hủy
                             </Button>
                             <Button
+                                className="min-w-[100px] ml-2"
                                 key="submit"
                                 type="primary"
                                 htmlType="submit"
-                                className="ml-2"
                             >
                                 Xác nhận
                             </Button>

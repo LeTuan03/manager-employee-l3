@@ -85,23 +85,12 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                 }}
                 footer={
                     <div className="flex justify-center">
-                        <Button
-                            danger
-                            onClick={() => {
-                                dispatch(
-                                    setOpen({ ...open, modalProfile: false })
-                                );
-                                setEmployeeId(null);
-                                setActiveKey("1");
-                            }}
-                        >
-                            Hủy
-                        </Button>
                         {[NEW_SAVE, REJECT].includes(
                             employee?.submitProfileStatus
                         ) && (
                             <Button
-                                danger
+                                className="min-w-[100px]"
+                                type="primary"
                                 loading={loading}
                                 onClick={() => {
                                     handleUpdateEmployee({
@@ -117,6 +106,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                             ACCEPT_REQUEST_END_PROFILE &&
                             role !== ROLE.MANAGE && (
                                 <Button
+                                    className="min-w-[100px]"
                                     type="primary"
                                     onClick={() =>
                                         dispatch(
@@ -133,6 +123,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                         {employee?.submitProfileStatus ===
                             REJECT_REQUEST_END_PROFILE && (
                             <Button
+                                className="min-w-[100px]"
                                 danger
                                 onClick={() => {
                                     dispatch(
@@ -147,6 +138,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                             employee?.submitProfileStatus
                         ) && (
                             <Button
+                                className="min-w-[100px]"
                                 htmlType="submit"
                                 type="primary"
                                 onClick={() => {
@@ -161,6 +153,20 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                                 Trình lãnh đạo
                             </Button>
                         )}
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalProfile: false })
+                                );
+                                setEmployeeId(null);
+                                setActiveKey("1");
+                            }}
+                        >
+                            Hủy
+                        </Button>
                     </div>
                 }
             >

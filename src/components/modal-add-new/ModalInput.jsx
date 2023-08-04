@@ -54,16 +54,19 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
         return (
             <div className="w-full flex justify-center gap-2">
                 <Button
+                    className="min-w-[100px] bg-green-600 text-white hover:!text-white"
+                    loading={loading}
+                    type="link"
                     onClick={() => {
-                        dispatch(setOpen({ ...open, modalInput: false }));
-                        setEmployeeId(null);
-                        setActiveKey("1");
+                        form.submit();
                     }}
                 >
-                    Hủy
+                    {employeeId ? "Lưu" : "Thêm"}
                 </Button>
                 {employee.submitProfileStatus && (
                     <Button
+                        className="min-w-[100px]"
+                        type="primary"
                         onClick={() => {
                             dispatch(setOpen({ ...open, modalProfile: true }));
                         }}
@@ -72,13 +75,16 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                     </Button>
                 )}
                 <Button
-                    loading={loading}
+                    className="min-w-[100px]"
                     type="primary"
+                    danger
                     onClick={() => {
-                        form.submit();
+                        dispatch(setOpen({ ...open, modalInput: false }));
+                        setEmployeeId(null);
+                        setActiveKey("1");
                     }}
                 >
-                    {employeeId ? "Sửa" : "Thêm"}
+                    Hủy
                 </Button>
             </div>
         );
