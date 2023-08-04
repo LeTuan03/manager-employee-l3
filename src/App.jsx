@@ -36,23 +36,27 @@ export default function App() {
             children: [
                 {
                     index: true,
-                    element: <></>,
+                    element: <>Home page</>,
                 },
                 {
                     path: "/manage_employee",
-                    element: <Employee></Employee>,
+                    element: isAuthenticated ? <Employee></Employee> : "403",
                 },
                 {
                     path: "/release",
-                    element: <PageEnd></PageEnd>,
+                    element: isAuthenticated ? <PageEnd></PageEnd> : "403",
                 },
                 {
                     path: "/awaiting_approval",
-                    element: <AwaitingApproval></AwaitingApproval>,
+                    element: isAuthenticated ? (
+                        <AwaitingApproval></AwaitingApproval>
+                    ) : (
+                        "403"
+                    ),
                 },
                 {
                     path: "/approved",
-                    element: <Approved></Approved>,
+                    element: isAuthenticated ? <Approved></Approved> : "403",
                 },
                 {
                     path: "/addnew_employee",

@@ -167,7 +167,10 @@ export default function SignIn() {
                                     >
                                         Đăng nhập
                                     </Button>
-                                    <Button className="ml-2 w-[100px]">
+                                    <Button
+                                        className="ml-2 w-[100px] bg-green-600"
+                                        type="primary"
+                                    >
                                         Đăng kí
                                     </Button>
                                 </Form.Item>
