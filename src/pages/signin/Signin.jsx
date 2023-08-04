@@ -13,7 +13,7 @@ export default function SignIn() {
             localStorage.setItem("access_token", response.access_token);
             const role = await getAccount();
             dispatch(doLoginAction(role?.data[0]));
-            message.success("Đăng nhập thành công!");
+            message.success("Đăng nhập thành công!!");
             navigate("/");
         } catch {
             message.error("Sai tài khoản hoặc mật khẩu!");
