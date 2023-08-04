@@ -75,7 +75,11 @@ export default function App() {
     ]);
     return (
         <>
-            <RouterProvider router={router} />
+            {
+                isAuthenticated ?
+                    <RouterProvider router={router} />
+                    :"Not found"
+            }
         </>
     );
 }
