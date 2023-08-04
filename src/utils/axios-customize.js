@@ -2,9 +2,6 @@ import axios from "axios";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 const instance = axios.create({
     baseURL,
-    // headers: {
-    //     "Content-Type": "application/json"
-    // }
 });
 instance.interceptors.request.use(
     function (config) {
@@ -24,9 +21,6 @@ instance.interceptors.response.use(
         return response;
     },
     function (error) {
-        if (+error?.response?.status === 401) {
-            window.location.href = "/login";
-        }
         return Promise.reject(error);
     }
 );
