@@ -14,20 +14,20 @@ import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
 import { STATUS } from "./constants/constants";
 export default function App() {
-    // const dispatch = useDispatch();
-    // const { isAuthenticated } = useSelector((state) => state.account);
-    // const getRoleAccount = async () => {
-    //     if (window.location.pathname === "/login") {
-    //         return;
-    //     }
-    //     const res = await getAccount();
-    //     if (res?.status === STATUS.SUCCESS) {
-    //         dispatch(doLoginAction(res?.data[0]));
-    //     }
-    // };
-    // useEffect(() => {
-    //     getRoleAccount();
-    // }, []);
+    const dispatch = useDispatch();
+    const { isAuthenticated } = useSelector((state) => state.account);
+    const getRoleAccount = async () => {
+        if (window.location.pathname === "/login") {
+            return;
+        }
+        const res = await getAccount();
+        if (res?.status === STATUS.SUCCESS) {
+            dispatch(doLoginAction(res?.data[0]));
+        }
+    };
+    useEffect(() => {
+        getRoleAccount();
+    }, []);
     const router = createBrowserRouter([
         {
             path: "/",
