@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Col, Form, Input, Row, Table, Button, message } from "antd";
+import {
+    Col,
+    Form,
+    Input,
+    Row,
+    Table,
+    Button,
+    message,
+    ConfigProvider,
+} from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
@@ -110,13 +119,13 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => useTruncateText(note || "", 25),
+            render: (note) => TextToTruncate(note || "", 25),
         },
         {
             title: "Lý do",
             dataIndex: "reason",
             key: "reason",
-            render: (reason) => useTruncateText(reason || "", 25),
+            render: (reason) => TextToTruncate(reason || "", 25),
         },
         {
             title: "Trạng thái",
@@ -157,11 +166,12 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                         break;
                     case 9:
                         salaryIncreaseStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                        break;
                     default:
                         salaryIncreaseStatus = "Chờ xử lí";
                         break;
                 }
-                return useTruncateText(salaryIncreaseStatus || "", 13);
+                return TextToTruncate(salaryIncreaseStatus || "", 13);
             },
         },
         {
@@ -308,10 +318,6 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                {
-                                    max: 100000000000,
-                                    message: "Lương không hợp lệ !",
-                                },
                             ]}
                         >
                             <Input type="number" suffix="VND" />
@@ -325,10 +331,6 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                                 {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
-                                },
-                                {
-                                    max: 100000000000,
-                                    message: "Lương không hợp lệ !",
                                 },
                             ]}
                         >
@@ -386,7 +388,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="w-full bg-green-600 text-white hover:!text-white"
+                                className="w-full"
                                 type="primary"
                                 htmlType="submit"
                             >
@@ -410,11 +412,15 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             </Form>
             <Row className="mt-8">
                 <Col span={24}>
-                    <Table
-                        columns={columns}
-                        dataSource={salary}
-                        pagination={false}
-                    />
+                    <div className="main-table">
+                        <ConfigProvider renderEmpty={() => <></>}>
+                            <Table
+                                columns={columns}
+                                dataSource={salary}
+                                pagination={false}
+                            />
+                        </ConfigProvider>
+                    </div>
                 </Col>
             </Row>
             <SalaryModal

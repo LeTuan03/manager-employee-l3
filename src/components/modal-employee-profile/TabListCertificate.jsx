@@ -10,18 +10,21 @@ const TabListCertificate = () => {
             title: "STT",
             key: "index",
             className: "border-table",
-            render: (text, record, index) => index + 1,
+            align: "center",
+            render: (text, record, index) => <b>{index + 1}</b>,
         },
         {
             title: "Tên văn bằng",
             dataIndex: "certificateName",
             key: "certificateName",
             className: "border-table",
+            align: "center",
         },
         {
             title: "Nội dung văn bằng",
             dataIndex: "content",
             key: "content",
+            align: "center",
             className: "border-table",
         },
         {
@@ -29,19 +32,21 @@ const TabListCertificate = () => {
             dataIndex: "issueDate",
             key: "issueDate",
             className: "border-table",
+            align: "center",
             render: (dateOfBirth) => <>{format(dateOfBirth, "dd/MM/yyyy")}</>,
         },
         {
             title: "Lĩnh vực",
             dataIndex: "field",
             key: "field",
+            align: "center",
             className: "border-table",
         },
     ];
     return (
         <>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font-table">
-                <div className="min-h-[720px] p-[6%_10%] bg-white">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] font-table font">
+                <div className="p-[6%_10%] bg-white">
                     <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
                     <ConfigProvider renderEmpty={() => <></>}>
                         <Table

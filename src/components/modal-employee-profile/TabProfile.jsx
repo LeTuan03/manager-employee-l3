@@ -16,7 +16,7 @@ import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/useTruncateText";
+import useTruncateText from "../../hook/TextToTruncate";
 import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import ModalDelete from "../ModalDelete";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
@@ -171,7 +171,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         new Date(
                                             employee?.dateOfBirth
                                         ).getTime(),
-                                        "yyyy-MM-dd"
+                                        "dd-MM-yyyy"
                                     )}
                             </div>
                         </div>
@@ -390,9 +390,12 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             setOpenDelete={setOpenDelete}
                         ></ModalDelete>
                         {exp?.length > 0 &&
-                            exp.map((item) => {
+                            exp.map((item, index) => {
                                 return (
-                                    <div className="flex justify-between group mb-5">
+                                    <div
+                                        key={index}
+                                        className="flex justify-between group mb-5"
+                                    >
                                         <div>
                                             <div className="font-medium">
                                                 <div>

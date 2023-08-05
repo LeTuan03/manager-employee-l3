@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input, Modal, Table, Tag } from "antd";
-import useTruncateText from "../hook/useTruncateText";
+import useTruncateText from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
     EditOutlined,
@@ -67,9 +67,7 @@ const TableComponet = (props) => {
             width: 120,
             align: "center",
             render: (dateOfBirth) => (
-                <p className="text-center">
-                    {format(new Date(dateOfBirth), "dd/MM/yyyy")}
-                </p>
+                <p>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</p>
             ),
         },
         {
@@ -79,13 +77,7 @@ const TableComponet = (props) => {
             align: "center",
             width: 90,
             render: (gender) => (
-                <p className="text-center">
-                    {gender === GENDER.FEMALE
-                        ? "Nữ"
-                        : gender === GENDER.MALE
-                        ? "Nam"
-                        : "Khác"}{" "}
-                </p>
+                <p>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</p>
             ),
         },
         {
@@ -94,7 +86,7 @@ const TableComponet = (props) => {
             key: "phone",
             align: "center",
             width: 130,
-            render: (phone) => <p className="text-center">{phone} </p>,
+            render: (phone) => <p>{phone} </p>,
         },
         {
             title: "Nhóm",
@@ -102,26 +94,30 @@ const TableComponet = (props) => {
             key: "team",
             align: "center",
             width: 90,
-            render: (team) => (
-                <div className="text-center">
-                    <Tag
-                        color={
-                            team === TEAM.BE
-                                ? "geekblue"
-                                : team === TEAM.FE
-                                ? "green"
-                                : "red"
-                        }
-                        className="w-full text-center"
-                    >
-                        {team === TEAM.BE
-                            ? "Back-end"
-                            : team === TEAM.FE
-                            ? "Front-end"
-                            : "Tester"}
-                    </Tag>
-                </div>
-            ),
+            render: (team) => {
+                let color, is;
+                switch (team) {
+                    case TEAM.BE:
+                        color = "geekblue";
+                        is = "Back-end";
+                        break;
+                    case TEAM.FE:
+                        color = "green";
+                        is = "Front-end";
+                        break;
+                    default:
+                        color = "red";
+                        is = "Tester";
+                        break;
+                }
+                return (
+                    <div>
+                        <Tag color={color} className="w-full text-center">
+                            {is}
+                        </Tag>
+                    </div>
+                );
+            },
         },
         {
             title: "Địa chỉ",
@@ -129,7 +125,7 @@ const TableComponet = (props) => {
             key: "address",
 
             render: (address) => {
-                const addressText = useTruncateText(address, 30);
+                const addressText = useTruncateText(address || "", 30);
                 return (
                     <span className="cursor-default" title={address}>
                         {addressText}
@@ -164,7 +160,7 @@ const TableComponet = (props) => {
                         status = "Từ chối";
                         break;
                     case PROFILE_END_REQUEST:
-                        status = "Yêu cầu kết thúc hồ sơ";
+                        status = "Gửi yêu cầu kết thúc hồ sơ";
                         break;
                     case ACCEPT_REQUEST_END_PROFILE:
                         status = "Chấp nhận yêu cầu kết thúc hồ sơ";
@@ -178,7 +174,7 @@ const TableComponet = (props) => {
                     default:
                         break;
                 }
-                const statusText = useTruncateText(status, 20);
+                const statusText = useTruncateText(status, 25);
                 return (
                     <span className="cursor-default" title={status}>
                         {statusText}
@@ -228,10 +224,7 @@ const TableComponet = (props) => {
                         <span>
                             <InfoCircleOutlined
                                 onClick={() => {
-                                    setReasonForRejection(
-                                        employee?.reasonForRefuseEndProfile ||
-                                            employee?.reasonForRejection
-                                    );
+                                    setReasonForRejection(employee);
                                     setOpenReject(true);
                                 }}
                                 className="text-orange-500 text-base"
@@ -308,7 +301,7 @@ const TableComponet = (props) => {
     return (
         <>
             <div className="flex justify-end mb-5 z-0">
-                <div className="!w-[30%]">
+                <div className="!w-[30%] absolute top-[95px]">
                     <Input
                         placeholder="Tìm kiếm ..."
                         allowClear
@@ -349,13 +342,26 @@ const TableComponet = (props) => {
                         </Button>
                     </div>
                 }
-                title="LÍ DO TỪ CHỐI"
+                title={
+                    reasonForRejection?.submitProfileStatus ===
+                    STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE
+                        ? "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC"
+                        : reasonForRejection?.submitProfileStatus ===
+                          STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE
+                        ? "LÝ DO TỪ CHỐI YÊU CẦU KẾT THÚC HỒ SƠ"
+                        : reasonForRejection?.submitProfileStatus ===
+                          STATUS_EMPLOYEE.REJECT
+                        ? "LÍ DO TỪ CHỐI"
+                        : "YÊU CẦU BỔ SUNG"
+                }
                 onCancel={() => {
                     setOpenReject(false);
                 }}
                 open={openReject}
             >
-                {reasonForRejection}
+                {reasonForRejection?.reasonForRefuseEndProfile ||
+                    reasonForRejection?.reasonForRejection ||
+                    reasonForRejection?.additionalRequestTermination}
             </Modal>
             <ModalDelete
                 handleDeleteEmployee={handleDeleteEmployee}

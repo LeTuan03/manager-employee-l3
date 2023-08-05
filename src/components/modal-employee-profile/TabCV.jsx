@@ -3,7 +3,7 @@ import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/useTruncateText";
+import useTruncateText from "../../hook/TextToTruncate";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
 
 const TabCV = () => {
@@ -24,14 +24,15 @@ const TabCV = () => {
             key: "index",
             className: "border-table",
             align: "center",
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) => <b>{index + 1}</b>,
         },
         {
             title: "Họ và tên",
             dataIndex: "name",
             key: "name",
+            align: "center",
             className: "border-table",
-            render: (name) => <p className="w-[90px]"> {name}</p>,
+            render: (name) => <p className="min-w-[90px]"> {name}</p>,
         },
         {
             title: "Ngày sinh",
@@ -39,9 +40,12 @@ const TabCV = () => {
             key: "dateOfBirth",
             className: "border-table",
             align: "center",
-            render: (dateOfBirth) =>
-                dateOfBirth &&
-                format(new Date(dateOfBirth).getTime(), "yyyy-MM-dd"),
+            render: (dateOfBirth) => (
+                <p className="min-w-[90px]">
+                    {dateOfBirth &&
+                        format(new Date(dateOfBirth).getTime(), "dd-MM-yyyy")}
+                </p>
+            ),
         },
         {
             title: "Giới tính",
@@ -49,7 +53,11 @@ const TabCV = () => {
             key: "gender",
             className: "border-table",
             align: "center",
-            render: (gender) => (gender === GENDER.FEMALE ? "Nữ" : "Nam"),
+            render: (gender) => (
+                <p className="min-w-[70px]">
+                    {gender === GENDER.FEMALE ? "Nữ" : "Nam"}
+                </p>
+            ),
         },
         {
             title: "Quan hệ",
@@ -71,7 +79,7 @@ const TabCV = () => {
                     default:
                         break;
                 }
-                return <>{relationShip}</>;
+                return <p className="min-w-[70px]">{relationShip}</p>;
             },
         },
         {
@@ -80,21 +88,25 @@ const TabCV = () => {
             key: "phoneNumber",
             className: "border-table",
             align: "center",
-            render: (phoneNumber) => <p className="w-[60px]">{phoneNumber}</p>,
+            render: (phoneNumber) => (
+                <p className="min-w-[100px]">{phoneNumber}</p>
+            ),
         },
         {
             title: "Số CCCD/CMT",
             dataIndex: "citizenIdentificationNumber",
             key: "citizenIdentificationNumber",
+            align: "center",
             className: "border-table",
             render: (citizenIdentificationNumber) => (
-                <p className="w-[60px]">{citizenIdentificationNumber}</p>
+                <p className="min-w-[100px]">{citizenIdentificationNumber}</p>
             ),
         },
         {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
+            align: "center",
             className: "border-table",
         },
     ];
@@ -107,19 +119,14 @@ const TabCV = () => {
         {
             label: "2. Nam/Nữ: ",
             span: 8,
-            value:
-                employee.gender === GENDER.MALE
-                    ? "Nam"
-                    : employee.gender === GENDER.FEMALE
-                    ? "Nữ"
-                    : "Khác",
+            value: employee.gender === GENDER.MALE ? "Nam" : "Nữ",
         },
         {
             label: "3. Ngày sinh: ",
             span: 12,
             value:
                 employee.dateOfBirth &&
-                format(new Date(employee.dateOfBirth), "dd-MM-yyy"),
+                format(new Date(employee.dateOfBirth), "dd-MM-yyyy"),
         },
         {
             label: "4. Nơi sinh: ",
@@ -139,7 +146,9 @@ const TabCV = () => {
         {
             label: "7. Ngày cấp: ",
             span: 12,
-            value: employee.dateOfIssuanceCard,
+            value:
+                employee.dateOfIssuanceCard &&
+                format(new Date(employee.dateOfIssuanceCard), "dd-MM-yyyy"),
         },
         {
             label: "8. Nơi cấp: ",
@@ -167,19 +176,7 @@ const TabCV = () => {
             value: employee.religion,
         },
     ];
-    const DataRow = ({ label, value, span }) => (
-        <Col span={span} className=" pr-4 mb-3 flex">
-            <span className="bg-white inline-flex items-center h-[25px]">
-                {label}
-            </span>
-            <div className="flex flex-shrink flex-grow h-[32px] pl-1">
-                <span className="relative z-10 pl-3 h-fit inline-block w-full ">
-                    {value}
-                    <div className="absolute w-full left-0 h-full top-[80%] dotted-border" />
-                </span>
-            </div>
-        </Col>
-    );
+
     return (
         <>
             <div
@@ -266,3 +263,17 @@ const TabCV = () => {
 };
 
 export default TabCV;
+
+const DataRow = ({ label, value, span }) => (
+    <Col span={span} className=" pr-4 mb-3 flex">
+        <span className="bg-white inline-flex items-center h-[25px]">
+            {label}
+        </span>
+        <div className="flex flex-shrink flex-grow h-[32px] pl-1">
+            <span className="relative z-10 pl-3 h-fit inline-block w-full ">
+                {value}
+                <div className="absolute w-full left-0 h-full top-[80%] dotted-border" />
+            </span>
+        </div>
+    </Col>
+);

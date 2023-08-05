@@ -9,6 +9,7 @@ import {
 } from "../../services/api";
 import { format } from "date-fns";
 import validateCodeInput from "../../hook/ValidateCodeInput";
+import TextArea from "antd/es/input/TextArea";
 
 const SendLeaderUpdateHappening = (props) => {
     const {
@@ -181,7 +182,7 @@ const SendLeaderUpdateHappening = (props) => {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <TextArea maxLength={100} showCount />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -198,6 +199,7 @@ const SendLeaderUpdateHappening = (props) => {
                                 <Button
                                     type="primary"
                                     danger
+                                    className="min-w-[100px]"
                                     onClick={() => setOpenLeader(false)}
                                 >
                                     Hủy

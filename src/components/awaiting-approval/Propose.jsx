@@ -9,7 +9,7 @@ import {
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import getDayMonthYear from "../common/getCurrentDay";
 
 export default function Propose() {
@@ -62,7 +62,7 @@ export default function Propose() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => useTruncateText(note || "", 25),
+            render: (note) => TextToTruncate(note || "", 25),
         },
         {
             title: "Nội dung",
@@ -75,7 +75,7 @@ export default function Propose() {
             key: "detailedDescription",
             dataIndex: "detailedDescription",
             render: (detailedDescription) =>
-                useTruncateText(detailedDescription || "", 25),
+                TextToTruncate(detailedDescription || "", 25),
         },
         {
             title: "Trạng thái",

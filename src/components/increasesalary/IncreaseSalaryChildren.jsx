@@ -12,7 +12,6 @@ const IncreaseSalaryChildren = ({ data }) => {
     useEffect(() => {
         handleGetEmp();
     }, [data]);
-    console.log(data);
     return (
         <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
             <div
@@ -82,8 +81,8 @@ const IncreaseSalaryChildren = ({ data }) => {
                         </Col>
                         <Col span={24}>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: wqeqew căn cứ quyết định
-                            thi hành.
+                            chính Kế toán và Ông/Bà: {empData?.name} căn cứ
+                            quyết định thi hành.
                         </Col>
                     </div>
                 </Row>

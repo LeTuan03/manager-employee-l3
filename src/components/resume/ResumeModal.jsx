@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import ModalProfile from "../modal-employee-profile/ModalProfile";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 
 export default function ResumeModal(props) {
     const {
@@ -130,7 +131,9 @@ export default function ResumeModal(props) {
                     break;
                 case "Resume":
                     if (profile.submitProfileStatus === "6") {
-                        profile.submitProfileStatus = "9";
+                        profile.additionalRequestTermination =
+                            values.additionalRequest;
+                        profile.submitProfileStatus = "8";
                     } else {
                         profile.submitProfileStatus = "4";
                     }
@@ -203,27 +206,30 @@ export default function ResumeModal(props) {
     const [form3] = Form.useForm();
     return (
         <>
-            <Button
-                className="bg-green-700 text-white min-w-[100px]"
-                onClick={() => {
-                    setEmployeeId(
-                        type === "Resume" ? profile?.id : profile?.employeeId
-                    );
-                    dispatch(
-                        getEmployee(
+            {profile.submitProfileStatus !== STATUS_EMPLOYEE.PENDING && (
+                <Button
+                    className="bg-green-700 text-white min-w-[100px] hover:!text-white hover:!border-0"
+                    onClick={() => {
+                        setEmployeeId(
                             type === "Resume"
                                 ? profile?.id
                                 : profile?.employeeId
-                        )
-                    );
-                    dispatch(setOpen({ ...open, modalProfile: true }));
-                }}
-            >
-                Xem hồ sơ
-            </Button>
-
+                        );
+                        dispatch(
+                            getEmployee(
+                                type === "Resume"
+                                    ? profile?.id
+                                    : profile?.employeeId
+                            )
+                        );
+                        dispatch(setOpen({ ...open, modalProfile: true }));
+                    }}
+                >
+                    Xem hồ sơ
+                </Button>
+            )}
             <Button
-                className="bg-green-700 text-white min-w-[100px]"
+                className="bg-green-700 text-white min-w-[100px] hover:!text-white hover:!border-0"
                 onClick={() => setIsApproveOpen(true)}
             >
                 Phê duyệt
@@ -288,20 +294,20 @@ export default function ResumeModal(props) {
                         </Checkbox>
                         <Form.Item className="text-center mt-8">
                             <Button
+                                className="mr-2 min-w-[100px]"
+                                key="submit"
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                Xác nhận
+                            </Button>
+                            <Button
                                 className="min-w-[100px]"
                                 type="primary"
                                 danger
                                 onClick={() => setIsApproveOpen(false)}
                             >
                                 Hủy
-                            </Button>
-                            <Button
-                                className="ml-2 min-w-[100px]"
-                                key="submit"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
                             </Button>
                         </Form.Item>
                     </Form>
@@ -343,6 +349,13 @@ export default function ResumeModal(props) {
                         </Form.Item>
                         <Form.Item className="text-center">
                             <Button
+                                className="min-w-[100px] mr-2"
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                Xác nhận
+                            </Button>{" "}
+                            <Button
                                 className="min-w-[100px]"
                                 type="primary"
                                 danger
@@ -352,13 +365,6 @@ export default function ResumeModal(props) {
                                 }}
                             >
                                 Hủy
-                            </Button>
-                            <Button
-                                className="min-w-[100px] ml-2"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
                             </Button>
                         </Form.Item>
                     </Form>
@@ -421,6 +427,14 @@ export default function ResumeModal(props) {
                         </Form.Item>
                         <Form.Item className="text-center mt-8">
                             <Button
+                                className="min-w-[100px] mr-2"
+                                key="submit"
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                Xác nhận
+                            </Button>
+                            <Button
                                 className="min-w-[100px]"
                                 key="cancel"
                                 type="primary"
@@ -431,14 +445,6 @@ export default function ResumeModal(props) {
                                 }}
                             >
                                 Hủy
-                            </Button>
-                            <Button
-                                className="min-w-[100px] ml-2"
-                                key="submit"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
                             </Button>
                         </Form.Item>
                     </Form>

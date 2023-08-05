@@ -1,5 +1,15 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
+import {
+    Button,
+    Col,
+    ConfigProvider,
+    Form,
+    Input,
+    Row,
+    Select,
+    Table,
+    message,
+} from "antd";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import {
@@ -9,7 +19,7 @@ import {
 } from "../../services/api";
 import RecomnentModal from "./RecomnentModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
@@ -88,7 +98,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => useTruncateText(note || "", 30),
+            render: (note) => TextToTruncate(note || "", 30),
         },
 
         {
@@ -96,7 +106,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             dataIndex: "detailedDescription",
             key: "detailedDescription",
             render: (detailedDescription) =>
-                useTruncateText(detailedDescription || "", 30),
+                TextToTruncate(detailedDescription || "", 30),
         },
         {
             title: "Trạng thái",
@@ -136,10 +146,11 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                         break;
                     case 9:
                         proposalStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                        break;
                     default:
                         break;
                 }
-                return useTruncateText(proposalStatus || "", 13);
+                return TextToTruncate(proposalStatus || "", 13);
             },
         },
         {
@@ -377,7 +388,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                         <Form.Item label=" ">
                             <Button
                                 type="primary"
-                                className="w-full bg-green-600 text-white hover:!text-white"
+                                className="w-full"
                                 htmlType="submit"
                             >
                                 Lưu
@@ -400,11 +411,15 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             </Form>
             <Row className="mt-8">
                 <Col span={24}>
-                    <Table
-                        columns={columns}
-                        dataSource={recoments}
-                        pagination={false}
-                    />
+                    <div className="main-table">
+                        <ConfigProvider renderEmpty={() => <></>}>
+                            <Table
+                                columns={columns}
+                                dataSource={recoments}
+                                pagination={false}
+                            />
+                        </ConfigProvider>
+                    </div>
                 </Col>
             </Row>
             <RecomnentModal

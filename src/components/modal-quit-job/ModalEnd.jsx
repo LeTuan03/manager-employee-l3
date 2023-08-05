@@ -36,16 +36,6 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center">
                         <Button
                             type="primary"
-                            danger
-                            onClick={() => {
-                                dispatch(setOpen({ ...open, modalEnd: false }));
-                                setReasonForEnding("");
-                            }}
-                        >
-                            Hủy
-                        </Button>
-                        <Button
-                            type="primary"
                             onClick={() => {
                                 if (reasonForEnding) {
                                     dispatch(
@@ -60,6 +50,17 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                             }}
                         >
                             Trình lãnh đạo
+                        </Button>
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                dispatch(setOpen({ ...open, modalEnd: false }));
+                                setReasonForEnding("");
+                            }}
+                        >
+                            Hủy
                         </Button>
                     </div>
                 }

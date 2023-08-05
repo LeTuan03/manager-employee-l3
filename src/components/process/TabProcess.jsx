@@ -1,5 +1,15 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row, Select, Table, message } from "antd";
+import {
+    Button,
+    Col,
+    ConfigProvider,
+    Form,
+    Input,
+    Row,
+    Select,
+    Table,
+    message,
+} from "antd";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import {
@@ -9,12 +19,25 @@ import {
 } from "../../services/api";
 import ProcessModal from "./ProcessModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
+    const {
+        SUBMIT_FILE_SAVE,
+        NEW_SAVE,
+        PENDING,
+        BEEN_APPEOVED,
+        ADDITIONAL_REQUIREMENTS,
+        REJECT,
+        PROFILE_END_REQUEST,
+        ACCEPT_REQUEST_END_PROFILE,
+        ADDITIONAL_REQUIREMENTS_END_PROFILE,
+        REJECT_REQUEST_END_PROFILE,
+    } = STATUS_EMPLOYEE;
     const [form] = Form.useForm();
     const { open } = useSelector((state) => state.employee);
     useEffect(() => {
@@ -113,7 +136,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => useTruncateText(note || "", 40),
+            render: (note) => TextToTruncate(note || "", 40),
         },
         {
             title: "Trạng thái",
@@ -123,40 +146,41 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             align: "center",
             render: (processStatus) => {
                 switch (processStatus) {
-                    case "0":
+                    case SUBMIT_FILE_SAVE:
                         processStatus = "Nộp lưu hồ sơ";
                         break;
-                    case "1":
+                    case NEW_SAVE:
                         processStatus = "Lưu mới";
                         break;
-                    case "2":
+                    case PENDING:
                         processStatus = "Chờ xử lí";
                         break;
-                    case "3":
+                    case BEEN_APPEOVED:
                         processStatus = "Đã được chấp nhận";
                         break;
-                    case "4":
+                    case ADDITIONAL_REQUIREMENTS:
                         processStatus = "Yêu cầu bổ sung";
                         break;
-                    case "5":
+                    case REJECT:
                         processStatus = "Từ chối";
                         break;
-                    case "6":
+                    case PROFILE_END_REQUEST:
                         processStatus = "Gửi yêu cầu kết thúc hồ sơ";
                         break;
-                    case "7":
+                    case ACCEPT_REQUEST_END_PROFILE:
                         processStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
                         break;
-                    case "8":
+                    case ADDITIONAL_REQUIREMENTS_END_PROFILE:
                         processStatus =
-                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
+                            "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
                         break;
-                    case "9":
+                    case REJECT_REQUEST_END_PROFILE:
                         processStatus = "Từ chối yêu cầu kết thúc hồ sơ";
+                        break;
                     default:
                         break;
                 }
-                return useTruncateText(processStatus || "", 13);
+                return TextToTruncate(processStatus || "", 13);
             },
         },
         {
@@ -346,7 +370,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
-                                className="w-full bg-green-600 text-white hover:!text-white"
+                                className="w-full"
                                 type="primary"
                                 htmlType="submit"
                             >
@@ -370,11 +394,15 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             </Form>
             <Row className="mt-8">
                 <Col span={24}>
-                    <Table
-                        columns={columns}
-                        dataSource={processs}
-                        pagination={false}
-                    />
+                    <div className="main-table">
+                        <ConfigProvider renderEmpty={() => <></>}>
+                            <Table
+                                columns={columns}
+                                dataSource={processs}
+                                pagination={false}
+                            />
+                        </ConfigProvider>
+                    </div>
                 </Col>
             </Row>
             <ProcessModal

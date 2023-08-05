@@ -9,7 +9,7 @@ import {
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import getDayMonthYear from "../common/getCurrentDay";
 
 export default function IncreaseSalary() {
@@ -76,13 +76,13 @@ export default function IncreaseSalary() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => useTruncateText(note || "", 25),
+            render: (note) => TextToTruncate(note || "", 25),
         },
         {
             title: "Lý do",
             key: "reason",
             dataIndex: "reason",
-            render: (reason) => useTruncateText(reason || "", 25),
+            render: (reason) => TextToTruncate(reason || "", 25),
         },
         {
             title: "Trạng thái",
@@ -268,7 +268,7 @@ const IncreaseTab = ({ profile }) => {
                         <div>
                             <b> Điều 1: </b> Kể từ ngày:{" "}
                             {data?.startDate &&
-                                format(data?.startDate, "yyyy/MM/dd")}{" "}
+                                format(data?.startDate, "dd/MM/yyyy")}{" "}
                             , mức lương của Ông/Bà: {emp.name} sẽ là:{" "}
                             {data.newSalary} đ.
                         </div>

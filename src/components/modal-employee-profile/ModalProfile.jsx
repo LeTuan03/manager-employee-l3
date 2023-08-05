@@ -14,6 +14,7 @@ const {
     REJECT,
     ACCEPT_REQUEST_END_PROFILE,
     REJECT_REQUEST_END_PROFILE,
+    ADDITIONAL_REQUIREMENTS_END_PROFILE,
 } = STATUS_EMPLOYEE;
 const ModalProfile = ({ employeeId, setEmployeeId }) => {
     const dispatch = useDispatch();
@@ -120,20 +121,23 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                                     Nộp lưu hồ sơ
                                 </Button>
                             )}
-                        {employee?.submitProfileStatus ===
-                            REJECT_REQUEST_END_PROFILE && (
-                            <Button
-                                className="min-w-[100px]"
-                                danger
-                                onClick={() => {
-                                    dispatch(
-                                        setOpen({ ...open, modalEnd: true })
-                                    );
-                                }}
-                            >
-                                Kết thúc
-                            </Button>
-                        )}
+                        {[
+                            REJECT_REQUEST_END_PROFILE,
+                            ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                        ].includes(employee?.submitProfileStatus) &&
+                            role !== ROLE.MANAGE && (
+                                <Button
+                                    className="min-w-[100px]"
+                                    type="primary"
+                                    onClick={() => {
+                                        dispatch(
+                                            setOpen({ ...open, modalEnd: true })
+                                        );
+                                    }}
+                                >
+                                    Kết thúc
+                                </Button>
+                            )}
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (

@@ -443,7 +443,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         span={24}
                     >
                         <Button
-                            className="bg-green-600 text-white hover:!text-white"
                             loading={loading}
                             type="primary"
                             htmlType="submit"

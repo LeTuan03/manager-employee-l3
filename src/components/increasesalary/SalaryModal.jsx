@@ -68,6 +68,7 @@ const SalaryModal = ({
                 openLeader={openLeader}
                 setOpenLeader={setOpenLeader}
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
+                setIsModalOpen={setIsModalOpen}
             />
         </>
     );

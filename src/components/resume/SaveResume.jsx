@@ -22,7 +22,7 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
 
     const onFinish = async (values) => {
         try {
-            profile.decisionDay = format(values.decisionDay.$d, "yyyy-MM-dd");
+            profile.decisionDay = values.decisionDay;
             profile.numberSaved = values.numberSaved;
             profile.submitProfileStatus = "0";
             await submitAndSaveResume(profile);
@@ -52,7 +52,11 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
             const testString = `NL${new Date()
                 .getFullYear()
                 .toString()
-                .slice(-2)}${profile.code.slice(-3)}`;
+                .slice(-2)}${
+                new Date().getMonth() + 1 < 10
+                    ? "0" + (new Date().getMonth() + 1)
+                    : new Date().getMonth() + 1
+            }${profile?.code?.slice(-3)}`;
             if (regexPattern.test(testString)) {
                 return Promise.resolve();
             } else {
@@ -61,7 +65,11 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                         `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${new Date()
                             .getFullYear()
                             .toString()
-                            .slice(-2)}${profile?.code?.slice(-3)}`
+                            .slice(-2)}${
+                            new Date().getMonth() + 1 < 10
+                                ? "0" + (new Date().getMonth() + 1)
+                                : new Date().getMonth() + 1
+                        }${profile?.code?.slice(-3)}`
                     )
                 );
             }
@@ -127,7 +135,11 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                     />
                 </Form.Item>
                 <Form.Item className="text-center">
+                    <Button htmlType="submit" type="primary">
+                        Xác nhận
+                    </Button>
                     <Button
+                        className="ml-2 min-w-[100px]"
                         type="primary"
                         danger
                         onClick={() =>
@@ -135,9 +147,6 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
                         }
                     >
                         Hủy
-                    </Button>
-                    <Button htmlType="submit" type="primary" className="ml-2">
-                        Xác nhận
                     </Button>
                 </Form.Item>
             </Form>

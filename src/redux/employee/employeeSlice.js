@@ -10,6 +10,7 @@ const initialState = {
         modalProfile: false,
         modalEnd: false,
         modalSendLeader: false,
+        modalSendLeaderUpdateHappening: false,
         modalUpdateHappening: false,
         modalResume: false,
     },

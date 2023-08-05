@@ -56,7 +56,7 @@ tr.ant-table-row:last-child > td {
 }
 
 .font * {
-    font-family: inherit;
+    font-family: "Tinos";
     font-size: medium;
 }
 .ant-modal-header {
@@ -110,7 +110,12 @@ tr.ant-table-row:last-child > td {
 .word {
     font-family: "Playfair Display", serif !important;
 }
-
+.ant-tabs-nav {
+    min-width: 12% !important;
+}
+.ant-tabs-tab {
+    padding-left: 0 !important;
+}
 /* tablet  */
 @media only screen and (max-width: 1024px) {
     .ant-tabs {

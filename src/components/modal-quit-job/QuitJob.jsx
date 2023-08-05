@@ -1,4 +1,4 @@
-import { Col, Input, Row } from "antd";
+import { Col, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
     };
     useEffect(() => {
         getTodayDate();
-    }, []);
+    }, [reasonForEnding]);
     return (
         <div
             className="font"

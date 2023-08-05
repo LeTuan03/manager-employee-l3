@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     AppstoreAddOutlined,
     AppstoreOutlined,
@@ -10,6 +10,7 @@ import {
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ROLE } from "../../constants/constants";
 function getItem(label, key, icon, children, type) {
     return {
         key,
@@ -76,6 +77,17 @@ const itemManage = [
 ];
 const MenuComponent = ({ collapsed }) => {
     const { role } = useSelector((state) => state.account);
+    let items = [];
+    switch (role) {
+        case ROLE.MANAGE:
+            items = itemManage;
+            break;
+        case ROLE.USER:
+            items = itemUser;
+            break;
+        default:
+            items = itemAdmin;
+    }
     return (
         <>
             <div className="w-full">
@@ -84,13 +96,7 @@ const MenuComponent = ({ collapsed }) => {
                     theme="dark"
                     className="text-white h-screen"
                     inlineCollapsed={collapsed}
-                    items={
-                        role === 3
-                            ? itemAdmin
-                            : role === 5
-                            ? itemManage
-                            : itemUser
-                    }
+                    items={items}
                 />
             </div>
         </>

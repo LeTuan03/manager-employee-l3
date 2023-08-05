@@ -9,8 +9,9 @@ import {
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/useTruncateText";
+import TextToTruncate from "../../hook/TextToTruncate";
 import getDayMonthYear from "../common/getCurrentDay";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 
 export default function Promote() {
     const { role } = useSelector((state) => state.account);
@@ -104,7 +105,7 @@ export default function Promote() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => useTruncateText(note || "", 40),
+            render: (note) => TextToTruncate(note || "", 40),
         },
         {
             title: "Trạng thái",
@@ -114,25 +115,25 @@ export default function Promote() {
             width: 200,
             render: (_, status, index) => {
                 switch (status.processStatus) {
-                    case "0":
+                    case STATUS_EMPLOYEE.SUBMIT_FILE_SAVE:
                         return "Nộp lưu hồ sơ";
-                    case "1":
+                    case STATUS_EMPLOYEE.NEW_SAVE:
                         return "Lưu mới";
-                    case "2":
+                    case STATUS_EMPLOYEE.PENDING:
                         return "Chờ xử lí";
-                    case "3":
+                    case STATUS_EMPLOYEE.BEEN_APPEOVED:
                         return "Đã được chấp nhận";
-                    case "4":
+                    case STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS:
                         return "Yêu cầu bổ sung";
-                    case "5":
+                    case STATUS_EMPLOYEE.REJECT:
                         return "Từ chối";
-                    case "6":
+                    case STATUS_EMPLOYEE.PROFILE_END_REQUEST:
                         return "Yêu cầu kết thúc hồ sơ";
-                    case "7":
+                    case STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE:
                         return "Chấp nhận yêu cầu kết thúc hồ sơ";
-                    case "8":
+                    case STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE:
                         return "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
-                    case "9":
+                    case STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE:
                         return "Từ chối yêu cầu kết thúc hồ sơ";
                     default:
                         break;

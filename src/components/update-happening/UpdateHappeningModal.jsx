@@ -99,7 +99,11 @@ export default function UpdateHappeningModal({ employeeId }) {
         <>
             <Modal
                 zIndex={3}
-                title={<p className="sticky top-0 z-10">CẬP NHẬT DIỄN BIẾN</p>}
+                title={
+                    <p className="fixed top-0 z-10 py-2 w-[80%] bg-white">
+                        CẬP NHẬT DIỄN BIẾN
+                    </p>
+                }
                 centered
                 open={open.modalUpdateHappening}
                 width="84%"
@@ -145,7 +149,7 @@ export default function UpdateHappeningModal({ employeeId }) {
                     </div>
                 }
             >
-                <div className="h-full overflow-y-scroll happening-scroll">
+                <div className="h-full overflow-y-scroll happening-scroll mt-5">
                     <Row className="mt-7">
                         <Col span={8} className="flex flex-col items-center">
                             <Image

@@ -141,6 +141,16 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center">
                         <Button
                             type="primary"
+                            loading={loading}
+                            onClick={() => {
+                                form.submit();
+                            }}
+                        >
+                            Trình lãnh đạo
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="min-w-[100px]"
                             danger
                             onClick={() => {
                                 dispatch(
@@ -151,15 +161,6 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                             }}
                         >
                             Hủy
-                        </Button>
-                        <Button
-                            type="primary"
-                            loading={loading}
-                            onClick={() => {
-                                form.submit();
-                            }}
-                        >
-                            Trình lãnh đạo
                         </Button>
                     </div>
                 }

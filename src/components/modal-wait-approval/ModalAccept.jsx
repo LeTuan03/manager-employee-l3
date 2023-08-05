@@ -1,8 +1,7 @@
-import { Button, Checkbox, DatePicker,Form, Modal, Space, message } from "antd";
+import { Button, Checkbox, DatePicker, Form, Modal, message } from "antd";
 import { format } from "date-fns";
 import React from "react";
 import { acceptEmployee } from "../../services/api";
-
 
 export default function ModalAccept({
     isApproveOpen,

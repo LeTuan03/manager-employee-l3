@@ -54,9 +54,9 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
         return (
             <div className="w-full flex justify-center gap-2">
                 <Button
-                    className="min-w-[100px] bg-green-600 text-white hover:!text-white"
+                    className="min-w-[100px]"
                     loading={loading}
-                    type="link"
+                    type="primary"
                     onClick={() => {
                         form.submit();
                     }}
