@@ -24,19 +24,15 @@ import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
+import StringStatus from "../common/StringStatus";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     const {
-        SUBMIT_FILE_SAVE,
         NEW_SAVE,
         PENDING,
         BEEN_APPEOVED,
         ADDITIONAL_REQUIREMENTS,
         REJECT,
-        PROFILE_END_REQUEST,
-        ACCEPT_REQUEST_END_PROFILE,
-        ADDITIONAL_REQUIREMENTS_END_PROFILE,
-        REJECT_REQUEST_END_PROFILE,
     } = STATUS_EMPLOYEE;
     const [form] = Form.useForm();
     const { open } = useSelector((state) => state.employee);
@@ -97,7 +93,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             width: 150,
             align: "center",
             render: (_, { promotionDay }) =>
-                format(new Date(promotionDay).getTime(), "yyyy/MM/dd"),
+                format(new Date(promotionDay).getTime(), "dd/MM/yyyy"),
         },
         {
             title: "Lần thứ",
@@ -112,12 +108,16 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             key: "currentPosition",
             width: 140,
             align: "center",
-            render: (currentPosition) =>
-                currentPosition === 0
-                    ? "Giám đốc"
-                    : currentPosition === 1
-                    ? "Trưởng phòng"
-                    : "Quản lí",
+            render: (currentPosition) => {
+                switch (currentPosition) {
+                    case 0:
+                        return "Giám đốc";
+                    case 1:
+                        return "Trưởng phòng";
+                    default:
+                        return "Quản lí";
+                }
+            },
         },
         {
             title: "Chức vụ hiện tại",
@@ -125,12 +125,16 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             key: "newPosition",
             width: 140,
             align: "center",
-            render: (newPosition) =>
-                newPosition === 0
-                    ? "Giám đốc"
-                    : newPosition === 1
-                    ? "Trưởng phòng"
-                    : "Quản lí",
+            render: (newPosition) => {
+                switch (newPosition) {
+                    case 0:
+                        return "Giám đốc";
+                    case 1:
+                        return "Trưởng phòng";
+                    default:
+                        return "Quản lí";
+                }
+            },
         },
         {
             title: "Ghi chú",
@@ -145,42 +149,15 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             width: 190,
             align: "center",
             render: (processStatus) => {
-                switch (processStatus) {
-                    case SUBMIT_FILE_SAVE:
-                        processStatus = "Nộp lưu hồ sơ";
-                        break;
-                    case NEW_SAVE:
-                        processStatus = "Lưu mới";
-                        break;
-                    case PENDING:
-                        processStatus = "Chờ xử lí";
-                        break;
-                    case BEEN_APPEOVED:
-                        processStatus = "Đã được chấp nhận";
-                        break;
-                    case ADDITIONAL_REQUIREMENTS:
-                        processStatus = "Yêu cầu bổ sung";
-                        break;
-                    case REJECT:
-                        processStatus = "Từ chối";
-                        break;
-                    case PROFILE_END_REQUEST:
-                        processStatus = "Gửi yêu cầu kết thúc hồ sơ";
-                        break;
-                    case ACCEPT_REQUEST_END_PROFILE:
-                        processStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
-                        break;
-                    case ADDITIONAL_REQUIREMENTS_END_PROFILE:
-                        processStatus =
-                            "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
-                        break;
-                    case REJECT_REQUEST_END_PROFILE:
-                        processStatus = "Từ chối yêu cầu kết thúc hồ sơ";
-                        break;
-                    default:
-                        break;
-                }
-                return TextToTruncate(processStatus || "", 13);
+                const statusText = TextToTruncate(
+                    StringStatus(processStatus),
+                    13
+                );
+                return (
+                    <span className="cursor-default" title={processStatus}>
+                        {statusText}
+                    </span>
+                );
             },
         },
         {
@@ -191,7 +168,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             align: "center",
             render: (_, employee) => (
                 <div>
-                    {employee.processStatus === "1" && (
+                    {employee.processStatus === NEW_SAVE && (
                         <div>
                             <span>
                                 <EditOutlined
@@ -219,7 +196,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             </span>
                         </div>
                     )}
-                    {employee.processStatus === "2" && (
+                    {employee.processStatus === PENDING && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -230,7 +207,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             />
                         </div>
                     )}
-                    {employee.processStatus === "3" && (
+                    {employee.processStatus === BEEN_APPEOVED && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -241,7 +218,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             />
                         </div>
                     )}
-                    {employee.processStatus === "4" && (
+                    {employee.processStatus === ADDITIONAL_REQUIREMENTS && (
                         <div>
                             <ModalInfo type="req" message={employee} />
                             <span>
@@ -261,7 +238,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             </span>
                         </div>
                     )}
-                    {employee.processStatus === "5" && (
+                    {employee.processStatus === REJECT && (
                         <div>
                             <ModalInfo message={employee} />
                             <span>

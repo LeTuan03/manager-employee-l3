@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Modal, Tabs } from "antd";
-import IncreaseSalaryChildren from "./IncreaseSalaryChildren";
+import IncreaseTab from "./IncreaseSalaryChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
 const SalaryModal = ({
@@ -14,7 +14,7 @@ const SalaryModal = ({
         {
             key: "1",
             label: `TĂNG LƯƠNG`,
-            children: <IncreaseSalaryChildren data={data} />,
+            children: <IncreaseTab profile={data} />,
         },
     ];
 
@@ -55,6 +55,7 @@ const SalaryModal = ({
             >
                 <div className="mt-10">
                     <Tabs
+                        style={{ height: 600, overflowY: "scroll" }}
                         defaultActiveKey="1"
                         items={items}
                         tabPosition={"left"}

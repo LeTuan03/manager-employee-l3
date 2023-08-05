@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Button, Input, Modal, Table, Tag } from "antd";
-import useTruncateText from "../hook/TextToTruncate";
+import { Button, Modal, Table, Tag } from "antd";
+import TextToTruncate from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
     EditOutlined,
     EyeOutlined,
     InfoCircleOutlined,
-    SearchOutlined,
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
@@ -20,6 +19,7 @@ import {
     TEAM,
 } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
+import StringStatus from "./common/StringStatus";
 const TableComponet = (props) => {
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);
@@ -58,7 +58,7 @@ const TableComponet = (props) => {
             dataIndex: "name",
             key: "name",
             width: 200,
-            render: (name) => useTruncateText(name, 22),
+            render: (name) => TextToTruncate(name, 22),
         },
         {
             title: "Ngày sinh",
@@ -125,7 +125,7 @@ const TableComponet = (props) => {
             key: "address",
 
             render: (address) => {
-                const addressText = useTruncateText(address || "", 30);
+                const addressText = TextToTruncate(address || "", 30);
                 return (
                     <span className="cursor-default" title={address}>
                         {addressText}
@@ -140,41 +140,7 @@ const TableComponet = (props) => {
             width: 200,
             align: "center",
             render: (status) => {
-                switch (status) {
-                    case SUBMIT_FILE_SAVE:
-                        status = "Nộp lưu hồ sơ";
-                        break;
-                    case NEW_SAVE:
-                        status = "Lưu mới";
-                        break;
-                    case PENDING:
-                        status = "Chờ xử lí";
-                        break;
-                    case BEEN_APPEOVED:
-                        status = "Đã được chấp nhận";
-                        break;
-                    case ADDITIONAL_REQUIREMENTS:
-                        status = "Yêu cầu bổ sung";
-                        break;
-                    case REJECT:
-                        status = "Từ chối";
-                        break;
-                    case PROFILE_END_REQUEST:
-                        status = "Gửi yêu cầu kết thúc hồ sơ";
-                        break;
-                    case ACCEPT_REQUEST_END_PROFILE:
-                        status = "Chấp nhận yêu cầu kết thúc hồ sơ";
-                        break;
-                    case ADDITIONAL_REQUIREMENTS_END_PROFILE:
-                        status = "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
-                        break;
-                    case REJECT_REQUEST_END_PROFILE:
-                        status = "Từ chối yêu cầu kết thúc hồ sơ";
-                        break;
-                    default:
-                        break;
-                }
-                const statusText = useTruncateText(status, 25);
+                const statusText = TextToTruncate(StringStatus(status), 25);
                 return (
                     <span className="cursor-default" title={status}>
                         {statusText}
@@ -200,21 +166,7 @@ const TableComponet = (props) => {
                             <DeleteOutlined className="text-red-600 text-lg" />
                         </span>
                     )}
-                    {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
-                        employee.submitProfileStatus
-                    ) && (
-                        <span
-                            onClick={() => {
-                                dispatch(
-                                    setOpen({ ...open, modalInput: true })
-                                );
-                                setEmployeeId(employee.id);
-                            }}
-                            className="cursor-pointer"
-                        >
-                            <EditOutlined className="text-blue-600 text-lg" />
-                        </span>
-                    )}
+
                     {[
                         REJECT_REQUEST_END_PROFILE,
                         ADDITIONAL_REQUIREMENTS_END_PROFILE,
@@ -283,6 +235,21 @@ const TableComponet = (props) => {
                             }}
                         />
                     )}
+                    {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                        employee.submitProfileStatus
+                    ) && (
+                        <span
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalInput: true })
+                                );
+                                setEmployeeId(employee.id);
+                            }}
+                            className="cursor-pointer"
+                        >
+                            <EditOutlined className="text-blue-600 text-lg" />
+                        </span>
+                    )}
                 </div>
             ),
         },
@@ -297,20 +264,8 @@ const TableComponet = (props) => {
             );
         }
     };
-    const onSearch = (value) => console.log(value.target.value);
     return (
         <>
-            <div className="flex justify-end mb-5 z-0">
-                <div className="!w-[30%] absolute top-[95px]">
-                    <Input
-                        placeholder="Tìm kiếm ..."
-                        allowClear
-                        addonAfter={<SearchOutlined />}
-                        size="large"
-                        onChange={onSearch}
-                    />
-                </div>
-            </div>
             <div className="main-table">
                 <Table
                     scroll={{ x: true }}
@@ -342,18 +297,7 @@ const TableComponet = (props) => {
                         </Button>
                     </div>
                 }
-                title={
-                    reasonForRejection?.submitProfileStatus ===
-                    STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE
-                        ? "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC"
-                        : reasonForRejection?.submitProfileStatus ===
-                          STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE
-                        ? "LÝ DO TỪ CHỐI YÊU CẦU KẾT THÚC HỒ SƠ"
-                        : reasonForRejection?.submitProfileStatus ===
-                          STATUS_EMPLOYEE.REJECT
-                        ? "LÍ DO TỪ CHỐI"
-                        : "YÊU CẦU BỔ SUNG"
-                }
+                title={getModalTitle(reasonForRejection?.submitProfileStatus)}
                 onCancel={() => {
                     setOpenReject(false);
                 }}
@@ -374,3 +318,16 @@ const TableComponet = (props) => {
 };
 
 export default TableComponet;
+
+const getModalTitle = (submitProfileStatus) => {
+    switch (submitProfileStatus) {
+        case STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE:
+            return "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC";
+        case STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE:
+            return "LÝ DO TỪ CHỐI YÊU CẦU KẾT THÚC HỒ SƠ";
+        case STATUS_EMPLOYEE.REJECT:
+            return "LÍ DO TỪ CHỐI";
+        default:
+            return "YÊU CẦU BỔ SUNG";
+    }
+};

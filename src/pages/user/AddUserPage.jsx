@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import ModalInput from "../../components/modal-add-new/ModalInput";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import ModalEnd from "../../components/modal-quit-job/ModalEnd";
 import SendLeader from "../../components/modal-send-leader/SendLeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import {
 } from "../../redux/employee/employeeSlice";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const AddUserPage = () => {
@@ -32,17 +33,30 @@ const AddUserPage = () => {
             dispatch(getEmployee(employeeId));
         }
     }, [employeeId]);
+
+    const onSearch = (value) => console.log(value.target.value);
     return (
         <>
-            <Button
-                type="primary"
-                onClick={() => {
-                    dispatch(setOpen({ ...open, modalInput: true }));
-                    dispatch(resetEmployee());
-                }}
-            >
-                Thêm mới
-            </Button>
+            <div className="flex justify-between align-baseline mb-5 z-0">
+                <Button
+                    size="large"
+                    type="primary"
+                    onClick={() => {
+                        dispatch(setOpen({ ...open, modalInput: true }));
+                        dispatch(resetEmployee());
+                    }}
+                >
+                    Thêm mới
+                </Button>
+                <Input
+                    className="w-[30%]"
+                    placeholder="Tìm kiếm ..."
+                    allowClear
+                    addonAfter={<SearchOutlined />}
+                    size="large"
+                    onSearch={onSearch}
+                />
+            </div>
             <ModalInput
                 setEmployeeId={setEmployeeId}
                 employeeId={employeeId}

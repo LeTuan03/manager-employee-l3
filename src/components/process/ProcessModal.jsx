@@ -1,6 +1,6 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
-import ProcessChildren from "./ProcessChildren";
+import PromoteTab from "./ProcessChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
 const ProcessModal = ({
@@ -14,7 +14,7 @@ const ProcessModal = ({
         {
             key: "1",
             label: `THĂNG CHỨC`,
-            children: <ProcessChildren data={data} />,
+            children: <PromoteTab profile={data} />,
         },
     ];
     const [openLeader, setOpenLeader] = useState("");
@@ -54,6 +54,7 @@ const ProcessModal = ({
             >
                 <div className="mt-10">
                     <Tabs
+                        style={{ height: 600, overflowY: "scroll" }}
                         defaultActiveKey="1"
                         items={items}
                         tabPosition={"left"}

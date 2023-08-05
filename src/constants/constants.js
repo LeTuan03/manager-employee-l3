@@ -6,9 +6,9 @@ export const GENDER = {
     FEMALE: 1,
 };
 export const TEAM = {
-    FE: 0,
-    BE: 1,
-    TESTER: 2,
+    FE: 1,
+    BE: 2,
+    TESTER: 3,
 };
 export const STATUS_EMPLOYEE = {
     SUBMIT_FILE_SAVE: "0",

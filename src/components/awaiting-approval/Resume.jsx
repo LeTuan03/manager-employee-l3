@@ -3,18 +3,14 @@ import { searchEmployee } from "../../services/api";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, Result, Table, Tabs, Tag } from "antd";
-import {
-    DeleteOutlined,
-    EditOutlined,
-    EyeOutlined,
-    SmileOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import TextToTruncate from "../../hook/TextToTruncate";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
-import { GENDER, ROLE, STATUS_EMPLOYEE, TEAM } from "../../constants/constants";
-import { getEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import { GENDER, STATUS_EMPLOYEE, TEAM } from "../../constants/constants";
+import { getEmployee } from "../../redux/employee/employeeSlice";
 import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
+import StringStatus from "../common/StringStatus";
 
 export default function Resume() {
     const dispatch = useDispatch();
@@ -26,17 +22,15 @@ export default function Resume() {
     const [listEmployee, setListEmployee] = useState([]);
     const [loading, setLoading] = useState(false);
     const [activeKey, setActiveKey] = useState("1");
-
     const [threeInfo, setThreeInfo] = useState({
         knowledge: employee?.knowledge || "",
         skill: employee?.skill || "",
         activity: employee?.activity || "",
     });
+    const { PENDING, PROFILE_END_REQUEST } = STATUS_EMPLOYEE;
     const getAllEmployee = async () => {
         setLoading(true);
-        const res = await searchEmployee(
-            `${STATUS_EMPLOYEE.PENDING},${STATUS_EMPLOYEE.PROFILE_END_REQUEST}`
-        );
+        const res = await searchEmployee(`${PENDING},${PROFILE_END_REQUEST}`);
         if (res?.status === 200) {
             setListEmployee(res?.data?.data);
             setLoading(false);
@@ -135,55 +129,12 @@ export default function Resume() {
             width: 200,
             align: "center",
             render: (status) => {
-                switch (status) {
-                    case "0":
-                        return <p>{TextToTruncate("Nộp lưu hồ sơ", 30)}</p>;
-                    case "1":
-                        return <p>{TextToTruncate("Lưu mới", 30)}</p>;
-                    case "2":
-                        return <p>{TextToTruncate("Chờ xử lí", 30)}</p>;
-                    case "3":
-                        return <p>{TextToTruncate("Đã được chấp nhận", 30)}</p>;
-                    case "4":
-                        return <p>{TextToTruncate("Yêu cầu bổ sung", 30)}</p>;
-                    case "5":
-                        return <p>{TextToTruncate("Từ chối", 30)}</p>;
-                    case "6":
-                        return (
-                            <p>
-                                {TextToTruncate("Yêu cầu kết thúc hồ sơ", 30)}
-                            </p>
-                        );
-                    case "7":
-                        return (
-                            <p>
-                                {TextToTruncate(
-                                    "Chấp nhận yêu cầu kết thúc hồ sơ",
-                                    30
-                                )}
-                            </p>
-                        );
-                    case "8":
-                        return (
-                            <p>
-                                {TextToTruncate(
-                                    "Yêu cầu bổ sung vào đơn kết thúc hồ sơ",
-                                    30
-                                )}
-                            </p>
-                        );
-                    case "9":
-                        return (
-                            <p>
-                                {TextToTruncate(
-                                    "Từ chối yêu cầu kết thúc hồ sơ",
-                                    30
-                                )}
-                            </p>
-                        );
-                    default:
-                        break;
-                }
+                const statusText = TextToTruncate(StringStatus(status), 25);
+                return (
+                    <span className="cursor-default" title={status}>
+                        {statusText}
+                    </span>
+                );
             },
         },
         {
@@ -193,39 +144,17 @@ export default function Resume() {
             align: "center",
             render: (_, user) => (
                 <div className="flex justify-center gap-3">
-                    {user.submitProfileStatus === STATUS_EMPLOYEE.NEW_SAVE &&
-                    role === ROLE.MANAGE ? (
-                        <>
-                            <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    handleDeleteEmployee(user.id);
-                                }}
-                            >
-                                <DeleteOutlined className="text-red-600 text-lg" />
-                            </span>
-                            <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    setOpen(true);
-                                }}
-                            >
-                                <EditOutlined className="text-blue-600 text-lg" />
-                            </span>
-                        </>
-                    ) : (
-                        <span
-                            className="cursor-pointer"
-                            onClick={() => {
-                                setProfile(user);
-                                setReasonForEnding(user?.reasonForEnding);
-                                dispatch(getEmployee(user.id));
-                                setIsModalOpen(true);
-                            }}
-                        >
-                            <EyeOutlined className="text-green-600 text-lg" />
-                        </span>
-                    )}
+                    <span
+                        className="cursor-pointer"
+                        onClick={() => {
+                            setProfile(user);
+                            setReasonForEnding(user?.reasonForEnding);
+                            dispatch(getEmployee(user.id));
+                            setIsModalOpen(true);
+                        }}
+                    >
+                        <EyeOutlined className="text-green-600 text-lg" />
+                    </span>
                 </div>
             ),
         },

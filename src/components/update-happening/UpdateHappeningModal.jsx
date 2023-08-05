@@ -13,6 +13,7 @@ import {
 import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import { TEAM } from "../../constants/constants";
 
 export default function UpdateHappeningModal({ employeeId }) {
     const dispatch = useDispatch();
@@ -95,6 +96,18 @@ export default function UpdateHappeningModal({ employeeId }) {
             getEmployee();
         }
     }, [employeeId]);
+
+    const getTeam = (team) => {
+        switch (team) {
+            case TEAM.FE:
+                return "Front-end";
+            case TEAM.BE:
+                return "Back-end";
+            default:
+                return "Tester";
+        }
+    };
+
     return (
         <>
             <Modal
@@ -158,13 +171,7 @@ export default function UpdateHappeningModal({ employeeId }) {
                                 src={employee.image}
                             />
                             <h1>{employee.name}</h1>
-                            <b>
-                                {employee.currentPosition === 3
-                                    ? "Front-end"
-                                    : employee.currentPosition === 2
-                                    ? "Back-end"
-                                    : "Tester"}
-                            </b>
+                            <b>{getTeam(employee.currentPosition)}</b>
                         </Col>
                         <Col span={16}>
                             <Card

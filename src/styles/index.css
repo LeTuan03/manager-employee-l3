@@ -3,9 +3,9 @@
 
 @tailwind components;
 @tailwind utilities;
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0px;
-} */
+}
 .happening-scroll::-webkit-scrollbar {
     width: 0px;
 }
@@ -56,7 +56,7 @@ tr.ant-table-row:last-child > td {
 }
 
 .font * {
-    font-family: "Tinos";
+    font-family: "Tinos", sans-serif;
     font-size: medium;
 }
 .ant-modal-header {

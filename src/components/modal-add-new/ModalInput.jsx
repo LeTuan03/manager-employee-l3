@@ -50,45 +50,20 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
             ),
         },
     ];
-    const FooterModal = () => {
-        return (
-            <div className="w-full flex justify-center gap-2">
-                <Button
-                    className="min-w-[100px]"
-                    loading={loading}
-                    type="primary"
-                    onClick={() => {
-                        form.submit();
-                    }}
-                >
-                    {employeeId ? "Lưu" : "Thêm"}
-                </Button>
-                {employee.submitProfileStatus && (
-                    <Button
-                        className="min-w-[100px]"
-                        type="primary"
-                        onClick={() => {
-                            dispatch(setOpen({ ...open, modalProfile: true }));
-                        }}
-                    >
-                        Đăng kí
-                    </Button>
-                )}
-                <Button
-                    className="min-w-[100px]"
-                    type="primary"
-                    danger
-                    onClick={() => {
-                        dispatch(setOpen({ ...open, modalInput: false }));
-                        setEmployeeId(null);
-                        setActiveKey("1");
-                    }}
-                >
-                    Hủy
-                </Button>
-            </div>
-        );
+    const handleSubmit = () => {
+        form.submit();
     };
+
+    const handleRegisterClick = () => {
+        dispatch(setOpen({ ...open, modalProfile: true }));
+    };
+
+    const handleCancelClick = () => {
+        dispatch(setOpen({ ...open, modalInput: false }));
+        setEmployeeId(null);
+        setActiveKey("1");
+    };
+
     return (
         <>
             <Modal
@@ -106,7 +81,35 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                     setEmployeeId(null);
                     setActiveKey("1");
                 }}
-                footer={<FooterModal></FooterModal>}
+                footer={
+                    <div className="w-full flex justify-center gap-2">
+                        <Button
+                            className="min-w-[100px]"
+                            loading={loading}
+                            type="primary"
+                            onClick={handleSubmit}
+                        >
+                            {employeeId ? "Lưu" : "Thêm"}
+                        </Button>
+                        {employee.submitProfileStatus && (
+                            <Button
+                                className="min-w-[100px]"
+                                type="primary"
+                                onClick={handleRegisterClick}
+                            >
+                                Đăng kí
+                            </Button>
+                        )}
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={handleCancelClick}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
             >
                 <Tabs
                     activeKey={activeKey}

@@ -19,6 +19,7 @@ import validateCodeInput from "../../hook/ValidateCodeInput";
 import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
+import NumberStatus from "../common/NumberStatus";
 
 const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
     const { open } = useSelector((state) => state.employee);
@@ -133,46 +134,8 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             key: "salaryIncreaseStatus",
             width: 130,
             align: "center",
-            render: (salaryIncreaseStatus) => {
-                switch (salaryIncreaseStatus) {
-                    case 0:
-                        salaryIncreaseStatus = "Nộp lưu hồ sơ";
-                        break;
-                    case 1:
-                        salaryIncreaseStatus = "Lưu mới";
-                        break;
-                    case 2:
-                        salaryIncreaseStatus = "Chờ xử lí";
-                        break;
-                    case 3:
-                        salaryIncreaseStatus = "Đã được chấp nhận";
-                        break;
-                    case 4:
-                        salaryIncreaseStatus = "Yêu cầu bổ sung";
-                        break;
-                    case 5:
-                        salaryIncreaseStatus = "Từ chối";
-                        break;
-                    case 6:
-                        salaryIncreaseStatus = "Gửi yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 7:
-                        salaryIncreaseStatus =
-                            "Chấp nhận yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 8:
-                        salaryIncreaseStatus =
-                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 9:
-                        salaryIncreaseStatus = "Từ chối yêu cầu kết thúc hồ sơ";
-                        break;
-                    default:
-                        salaryIncreaseStatus = "Chờ xử lí";
-                        break;
-                }
-                return TextToTruncate(salaryIncreaseStatus || "", 13);
-            },
+            render: (salaryIncreaseStatus) =>
+                TextToTruncate(NumberStatus(salaryIncreaseStatus) || "", 13),
         },
         {
             title: "Thao tác",

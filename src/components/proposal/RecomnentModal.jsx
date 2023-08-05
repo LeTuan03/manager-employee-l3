@@ -1,6 +1,6 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
-import RecomenetChildren from "./RecomenetChildren";
+import ProposeTab from "./RecomenetChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 
 const RecomnentModal = ({
@@ -14,7 +14,7 @@ const RecomnentModal = ({
         {
             key: "1",
             label: `ĐỀ XUẤT/THAM MƯU`,
-            children: <RecomenetChildren data={data} />,
+            children: <ProposeTab profile={data} />,
         },
     ];
     const [openLeader, setOpenLeader] = useState("");
@@ -53,6 +53,7 @@ const RecomnentModal = ({
             >
                 <div className="mt-10">
                     <Tabs
+                        style={{ height: 600, overflowY: "scroll" }}
                         defaultActiveKey="1"
                         items={items}
                         tabPosition={"left"}

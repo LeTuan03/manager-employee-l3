@@ -14,11 +14,16 @@ import {
 } from "antd";
 import { format } from "date-fns";
 import _ from "lodash";
-import { GENDER, STATUS, TEAM } from "../../constants/constants";
+import {
+    GENDER,
+    STATUS,
+    TEAM,
+    STATUS_EMPLOYEE,
+} from "../../constants/constants";
 import { createEmployee, postAvatar, updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+
 const FormEmployee = ({
     form,
     family,
@@ -306,7 +311,7 @@ const FormEmployee = ({
                                         },
                                         {
                                             pattern:
-                                                /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                                /^(?!.* )[^\d!@#$%^&*()+.=_-]{2,}$/g,
                                             message: "Tên sai định dạng",
                                         },
                                     ]}

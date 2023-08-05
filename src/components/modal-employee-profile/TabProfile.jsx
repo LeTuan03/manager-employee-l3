@@ -16,7 +16,7 @@ import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/TextToTruncate";
+import TextToTruncate from "../../hook/TextToTruncate";
 import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import ModalDelete from "../ModalDelete";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
@@ -147,7 +147,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             <div className="mt-10">
                                 <MailOutlined className="mr-3" />
                                 {employee?.email &&
-                                    useTruncateText(employee?.email, 20)}
+                                    TextToTruncate(employee?.email, 20)}
                             </div>
                             <div>
                                 <PhoneOutlined className="mr-3" />
@@ -156,7 +156,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             <div>
                                 <EnvironmentOutlined className="mr-3" />
                                 {employee?.address &&
-                                    useTruncateText(employee?.address, 20)}
+                                    TextToTruncate(employee?.address, 20)}
                             </div>
                             <div>
                                 <UserOutlined className="mr-3" />
@@ -232,7 +232,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <div className="border-l-2">
                             <h1>
                                 {employee?.name &&
-                                    useTruncateText(employee?.name, 25)}
+                                    TextToTruncate(employee?.name, 25)}
                             </h1>
                             <div className="text-lg">
                                 {employee?.team === 1
@@ -390,10 +390,10 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             setOpenDelete={setOpenDelete}
                         ></ModalDelete>
                         {exp?.length > 0 &&
-                            exp.map((item, index) => {
+                            exp.map((item) => {
                                 return (
                                     <div
-                                        key={index}
+                                        key={item.id}
                                         className="flex justify-between group mb-5"
                                     >
                                         <div>

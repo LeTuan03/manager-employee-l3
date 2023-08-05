@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
-import { Col, Row, Modal, Result, Table, Button, Tabs } from "antd";
-import {
-    getByEmpIdSalary,
-    getEmployeeById,
-    getSalaryIncreaseByCurrentLeader,
-} from "../../services/api";
+import { Modal, Result, Table, Button, Tabs } from "antd";
+import { getSalaryIncreaseByCurrentLeader } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
 import TextToTruncate from "../../hook/TextToTruncate";
-import getDayMonthYear from "../common/getCurrentDay";
+import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
+import NumberStatus from "../common/NumberStatus";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);
@@ -90,32 +87,7 @@ export default function IncreaseSalary() {
             dataIndex: "salaryIncreaseStatus",
             align: "center",
             width: 170,
-            render: (_, status) => {
-                switch (status.salaryIncreaseStatus) {
-                    case 0:
-                        return "Nộp lưu hồ sơ";
-                    case 1:
-                        return "Lưu mới";
-                    case 2:
-                        return "Chờ xử lí";
-                    case 3:
-                        return "Đã được chấp nhận";
-                    case 4:
-                        return "Yêu cầu bổ sung";
-                    case 5:
-                        return "Từ chối";
-                    case 6:
-                        return "Yêu cầu kết thúc hồ sơ";
-                    case 7:
-                        return "Chấp nhận yêu cầu kết thúc hồ sơ";
-                    case 8:
-                        return "Yêu cầu bổ sung vào đơn kết thúc hồ sơ";
-                    case 9:
-                        return "Từ chối yêu cầu kết thúc hồ sơ";
-                    default:
-                        break;
-                }
-            },
+            render: (_, status) => NumberStatus(status.salaryIncreaseStatus),
         },
         {
             title: "Thao tác",
@@ -205,105 +177,3 @@ export default function IncreaseSalary() {
         </div>
     );
 }
-
-const IncreaseTab = ({ profile }) => {
-    const [data, setData] = useState({});
-    const [emp, setEmp] = useState({});
-    const handleGetDetailSalary = async () => {
-        const res = await getByEmpIdSalary(profile.employeeId);
-        const res2 = await getEmployeeById(profile.employeeId);
-        setData(res?.data?.data[0]);
-        setEmp(res2?.data?.data);
-    };
-    useEffect(() => {
-        handleGetDetailSalary();
-    }, [profile]);
-    return (
-        <div
-            className="p-[35px] bg-[#e7e7e7] font"
-            style={{
-                fontFamily: "Tinos",
-            }}
-        >
-            <div className="bg-white p-[64px]">
-                <Row>
-                    <Col flex={2} className="text-center">
-                        <h3>CÔNG TY OCEAN TECH</h3>
-                        <p>Số: {profile.employeeId}</p>
-                    </Col>
-                    <Col flex={3} className="text-center">
-                        <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
-                        <h4>Độc lập - Tự do - Hạnh phúc</h4>
-                        ----------------------------
-                    </Col>
-                </Row>
-                <div className="text-center">
-                    <h3 className="mt-10"> QUYẾT ĐỊNH </h3>
-                    <p className="font-bold">
-                        Về việc tăng lương cho người lao động
-                    </p>
-                </div>
-                <div className="flex justify-center mt-5">
-                    <div className="leading-9">
-                        <i className="block">
-                            - Căn cứ vào quy chế lương thưởng và Điều lệ hoạt
-                            động của công ty Ocean Tech.
-                        </i>
-                        <i className="block">
-                            - Căn cứ hợp đồng lao động số …/HĐLĐ-...., ngày ….
-                            tháng …. năm 20…..
-                        </i>
-                        <i className="block">
-                            - Căn cứ những đóng góp thực tế đối với sự phát
-                            triển của Công ty
-                        </i>
-                    </div>
-                </div>
-                <div className="text-center m-9">
-                    <h3>GIÁM ĐỐC CÔNG TY OCEANTECH</h3>
-                    <h3> QUYẾT ĐỊNH</h3>
-                </div>
-                <div className="flex justify-center leading-10">
-                    <div>
-                        <div>
-                            <b> Điều 1: </b> Kể từ ngày:{" "}
-                            {data?.startDate &&
-                                format(data?.startDate, "dd/MM/yyyy")}{" "}
-                            , mức lương của Ông/Bà: {emp.name} sẽ là:{" "}
-                            {data.newSalary} đ.
-                        </div>
-                        <div>
-                            <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: {emp.name} căn cứ quyết
-                            định thi hành.
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-10">
-                    <Row>
-                        <Col flex={3} className="text-center"></Col>
-                        <Col flex={2} className="text-center">
-                            <i>
-                                Hà Nội, ngày{" "}
-                                {profile.startDate &&
-                                    getDayMonthYear(profile.startDate).day}{" "}
-                                tháng{" "}
-                                {profile.startDate &&
-                                    getDayMonthYear(profile.startDate)
-                                        .month}{" "}
-                                năm{" "}
-                                {profile.startDate &&
-                                    getDayMonthYear(profile.startDate).year}
-                            </i>
-                            <h3>NGƯỜI LÀM ĐƠN</h3>
-                            <i>(Ký, ghi rõ họ tên)</i>
-
-                            <b className="block mt-5">{emp.name}</b>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-        </div>
-    );
-};

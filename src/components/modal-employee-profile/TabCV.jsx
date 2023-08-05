@@ -3,7 +3,7 @@ import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useTruncateText from "../../hook/TextToTruncate";
+import TextToTruncate from "../../hook/TextToTruncate";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
 
 const TabCV = () => {
@@ -131,12 +131,12 @@ const TabCV = () => {
         {
             label: "4. Nơi sinh: ",
             span: 12,
-            value: employee.address && useTruncateText(employee.address, 30),
+            value: employee.address && TextToTruncate(employee.address, 30),
         },
         {
             label: "5. Nguyên quán: ",
             span: 24,
-            value: employee.address && useTruncateText(employee.address, 70),
+            value: employee.address && TextToTruncate(employee.address, 70),
         },
         {
             label: "6. Số CCCD: ",
@@ -211,9 +211,9 @@ const TabCV = () => {
                     <div>
                         <h4 className="mt-10 mb-5">I. THÔNG TIN BẢN THÂN</h4>
                         <Row>
-                            {dataRows.map((row, index) => (
+                            {dataRows.map((row) => (
                                 <DataRow
-                                    key={index}
+                                    key={row.label}
                                     label={row.label}
                                     value={row.value}
                                     span={row.span}

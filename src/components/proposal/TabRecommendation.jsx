@@ -23,6 +23,7 @@ import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
+import NumberStatus from "../common/NumberStatus";
 
 const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
@@ -114,44 +115,8 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             key: "proposalStatus",
             width: 190,
             align: "center",
-            render: (proposalStatus) => {
-                switch (proposalStatus) {
-                    case 0:
-                        proposalStatus = "Nộp lưu hồ sơ";
-                        break;
-                    case 1:
-                        proposalStatus = "Lưu mới";
-                        break;
-                    case 2:
-                        proposalStatus = "Chờ xử lí";
-                        break;
-                    case 3:
-                        proposalStatus = "Đã được chấp nhận";
-                        break;
-                    case 4:
-                        proposalStatus = "Yêu cầu bổ sung";
-                        break;
-                    case 5:
-                        proposalStatus = "Từ chối";
-                        break;
-                    case 6:
-                        proposalStatus = "Gửi yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 7:
-                        proposalStatus = "Chấp nhận yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 8:
-                        proposalStatus =
-                            "Yêu cầu bổ xung yêu cầu kết thúc hồ sơ";
-                        break;
-                    case 9:
-                        proposalStatus = "Từ chối yêu cầu kết thúc hồ sơ";
-                        break;
-                    default:
-                        break;
-                }
-                return TextToTruncate(proposalStatus || "", 13);
-            },
+            render: (proposalStatus) =>
+                TextToTruncate(NumberStatus(proposalStatus) || "", 13),
         },
         {
             title: "Thao tác",

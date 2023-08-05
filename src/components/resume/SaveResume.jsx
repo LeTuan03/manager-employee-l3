@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Modal, message } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
 import { getEmployeeById, submitAndSaveResume } from "../../services/api";

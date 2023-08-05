@@ -290,7 +290,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                 },
                                 {
                                     pattern:
-                                        /^(?!.*  )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                        /^(?!.* {2})[^\d!@#$%^&*()+.=_-]{2,}$/g,
                                     message: "Tên sai định dạng",
                                 },
                             ]}
