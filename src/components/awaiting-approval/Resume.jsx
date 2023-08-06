@@ -46,9 +46,8 @@ export default function Resume() {
             dataIndex: "stt",
             key: "stt",
             width: 60,
-            render: (_, item, index) => (
-                <b className="block text-center">{index + 1}</b>
-            ),
+            align: "center",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
 
         {
@@ -56,7 +55,10 @@ export default function Resume() {
             dataIndex: "name",
             key: "name",
             width: 170,
-            render: (text) => TextToTruncate(text, 20),
+            align: "center",
+            render: (text) => (
+                <p className="text-left">{TextToTruncate(text, 20)}</p>
+            ),
         },
         {
             title: "Ngày sinh",
@@ -95,9 +97,10 @@ export default function Resume() {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
+            align: "center",
             render: (address) => {
                 const addressText = TextToTruncate(address, 35);
-                return <span>{addressText}</span>;
+                return <p className="text-left">{addressText}</p>;
             },
         },
         {
@@ -144,6 +147,7 @@ export default function Resume() {
                     <>
                         <div className="main-table">
                             <Table
+                                bordered
                                 loading={loading}
                                 columns={columns}
                                 dataSource={listEmployee}
@@ -188,7 +192,8 @@ export default function Resume() {
                                 </div>
                             }
                         >
-                            {employee?.submitProfileStatus === "6" ? (
+                            {employee?.submitProfileStatus ===
+                            PROFILE_END_REQUEST ? (
                                 <Tabs
                                     defaultActiveKey="1"
                                     tabPosition="left"

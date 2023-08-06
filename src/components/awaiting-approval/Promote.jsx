@@ -101,7 +101,10 @@ export default function Promote() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => TextToTruncate(note || "", 40),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 40)}</p>
+            ),
         },
         {
             title: "Trạng thái",
@@ -136,6 +139,7 @@ export default function Promote() {
                 <>
                     <div className="main-table">
                         <Table
+                            bordered
                             columns={columns}
                             dataSource={processEmp}
                             pagination={{

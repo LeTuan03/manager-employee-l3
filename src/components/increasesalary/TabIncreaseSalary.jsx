@@ -381,6 +381,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                     <div className="main-table">
                         <ConfigProvider renderEmpty={() => <></>}>
                             <Table
+                                bordered
                                 columns={columns}
                                 dataSource={salary}
                                 pagination={false}

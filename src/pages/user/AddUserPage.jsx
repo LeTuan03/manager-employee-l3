@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import ModalInput from "../../components/modal-add-new/ModalInput";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import ModalEnd from "../../components/modal-quit-job/ModalEnd";
 import SendLeader from "../../components/modal-send-leader/SendLeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import {
 } from "../../redux/employee/employeeSlice";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const AddUserPage = () => {
@@ -27,15 +28,23 @@ const AddUserPage = () => {
     }, []);
     return (
         <>
-            <Button
-                type="primary"
-                onClick={() => {
-                    dispatch(setOpen({ ...open, modalInput: true }));
-                    dispatch(resetEmployee());
-                }}
-            >
-                Thêm mới
-            </Button>
+            <div className="mb-4 flex justify-between">
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        dispatch(setOpen({ ...open, modalInput: true }));
+                        dispatch(resetEmployee());
+                    }}
+                >
+                    Thêm mới
+                </Button>
+                <Input
+                    className="!w-[30%]"
+                    placeholder="Tìm kiếm ..."
+                    allowClear
+                    addonAfter={<SearchOutlined type="primary" />}
+                />
+            </div>
             <ModalInput></ModalInput>
             <Table></Table>
             <ModalProfile></ModalProfile>
@@ -43,9 +52,7 @@ const AddUserPage = () => {
                 setReasonForEnding={setReasonForEnding}
                 reasonForEnding={reasonForEnding}
             ></ModalEnd>
-            <SendLeader
-                reasonForEnding={reasonForEnding}
-            ></SendLeader>
+            <SendLeader reasonForEnding={reasonForEnding}></SendLeader>
         </>
     );
 };

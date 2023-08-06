@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Button, Modal, Table, Input } from "antd";
+import { Button, Modal, Table } from "antd";
 import TextToTruncate from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
     EditOutlined,
     EyeOutlined,
     InfoCircleOutlined,
-    SearchOutlined,
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
@@ -248,16 +247,6 @@ const TableComponet = () => {
     };
     return (
         <>
-            <div className="flex justify-end mb-5 z-0">
-                <div className="!w-[30%]">
-                    <Input
-                        placeholder="Tìm kiếm ..."
-                        allowClear
-                        addonAfter={<SearchOutlined />}
-                        size="large"
-                    />
-                </div>
-            </div>
             <div className="main-table">
                 <Table
                     scroll={{ x: true }}

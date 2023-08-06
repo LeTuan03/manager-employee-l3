@@ -83,19 +83,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
 
     const handleEdit = (employee) => {
         employee.promotionDay = format(
-            new Date(employee.promotionDay).getTime(),
-            "yyyy-MM-dd"
-        );
-        setData(employee);
-        form.setFieldsValue(employee);
-        employee.promotionDay = format(
-            new Date(employee.promotionDay).getTime(),
-            "yyyy-MM-dd"
-        );
-        setData(employee);
-        form.setFieldsValue(employee);
-        employee.promotionDay = format(
-            new Date(employee.promotionDay).getTime(),
+            new Date(employee.promotionDay),
             "yyyy-MM-dd"
         );
         setData(employee);
@@ -121,8 +109,8 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             key: "promotionDay",
             width: 150,
             align: "center",
-            render: (_, { promotionDay }) =>
-                format(new Date(promotionDay).getTime(), "dd/MM/yyyy"),
+            render: (promotionDay) =>
+                format(new Date(promotionDay), "dd/MM/yyyy"),
         },
         {
             title: "Lần thứ",
@@ -198,7 +186,9 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             </span>
                         </div>
                     )}
-                    {employee.processStatus === PENDING && (
+                    {[PENDING, BEEN_APPEOVED].includes(
+                        employee.processStatus
+                    ) && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -206,28 +196,19 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             />
                         </div>
                     )}
-                    {employee.processStatus === BEEN_APPEOVED && (
+                    {[ADDITIONAL_REQUIREMENTS, REJECT].includes(
+                        employee.processStatus
+                    ) && (
                         <div>
-                            <EyeOutlined
-                                className="text-green-600 text-lg"
-                                onClick={() => handleWatch(employee)}
+                            <ModalInfo
+                                type={
+                                    employee.processStatus ===
+                                    ADDITIONAL_REQUIREMENTS
+                                        ? "req"
+                                        : ""
+                                }
+                                message={employee}
                             />
-                        </div>
-                    )}
-                    {employee.processStatus === ADDITIONAL_REQUIREMENTS && (
-                        <div>
-                            <ModalInfo type="req" message={employee} />
-                            <span>
-                                <EditOutlined
-                                    className="text-blue-600 text-lg"
-                                    onClick={() => handleEdit(employee)}
-                                />
-                            </span>
-                        </div>
-                    )}
-                    {employee.processStatus === REJECT && (
-                        <div>
-                            <ModalInfo message={employee} />
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg"
@@ -266,7 +247,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input name="promotionDay" type="date" />
+                            <Input type="date" />
                         </Form.Item>
                     </Col>
                     <Col span={4}>
@@ -308,10 +289,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
                                 },
-                                {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
-                                },
+
                                 {
                                     validator: validateCodeInput,
                                     message:
@@ -352,6 +330,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     <div className="main-table">
                         <ConfigProvider renderEmpty={() => <></>}>
                             <Table
+                                bordered
                                 columns={columns}
                                 dataSource={processs}
                                 pagination={false}

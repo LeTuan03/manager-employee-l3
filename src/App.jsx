@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutHomePage from "./components/layout/LayoutHomePage";
 import Employee from "./pages/manager/Employee";

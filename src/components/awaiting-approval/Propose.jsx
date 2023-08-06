@@ -59,20 +59,30 @@ export default function Propose() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => TextToTruncate(note || "", 25),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 25)}</p>
+            ),
         },
         {
             title: "Nội dung",
             key: "content",
             dataIndex: "content",
-            className: "truncate",
+            align: "center",
+            render: (content) => (
+                <p className="text-left">{TextToTruncate(content || "", 25)}</p>
+            ),
         },
         {
             title: "Mô tả chi tiết",
             key: "detailedDescription",
             dataIndex: "detailedDescription",
-            render: (detailedDescription) =>
-                TextToTruncate(detailedDescription || "", 25),
+            align: "center",
+            render: (detailedDescription) => (
+                <p className="text-left">
+                    {TextToTruncate(detailedDescription || "", 25)}
+                </p>
+            ),
         },
         {
             title: "Trạng thái",
@@ -106,6 +116,7 @@ export default function Propose() {
                 <>
                     <div className="main-table">
                         <Table
+                            bordered
                             columns={columns}
                             dataSource={proposeEmp}
                             pagination={{

@@ -46,7 +46,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             await deleteProposal(id);
             message.success("Xóa thành công!");
             form.resetFields();
-            handleGetRecomentByEmp();
+            await handleGetRecomentByEmp();
             setLoading(false);
         } catch (error) {
             message.error("Xóa thất bại!");
@@ -54,7 +54,6 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
         }
     };
     const handleSubmit = async (value) => {
-        console.log(value);
         try {
             if (value.id) {
                 const res = await updateProposal(value);
@@ -65,12 +64,21 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công!");
             }
-            handleGetRecomentByEmp();
+            await handleGetRecomentByEmp();
             setIsModalOpen(true);
             form.resetFields();
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleEdit = (employee) => {
+        employee.proposalDate = format(
+            new Date(employee.proposalDate),
+            "yyyy-MM-dd"
+        );
+        setData(employee);
+        form.setFieldsValue(employee);
     };
 
     const columns = [
@@ -88,8 +96,8 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             key: "proposalDate",
             width: 130,
             align: "center",
-            render: (_, { proposalDate }) =>
-                format(new Date(proposalDate).getTime(), "yyyy/MM/dd"),
+            render: (proposalDate) =>
+                format(new Date(proposalDate), "yyyy/MM/dd"),
         },
         {
             title: "Loại ",
@@ -135,16 +143,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
-                                    onClick={() => {
-                                        employee.proposalDate = format(
-                                            new Date(
-                                                employee.proposalDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                             <span>
@@ -158,19 +157,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             </span>
                         </div>
                     )}
-                    {employee.proposalStatus === 2 && (
-                        <div>
-                            <EyeOutlined
-                                className="text-green-600 text-lg"
-                                onClick={() => {
-                                    setData(employee);
-                                    setIsModalOpen(true);
-                                    console.log(employee);
-                                }}
-                            />
-                        </div>
-                    )}
-                    {employee.proposalStatus === 3 && (
+                    {[2, 3].includes(employee.proposalStatus) && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -181,44 +168,18 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             />
                         </div>
                     )}
-                    {employee.proposalStatus === 4 && (
+                    {[4, 5].includes(employee.proposalStatus) && (
                         <div>
-                            <ModalInfo type="req" message={employee} />
+                            <ModalInfo
+                                type={
+                                    employee.proposalStatus === 4 ? "req" : ""
+                                }
+                                message={employee}
+                            />
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.proposalDate = format(
-                                            new Date(
-                                                employee.proposalDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        console.log(employee);
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
-                                />
-                            </span>
-                        </div>
-                    )}
-                    {employee.proposalStatus === 5 && (
-                        <div>
-                            <ModalInfo message={employee} />
-                            <span>
-                                <EditOutlined
-                                    className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.proposalDate = format(
-                                            new Date(
-                                                employee.proposalDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        console.log(employee);
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                         </div>
@@ -293,10 +254,6 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                     message: "Không được bỏ trống trường này !",
                                 },
                                 {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
-                                },
-                                {
                                     validator: validateCodeInput,
                                     message:
                                         "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
@@ -318,10 +275,6 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                     message: "Không được bỏ trống trường này !",
                                 },
                                 {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
-                                },
-                                {
                                     validator: validateCodeInput,
                                     message:
                                         "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
@@ -339,10 +292,6 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                 {
                                     required: true,
                                     message: "Không được bỏ trống trường này !",
-                                },
-                                {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
                                 },
                                 {
                                     validator: validateCodeInput,
@@ -384,6 +333,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                     <div className="main-table">
                         <ConfigProvider renderEmpty={() => <></>}>
                             <Table
+                                bordered
                                 columns={columns}
                                 dataSource={recoments}
                                 pagination={false}

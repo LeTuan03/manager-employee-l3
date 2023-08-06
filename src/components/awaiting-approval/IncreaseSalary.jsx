@@ -45,7 +45,7 @@ export default function IncreaseSalary() {
             key: "startDate",
             dataIndex: "startDate",
             align: "center",
-            width: 140,
+            width: 150,
             render: (date) => format(date, "dd/MM/yyyy"),
         },
         {
@@ -73,13 +73,19 @@ export default function IncreaseSalary() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
-            render: (note) => TextToTruncate(note || "", 25),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 25)}</p>
+            ),
         },
         {
             title: "Lý do",
             key: "reason",
             dataIndex: "reason",
-            render: (reason) => TextToTruncate(reason || "", 25),
+            align: "center",
+            render: (reason) => (
+                <p className="text-left">{TextToTruncate(reason || "", 25)}</p>
+            ),
         },
         {
             title: "Trạng thái",
@@ -114,6 +120,7 @@ export default function IncreaseSalary() {
                 <>
                     <div className="main-table">
                         <Table
+                            bordered
                             columns={columns}
                             dataSource={dataSalary}
                             pagination={{
