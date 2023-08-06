@@ -111,15 +111,22 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => TextToTruncate(note || "", 30),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 30)}</p>
+            ),
         },
 
         {
             title: "Mô tả chi tiết",
             dataIndex: "detailedDescription",
             key: "detailedDescription",
-            render: (detailedDescription) =>
-                TextToTruncate(detailedDescription || "", 30),
+            align: "center",
+            render: (detailedDescription) => (
+                <p className="text-left">
+                    {TextToTruncate(detailedDescription || "", 30)}
+                </p>
+            ),
         },
         {
             title: "Trạng thái",

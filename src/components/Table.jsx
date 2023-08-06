@@ -284,10 +284,10 @@ const TableComponet = () => {
                 }}
                 open={openReject}
             >
-                {reasonForRejection?.reasonForRefuseEndProfile ||
-                    reasonForRejection?.reasonForRejection ||
-                    reasonForRejection?.additionalRequest ||
-                    reasonForRejection.additionalRequestTermination}
+                {getInfo(
+                    reasonForRejection.submitProfileStatus,
+                    reasonForRejection
+                )}
             </Modal>
             <ModalDelete
                 handleDeleteEmployee={handleDeleteEmployee}
@@ -312,5 +312,17 @@ const getStatus = (status) => {
             return "LÍ DO TỪ CHỐI";
         default:
             return "YÊU CẦU BỔ SUNG";
+    }
+};
+const getInfo = (status, reasonForRejection) => {
+    switch (status) {
+        case STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE:
+            return reasonForRejection.additionalRequestTermination;
+        case STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE:
+            return reasonForRejection?.reasonForRefuseEndProfile;
+        case STATUS_EMPLOYEE.REJECT:
+            return reasonForRejection?.reasonForRejection;
+        default:
+            return reasonForRejection?.additionalRequest;
     }
 };

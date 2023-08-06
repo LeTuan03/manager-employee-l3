@@ -211,8 +211,8 @@ export default function UpdateHappeningModal() {
                                                 format(
                                                     new Date(
                                                         employee.dateOfBirth
-                                                    ).getTime(),
-                                                    "yyyy/MM/dd"
+                                                    ),
+                                                    "dd/MM/yyyy"
                                                 )
                                             }
                                         />

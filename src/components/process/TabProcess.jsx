@@ -135,7 +135,10 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => TextToTruncate(note || "", 40),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 40)}</p>
+            ),
         },
         {
             title: "Trạng thái",

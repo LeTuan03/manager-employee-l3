@@ -99,7 +99,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             title: "Ngày tăng lương",
             dataIndex: "startDate",
             key: "startDate",
-            width: 140,
+            width: 150,
             align: "center",
             render: (text) => format(new Date(text), "yyyy/MM/dd"),
         },
@@ -128,13 +128,19 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             title: "Ghi chú",
             dataIndex: "note",
             key: "note",
-            render: (note) => TextToTruncate(note || "", 25),
+            align: "center",
+            render: (note) => (
+                <p className="text-left">{TextToTruncate(note || "", 25)}</p>
+            ),
         },
         {
             title: "Lý do",
             dataIndex: "reason",
             key: "reason",
-            render: (reason) => TextToTruncate(reason || "", 25),
+            align: "center",
+            render: (reason) => (
+                <p className="text-left">{TextToTruncate(reason || "", 25)}</p>
+            ),
         },
         {
             title: "Trạng thái",

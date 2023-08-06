@@ -12,7 +12,6 @@ const ProposeTab = ({ profile }) => {
     useEffect(() => {
         handleGetDetailPromote();
     }, [profile]);
-    console.log(profile);
     return (
         <div className="p-[35px] bg-[#e7e7e7] font">
             <div className="bg-white p-[64px]">
