@@ -12,6 +12,7 @@ const ProposeTab = ({ profile }) => {
     useEffect(() => {
         handleGetDetailPromote();
     }, [profile]);
+    console.log(profile);
     return (
         <div className="p-[35px] bg-[#e7e7e7] font">
             <div className="bg-white p-[64px]">
@@ -41,7 +42,8 @@ const ProposeTab = ({ profile }) => {
                                 format(emp.dateOfBirth, "dd-MM-yyyy")}
                         </p>
                         <p className="block">
-                            Tôi xin trình bày với nội dung sự việc như sau:
+                            Tôi xin trình bày với nội dung sự việc như sau:{" "}
+                            {profile?.detailedDescription}
                         </p>
                         <p className="block">{profile?.detailedDescription}</p>
                         <p className="block">

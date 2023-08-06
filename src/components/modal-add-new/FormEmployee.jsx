@@ -14,28 +14,20 @@ import {
 } from "antd";
 import { format } from "date-fns";
 import _ from "lodash";
-import {
-    GENDER,
-    STATUS,
-    TEAM,
-    STATUS_EMPLOYEE,
-} from "../../constants/constants";
+import { GENDER, STATUS, TEAM, STATUS_EMPLOYEE } from "../../constants/constants";
 import { createEmployee, postAvatar, updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
-
+import { getAllEmployee, getEmployee, setOpen } from "../../redux/employee/employeeSlice";
 const FormEmployee = ({
     form,
     family,
     certificate,
-    employeeId,
-    setEmployeeId,
     setLoading,
 }) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
     const dispatch = useDispatch();
-    const { open, employee } = useSelector((state) => state.employee);
+    const { open, employee, isLoading } = useSelector((state) => state.employee);
     const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } =
         STATUS_EMPLOYEE;
     const onFinish = async (values) => {
@@ -62,9 +54,8 @@ const FormEmployee = ({
             address,
             team,
             email,
-            image: `${
-                import.meta.env.VITE_BACKEND_URL
-            }/public/image/${urlAvatar}`,
+            image: `${import.meta.env.VITE_BACKEND_URL
+                }/public/image/${urlAvatar}`,
             phone,
             citizenIdentificationNumber,
             employeeFamilyDtos: family || [],
@@ -75,7 +66,7 @@ const FormEmployee = ({
             placeOfIssueCard,
             submitProfileStatus: "1",
         };
-        if (employeeId) {
+        if (employee?.id) {
             await handleUpdateEmployee(data);
         } else {
             await handleCreateEmployee(data);
@@ -94,31 +85,7 @@ const FormEmployee = ({
                         `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
                     )
                 );
-                setEmployeeId(res?.data?.data?.id);
-                form.setFieldsValue({
-                    name: employee.name,
-                    code: employee.code,
-                    gender: employee.gender,
-                    dateOfBirth:
-                        employee.dateOfBirth &&
-                        format(new Date(employee.dateOfBirth), "yyyy-MM-dd"),
-                    address: employee.address,
-                    team: employee.team,
-                    email: employee.email,
-                    phone: employee.phone,
-                    citizenIdentificationNumber:
-                        employee.citizenIdentificationNumber,
-                    dateOfIssuanceCard:
-                        employee.dateOfBirth &&
-                        format(
-                            new Date(employee.dateOfIssuanceCard),
-                            "yyyy-MM-dd"
-                        ),
-                    placeOfIssueCard: employee.placeOfIssueCard,
-                    ethnic: employee.ethnic,
-                    religion: employee.religion,
-                });
-                setUserAvatar(employee.image);
+                dispatch(getEmployee(res?.data?.data?.id))
                 message.success("Thêm nhân viên thành công");
             } else {
                 message.error(res?.data?.message);
@@ -131,7 +98,7 @@ const FormEmployee = ({
     const handleUpdateEmployee = async (data) => {
         try {
             setLoading(true);
-            const res = await updateEmployee(employeeId, data);
+            const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(setOpen({ ...open, modalInput: false }));
                 dispatch(
@@ -182,12 +149,12 @@ const FormEmployee = ({
         customRequest: handleUploadAvatar,
         onChange(info) {
             if (info.file.status === "done") {
-                message.success(`${info.file.name} file uploaded successfully`);
+                message.success(`${info.file.name} tải lên thành công`);
                 getBase64(info.file.originFileObj, (url) => {
                     setUserAvatar(url);
                 });
             } else if (info.file.status === "error") {
-                message.error(`${info.file.name} file upload failed.`);
+                message.error(`${info.file.name} tải lên thất bại.`);
             }
         },
     };
@@ -195,26 +162,15 @@ const FormEmployee = ({
     useEffect(() => {
         if (!_.isEmpty(employee)) {
             form.setFieldsValue({
-                name: employee.name,
-                code: employee.code,
-                gender: employee.gender,
+                ...employee,
                 dateOfBirth: format(
                     new Date(employee.dateOfBirth),
                     "yyyy-MM-dd"
                 ),
-                address: employee.address,
-                team: employee.team,
-                email: employee.email,
-                phone: employee.phone,
-                citizenIdentificationNumber:
-                    employee.citizenIdentificationNumber,
                 dateOfIssuanceCard: format(
                     new Date(employee.dateOfIssuanceCard),
                     "yyyy-MM-dd"
                 ),
-                placeOfIssueCard: employee.placeOfIssueCard,
-                ethnic: employee.ethnic,
-                religion: employee.religion,
             });
             setUserAvatar(employee.image);
         }
@@ -286,6 +242,7 @@ const FormEmployee = ({
     return (
         <>
             <Form
+                disabled={isLoading}
                 layout={"vertical"}
                 form={form}
                 name="basic"
@@ -311,7 +268,7 @@ const FormEmployee = ({
                                         },
                                         {
                                             pattern:
-                                                /^(?!.* )[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                                /^(?!.* {2})[^\d!@#$%^&*()+.=_-]{2,}$/g,
                                             message: "Tên sai định dạng",
                                         },
                                     ]}

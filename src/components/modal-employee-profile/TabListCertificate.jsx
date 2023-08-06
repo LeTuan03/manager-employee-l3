@@ -19,6 +19,7 @@ const TabListCertificate = () => {
             key: "certificateName",
             className: "border-table",
             align: "center",
+            render: (certificateName) => <div className="text-left">{certificateName}</div>,
         },
         {
             title: "Nội dung văn bằng",
@@ -26,6 +27,7 @@ const TabListCertificate = () => {
             key: "content",
             align: "center",
             className: "border-table",
+            render: (content) => <div className="text-left">{content}</div>,
         },
         {
             title: "Ngày cấp",
@@ -41,6 +43,7 @@ const TabListCertificate = () => {
             key: "field",
             align: "center",
             className: "border-table",
+            render: (field) => <div className="text-left">{field}</div>,
         },
     ];
     return (

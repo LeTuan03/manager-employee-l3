@@ -31,16 +31,19 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
 
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDelete = async (value) => {
         try {
+            setLoading(true);
             await deleteSalary(value);
             message.success("Xóa thành công!");
             form.resetFields();
             handleGetSalaryByEmp();
+            setLoading(false);
         } catch (error) {
             message.error("Xóa thất bại!");
             console.log(error);
@@ -394,6 +397,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
             />
             <ModalDelete
+                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}

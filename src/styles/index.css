@@ -3,18 +3,21 @@
 
 @tailwind components;
 @tailwind utilities;
-::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 0px;
 }
 .happening-scroll::-webkit-scrollbar {
     width: 0px;
 }
+
 .border-table {
     border: #515151 2px double !important;
 }
+
 th {
     border-radius: 0% !important;
 }
+
 th.ant-table-cell,
 td.ant-table-cell {
     border-top: 0px !important;
@@ -25,8 +28,12 @@ th.ant-table-cell:last-child,
 td.ant-table-cell:last-child {
     border-right: 0px !important;
 }
+
 tr.ant-table-row:last-child > td {
     border-bottom: 0px !important;
+}
+.main-table td.ant-table-cell {
+    border-bottom: #e2e2e2 1px solid !important;
 }
 .dotted-border::after {
     content: "";
@@ -36,6 +43,7 @@ tr.ant-table-row:last-child > td {
     width: 100%;
     border-bottom: 1px dotted #000;
 }
+
 .dotted::after {
     content: "";
     left: 0;
@@ -44,13 +52,16 @@ tr.ant-table-row:last-child > td {
     width: 100%;
     border-bottom: 1px dotted #000;
 }
+
 * {
     margin: 0;
 }
+
 .table-s > div > div > div > div > .ant-table-thead {
     color: white !important;
     background-color: #1677ff !important;
 }
+
 .font {
     font-family: "Tinos", sans-serif;
 }
@@ -59,6 +70,7 @@ tr.ant-table-row:last-child > td {
     font-family: "Tinos", sans-serif;
     font-size: medium;
 }
+
 .ant-modal-header {
     position: sticky;
     top: 0;
@@ -67,13 +79,16 @@ tr.ant-table-row:last-child > td {
     z-index: 99;
     padding: 10px 0;
 }
+
 .main-table .ant-table-wrapper .ant-table-thead > tr > th {
     background-color: #1677ff;
     color: #ffffff;
 }
+
 .ant-table-wrapper .ant-table-thead > tr > th {
     background-color: #ffffff;
 }
+
 .login-r {
     position: absolute;
     top: 50%;
@@ -83,9 +98,11 @@ tr.ant-table-row:last-child > td {
     height: 10%;
     transform: translateY(-50%);
 }
+
 .ant-modal-content {
     padding: 4px 24px 20px 24px !important;
 }
+
 .custom-area textarea {
     line-height: 2.25em !important;
     background-color: transparent !important;
@@ -94,9 +111,11 @@ tr.ant-table-row:last-child > td {
     background-size: 3px 2.25em !important;
     overflow: hidden !important;
 }
+
 .ant-table-wrapper .ant-table-tbody > tr > td {
     border-bottom: none;
 }
+
 .custom-area::before {
     content: " ";
     width: 100%;
@@ -107,15 +126,19 @@ tr.ant-table-row:last-child > td {
     position: absolute;
     z-index: 1;
 }
+
 .word {
     font-family: "Playfair Display", serif !important;
 }
+
 .ant-tabs-nav {
     min-width: 12% !important;
 }
+
 .ant-tabs-tab {
     padding-left: 0 !important;
 }
+
 /* tablet  */
 @media only screen and (max-width: 1024px) {
     .ant-tabs {

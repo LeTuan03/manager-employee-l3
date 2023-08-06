@@ -17,7 +17,7 @@ import {
     deleteProposal,
     updateProposal,
 } from "../../services/api";
-import RecomnentModal from "./RecomnentModal";
+import ModalUpdateHappening from "./RecomnentModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
@@ -27,6 +27,7 @@ import NumberStatus from "../common/NumberStatus";
 
 const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
@@ -41,16 +42,19 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
 
     const handleDeleteRecoment = async (id) => {
         try {
+            setLoading(true);
             await deleteProposal(id);
             message.success("Xóa thành công!");
             form.resetFields();
             handleGetRecomentByEmp();
+            setLoading(false);
         } catch (error) {
             message.error("Xóa thất bại!");
             console.log(error);
         }
     };
     const handleSubmit = async (value) => {
+        console.log(value);
         try {
             if (value.id) {
                 const res = await updateProposal(value);
@@ -161,6 +165,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                                 onClick={() => {
                                     setData(employee);
                                     setIsModalOpen(true);
+                                    console.log(employee);
                                 }}
                             />
                         </div>
@@ -387,7 +392,8 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                     </div>
                 </Col>
             </Row>
-            <RecomnentModal
+            <ModalUpdateHappening
+                type="recoment"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
@@ -395,6 +401,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
             />
             <ModalDelete
+                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}

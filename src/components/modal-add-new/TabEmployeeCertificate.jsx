@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, message, Row, Col, Button, Table } from "antd";
+import { Form, Input, message, Row, Col, Button, Table, ConfigProvider, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import {
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
 import ModalDelete from "../ModalDelete";
+import TextToTruncate from "../../hook/TextToTruncate";
 const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);
@@ -46,7 +47,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             try {
                 setLoading(true);
                 const res = await createCertificate(employee.id, [data]);
-                if (res?.status === STATUS.SUCCESS) {
+                if (res?.data?.code === STATUS.SUCCESS) {
                     setCertificate(res?.data?.data);
                     formCertificate.resetFields();
                     message.success("Thêm thành công văn bằng");
@@ -135,6 +136,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             } else {
                 message.error(res?.data?.message);
             }
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -158,7 +160,6 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
         {
             title: "Thao tác",
             align: "center",
-            width: 100,
             render: (_, item) => (
                 <div className="flex justify-center gap-3">
                     <>
@@ -197,20 +198,26 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "certificateName",
             key: "certificateName",
             align: "center",
-            className: "max-w-xs",
+            className: '!max-w-[200px]',
+            render: (certificateName) => (
+                <>{TextToTruncate(certificateName, 26)}</>
+            ),
         },
         {
             title: "Nội dung văn bằng",
             dataIndex: "content",
             key: "content",
-            className: "max-w-lg",
+            align: "center",
+            className: '!max-w-[200px]',
+            render: (content) => (
+                <>{TextToTruncate(content, 26)}</>
+            ),
         },
         {
             title: "Ngày cấp",
             dataIndex: "issueDate",
             key: "issueDate",
             align: "center",
-            width: 100,
             render: (issueDate) => (
                 <>{issueDate && format(new Date(issueDate), "dd/MM/yyyy")}</>
             ),
@@ -220,8 +227,9 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "field",
             key: "field",
             align: "center",
-            width: 100,
-            className: "max-w-[200px]",
+            render: (field) => (
+                <>{TextToTruncate(field, 30)}</>
+            ),
         },
     ];
     if (role !== 4) {
@@ -230,6 +238,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     return (
         <>
             <Form
+                disabled={loading}
                 className="mb-4"
                 layout={"vertical"}
                 name="basic"
@@ -250,6 +259,11 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 {
                                     required: true,
                                     message: "Bạn cần nhập trường này",
+                                },
+                                {
+                                    pattern:
+                                        /^(?!.* {2})[^\d!@#$%^&*()+.=,_-]{2,}$/g,
+                                    message: "Tên sai định dạng",
                                 },
                             ]}
                         >
@@ -279,6 +293,11 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     required: true,
                                     message: "Bạn cần nhập trường này",
                                 },
+                                {
+                                    pattern:
+                                        /^(?!.* {2})[^\d!@#$%^&*()+.=_]{2,}$/g,
+                                    message: "Sai định dạng",
+                                },
                             ]}
                         >
                             <Input maxLength={50} showCount />
@@ -295,6 +314,11 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     required: true,
                                     message: "Bạn cần nhập trường này",
                                 },
+                                {
+                                    pattern:
+                                        /^(?!.* {2})\S+(?: \S+)*$/,
+                                    message: "Không để khoảng trắng ở đầu, cuối và quá nhiều khoảng trắng liên tiếp",
+                                },
                             ]}
                         >
                             <Input maxLength={200} showCount />
@@ -310,7 +334,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             type="primary"
                             htmlType="submit"
                         >
-                            {id ? "Sửa" : "Thêm"}
+                            {id ? "Lưu" : "Thêm"}
                         </Button>
                         <Button
                             type="primary"
@@ -326,15 +350,20 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     </Col>
                 </Row>
             </Form>
-            <Table
-                scroll={{ x: true, y: 200 }}
-                bordered
-                dataSource={certificate}
-                columns={columns}
-                pagination={false}
-                loading={loading}
-            />
+            <ConfigProvider renderEmpty={() => <><Empty description={false} /></>}>
+                <div className="main-table">
+                    <Table
+                        scroll={{ x: true, y: 200 }}
+                        bordered
+                        dataSource={certificate}
+                        columns={columns}
+                        pagination={false}
+                        loading={loading}
+                    />
+                </div>
+            </ConfigProvider>
             <ModalDelete
+                loading={loading}
                 handleDeleteById={handleDeleteCertificate}
                 handleDeleteByUid={handleDeleteByUid}
                 uidDelete={uidDelete}

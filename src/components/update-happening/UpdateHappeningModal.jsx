@@ -5,7 +5,6 @@ import { format } from "date-fns";
 import TabIncreaseSalary from "../increasesalary/TabIncreaseSalary";
 import TabProcess from "../process/TabProcess";
 import {
-    getEmployeeById,
     getProcessByEmp,
     getProposalByEmp,
     getSalaryByEmp,
@@ -15,22 +14,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import { TEAM } from "../../constants/constants";
 
-export default function UpdateHappeningModal({ employeeId }) {
+export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
-    const { open } = useSelector((state) => state.employee);
+    const { open,employee } = useSelector((state) => state.employee);
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
-    const [employee, setEmployee] = useState({});
     const [activeKey, setActiveKey] = useState("1");
 
-    const getEmployee = async () => {
-        const res = await getEmployeeById(employeeId);
-        setEmployee(res?.data?.data);
-    };
     const handleGetSalaryByEmp = async () => {
         try {
-            const res = await getSalaryByEmp(employeeId);
+            const res = await getSalaryByEmp(employee?.id);
             setSalary(res?.data?.data);
         } catch (error) {
             console.log(error);
@@ -38,7 +32,7 @@ export default function UpdateHappeningModal({ employeeId }) {
     };
     const handleGetProcessByEmp = async () => {
         try {
-            const res = await getProcessByEmp(employeeId);
+            const res = await getProcessByEmp(employee?.id);
             setProcesss(res?.data?.data);
         } catch (error) {
             console.log(error);
@@ -46,7 +40,7 @@ export default function UpdateHappeningModal({ employeeId }) {
     };
     const handleGetRecomentByEmp = async () => {
         try {
-            const res = await getProposalByEmp(employeeId);
+            const res = await getProposalByEmp(employee?.id);
             setRecoments(res?.data?.data);
         } catch (error) {
             console.log(error);
@@ -87,16 +81,6 @@ export default function UpdateHappeningModal({ employeeId }) {
             ),
         },
     ];
-
-    useEffect(() => {
-        if (employeeId) {
-            handleGetSalaryByEmp();
-            handleGetProcessByEmp();
-            handleGetRecomentByEmp();
-            getEmployee();
-        }
-    }, [employeeId]);
-
     const getTeam = (team) => {
         switch (team) {
             case TEAM.FE:
@@ -107,7 +91,13 @@ export default function UpdateHappeningModal({ employeeId }) {
                 return "Tester";
         }
     };
-
+    useEffect(() => {
+        if (employee?.id) {
+            handleGetSalaryByEmp();
+            handleGetProcessByEmp();
+            handleGetRecomentByEmp();
+        }
+    }, [employee?.id]);
     return (
         <>
             <Modal
@@ -171,7 +161,9 @@ export default function UpdateHappeningModal({ employeeId }) {
                                 src={employee.image}
                             />
                             <h1>{employee.name}</h1>
-                            <b>{getTeam(employee.currentPosition)}</b>
+                            <b>
+                                {getTeam(employee.currentPosition)}
+                            </b>
                         </Col>
                         <Col span={16}>
                             <Card

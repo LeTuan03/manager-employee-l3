@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getAllLeader, updateEmployee } from "../../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    getAllEmployee,
-    resetEmployee,
-    setOpen,
-} from "../../redux/employee/employeeSlice";
+import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import TextArea from "antd/es/input/TextArea";
 const {
@@ -20,7 +16,7 @@ const {
     PROFILE_END_REQUEST,
     ADDITIONAL_REQUIREMENTS_END_PROFILE,
 } = STATUS_EMPLOYEE;
-const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
+const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
     const dispatch = useDispatch();
@@ -52,9 +48,9 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
             ...employee,
             leaderId,
             submitDay,
-            submitContent,
+            submitContent: submitContent.trim(),
             submitProfileStatus,
-            reasonForEnding: reasonForEnd,
+            reasonForEnding: reasonForEnd.trim(),
         };
         await handleSendLeader(data);
     };
@@ -76,10 +72,8 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                         )
                     );
                 }
-                dispatch(resetEmployee());
                 setIdLeader({ id: null, label: "" });
                 setReasonForEnding && setReasonForEnding("");
-                setEmployeeId(null);
                 message.success("Trình lãnh đạo thành công");
                 dispatch(
                     setOpen({
@@ -121,6 +115,12 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
             return Promise.reject(new Error(`Vui lòng nhập ngày`));
         }
     }
+    const handleCancel = () => {
+        setIdLeader({ id: null, label: "" });
+        dispatch(setOpen({ ...open, modalSendLeader: false }));
+        form.resetFields();
+        setLoading(false);
+    };
     useEffect(() => {
         handleGetAllLeader();
     }, []);
@@ -141,6 +141,7 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center">
                         <Button
                             type="primary"
+                            className="min-w-[100px]"
                             loading={loading}
                             onClick={() => {
                                 form.submit();
@@ -152,23 +153,14 @@ const SendLeader = ({ setEmployeeId, reasonForEnding, setReasonForEnding }) => {
                             type="primary"
                             className="min-w-[100px]"
                             danger
-                            onClick={() => {
-                                dispatch(
-                                    setOpen({ ...open, modalSendLeader: false })
-                                );
-                                form.resetFields();
-                                setLoading(false);
-                            }}
+                            onClick={() => handleCancel()}
                         >
                             Hủy
                         </Button>
                     </div>
                 }
                 onFinish={onFinish}
-                onCancel={() => {
-                    dispatch(setOpen({ ...open, modalSendLeader: false }));
-                    form.resetFields();
-                }}
+                onCancel={() => handleCancel()}
             >
                 <Form
                     layout={"vertical"}

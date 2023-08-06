@@ -3,6 +3,7 @@ import { Button, Modal } from "antd";
 import { FrownOutlined } from "@ant-design/icons";
 export default function ModalInfo({ message, type }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    console.log(message);
     return (
         <>
             <span>

@@ -4,8 +4,8 @@ import FormEmployee from "./FormEmployee";
 import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpen } from "../../redux/employee/employeeSlice";
-const ModalInput = ({ employeeId, setEmployeeId }) => {
+import { getEmployee, setOpen } from "../../redux/employee/employeeSlice";
+const ModalInput = () => {
     const [form] = Form.useForm();
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
@@ -24,8 +24,6 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                     certificate={certificate}
                     form={form}
                     setOpen={setOpen}
-                    employeeId={employeeId}
-                    setEmployeeId={setEmployeeId}
                 ></FormEmployee>
             ),
         },
@@ -50,26 +48,13 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
             ),
         },
     ];
-    const handleSubmit = () => {
-        form.submit();
-    };
-
-    const handleRegisterClick = () => {
-        dispatch(setOpen({ ...open, modalProfile: true }));
-    };
-
-    const handleCancelClick = () => {
-        dispatch(setOpen({ ...open, modalInput: false }));
-        setEmployeeId(null);
-        setActiveKey("1");
-    };
 
     return (
         <>
             <Modal
                 zIndex={1}
                 title={
-                    employeeId
+                    employee?.id
                         ? "CẬP NHẬT THÔNG TIN NHÂN VIÊN"
                         : "THÊM THÔNG TIN NHÂN VIÊN"
                 }
@@ -78,38 +63,43 @@ const ModalInput = ({ employeeId, setEmployeeId }) => {
                 width={1000}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalInput: false }));
-                    setEmployeeId(null);
                     setActiveKey("1");
                 }}
-                footer={
-                    <div className="w-full flex justify-center gap-2">
+                footer={<div className="w-full flex justify-center gap-2">
+                    <Button
+                        className="min-w-[100px]"
+                        loading={loading}
+                        type="primary"
+                        onClick={() => {
+                            form.submit();
+                        }}
+                    >
+                        {employee?.id ? "Lưu" : "Thêm"}
+                    </Button>
+                    {employee.submitProfileStatus && (
                         <Button
-                            className="min-w-[100px]"
-                            loading={loading}
+                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
                             type="primary"
-                            onClick={handleSubmit}
+                            onClick={() => {
+                                dispatch(getEmployee(employee?.id))
+                                dispatch(setOpen({ ...open, modalProfile: true }));
+                            }}
                         >
-                            {employeeId ? "Lưu" : "Thêm"}
+                            Đăng kí
                         </Button>
-                        {employee.submitProfileStatus && (
-                            <Button
-                                className="min-w-[100px]"
-                                type="primary"
-                                onClick={handleRegisterClick}
-                            >
-                                Đăng kí
-                            </Button>
-                        )}
-                        <Button
-                            className="min-w-[100px]"
-                            type="primary"
-                            danger
-                            onClick={handleCancelClick}
-                        >
-                            Hủy
-                        </Button>
-                    </div>
-                }
+                    )}
+                    <Button
+                        className="min-w-[100px]"
+                        type="primary"
+                        danger
+                        onClick={() => {
+                            dispatch(setOpen({ ...open, modalInput: false }));
+                            setActiveKey("1");
+                        }}
+                    >
+                        Hủy
+                    </Button>
+                </div>}
             >
                 <Tabs
                     activeKey={activeKey}

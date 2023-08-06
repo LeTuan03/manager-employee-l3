@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import EmployeeProfile from "./EmployeeProfile";
 import { Button, Modal, message } from "antd";
 import { updateEmployee } from "../../services/api";
@@ -16,7 +16,7 @@ const {
     REJECT_REQUEST_END_PROFILE,
     ADDITIONAL_REQUIREMENTS_END_PROFILE,
 } = STATUS_EMPLOYEE;
-const ModalProfile = ({ employeeId, setEmployeeId }) => {
+const ModalProfile = () => {
     const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
     const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
     const handleUpdateEmployee = async (data) => {
         try {
             setLoading(true);
-            const res = await updateEmployee(employeeId, data);
+            const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
                     getAllEmployee(
@@ -46,11 +46,7 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
             console.log(error);
         }
     };
-    useEffect(() => {
-        return () => {
-            setEmployeeId(null);
-        };
-    }, []);
+
     return (
         <>
             <Modal
@@ -60,13 +56,13 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                 title={
                     <div className="flex justify-between">
                         <div>Hồ sơ nhân viên</div>
-                        {employee.numberSaved && (
+                        {employee?.numberSaved && (
                             <div className="mr-9 text-green-600">
                                 <i>
                                     {" "}
-                                    Số lưu: {employee.numberSaved} - Ngày lưu:{" "}
-                                    {format(
-                                        new Date(employee.submitDay).getTime(),
+                                    Số lưu: {employee?.numberSaved} - Ngày lưu:{" "}
+                                    {employee?.submitDay&&format(
+                                        new Date(employee?.submitDay).getTime(),
                                         "yyyy-MM-dd"
                                     )}
                                 </i>
@@ -81,28 +77,29 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                 }}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
-                    setEmployeeId(null);
                     setActiveKey("1");
                 }}
                 footer={
                     <div className="flex justify-center">
-                        {[NEW_SAVE, REJECT].includes(
+                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
-                            <Button
-                                className="min-w-[100px]"
-                                type="primary"
-                                loading={loading}
-                                onClick={() => {
-                                    handleUpdateEmployee({
-                                        ...employee,
-                                        ...threeInfo,
-                                    });
-                                }}
-                            >
-                                Lưu
-                            </Button>
-                        )}
+                                <Button
+                                    className="min-w-[100px]"
+                                    type="primary"
+                                    loading={loading}
+                                    onClick={() => {
+                                        handleUpdateEmployee({
+                                            ...employee,
+                                            knowledge: threeInfo?.knowledge?.trim(),
+                                            skill: threeInfo?.skill?.trim(),
+                                            activity: threeInfo?.activity?.trim()
+                                        });
+                                    }}
+                                >
+                                    Lưu
+                                </Button>
+                            )}
                         {employee?.submitProfileStatus ===
                             ACCEPT_REQUEST_END_PROFILE &&
                             role !== ROLE.MANAGE && (
@@ -141,22 +138,22 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
-                            <Button
-                                className="min-w-[100px]"
-                                htmlType="submit"
-                                type="primary"
-                                onClick={() => {
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalSendLeader: true,
-                                        })
-                                    );
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
-                        )}
+                                <Button
+                                    className="min-w-[100px] bg-green-600 hover:!bg-green-500"
+                                    htmlType="submit"
+                                    type="primary"
+                                    onClick={() => {
+                                        dispatch(
+                                            setOpen({
+                                                ...open,
+                                                modalSendLeader: true,
+                                            })
+                                        );
+                                    }}
+                                >
+                                    Trình lãnh đạo
+                                </Button>
+                            )}
                         <Button
                             className="min-w-[100px]"
                             type="primary"
@@ -165,7 +162,6 @@ const ModalProfile = ({ employeeId, setEmployeeId }) => {
                                 dispatch(
                                     setOpen({ ...open, modalProfile: false })
                                 );
-                                setEmployeeId(null);
                                 setActiveKey("1");
                             }}
                         >

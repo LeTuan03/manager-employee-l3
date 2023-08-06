@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Table from "../../components/Table";
 import { useDispatch } from "react-redux";
 import {
     getAllEmployee,
-    getEmployee,
 } from "../../redux/employee/employeeSlice";
 import SaveResume from "../../components/resume/SaveResume";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 const PageEnd = () => {
-    const [employeeId, setEmployeeId] = useState(null);
     const dispatch = useDispatch();
+    const { ACCEPT_REQUEST_END_PROFILE, SUBMIT_FILE_SAVE } = STATUS_EMPLOYEE
     useEffect(() => {
-        dispatch(getAllEmployee("7,0"));
+        dispatch(getAllEmployee(`${ACCEPT_REQUEST_END_PROFILE},${SUBMIT_FILE_SAVE}`));
     }, []);
-    useEffect(() => {
-        if (employeeId) {
-            dispatch(getEmployee(employeeId));
-        }
-    }, [employeeId]);
     return (
         <>
-            <Table setEmployeeId={setEmployeeId}></Table>
-            <ModalProfile
-                setEmployeeId={setEmployeeId}
-                employeeId={employeeId}
-            ></ModalProfile>
-            <SaveResume
-                setEmployeeId={setEmployeeId}
-                employeeId={employeeId}
-            ></SaveResume>
+            <Table></Table>
+            <ModalProfile></ModalProfile>
+            <SaveResume></SaveResume>
         </>
     );
 };

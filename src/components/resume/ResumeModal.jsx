@@ -184,6 +184,7 @@ export default function ResumeModal(props) {
                             values.reasonForRejection;
                         profile.submitProfileStatus = "9";
                     } else {
+                        profile.reasonForRejection = values.reasonForRejection;
                         profile.submitProfileStatus = "5";
                     }
                     await acceptEmployee(profile);

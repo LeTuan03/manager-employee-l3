@@ -36,6 +36,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center">
                         <Button
                             type="primary"
+                            className="min-w-[100px]"
                             onClick={() => {
                                 if (reasonForEnding) {
                                     dispatch(

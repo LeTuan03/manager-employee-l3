@@ -1,14 +1,23 @@
 import { Col, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ROLE } from "../../constants/constants";
 
 const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
+    const [date, setDate] = useState({});
     const { employee } = useSelector((state) => state.employee);
     const { role } = useSelector((state) => state.account);
-
+    const getTodayDate = () => {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        setDate({ day, month });
+    };
+    useEffect(() => {
+        getTodayDate();
+    }, [reasonForEnding]);
     return (
         <div
             className="font"
@@ -110,21 +119,8 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                         <Col span={12} className="text-center">
                             <div>
                                 <i className="block">
-                                    Hà Nội, ngày{" "}
-                                    {format(
-                                        new Date(employees.submitDay),
-                                        "dd"
-                                    )}{" "}
-                                    tháng{" "}
-                                    {format(
-                                        new Date(employees.submitDay),
-                                        "MM"
-                                    )}{" "}
-                                    năm{" "}
-                                    {format(
-                                        new Date(employees.submitDay),
-                                        "yyyy"
-                                    )}
+                                    Hà Nội, ngày {date.day} tháng {date.month}{" "}
+                                    năm 2023
                                 </i>
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className="block">(Ký, ghi rõ họ tên)</i>

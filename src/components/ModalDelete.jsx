@@ -1,17 +1,22 @@
 import { Button, Modal } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 
 const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
     const handleOK = () => {
-        setOpenDelete(false);
         if (rest?.idDelete) {
             rest?.handleDeleteById(rest?.idDelete);
         } else if (rest?.uidDelete) {
             rest?.handleDeleteByUid(rest?.uidDelete);
+            setOpenDelete(false)
         } else {
             rest?.handleDeleteEmployee(rest?.employeeIdToDelete);
         }
     };
+    useEffect(()=>{
+        if(!rest?.loading){
+            setOpenDelete(false);
+        }
+    },[rest?.loading])
     return (
         <Modal
             title="Xóa bản ghi"
@@ -25,6 +30,7 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
                 <>
                     <div className="flex justify-center">
                         <Button
+                            loading={rest?.loading}
                             type="primary"
                             onClick={() => {
                                 handleOK();

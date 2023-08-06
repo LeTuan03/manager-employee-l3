@@ -6,19 +6,19 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
 
-export default function SaveResume({ employeeId, setEmployeeId }) {
+export default function SaveResume() {
     const dispatch = useDispatch();
-    const { open } = useSelector((state) => state.employee);
+    const { open ,employee} = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const [form] = Form.useForm();
     const handleGetProfile = async () => {
-        const res = await getEmployeeById(employeeId);
+        const res = await getEmployeeById(employee.id);
         setProfile(res?.data?.data);
     };
 
     useEffect(() => {
         handleGetProfile();
-    }, [employeeId]);
+    }, [employee.id]);
 
     const onFinish = async (values) => {
         try {
@@ -32,7 +32,6 @@ export default function SaveResume({ employeeId, setEmployeeId }) {
             );
             form.resetFields();
             dispatch(getAllEmployee("7,0"));
-            setEmployeeId(null);
         } catch (error) {
             console.log(error);
             message.error("Nộp lưu hồ sơ thất bại!");

@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { searchEmployee } from "../../services/api";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, Result, Table, Tabs, Tag } from "antd";
+import { Button, Modal, Result, Table, Tabs } from "antd";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import TextToTruncate from "../../hook/TextToTruncate";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
-import { GENDER, STATUS_EMPLOYEE, TEAM } from "../../constants/constants";
+import { GENDER, STATUS_EMPLOYEE } from "../../constants/constants";
 import { getEmployee } from "../../redux/employee/employeeSlice";
 import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
 import StringStatus from "../common/StringStatus";
+import TeamStatus from "../common/TeamStatus";
 
 export default function Resume() {
     const dispatch = useDispatch();
@@ -88,30 +89,7 @@ export default function Resume() {
             key: "team",
             width: 120,
             align: "center",
-            render: (team) => {
-                let color, is;
-                switch (team) {
-                    case TEAM.BE:
-                        color = "geekblue";
-                        is = "Back-end";
-                        break;
-                    case TEAM.FE:
-                        color = "green";
-                        is = "Front-end";
-                        break;
-                    default:
-                        color = "red";
-                        is = "Tester";
-                        break;
-                }
-                return (
-                    <div>
-                        <Tag color={color} className="w-full text-center">
-                            {is}
-                        </Tag>
-                    </div>
-                );
-            },
+            render: (team) => TeamStatus(team),
         },
         {
             title: "Địa chỉ",

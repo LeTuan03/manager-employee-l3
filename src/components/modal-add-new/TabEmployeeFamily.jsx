@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, message, Row, Col, Button, Table, Select } from "antd";
+import { Form, Input, message, Row, Col, Button, Table, Select, Empty, ConfigProvider } from "antd";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import {
@@ -13,6 +13,7 @@ import _ from "lodash";
 import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
+import TextToTruncate from "../../hook/TextToTruncate";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
     const [loading, setLoading] = useState(false);
@@ -163,6 +164,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "stt",
             align: "center",
             key: "stt",
+            width:60,
             render: (_, item, index) => <>{index + 1}</>,
         },
         {
@@ -204,22 +206,30 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         {
             title: "Họ và tên",
             dataIndex: "name",
+            align: "center",
+            className:"!max-w-[120px]",
+            render: (name) => (
+                <div className="text-left">{TextToTruncate(name, 26)}</div>
+            ),
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
+            align: "center",
             render: (dateOfBirth) => (
-                <>{format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
+                <>{dateOfBirth&&format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
             ),
         },
         {
             title: "Giới tính",
             dataIndex: "gender",
+            align: "center",
             render: (gender) => <>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</>,
         },
         {
             title: "Quan hệ",
             dataIndex: "relationShip",
+            align: "center",
             render: (relationShip) => {
                 switch (relationShip) {
                     case RELATIONSHIP.CHILD:
@@ -240,14 +250,24 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         {
             title: "Số CCCD/CMT",
             dataIndex: "citizenIdentificationNumber",
+            width: 120,
+            render: (citizenIdentificationNumber) => (
+                <>{TextToTruncate(citizenIdentificationNumber, 26)}</>
+            ),
         },
         {
             title: "Email",
             dataIndex: "email",
+            align: "center",
         },
         {
             title: "Địa chỉ",
             dataIndex: "address",
+            align: "center",
+            className:"!max-w-[180px]",
+            render: (address) => (
+                <div className="text-left">{TextToTruncate(address, 30)}</div>
+            ),
         },
     ];
     function validateDateOfBirth(_, value) {
@@ -432,6 +452,11 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                     required: true,
                                     message: "Bạn cần nhập trường này",
                                 },
+                                {
+                                    pattern:
+                                        /^(?!.* {2})[^!@#$%^&*()+.=_]{2,}$/g,
+                                    message: "Sai định dạng",
+                                },
                             ]}
                         >
                             <Input maxLength={100} showCount />
@@ -447,7 +472,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             type="primary"
                             htmlType="submit"
                         >
-                            {update ? "Sửa" : "Thêm"}
+                            {update ? "Lưu" : "Thêm"}
                         </Button>
                         <Button
                             type="primary"
@@ -463,15 +488,20 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                     </Col>
                 </Row>
             </Form>
-            <Table
-                loading={loading}
-                scroll={{ x: true, y: 200 }}
-                bordered
-                dataSource={family}
-                columns={columns}
-                pagination={false}
-            />
+            <ConfigProvider renderEmpty={() => <><Empty description={false} /></>}>
+                <div className="main-table">
+                    <Table
+                        loading={loading}
+                        scroll={{ x: true, y: 200 }}
+                        bordered
+                        dataSource={family}
+                        columns={columns}
+                        pagination={false}
+                    />
+                </div>
+            </ConfigProvider>
             <ModalDelete
+                loading={loading}
                 handleDeleteById={handleDeleteFamily}
                 handleDeleteByUid={handleDeleteByUid}
                 uidDelete={uidDelete}
@@ -479,7 +509,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
             ></ModalDelete>
-            ;
+            
         </>
     );
 };

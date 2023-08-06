@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { Button, Modal, Table, Tag } from "antd";
+import { Button, Modal, Table, Tag, Input } from "antd";
 import TextToTruncate from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
     EditOutlined,
     EyeOutlined,
     InfoCircleOutlined,
+    SearchOutlined,
 } from "@ant-design/icons";
 import { deleteEmployee } from "../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, setOpen } from "../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    getEmployee,
+    setOpen,
+} from "../redux/employee/employeeSlice";
 import {
     GENDER,
     ROLE,
@@ -20,7 +25,8 @@ import {
 } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
-const TableComponet = (props) => {
+import TeamStatus from "./common/TeamStatus";
+const TableComponet = () => {
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
@@ -30,7 +36,6 @@ const TableComponet = (props) => {
         (state) => state.employee
     );
     const { role } = useSelector((state) => state.account);
-    const { setEmployeeId } = props;
     const {
         SUBMIT_FILE_SAVE,
         NEW_SAVE,
@@ -58,7 +63,10 @@ const TableComponet = (props) => {
             dataIndex: "name",
             key: "name",
             width: 200,
-            render: (name) => TextToTruncate(name, 22),
+            align: "center",
+            render: (name) => (
+                <div className="text-left">{TextToTruncate(name, 22)}</div>
+            ),
         },
         {
             title: "Ngày sinh",
@@ -94,42 +102,19 @@ const TableComponet = (props) => {
             key: "team",
             align: "center",
             width: 90,
-            render: (team) => {
-                let color, is;
-                switch (team) {
-                    case TEAM.BE:
-                        color = "geekblue";
-                        is = "Back-end";
-                        break;
-                    case TEAM.FE:
-                        color = "green";
-                        is = "Front-end";
-                        break;
-                    default:
-                        color = "red";
-                        is = "Tester";
-                        break;
-                }
-                return (
-                    <div>
-                        <Tag color={color} className="w-full text-center">
-                            {is}
-                        </Tag>
-                    </div>
-                );
-            },
+            render: (team) => TeamStatus(team),
         },
         {
             title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
-
+            align: "center",
             render: (address) => {
                 const addressText = TextToTruncate(address || "", 30);
                 return (
-                    <span className="cursor-default" title={address}>
+                    <div className="cursor-default text-left" title={address}>
                         {addressText}
-                    </span>
+                    </div>
                 );
             },
         },
@@ -142,7 +127,10 @@ const TableComponet = (props) => {
             render: (status) => {
                 const statusText = TextToTruncate(StringStatus(status), 25);
                 return (
-                    <span className="cursor-default" title={status}>
+                    <span
+                        className="cursor-default"
+                        title={StringStatus(status)}
+                    >
                         {statusText}
                     </span>
                 );
@@ -166,7 +154,6 @@ const TableComponet = (props) => {
                             <DeleteOutlined className="text-red-600 text-lg" />
                         </span>
                     )}
-
                     {[
                         REJECT_REQUEST_END_PROFILE,
                         ADDITIONAL_REQUIREMENTS_END_PROFILE,
@@ -178,6 +165,7 @@ const TableComponet = (props) => {
                                 onClick={() => {
                                     setReasonForRejection(employee);
                                     setOpenReject(true);
+                                    console.log(employee);
                                 }}
                                 className="text-orange-500 text-base"
                             />
@@ -195,7 +183,7 @@ const TableComponet = (props) => {
                         <EyeOutlined
                             className="text-green-600 text-lg"
                             onClick={() => {
-                                setEmployeeId(employee.id);
+                                dispatch(getEmployee(employee.id));
                                 if (
                                     employee.submitProfileStatus ===
                                     BEEN_APPEOVED
@@ -240,10 +228,10 @@ const TableComponet = (props) => {
                     ) && (
                         <span
                             onClick={() => {
+                                dispatch(getEmployee(employee.id));
                                 dispatch(
                                     setOpen({ ...open, modalInput: true })
                                 );
-                                setEmployeeId(employee.id);
                             }}
                             className="cursor-pointer"
                         >
@@ -266,6 +254,16 @@ const TableComponet = (props) => {
     };
     return (
         <>
+            <div className="flex justify-end mb-5 z-0">
+                <div className="!w-[30%]">
+                    <Input
+                        placeholder="Tìm kiếm ..."
+                        allowClear
+                        addonAfter={<SearchOutlined />}
+                        size="large"
+                    />
+                </div>
+            </div>
             <div className="main-table">
                 <Table
                     scroll={{ x: true }}
@@ -297,7 +295,7 @@ const TableComponet = (props) => {
                         </Button>
                     </div>
                 }
-                title={getModalTitle(reasonForRejection?.submitProfileStatus)}
+                title={getStatus(reasonForRejection?.submitProfileStatus)}
                 onCancel={() => {
                     setOpenReject(false);
                 }}
@@ -305,12 +303,14 @@ const TableComponet = (props) => {
             >
                 {reasonForRejection?.reasonForRefuseEndProfile ||
                     reasonForRejection?.reasonForRejection ||
-                    reasonForRejection?.additionalRequestTermination}
+                    reasonForRejection?.additionalRequest ||
+                    reasonForRejection.additionalRequestTermination}
             </Modal>
             <ModalDelete
                 handleDeleteEmployee={handleDeleteEmployee}
                 employeeIdToDelete={employeeIdToDelete}
                 openDelete={openDelete}
+                loading={isLoading}
                 setOpenDelete={setOpenDelete}
             ></ModalDelete>
         </>
@@ -319,8 +319,8 @@ const TableComponet = (props) => {
 
 export default TableComponet;
 
-const getModalTitle = (submitProfileStatus) => {
-    switch (submitProfileStatus) {
+const getStatus = (status) => {
+    switch (status) {
         case STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE:
             return "YÊU CẦU BỔ SUNG VÀO ĐƠN KẾT THÚC";
         case STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE:

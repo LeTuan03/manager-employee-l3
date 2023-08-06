@@ -93,6 +93,11 @@ const SendLeaderUpdateHappening = (props) => {
             setIdLeader({ ...idLeader, label: "Trưởng phòng" });
         }
     };
+    const handleCancel = () => {
+        setIdLeader({ id: null, label: "" });
+        form.resetFields();
+        setOpenLeader(false);
+    };
     useEffect(() => {
         handleGetAllLeader();
     }, []);
@@ -103,11 +108,7 @@ const SendLeaderUpdateHappening = (props) => {
                 centered
                 title="Trình lãnh đạo"
                 open={openLeader}
-                onCancel={() => {
-                    setOpenLeader(false);
-                    form.resetFields();
-                    setIdLeader({ id: null, label: "" });
-                }}
+                onCancel={() => handleCancel()}
                 footer={false}
             >
                 <Form
@@ -200,7 +201,7 @@ const SendLeaderUpdateHappening = (props) => {
                                     type="primary"
                                     danger
                                     className="min-w-[100px]"
-                                    onClick={() => setOpenLeader(false)}
+                                    onClick={() => handleCancel()}
                                 >
                                     Hủy
                                 </Button>

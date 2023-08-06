@@ -1,18 +1,23 @@
-import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import TextToTruncate from "../../hook/TextToTruncate";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
+import TextToTruncate from "../../hook/TextToTruncate";
 
 const TabCV = () => {
     const [date, setDate] = useState({});
     const { employee } = useSelector((state) => state.employee);
     const getTodayDate = () => {
         const date = new Date();
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
+        let day = date.getDate();
+        if (day < 10) {
+            day = "0" + day
+        }
+        let month = date.getMonth() + 1;
+        if (month < 10) {
+            month = "0" + month
+        }
         setDate({ day, month });
     };
     useEffect(() => {
@@ -32,7 +37,7 @@ const TabCV = () => {
             key: "name",
             align: "center",
             className: "border-table",
-            render: (name) => <p className="min-w-[90px]"> {name}</p>,
+            render: (name) => <div className="min-w-[90px] text-left">{name}</div>,
         },
         {
             title: "Ngày sinh",
@@ -108,20 +113,24 @@ const TabCV = () => {
             key: "address",
             align: "center",
             className: "border-table",
+            render: (address) => <div className="text-left">{address}</div>,
         },
     ];
     const dataRows = [
         {
+            id: 1,
             label: "1. Họ và tên: ",
             span: 16,
             value: employee.name,
         },
         {
+            id: 2,
             label: "2. Nam/Nữ: ",
             span: 8,
             value: employee.gender === GENDER.MALE ? "Nam" : "Nữ",
         },
         {
+            id: 3,
             label: "3. Ngày sinh: ",
             span: 12,
             value:
@@ -129,21 +138,25 @@ const TabCV = () => {
                 format(new Date(employee.dateOfBirth), "dd-MM-yyyy"),
         },
         {
+            id: 4,
             label: "4. Nơi sinh: ",
             span: 12,
             value: employee.address && TextToTruncate(employee.address, 30),
         },
         {
+            id: 5,
             label: "5. Nguyên quán: ",
             span: 24,
             value: employee.address && TextToTruncate(employee.address, 70),
         },
         {
+            id: 6,
             label: "6. Số CCCD: ",
             span: 12,
             value: employee.citizenIdentificationNumber,
         },
         {
+            id: 7,
             label: "7. Ngày cấp: ",
             span: 12,
             value:
@@ -151,32 +164,36 @@ const TabCV = () => {
                 format(new Date(employee.dateOfIssuanceCard), "dd-MM-yyyy"),
         },
         {
+            id: 8,
             label: "8. Nơi cấp: ",
             span: 24,
             value: employee.placeOfIssueCard,
         },
         {
+            id: 9,
             label: "9. Số điện thoại: ",
             span: 24,
             value: employee.phone,
         },
         {
+            id: 10,
             label: "10. Email: ",
             span: 24,
             value: employee.email,
         },
         {
+            id: 11,
             label: "11. Dân tộc: ",
             span: 12,
             value: employee.ethnic,
         },
         {
+            id: 12,
             label: "12. Tôn giáo: ",
             span: 12,
             value: employee.religion,
         },
     ];
-
     return (
         <>
             <div
@@ -191,7 +208,6 @@ const TabCV = () => {
                             className="cursor-pointer"
                             src={employee?.image}
                             size={200}
-                            icon={<UserOutlined />}
                         />
                         <div className="max-w-3xl mx-auto ">
                             <h1 className="text-center text-2xl font-bold">
@@ -213,7 +229,7 @@ const TabCV = () => {
                         <Row>
                             {dataRows.map((row) => (
                                 <DataRow
-                                    key={row.label}
+                                    key={row.id}
                                     label={row.label}
                                     value={row.value}
                                     span={row.span}

@@ -17,7 +17,6 @@ import {
     deleteProcess,
     updateProcess,
 } from "../../services/api";
-import ProcessModal from "./ProcessModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
@@ -25,6 +24,8 @@ import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
+import ProcesPosition from "../common/ProcessPosition";
+import ModalUpdateHappening from "../proposal/RecomnentModal";
 
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     const {
@@ -43,15 +44,18 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
     }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
+    const [loading, setLoading] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDeletePromote = async (id) => {
         try {
+            setLoading(true);
             await deleteProcess(id);
             message.success("Xóa thành công !");
-            handleGetProcessByEmp();
+            await handleGetProcessByEmp();
             form.resetFields();
+            setLoading(false);
         } catch (error) {
             message.error("Xóa thất bại !");
         }
@@ -68,7 +72,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công !");
             }
-            handleGetProcessByEmp();
+            await handleGetProcessByEmp();
             setIsModalOpen(true);
             form.resetFields();
         } catch (error) {
@@ -77,6 +81,31 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
         }
     };
 
+    const handleEdit = (employee) => {
+        employee.promotionDay = format(
+            new Date(employee.promotionDay).getTime(),
+            "yyyy-MM-dd"
+        );
+        setData(employee);
+        form.setFieldsValue(employee);
+        employee.promotionDay = format(
+            new Date(employee.promotionDay).getTime(),
+            "yyyy-MM-dd"
+        );
+        setData(employee);
+        form.setFieldsValue(employee);
+        employee.promotionDay = format(
+            new Date(employee.promotionDay).getTime(),
+            "yyyy-MM-dd"
+        );
+        setData(employee);
+        form.setFieldsValue(employee);
+    };
+
+    const handleWatch = (employee) => {
+        setData(employee);
+        setIsModalOpen(true);
+    };
     const columns = [
         {
             title: "STT",
@@ -108,16 +137,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             key: "currentPosition",
             width: 140,
             align: "center",
-            render: (currentPosition) => {
-                switch (currentPosition) {
-                    case 0:
-                        return "Giám đốc";
-                    case 1:
-                        return "Trưởng phòng";
-                    default:
-                        return "Quản lí";
-                }
-            },
+            render: (currentPosition) => ProcesPosition(currentPosition),
         },
         {
             title: "Chức vụ hiện tại",
@@ -125,16 +145,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             key: "newPosition",
             width: 140,
             align: "center",
-            render: (newPosition) => {
-                switch (newPosition) {
-                    case 0:
-                        return "Giám đốc";
-                    case 1:
-                        return "Trưởng phòng";
-                    default:
-                        return "Quản lí";
-                }
-            },
+            render: (newPosition) => ProcesPosition(newPosition),
         },
         {
             title: "Ghi chú",
@@ -173,16 +184,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
-                                    onClick={() => {
-                                        employee.promotionDay = format(
-                                            new Date(
-                                                employee.promotionDay
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                             <span>
@@ -200,10 +202,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
-                                onClick={() => {
-                                    setData(employee);
-                                    setIsModalOpen(true);
-                                }}
+                                onClick={() => handleWatch(employee)}
                             />
                         </div>
                     )}
@@ -211,10 +210,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
-                                onClick={() => {
-                                    setData(employee);
-                                    setIsModalOpen(true);
-                                }}
+                                onClick={() => handleWatch(employee)}
                             />
                         </div>
                     )}
@@ -224,16 +220,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.promotionDay = format(
-                                            new Date(
-                                                employee.promotionDay
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                         </div>
@@ -244,16 +231,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.promotionDay = format(
-                                            new Date(
-                                                employee.promotionDay
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                         </div>
@@ -382,7 +360,8 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     </div>
                 </Col>
             </Row>
-            <ProcessModal
+            <ModalUpdateHappening
+                type="process"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
@@ -390,6 +369,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                 handleGetProcessByEmp={handleGetProcessByEmp}
             />
             <ModalDelete
+                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}
