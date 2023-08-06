@@ -250,13 +250,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             label="Ghi chú"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >
@@ -271,13 +265,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             label="Nội dung"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >
@@ -290,13 +278,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                             label="Mô tả chi tiết"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >

@@ -57,7 +57,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 if (res?.data?.code === STATUS.SUCCESS) {
                     message.success("Cập nhật thành công!");
                     setData(res?.data?.data);
-                    handleGetSalaryByEmp();
+                    await handleGetSalaryByEmp();
                     setIsModalOpen(true);
                     form.resetFields();
                 } else {
@@ -68,7 +68,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                 if (res?.data?.code === STATUS.SUCCESS) {
                     message.success("Thêm mới thành công!");
                     setData(res?.data?.data[0]);
-                    handleGetSalaryByEmp();
+                    await handleGetSalaryByEmp();
                     setIsModalOpen(true);
                     form.resetFields();
                 } else {
@@ -81,6 +81,11 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
         }
     };
 
+    const handleEdit = (employee) => {
+        employee.startDate = format(new Date(employee.startDate), "yyyy-MM-dd");
+        setData(employee);
+        form.setFieldsValue(employee);
+    };
     const columns = [
         {
             title: "STT",
@@ -96,7 +101,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             key: "startDate",
             width: 140,
             align: "center",
-            render: (text) => format(new Date(text).getTime(), "yyyy/MM/dd"),
+            render: (text) => format(new Date(text), "yyyy/MM/dd"),
         },
         {
             title: "Lần thứ",
@@ -153,16 +158,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
-                                    onClick={() => {
-                                        employee.startDate = format(
-                                            new Date(
-                                                employee.startDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                             <span>
@@ -176,64 +172,31 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             </span>
                         </div>
                     )}
-                    {employee.salaryIncreaseStatus === 2 && (
-                        <div className="">
+                    {[2, 3].includes(employee.salaryIncreaseStatus) && (
+                        <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
                                 onClick={() => {
-                                    setIsModalOpen(true);
                                     setData(employee);
+                                    setIsModalOpen(true);
                                 }}
                             />
                         </div>
                     )}
-                    {employee.salaryIncreaseStatus === 3 && (
-                        <div className="">
-                            <EyeOutlined
-                                className="text-green-600 text-lg"
-                                onClick={() => {
-                                    setIsModalOpen(true);
-                                    setData(employee);
-                                }}
+                    {[4, 5].includes(employee.salaryIncreaseStatus) && (
+                        <div>
+                            <ModalInfo
+                                message={employee}
+                                type={
+                                    employee.salaryIncreaseStatus === 4
+                                        ? "req"
+                                        : ""
+                                }
                             />
-                        </div>
-                    )}
-                    {employee.salaryIncreaseStatus === 4 && (
-                        <div>
-                            <ModalInfo message={employee} type="req" />
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.startDate = format(
-                                            new Date(
-                                                employee.startDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
-                                />
-                            </span>
-                        </div>
-                    )}
-                    {employee.salaryIncreaseStatus === 5 && (
-                        <div>
-                            <ModalInfo message={employee} />
-                            <span>
-                                <EditOutlined
-                                    className="text-blue-600 text-lg"
-                                    onClick={() => {
-                                        employee.startDate = format(
-                                            new Date(
-                                                employee.startDate
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
-                                        );
-                                        setData(employee);
-                                        form.setFieldsValue(employee);
-                                    }}
+                                    onClick={() => handleEdit(employee)}
                                 />
                             </span>
                         </div>
@@ -311,17 +274,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             label="Ghi chú"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                                {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
-                                },
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >
@@ -334,17 +287,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             label="Lý do"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-                                {
-                                    max: 150,
-                                    message: "Nội dung bạn nhập quá dài !",
-                                },
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >

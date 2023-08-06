@@ -27,14 +27,10 @@ import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import ModalUpdateHappening from "../proposal/RecomnentModal";
 
+const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
+    STATUS_EMPLOYEE;
+
 const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
-    const {
-        NEW_SAVE,
-        PENDING,
-        BEEN_APPEOVED,
-        ADDITIONAL_REQUIREMENTS,
-        REJECT,
-    } = STATUS_EMPLOYEE;
     const [form] = Form.useForm();
     const { open } = useSelector((state) => state.employee);
     useEffect(() => {
@@ -148,13 +144,9 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
             width: 190,
             align: "center",
             render: (processStatus) => {
-                const statusText = TextToTruncate(
-                    StringStatus(processStatus),
-                    13
-                );
                 return (
                     <span className="cursor-default" title={processStatus}>
-                        {statusText}
+                        {TextToTruncate(StringStatus(processStatus), 13)}
                     </span>
                 );
             },
@@ -286,14 +278,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                             label="Ghi chú"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
-                                },
-
-                                {
                                     validator: validateCodeInput,
-                                    message:
-                                        "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                 },
                             ]}
                         >
