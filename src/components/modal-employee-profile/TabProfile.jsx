@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import TextToTruncate from "../../hook/TextToTruncate";
 import ModalDelete from "../ModalDelete";
+import TeamStatus from "../common/TeamStatus";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({ setThreeInfo, threeInfo }) => {
     const { employee } = useSelector((state) => state.employee);
@@ -29,8 +30,13 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
     const [openForm, setOpenForm] = useState(false);
     const [exp, setExp] = useState([]);
     const onFinish = async (values) => {
-        const { companyName, jobDescription, endDate, startDate, companyAddress } =
-            values;
+        const {
+            companyName,
+            jobDescription,
+            endDate,
+            startDate,
+            companyAddress,
+        } = values;
         const data = {
             companyName: companyName.trim(),
             jobDescription: jobDescription.trim(),
@@ -124,7 +130,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             const inputDateTime = new Date(value);
             const currentDateTime = new Date();
             if (inputDateTime > currentDateTime) {
-                return Promise.reject(new Error("Yêu cầu chọn trước ngày hôm nay"));
+                return Promise.reject(
+                    new Error("Yêu cầu chọn trước ngày hôm nay")
+                );
             }
             return Promise.resolve();
         } else {
@@ -145,7 +153,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <div className="leading-10">
                             <div className="mt-10">
                                 <MailOutlined className="mr-3" />
-                                {employee?.email && TextToTruncate(employee?.email, 20)}
+                                {employee?.email &&
+                                    TextToTruncate(employee?.email, 20)}
                             </div>
                             <div>
                                 <PhoneOutlined className="mr-3" />
@@ -153,17 +162,22 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             </div>
                             <div>
                                 <EnvironmentOutlined className="mr-3" />
-                                {employee?.address && TextToTruncate(employee?.address, 20)}
+                                {employee?.address &&
+                                    TextToTruncate(employee?.address, 20)}
                             </div>
                             <div>
                                 <UserOutlined className="mr-3" />
-                                {employee?.gender === GENDER.FEMALE ? "Nữ" : "Nam"}
+                                {employee?.gender === GENDER.FEMALE
+                                    ? "Nữ"
+                                    : "Nam"}
                             </div>
                             <div>
                                 <GiftOutlined className="mr-3" />
                                 {employee?.dateOfBirth &&
                                     format(
-                                        new Date(employee?.dateOfBirth).getTime(),
+                                        new Date(
+                                            employee?.dateOfBirth
+                                        ).getTime(),
                                         "dd-MM-yyyy"
                                     )}
                             </div>
@@ -174,7 +188,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 <TextArea
                                     className="!pt-[8px]"
                                     readOnly={
-                                        ![NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                                        ![
+                                            NEW_SAVE,
+                                            REJECT,
+                                            ADDITIONAL_REQUIREMENTS,
+                                        ].includes(
                                             employee?.submitProfileStatus
                                         )
                                     }
@@ -196,7 +214,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 <TextArea
                                     className="!pt-[8px]"
                                     readOnly={
-                                        ![NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                                        ![
+                                            NEW_SAVE,
+                                            REJECT,
+                                            ADDITIONAL_REQUIREMENTS,
+                                        ].includes(
                                             employee?.submitProfileStatus
                                         )
                                     }
@@ -214,11 +236,17 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         </Col>
                     </div>
                     <div className="basis-3/4 ">
-                        <div className="pl-10" style={{borderLeft:'1px solid'}}>
+                        <div
+                            className="pl-10"
+                            style={{ borderLeft: "1px solid" }}
+                        >
                             <div className="border-l-2">
-                                <h1>{employee?.name && TextToTruncate(employee?.name, 25)}</h1>
-                                <div className="text-lg">
-                                    {employee?.team === 1 ? "Back-end" : "Front-end"}
+                                <h1>
+                                    {employee?.name &&
+                                        TextToTruncate(employee?.name, 25)}
+                                </h1>
+                                <div className="text-lg w-fit">
+                                    {TeamStatus(employee?.team)}
                                 </div>
                             </div>
                             <div className="border-l-2 mt-8">
@@ -236,7 +264,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 maxLength={240}
                                                 autoSize={{ minRows: 1 }}
                                                 readOnly={
-                                                    ![NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                                                    ![
+                                                        NEW_SAVE,
+                                                        REJECT,
+                                                        ADDITIONAL_REQUIREMENTS,
+                                                    ].includes(
                                                         employee?.submitProfileStatus
                                                     )
                                                 }
@@ -254,19 +286,24 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="pl-10" style={{borderLeft:'1px solid'}}>
+                        <div
+                            className="pl-10"
+                            style={{ borderLeft: "1px solid" }}
+                        >
                             <div className="border-l-2 flex justify-between items-center mt-6">
                                 <h2 className="my-5">KINH NGHIỆM LÀM VIỆC</h2>
-                                {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
-                                    employee?.submitProfileStatus
-                                ) && (
-                                        <PlusOutlined
-                                            className="cursor-pointer"
-                                            onClick={() => {
-                                                setOpenForm(!openForm);
-                                            }}
-                                        />
-                                    )}
+                                {[
+                                    NEW_SAVE,
+                                    REJECT,
+                                    ADDITIONAL_REQUIREMENTS,
+                                ].includes(employee?.submitProfileStatus) && (
+                                    <PlusOutlined
+                                        className="cursor-pointer"
+                                        onClick={() => {
+                                            setOpenForm(!openForm);
+                                        }}
+                                    />
+                                )}
                             </div>
                             <Form
                                 className={openForm ? "" : "hidden"}
@@ -311,7 +348,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: "Vui lòng nhập tên công ty!",
+                                                    message:
+                                                        "Vui lòng nhập tên công ty!",
                                                 },
                                             ]}
                                         >
@@ -325,7 +363,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: "Vui lòng nhập địa chỉ công ty!",
+                                                    message:
+                                                        "Vui lòng nhập địa chỉ công ty!",
                                                 },
                                             ]}
                                         >
@@ -344,79 +383,120 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         },
                                     ]}
                                 >
-                                    <TextArea autoSize showCount maxLength={240} />
+                                    <TextArea
+                                        autoSize
+                                        showCount
+                                        maxLength={240}
+                                    />
                                 </Form.Item>
                                 <Form.Item hidden name="id">
                                     <Input hidden />
                                 </Form.Item>
                                 <Form.Item className="mt-8">
                                     <Space>
-                                        <Button loading={loading} type="primary" htmlType="submit">
+                                        <Button
+                                            loading={loading}
+                                            type="primary"
+                                            htmlType="submit"
+                                        >
                                             {values?.id ? "Cập nhật" : "Lưu"}
                                         </Button>
-                                        <Button htmlType="reset">Đặt lại</Button>
+                                        <Button htmlType="reset">
+                                            Đặt lại
+                                        </Button>
                                     </Space>
                                 </Form.Item>
                             </Form>
                             {exp?.length > 0 &&
                                 exp.map((item) => {
                                     return (
-                                        <div className="flex justify-between group mb-5" key={item.id}>
+                                        <div
+                                            className="flex justify-between group mb-5"
+                                            key={item.id}
+                                        >
                                             <div>
                                                 <div className="font-medium">
                                                     <div>
-                                                        <span className="uppercase">{item.companyName}</span>
+                                                        <span className="uppercase">
+                                                            {item.companyName}
+                                                        </span>
                                                         <span> | </span>
                                                         {item?.startDate &&
-                                                            format(new Date(item.startDate), "dd/MM/yyy")}
+                                                            format(
+                                                                new Date(
+                                                                    item.startDate
+                                                                ),
+                                                                "dd/MM/yyy"
+                                                            )}
                                                         -
                                                         {item?.endDate &&
-                                                            format(new Date(item.endDate), "dd/MM/yyy")}
+                                                            format(
+                                                                new Date(
+                                                                    item.endDate
+                                                                ),
+                                                                "dd/MM/yyy"
+                                                            )}
                                                     </div>
                                                 </div>
                                                 <div className="custom-area relative">
                                                     <TextArea
                                                         className="!pt-[8px]"
-                                                        value={item.jobDescription}
+                                                        value={
+                                                            item.jobDescription
+                                                        }
                                                         bordered={false}
                                                         autoSize
                                                         readOnly
                                                     ></TextArea>
                                                 </div>
                                             </div>
-                                            {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                                            {[
+                                                NEW_SAVE,
+                                                REJECT,
+                                                ADDITIONAL_REQUIREMENTS,
+                                            ].includes(
                                                 employee.submitProfileStatus
                                             ) && (
-                                                    <div
-                                                        className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
+                                                <div
+                                                    className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
                                         justify-center gap-2 items-center p-2 rounded-md"
-                                                    >
-                                                        <EditOutlined
-                                                            onClick={() => {
-                                                                form.setFieldsValue({
+                                                >
+                                                    <EditOutlined
+                                                        onClick={() => {
+                                                            form.setFieldsValue(
+                                                                {
                                                                     ...item,
-                                                                    startDate: format(
-                                                                        new Date(item.startDate),
-                                                                        "yyyy-MM-dd"
-                                                                    ),
-                                                                    endDate: format(
-                                                                        new Date(item.endDate),
-                                                                        "yyyy-MM-dd"
-                                                                    ),
-                                                                });
-                                                                setOpenForm(true);
-                                                            }}
-                                                            className="text-blue-600 text-lg cursor-pointer"
-                                                        />
-                                                        <DeleteOutlined
-                                                            onClick={() => {
-                                                                setEmployeeIdToDelete(item.id);
-                                                                setOpenDelete(true);
-                                                            }}
-                                                            className="text-red-600 text-lg cursor-pointer"
-                                                        />
-                                                    </div>
-                                                )}
+                                                                    startDate:
+                                                                        format(
+                                                                            new Date(
+                                                                                item.startDate
+                                                                            ),
+                                                                            "yyyy-MM-dd"
+                                                                        ),
+                                                                    endDate:
+                                                                        format(
+                                                                            new Date(
+                                                                                item.endDate
+                                                                            ),
+                                                                            "yyyy-MM-dd"
+                                                                        ),
+                                                                }
+                                                            );
+                                                            setOpenForm(true);
+                                                        }}
+                                                        className="text-blue-600 text-lg cursor-pointer"
+                                                    />
+                                                    <DeleteOutlined
+                                                        onClick={() => {
+                                                            setEmployeeIdToDelete(
+                                                                item.id
+                                                            );
+                                                            setOpenDelete(true);
+                                                        }}
+                                                        className="text-red-600 text-lg cursor-pointer"
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     );
                                 })}

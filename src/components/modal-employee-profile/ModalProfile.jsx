@@ -61,10 +61,13 @@ const ModalProfile = () => {
                                 <i>
                                     {" "}
                                     Số lưu: {employee?.numberSaved} - Ngày lưu:{" "}
-                                    {employee?.submitDay&&format(
-                                        new Date(employee?.submitDay).getTime(),
-                                        "yyyy-MM-dd"
-                                    )}
+                                    {employee?.submitDay &&
+                                        format(
+                                            new Date(
+                                                employee?.submitDay
+                                            ).getTime(),
+                                            "yyyy-MM-dd"
+                                        )}
                                 </i>
                             </div>
                         )}
@@ -84,22 +87,22 @@ const ModalProfile = () => {
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
-                                <Button
-                                    className="min-w-[100px]"
-                                    type="primary"
-                                    loading={loading}
-                                    onClick={() => {
-                                        handleUpdateEmployee({
-                                            ...employee,
-                                            knowledge: threeInfo?.knowledge?.trim(),
-                                            skill: threeInfo?.skill?.trim(),
-                                            activity: threeInfo?.activity?.trim()
-                                        });
-                                    }}
-                                >
-                                    Lưu
-                                </Button>
-                            )}
+                            <Button
+                                className="min-w-[100px]"
+                                type="primary"
+                                loading={loading}
+                                onClick={() => {
+                                    handleUpdateEmployee({
+                                        ...employee,
+                                        knowledge: threeInfo?.knowledge?.trim(),
+                                        skill: threeInfo?.skill?.trim(),
+                                        activity: threeInfo?.activity?.trim(),
+                                    });
+                                }}
+                            >
+                                Lưu
+                            </Button>
+                        )}
                         {employee?.submitProfileStatus ===
                             ACCEPT_REQUEST_END_PROFILE &&
                             role !== ROLE.MANAGE && (
@@ -138,22 +141,22 @@ const ModalProfile = () => {
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
-                                <Button
-                                    className="min-w-[100px] bg-green-600 hover:!bg-green-500"
-                                    htmlType="submit"
-                                    type="primary"
-                                    onClick={() => {
-                                        dispatch(
-                                            setOpen({
-                                                ...open,
-                                                modalSendLeader: true,
-                                            })
-                                        );
-                                    }}
-                                >
-                                    Trình lãnh đạo
-                                </Button>
-                            )}
+                            <Button
+                                className="min-w-[100px]"
+                                htmlType="submit"
+                                type="primary"
+                                onClick={() => {
+                                    dispatch(
+                                        setOpen({
+                                            ...open,
+                                            modalSendLeader: true,
+                                        })
+                                    );
+                                }}
+                            >
+                                Trình lãnh đạo
+                            </Button>
+                        )}
                         <Button
                             className="min-w-[100px]"
                             type="primary"

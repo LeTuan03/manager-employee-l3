@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Table, Tag, Input } from "antd";
+import { Button, Modal, Table, Input } from "antd";
 import TextToTruncate from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
@@ -16,13 +16,7 @@ import {
     getEmployee,
     setOpen,
 } from "../redux/employee/employeeSlice";
-import {
-    GENDER,
-    ROLE,
-    STATUS,
-    STATUS_EMPLOYEE,
-    TEAM,
-} from "../constants/constants";
+import { GENDER, ROLE, STATUS, STATUS_EMPLOYEE } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
 import TeamStatus from "./common/TeamStatus";

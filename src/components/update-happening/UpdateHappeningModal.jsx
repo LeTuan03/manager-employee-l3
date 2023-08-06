@@ -1,6 +1,5 @@
 import { Button, Card, Col, Image, Input, Modal, Row, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-
 import { format } from "date-fns";
 import TabIncreaseSalary from "../increasesalary/TabIncreaseSalary";
 import TabProcess from "../process/TabProcess";
@@ -12,11 +11,11 @@ import {
 import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
-import { TEAM } from "../../constants/constants";
+import TeamStatus from "../common/TeamStatus";
 
 export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
-    const { open,employee } = useSelector((state) => state.employee);
+    const { open, employee } = useSelector((state) => state.employee);
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
@@ -81,16 +80,6 @@ export default function UpdateHappeningModal() {
             ),
         },
     ];
-    const getTeam = (team) => {
-        switch (team) {
-            case TEAM.FE:
-                return "Front-end";
-            case TEAM.BE:
-                return "Back-end";
-            default:
-                return "Tester";
-        }
-    };
     useEffect(() => {
         if (employee?.id) {
             handleGetSalaryByEmp();
@@ -161,9 +150,7 @@ export default function UpdateHappeningModal() {
                                 src={employee.image}
                             />
                             <h1>{employee.name}</h1>
-                            <b>
-                                {getTeam(employee.currentPosition)}
-                            </b>
+                            <b>{TeamStatus(employee.currentPosition)}</b>
                         </Col>
                         <Col span={16}>
                             <Card
