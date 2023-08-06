@@ -1,28 +1,12 @@
 import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
 import TextToTruncate from "../../hook/TextToTruncate";
 
 const TabCV = () => {
-    const [date, setDate] = useState({});
     const { employee } = useSelector((state) => state.employee);
-    const getTodayDate = () => {
-        const date = new Date();
-        let day = date.getDate();
-        if (day < 10) {
-            day = "0" + day
-        }
-        let month = date.getMonth() + 1;
-        if (month < 10) {
-            month = "0" + month
-        }
-        setDate({ day, month });
-    };
-    useEffect(() => {
-        getTodayDate();
-    }, []);
     const columnFamily = [
         {
             title: "STT",
@@ -37,7 +21,9 @@ const TabCV = () => {
             key: "name",
             align: "center",
             className: "border-table",
-            render: (name) => <div className="min-w-[90px] text-left">{name}</div>,
+            render: (name) => (
+                <div className="min-w-[90px] text-left">{name}</div>
+            ),
         },
         {
             title: "Ngày sinh",
@@ -261,8 +247,27 @@ const TabCV = () => {
                         <div className="flex flex-row-reverse m-5">
                             <div className="text-center pr-10">
                                 <i>
-                                    Hà Nội, ngày {date.day} tháng {date.month}{" "}
-                                    năm 2023
+                                    Hà Nội, ngày{" "}
+                                    {format(
+                                        employee?.submitDay
+                                            ? new Date(employee?.submitDay)
+                                            : new Date(),
+                                        "dd"
+                                    )}{" "}
+                                    tháng{" "}
+                                    {format(
+                                        employee?.submitDay
+                                            ? new Date(employee?.submitDay)
+                                            : new Date(),
+                                        "MM"
+                                    )}{" "}
+                                    năm{" "}
+                                    {format(
+                                        employee?.submitDay
+                                            ? new Date(employee?.submitDay)
+                                            : new Date(),
+                                        "yyyy"
+                                    )}
                                 </i>
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className=" m-8 mt-3">(Ký, ghi rõ họ tên)</i>

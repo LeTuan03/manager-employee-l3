@@ -182,7 +182,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     )}
                             </div>
                         </div>
-                        <h2 className="mt-5">KĨ NĂNG</h2>
+                        <h2 className="mt-5">KĨ NĂNGNĂNG</h2>
                         <Col className=" pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
