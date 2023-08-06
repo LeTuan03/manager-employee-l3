@@ -182,7 +182,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     )}
                             </div>
                         </div>
-                        <h2 className="mt-5">Kĩ năng</h2>
+                        <h2 className="mt-5">KĨ NĂNG</h2>
                         <Col className=" pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
@@ -208,7 +208,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 ></TextArea>
                             </div>
                         </Col>
-                        <h2 className="mt-5">Hoạt động</h2>
+                        <h2 className="mt-5">HOẠT ĐỘNG</h2>
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
@@ -251,7 +251,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             </div>
                             <div className="border-l-2 mt-8">
                                 <div>
-                                    <div className="text-lg mb-3">HỌC VẤN</div>
+                                    <h2 className="text-lg mb-3">HỌC VẤN</h2>
                                     <div className="relative">
                                         <span className="absolute top-[-0.4em] left-[4px] text-3xl z-50">
                                             ❝
