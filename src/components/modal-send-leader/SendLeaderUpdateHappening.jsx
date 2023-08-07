@@ -173,13 +173,7 @@ const SendLeaderUpdateHappening = (props) => {
                                 name="submitContent"
                                 rules={[
                                     {
-                                        required: true,
-                                        message: "Bạn cần nhập trường này",
-                                    },
-                                    {
                                         validator: validateCodeInput,
-                                        message:
-                                            "Vui lòng nhập văn bản thuần túy, không phải nội dung giống như mã.",
                                     },
                                 ]}
                             >

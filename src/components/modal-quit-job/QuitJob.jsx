@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ROLE } from "../../constants/constants";
+import Conclusion from "../common/Conclusion";
 
 const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
     const { employee } = useSelector((state) => state.employee);
@@ -108,29 +109,11 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                         <Col span={12}></Col>
                         <Col span={12} className="text-center">
                             <div>
-                                <i className="block">
-                                    Hà Nội, ngày{" "}
-                                    {format(
-                                        employee?.endDay
-                                            ? new Date(employee?.endDay)
-                                            : new Date(),
-                                        "dd"
-                                    )}{" "}
-                                    tháng{" "}
-                                    {format(
-                                        employee?.endDay
-                                            ? new Date(employee?.endDay)
-                                            : new Date(),
-                                        "MM"
-                                    )}{" "}
-                                    năm{" "}
-                                    {format(
-                                        employee?.endDay
-                                            ? new Date(employee?.endDay)
-                                            : new Date(),
-                                        "yyyy"
-                                    )}
-                                </i>
+                                {Conclusion(
+                                    employee?.endDay
+                                        ? employee?.endDay
+                                        : new Date()
+                                )}
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className="block">(Ký, ghi rõ họ tên)</i>
                                 <b className="block mt-5">

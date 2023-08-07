@@ -15,13 +15,6 @@ export default function IncreaseSalary() {
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
     const getCurrentEmpIncreaseSalary = async () => {
         const res = await getSalaryIncreaseByCurrentLeader();
         setDataSalary(res?.data?.data);
@@ -136,8 +129,8 @@ export default function IncreaseSalary() {
                         zIndex={1}
                         title="Biểu mẫu"
                         open={isModalOpen}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
+                        onOk={() => setIsModalOpen(false)}
+                        onCancel={() => setIsModalOpen(false)}
                         width={1300}
                         centered
                         footer={

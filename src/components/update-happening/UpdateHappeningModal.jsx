@@ -88,148 +88,135 @@ export default function UpdateHappeningModal() {
         }
     }, [employee?.id]);
     return (
-        <>
-            <Modal
-                zIndex={3}
-                title={
-                    <p className="fixed top-0 z-10 py-2 w-[80%] bg-white">
-                        CẬP NHẬT DIỄN BIẾN
-                    </p>
-                }
-                centered
-                open={open.modalUpdateHappening}
-                width="84%"
-                onCancel={() => {
-                    dispatch(setOpen({ ...open, modalUpdateHappening: false }));
-                    dispatch(resetEmployee());
-                    setActiveKey("1");
-                }}
-                footer={
-                    <div
-                        className="text-center bg-white fixed bottom-0 w-[84%] py-5"
-                        style={{
-                            width: "80%",
-                            transform: "translateX(0)",
+        <Modal
+            className="h-screen relative"
+            zIndex={3}
+            title={
+                <p className="fixed top-0 z-10 py-2 w-[80%] bg-white">
+                    CẬP NHẬT DIỄN BIẾN
+                </p>
+            }
+            centered
+            open={open.modalUpdateHappening}
+            width="84%"
+            onCancel={() => {
+                dispatch(setOpen({ ...open, modalUpdateHappening: false }));
+                dispatch(resetEmployee());
+                setActiveKey("1");
+            }}
+            footer={
+                <div className="text-center bg-white fixed bottom-0 w-[80%] py-5">
+                    <Button
+                        className="min-w-[100px]"
+                        key="submit"
+                        type="primary"
+                        onClick={() => {
+                            dispatch(setOpen({ ...open, modalEnd: true }));
                         }}
                     >
-                        <Button
-                            className="min-w-[100px]"
-                            key="submit"
-                            type="primary"
-                            onClick={() => {
-                                dispatch(setOpen({ ...open, modalEnd: true }));
-                            }}
-                        >
-                            Kết thúc
-                        </Button>
-                        <Button
-                            className="min-w-[100px]"
-                            type="primary"
-                            danger
-                            onClick={() => {
-                                dispatch(resetEmployee());
-                                dispatch(
-                                    setOpen({
-                                        ...open,
-                                        modalUpdateHappening: false,
-                                    })
-                                );
-                            }}
-                        >
-                            Hủy
-                        </Button>
-                    </div>
-                }
-            >
-                <div className="h-full overflow-y-scroll happening-scroll mt-5">
-                    <Row className="mt-7">
-                        <Col span={8} className="flex flex-col items-center">
-                            <Image
-                                width={200}
-                                height={200}
-                                src={employee.image}
-                            />
-                            <h1>{employee.name}</h1>
-                            <b>{TeamStatus(employee.currentPosition)}</b>
-                        </Col>
-                        <Col span={16}>
-                            <Card
-                                title="Thông tin nhân viên"
-                                bordered={false}
-                                className="w-full"
-                            >
-                                <Row gutter={16} className="mb-2">
-                                    <Col span={8}>Họ và tên</Col>
-                                    <Col span={8}>Mã nhân viên </Col>
-                                    <Col span={8}>Số điện thoại</Col>
-                                </Row>
-                                <Row gutter={16} className="mb-2">
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={employee.name}
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={employee.code}
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={employee.phone}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row gutter={16} className="mb-2">
-                                    <Col span={8}>Email</Col>
-                                    <Col span={8}>CCCD/CMT</Col>
-                                    <Col span={8}>Ngày sinh</Col>
-                                </Row>
-                                <Row gutter={16} className="mb-2">
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={employee.email}
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={
-                                                employee.citizenIdentificationNumber
-                                            }
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Input
-                                            className="pointer-events-none"
-                                            value={
-                                                employee.id &&
-                                                format(
-                                                    new Date(
-                                                        employee.dateOfBirth
-                                                    ),
-                                                    "dd/MM/yyyy"
-                                                )
-                                            }
-                                        />
-                                    </Col>
-                                </Row>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <div className="mt-10 mb-20">
-                        <Tabs
-                            activeKey={activeKey}
-                            onChange={(e) => setActiveKey(e)}
-                            items={items}
-                        />
-                    </div>
+                        Kết thúc
+                    </Button>
+                    <Button
+                        className="min-w-[100px]"
+                        type="primary"
+                        danger
+                        onClick={() => {
+                            dispatch(resetEmployee());
+                            dispatch(
+                                setOpen({
+                                    ...open,
+                                    modalUpdateHappening: false,
+                                })
+                            );
+                        }}
+                    >
+                        Hủy
+                    </Button>
                 </div>
-            </Modal>
-        </>
+            }
+        >
+            <div className="h-full overflow-y-scroll happening-scroll mt-5">
+                <Row className="mt-7">
+                    <Col span={8} className="flex flex-col items-center">
+                        <Image width={200} height={200} src={employee.image} />
+                        <h1>{employee.name}</h1>
+                        <b>{TeamStatus(employee.currentPosition)}</b>
+                    </Col>
+                    <Col span={16}>
+                        <Card
+                            title="Thông tin nhân viên"
+                            bordered={false}
+                            className="w-full"
+                        >
+                            <Row gutter={16} className="mb-2">
+                                <Col span={8}>Họ và tên</Col>
+                                <Col span={8}>Mã nhân viên </Col>
+                                <Col span={8}>Số điện thoại</Col>
+                            </Row>
+                            <Row gutter={16} className="mb-2">
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={employee.name}
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={employee.code}
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={employee.phone}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} className="mb-2">
+                                <Col span={8}>Email</Col>
+                                <Col span={8}>CCCD/CMT</Col>
+                                <Col span={8}>Ngày sinh</Col>
+                            </Row>
+                            <Row gutter={16} className="mb-2">
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={employee.email}
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={
+                                            employee.citizenIdentificationNumber
+                                        }
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Input
+                                        className="pointer-events-none"
+                                        value={
+                                            employee.id &&
+                                            format(
+                                                new Date(employee.dateOfBirth),
+                                                "dd/MM/yyyy"
+                                            )
+                                        }
+                                    />
+                                </Col>
+                            </Row>
+                        </Card>
+                    </Col>
+                </Row>
+                <div className="mt-10 mb-20">
+                    <Tabs
+                        activeKey={activeKey}
+                        onChange={(e) => setActiveKey(e)}
+                        items={items}
+                    />
+                </div>
+            </div>
+        </Modal>
     );
 }

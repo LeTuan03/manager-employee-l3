@@ -318,6 +318,7 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                     <div className="main-table">
                         <ConfigProvider renderEmpty={() => <></>}>
                             <Table
+                                className="min-h-[200px]"
                                 bordered
                                 columns={columns}
                                 dataSource={processs}

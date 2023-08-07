@@ -4,6 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
 import TextToTruncate from "../../hook/TextToTruncate";
+import Conclusion from "../common/Conclusion";
 
 const TabCV = () => {
     const { employee } = useSelector((state) => state.employee);
@@ -246,29 +247,11 @@ const TabCV = () => {
                         </p>
                         <div className="flex flex-row-reverse m-5">
                             <div className="text-center pr-10">
-                                <i>
-                                    Hà Nội, ngày{" "}
-                                    {format(
-                                        employee?.submitDay
-                                            ? new Date(employee?.submitDay)
-                                            : new Date(),
-                                        "dd"
-                                    )}{" "}
-                                    tháng{" "}
-                                    {format(
-                                        employee?.submitDay
-                                            ? new Date(employee?.submitDay)
-                                            : new Date(),
-                                        "MM"
-                                    )}{" "}
-                                    năm{" "}
-                                    {format(
-                                        employee?.submitDay
-                                            ? new Date(employee?.submitDay)
-                                            : new Date(),
-                                        "yyyy"
-                                    )}
-                                </i>
+                                {Conclusion(
+                                    employee?.submitDay
+                                        ? employee?.submitDay
+                                        : new Date()
+                                )}
                                 <h3>NGƯỜI LÀM ĐƠN</h3>
                                 <i className=" m-8 mt-3">(Ký, ghi rõ họ tên)</i>
                                 <h5 className=" my-10 text-base">
