@@ -62,6 +62,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                 setExp(res?.data?.data);
                 setOpenForm(false);
                 form.resetFields();
+                message.success("Thêm thành công!");
             } else {
                 message.error(res?.data?.message);
             }
@@ -78,6 +79,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                 await handleGetExp();
                 setOpenForm(false);
                 form.resetFields();
+                message.success("Cập nhật thành công!");
             } else {
                 message.error(res?.data?.message);
             }
