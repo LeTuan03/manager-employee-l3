@@ -110,10 +110,12 @@ export default function Resume() {
             width: 200,
             align: "center",
             render: (status) => {
-                const statusText = TextToTruncate(StringStatus(status), 25);
                 return (
-                    <span className="cursor-default" title={status}>
-                        {statusText}
+                    <span
+                        className="cursor-default"
+                        title={StringStatus(status)}
+                    >
+                        {TextToTruncate(StringStatus(status), 25)}
                     </span>
                 );
             },
@@ -209,7 +211,6 @@ export default function Resume() {
                                                     setReasonForEnding={
                                                         setReasonForEnding
                                                     }
-                                                    employees={profile}
                                                 />
                                             ),
                                         },

@@ -63,10 +63,8 @@ const ModalProfile = () => {
                                     Số lưu: {employee?.numberSaved} - Ngày lưu:{" "}
                                     {employee?.submitDay &&
                                         format(
-                                            new Date(
-                                                employee?.submitDay
-                                            ).getTime(),
-                                            "yyyy-MM-dd"
+                                            new Date(employee?.submitDay),
+                                            "dd-MM-yyyy"
                                         )}
                                 </i>
                             </div>

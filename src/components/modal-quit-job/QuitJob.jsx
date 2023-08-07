@@ -1,12 +1,13 @@
+import React from "react";
 import { Col, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
-import React from "react";
 import { useSelector } from "react-redux";
 import { ROLE } from "../../constants/constants";
 import Conclusion from "../common/Conclusion";
+import CommonHeader from "../common/CommonHeader";
 
-const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
+const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
     const { employee } = useSelector((state) => state.employee);
     const { role } = useSelector((state) => state.account);
     return (
@@ -18,17 +19,10 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
         >
             <div className="bg-[#e7e7e7] p-14 max-h-[520px] overflow-y-scroll">
                 <div className=" bg-white py-10 pb-20">
-                    <Row>
-                        <Col span={12} className="text-center">
-                            <h3>CÔNG TY OCEAN TECH</h3>
-                            <p>Số:</p>
-                        </Col>
-                        <Col span={12} className="text-center">
-                            <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
-                            <b>Độc lập - Tự do - Hạnh phúc</b>
-                            <p>--------------------</p>
-                        </Col>
-                    </Row>
+                    <CommonHeader
+                        company="CÔNG TY OCEAN TECH"
+                        profile={employee}
+                    />
                     <Row>
                         <Col span={24} className="text-center mt-10">
                             <h2>ĐƠN XIN NGHỈ VIỆC</h2>
@@ -42,7 +36,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                     <div>Tôi tên là:</div>
                                     <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                         <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                            {employees?.name || employee?.name}
+                                            {employee?.name}
                                         </span>
                                     </div>
                                 </div>
@@ -51,16 +45,11 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                         <div>Ngày, tháng, năm sinh:</div>
                                         <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                             <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                                {(employees?.dateOfBirth &&
+                                                {employee?.dateOfBirth &&
                                                     format(
-                                                        employees?.dateOfBirth,
+                                                        employee?.dateOfBirth,
                                                         "dd-MM-yyyy"
-                                                    )) ||
-                                                    (employee?.dateOfBirth &&
-                                                        format(
-                                                            employee?.dateOfBirth,
-                                                            "dd-MM-yyyy"
-                                                        ))}
+                                                    )}
                                             </span>
                                         </div>
                                     </div>
@@ -68,8 +57,9 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                         <div> CCCD/CMT:</div>
                                         <div className="flex flex-shrink flex-grow h-[32px] pl-1">
                                             <span className="relative z-10 pl-3 inline-block w-full dotted">
-                                                {employees?.citizenIdentificationNumber ||
-                                                    employee?.citizenIdentificationNumber}
+                                                {
+                                                    employee?.citizenIdentificationNumber
+                                                }
                                             </span>
                                         </div>
                                     </div>
@@ -94,10 +84,10 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                                 </div>
                                 <div className="leading-9">
                                     Trong thời gian chờ đợi sự chấp thuận của
-                                    Ban Giám đốc Công ty, tôi sẽ tiếp tục <br />{" "}
-                                    làm việc nghiêm túc và tiến hành bàn giao
-                                    công việc cũng như tài sản cho người <br />{" "}
-                                    quản lý trực tiếp của tôi.
+                                    Ban Giám đốc Công ty, tôi sẽ tiếp tục làm
+                                    việc nghiêm túc và tiến hành bàn giao công
+                                    việc cũng như tài sản cho người quản lý trực
+                                    tiếp của tôi.
                                 </div>
                                 <div className="mt-5">
                                     Tôi xin chân thành cảm ơn!
@@ -105,23 +95,10 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding, employees }) => {
                             </div>
                         </Col>
                     </Row>
-                    <Row className="mt-10">
-                        <Col span={12}></Col>
-                        <Col span={12} className="text-center">
-                            <div>
-                                {Conclusion(
-                                    employee?.endDay
-                                        ? employee?.endDay
-                                        : new Date()
-                                )}
-                                <h3>NGƯỜI LÀM ĐƠN</h3>
-                                <i className="block">(Ký, ghi rõ họ tên)</i>
-                                <b className="block mt-5">
-                                    {employees?.name || employee?.name}
-                                </b>
-                            </div>
-                        </Col>
-                    </Row>
+                    {Conclusion(
+                        employee?.endDay ? employee?.endDay : new Date(),
+                        employee?.name
+                    )}
                 </div>
             </div>
         </div>

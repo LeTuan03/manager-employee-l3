@@ -6,7 +6,7 @@ const CommonHeader = ({ company, profile }) => {
         <Row>
             <Col flex={2} className="text-center">
                 <h3>{company}</h3>
-                <p>Số: {profile.employeeId}</p>
+                <p>Số: {profile?.employeeId || profile?.id}</p>
             </Col>
             <Col flex={3} className="text-center">
                 <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
