@@ -245,20 +245,12 @@ const TabCV = () => {
                             sự thật, nếu có điều gì không đúng tôi chịu trách
                             nhiệm trước pháp luật về lời khai của mình.
                         </p>
-                        <div className="flex flex-row-reverse m-5">
-                            <div className="text-center pr-10">
-                                {Conclusion(
-                                    employee?.submitDay
-                                        ? employee?.submitDay
-                                        : new Date()
-                                )}
-                                <h3>NGƯỜI LÀM ĐƠN</h3>
-                                <i className=" m-8 mt-3">(Ký, ghi rõ họ tên)</i>
-                                <h5 className=" my-10 text-base">
-                                    {employee.name}
-                                </h5>
-                            </div>
-                        </div>
+                        {Conclusion(
+                            employee?.submitDay
+                                ? employee?.submitDay
+                                : new Date(),
+                            employee.name
+                        )}
                     </div>
                 </div>
             </div>

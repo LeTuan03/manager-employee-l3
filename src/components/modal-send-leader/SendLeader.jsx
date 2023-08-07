@@ -61,15 +61,15 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             if (res?.data?.code === STATUS.SUCCESS) {
                 if (res?.data?.data?.submitProfileStatus === "2") {
                     dispatch(
-                        getAllEmployee(
-                            `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
-                        )
+                        getAllEmployee({
+                            status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                        })
                     );
                 } else {
                     dispatch(
-                        getAllEmployee(
-                            `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},${REJECT_REQUEST_END_PROFILE}`
-                        )
+                        getAllEmployee({
+                            status: `${BEEN_APPEOVED},${PROFILE_END_REQUEST},${ADDITIONAL_REQUIREMENTS_END_PROFILE},${REJECT_REQUEST_END_PROFILE}`,
+                        })
                     );
                 }
                 setIdLeader({ id: null, label: "" });

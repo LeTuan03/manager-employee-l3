@@ -240,7 +240,7 @@ const TableComponet = () => {
         if (res?.data?.code === STATUS.SUCCESS) {
             dispatch(
                 getAllEmployee(
-                    `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
+                    { status:`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`}
                 )
             );
         }

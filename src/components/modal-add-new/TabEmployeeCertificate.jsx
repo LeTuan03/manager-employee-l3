@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, message, Row, Col, Button, Table, ConfigProvider, Empty } from "antd";
+import {
+    Form,
+    Input,
+    message,
+    Row,
+    Col,
+    Button,
+    Table,
+    ConfigProvider,
+    Empty,
+} from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
@@ -155,11 +165,12 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             align: "center",
             key: "stt",
             width: 60,
-            render: (_, item, index) => <>{index + 1}</>,
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Thao tác",
             align: "center",
+            width: 90,
             render: (_, item) => (
                 <div className="flex justify-center gap-3">
                     <>
@@ -198,7 +209,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "certificateName",
             key: "certificateName",
             align: "center",
-            className: '!max-w-[200px]',
+            width: 200,
             render: (certificateName) => (
                 <>{TextToTruncate(certificateName, 26)}</>
             ),
@@ -208,10 +219,8 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "content",
             key: "content",
             align: "center",
-            className: '!max-w-[200px]',
-            render: (content) => (
-                <>{TextToTruncate(content, 26)}</>
-            ),
+            className: "!max-w-[200px]",
+            render: (content) => <>{TextToTruncate(content, 26)}</>,
         },
         {
             title: "Ngày cấp",
@@ -227,9 +236,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "field",
             key: "field",
             align: "center",
-            render: (field) => (
-                <>{TextToTruncate(field, 30)}</>
-            ),
+            render: (field) => <>{TextToTruncate(field, 30)}</>,
         },
     ];
     if (role !== 4) {
@@ -315,9 +322,9 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern:
-                                        /^(?!.* {2})\S+(?: \S+)*$/,
-                                    message: "Không để khoảng trắng ở đầu, cuối và quá nhiều khoảng trắng liên tiếp",
+                                    pattern: /^(?!.* {2})\S+(?: \S+)*$/,
+                                    message:
+                                        "Không để khoảng trắng ở đầu, cuối và quá nhiều khoảng trắng liên tiếp",
                                 },
                             ]}
                         >
@@ -330,6 +337,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         span={24}
                     >
                         <Button
+                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
                             loading={loading}
                             type="primary"
                             htmlType="submit"
@@ -350,7 +358,13 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     </Col>
                 </Row>
             </Form>
-            <ConfigProvider renderEmpty={() => <><Empty description={false} /></>}>
+            <ConfigProvider
+                renderEmpty={() => (
+                    <>
+                        <Empty description={false} />
+                    </>
+                )}
+            >
                 <div className="main-table">
                     <Table
                         scroll={{ x: true, y: 200 }}

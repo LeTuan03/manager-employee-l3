@@ -1,12 +1,12 @@
 import axios from "../utils/axios-customize";
-export const searchEmployee = async (status) => {
+export const searchEmployee = async (status, keyword = "") => {
     return await axios(
-        `/employee/search?pageIndex=1&pageSize=100&listStatus=${status}`
+        `/employee/search?pageIndex=1&pageSize=100&keyword=${keyword}&listStatus=${status}`
     );
 };
-export const searchKeyWord = async (text, status) => {
+export const searchEmployee2 = async (status) => {
     return await axios(
-        `/employee/search?pageIndex=1&pageSize=100&keyword=${text}&listStatus=${status}`
+        `/employee/search?pageIndex=1&pageSize=100&listStatus=${status}`
     );
 };
 export const deleteEmployee = async (id) => {

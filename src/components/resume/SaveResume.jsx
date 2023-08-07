@@ -5,10 +5,10 @@ import { getEmployeeById, submitAndSaveResume } from "../../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
-
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 export default function SaveResume() {
     const dispatch = useDispatch();
-    const { open ,employee} = useSelector((state) => state.employee);
+    const { open, employee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const [form] = Form.useForm();
     const handleGetProfile = async () => {
@@ -31,7 +31,11 @@ export default function SaveResume() {
                 setOpen({ ...open, modalResume: false, modalProfile: false })
             );
             form.resetFields();
-            dispatch(getAllEmployee("7,0"));
+            dispatch(
+                getAllEmployee({
+                    status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
+                })
+            );
         } catch (error) {
             console.log(error);
             message.error("Nộp lưu hồ sơ thất bại!");

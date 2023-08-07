@@ -33,9 +33,9 @@ const ModalProfile = () => {
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
-                    getAllEmployee(
-                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
-                    )
+                    getAllEmployee({
+                        status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                    })
                 );
                 message.success("Đã lưu thành công");
             } else {
@@ -59,7 +59,6 @@ const ModalProfile = () => {
                         {employee?.numberSaved && (
                             <div className="mr-9 text-green-600">
                                 <i>
-                                    {" "}
                                     Số lưu: {employee?.numberSaved} - Ngày lưu:{" "}
                                     {employee?.submitDay &&
                                         format(
@@ -86,7 +85,7 @@ const ModalProfile = () => {
                             employee?.submitProfileStatus
                         ) && (
                             <Button
-                                className="min-w-[100px]"
+                                className="w-[100px] bg-green-600 hover:!bg-green-500"
                                 type="primary"
                                 loading={loading}
                                 onClick={() => {
@@ -144,6 +143,12 @@ const ModalProfile = () => {
                                 htmlType="submit"
                                 type="primary"
                                 onClick={() => {
+                                    handleUpdateEmployee({
+                                        ...employee,
+                                        knowledge: threeInfo?.knowledge?.trim(),
+                                        skill: threeInfo?.skill?.trim(),
+                                        activity: threeInfo?.activity?.trim(),
+                                    });
                                     dispatch(
                                         setOpen({
                                             ...open,

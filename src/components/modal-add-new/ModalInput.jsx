@@ -65,41 +65,47 @@ const ModalInput = () => {
                     dispatch(setOpen({ ...open, modalInput: false }));
                     setActiveKey("1");
                 }}
-                footer={<div className="w-full flex justify-center gap-2">
-                    <Button
-                        className="min-w-[100px]"
-                        loading={loading}
-                        type="primary"
-                        onClick={() => {
-                            form.submit();
-                        }}
-                    >
-                        {employee?.id ? "Lưu" : "Thêm"}
-                    </Button>
-                    {employee.submitProfileStatus && (
+                footer={
+                    <div className="w-full flex justify-center gap-2">
                         <Button
                             className=" w-[100px] bg-green-600 hover:!bg-green-500"
+                            loading={loading}
                             type="primary"
                             onClick={() => {
-                                dispatch(getEmployee(employee?.id))
-                                dispatch(setOpen({ ...open, modalProfile: true }));
+                                form.submit();
                             }}
                         >
-                            Đăng kí
+                            {employee?.id ? "Lưu" : "Thêm"}
                         </Button>
-                    )}
-                    <Button
-                        className="min-w-[100px]"
-                        type="primary"
-                        danger
-                        onClick={() => {
-                            dispatch(setOpen({ ...open, modalInput: false }));
-                            setActiveKey("1");
-                        }}
-                    >
-                        Hủy
-                    </Button>
-                </div>}
+                        {employee.submitProfileStatus && (
+                            <Button
+                                className=" w-[100px]"
+                                type="primary"
+                                onClick={() => {
+                                    dispatch(getEmployee(employee?.id));
+                                    dispatch(
+                                        setOpen({ ...open, modalProfile: true })
+                                    );
+                                }}
+                            >
+                                Đăng kí
+                            </Button>
+                        )}
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                dispatch(
+                                    setOpen({ ...open, modalInput: false })
+                                );
+                                setActiveKey("1");
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                    </div>
+                }
             >
                 <Tabs
                     activeKey={activeKey}

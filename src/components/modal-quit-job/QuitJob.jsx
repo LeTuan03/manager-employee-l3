@@ -70,7 +70,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                 </div>
                                 <div className="custom-area relative">
                                     <TextArea
-                                        className="!pt-[11px]"
+                                        className="!pt-[11px] !pl-0"
                                         bordered={false}
                                         autoSize={{ minRows: 1 }}
                                         value={reasonForEnding}

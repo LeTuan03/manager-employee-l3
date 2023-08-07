@@ -22,7 +22,7 @@ export const getAllEmployee = createAsyncThunk(
     "employees/getAllEmployees",
     async (param) => {
         try {
-            const response = await searchEmployee(param);
+            const response = await searchEmployee(param?.status,param?.search);
             return response?.data?.data;
         } catch (error) {
             message.error(error.message);

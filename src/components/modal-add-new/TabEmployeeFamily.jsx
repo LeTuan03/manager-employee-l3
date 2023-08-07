@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, message, Row, Col, Button, Table, Select, Empty, ConfigProvider } from "antd";
+import {
+    Form,
+    Input,
+    message,
+    Row,
+    Col,
+    Button,
+    Table,
+    Select,
+    Empty,
+    ConfigProvider,
+} from "antd";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import {
@@ -162,14 +173,15 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         {
             title: "STT",
             dataIndex: "stt",
-            align: "center",
             key: "stt",
-            width:60,
-            render: (_, item, index) => <>{index + 1}</>,
+            align: "center",
+            className: "!min-w-[60px]",
+            render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
             title: "Thao tác",
             align: "center",
+            className: "!min-w-[100px]",
             render: (_, family) => (
                 <div className="flex justify-center gap-3">
                     <>
@@ -207,7 +219,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             title: "Họ và tên",
             dataIndex: "name",
             align: "center",
-            className:"!max-w-[120px]",
+            className: "!min-w-[120px]",
             render: (name) => (
                 <div className="text-left">{TextToTruncate(name, 26)}</div>
             ),
@@ -217,13 +229,16 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "dateOfBirth",
             align: "center",
             render: (dateOfBirth) => (
-                <>{dateOfBirth&&format(new Date(dateOfBirth), "dd/MM/yyyy")}</>
+                <>
+                    {dateOfBirth && format(new Date(dateOfBirth), "dd/MM/yyyy")}
+                </>
             ),
         },
         {
             title: "Giới tính",
             dataIndex: "gender",
             align: "center",
+            className: "!min-w-[90px]",
             render: (gender) => <>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</>,
         },
         {
@@ -242,6 +257,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         relationShip = "Anh/Chị/Em";
                         break;
                     default:
+                        relationShip = "Anh/Chị/Em";
                         break;
                 }
                 return <>{relationShip}</>;
@@ -264,9 +280,9 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             title: "Địa chỉ",
             dataIndex: "address",
             align: "center",
-            className:"!max-w-[180px]",
+            className: "!min-w-[180px]",
             render: (address) => (
-                <div className="text-left">{TextToTruncate(address, 30)}</div>
+                <div className="text-left">{TextToTruncate(address, 20)}</div>
             ),
         },
     ];
@@ -470,6 +486,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         <Button
                             loading={loading}
                             type="primary"
+                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
                             htmlType="submit"
                         >
                             {update ? "Lưu" : "Thêm"}
@@ -488,7 +505,13 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                     </Col>
                 </Row>
             </Form>
-            <ConfigProvider renderEmpty={() => <><Empty description={false} /></>}>
+            <ConfigProvider
+                renderEmpty={() => (
+                    <>
+                        <Empty description={false} />
+                    </>
+                )}
+            >
                 <div className="main-table">
                     <Table
                         loading={loading}
@@ -509,7 +532,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
             ></ModalDelete>
-            
         </>
     );
 };

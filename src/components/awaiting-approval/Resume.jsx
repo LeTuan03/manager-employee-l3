@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { searchEmployee } from "../../services/api";
+import { searchEmployee2 } from "../../services/api";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, Result, Table, Tabs } from "antd";
@@ -31,7 +31,7 @@ export default function Resume() {
     const { PENDING, PROFILE_END_REQUEST } = STATUS_EMPLOYEE;
     const getAllEmployee = async () => {
         setLoading(true);
-        const res = await searchEmployee(`${PENDING},${PROFILE_END_REQUEST}`);
+        const res = await searchEmployee2(`${PENDING},${PROFILE_END_REQUEST}`);
         if (res?.status === 200) {
             setListEmployee(res?.data?.data);
             setLoading(false);

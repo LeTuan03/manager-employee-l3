@@ -21,47 +21,71 @@ function getItem(label, key, icon, children, type) {
     };
 }
 const itemAdmin = [
-    getItem("Quản lí", "sub1", <AppstoreOutlined />, [
-        getItem(<Link to={"/manage_employee"}>Quản lí nhân viên</Link>, "5"),
-        getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
-    ]),
+    getItem(
+        <Link to={"/"} className="text-white">
+            Quản lí
+        </Link>,
+        "sub1",
+        <AppstoreOutlined />,
+        [
+            getItem(
+                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+                "5"
+            ),
+            getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
+        ]
+    ),
     getItem("Lãnh đạo", "sub2", <AppstoreOutlined />, [
         getItem("Chờ duyệt", "9"),
         getItem("Đã duyệt", "10"),
     ]),
 ];
 const itemUser = [
-    getItem("Quản lí", "sub1", <AppstoreOutlined />, [
-        getItem(
-            <Link to={"/addnew_employee"}>Thêm mới nhân viên</Link>,
-            "1",
-            <PlusSquareOutlined />
-        ),
-        getItem(
-            <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
-            "2",
-            <UsergroupDeleteOutlined />
-        ),
-        getItem(
-            <Link to={"/release"}>Kết thúc</Link>,
-            "3",
-            <PartitionOutlined />
-        ),
-    ]),
+    getItem(
+        <Link to={"/"} className="text-white">
+            Quản lí
+        </Link>,
+        "sub1",
+        <AppstoreOutlined />,
+        [
+            getItem(
+                <Link to={"/addnew_employee"}>Thêm mới nhân viên</Link>,
+                "1",
+                <PlusSquareOutlined />
+            ),
+            getItem(
+                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+                "2",
+                <UsergroupDeleteOutlined />
+            ),
+            getItem(
+                <Link to={"/release"}>Kết thúc</Link>,
+                "3",
+                <PartitionOutlined />
+            ),
+        ]
+    ),
 ];
 const itemManage = [
-    getItem("Quản lí", "sub4", <AppstoreOutlined />, [
-        getItem(
-            <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
-            "13",
-            <UsergroupDeleteOutlined />
-        ),
-        getItem(
-            <Link to={"/release"}>Kết thúc</Link>,
-            "14",
-            <PartitionOutlined />
-        ),
-    ]),
+    getItem(
+        <Link to={"/"} className="text-white">
+            Quản lí
+        </Link>,
+        "sub4",
+        <AppstoreOutlined />,
+        [
+            getItem(
+                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+                "13",
+                <UsergroupDeleteOutlined />
+            ),
+            getItem(
+                <Link to={"/release"}>Kết thúc</Link>,
+                "14",
+                <PartitionOutlined />
+            ),
+        ]
+    ),
     getItem("Lãnh đạo", "sub5", <AppstoreOutlined />, [
         getItem(
             <Link to={"/awaiting_approval"}>Chờ duyệt</Link>,

@@ -186,7 +186,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className=" pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px]"
+                                    className="!pt-[8px] !pl-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -212,7 +212,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px]"
+                                    className="!pt-[8px] !pl-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -258,7 +258,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         </span>
                                         <div className="custom-area relative">
                                             <TextArea
-                                                className="!pt-[8px]"
+                                                className="!pt-[8px] !pl-0"
                                                 placeholder="Học vấn của bạn!"
                                                 bordered={false}
                                                 maxLength={240}
@@ -398,10 +398,16 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             loading={loading}
                                             type="primary"
                                             htmlType="submit"
+                                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
                                         >
                                             {values?.id ? "Cập nhật" : "Lưu"}
                                         </Button>
-                                        <Button htmlType="reset">
+                                        <Button
+                                            htmlType="reset"
+                                            type="primary"
+                                            className=" w-[100px]"
+                                            danger
+                                        >
                                             Đặt lại
                                         </Button>
                                     </Space>
@@ -440,7 +446,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 </div>
                                                 <div className="custom-area relative">
                                                     <TextArea
-                                                        className="!pt-[8px]"
+                                                        className="!pt-[8px] !pl-0"
                                                         value={
                                                             item.jobDescription
                                                         }

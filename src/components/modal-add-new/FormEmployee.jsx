@@ -14,20 +14,26 @@ import {
 } from "antd";
 import { format } from "date-fns";
 import _ from "lodash";
-import { GENDER, STATUS, TEAM, STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    GENDER,
+    STATUS,
+    TEAM,
+    STATUS_EMPLOYEE,
+} from "../../constants/constants";
 import { createEmployee, postAvatar, updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, getEmployee, setOpen } from "../../redux/employee/employeeSlice";
-const FormEmployee = ({
-    form,
-    family,
-    certificate,
-    setLoading,
-}) => {
+import {
+    getAllEmployee,
+    getEmployee,
+    setOpen,
+} from "../../redux/employee/employeeSlice";
+const FormEmployee = ({ form, family, certificate, setLoading }) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
     const dispatch = useDispatch();
-    const { open, employee, isLoading } = useSelector((state) => state.employee);
+    const { open, employee, isLoading } = useSelector(
+        (state) => state.employee
+    );
     const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } =
         STATUS_EMPLOYEE;
     const onFinish = async (values) => {
@@ -54,8 +60,9 @@ const FormEmployee = ({
             address,
             team,
             email,
-            image: `${import.meta.env.VITE_BACKEND_URL
-                }/public/image/${urlAvatar}`,
+            image: `${
+                import.meta.env.VITE_BACKEND_URL
+            }/public/image/${urlAvatar}`,
             phone,
             citizenIdentificationNumber,
             employeeFamilyDtos: family || [],
@@ -81,11 +88,11 @@ const FormEmployee = ({
             const res = await createEmployee(data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
-                    getAllEmployee(
-                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
-                    )
+                    getAllEmployee({
+                        status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                    })
                 );
-                dispatch(getEmployee(res?.data?.data?.id))
+                dispatch(getEmployee(res?.data?.data?.id));
                 message.success("Thêm nhân viên thành công");
             } else {
                 message.error(res?.data?.message);
@@ -102,10 +109,11 @@ const FormEmployee = ({
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(setOpen({ ...open, modalInput: false }));
                 dispatch(
-                    getAllEmployee(
-                        `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`
-                    )
+                    getAllEmployee({
+                        status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                    })
                 );
+                message.success("Cập nhật nhân viên thành công");
             } else {
                 message.error(res?.data?.message);
             }
