@@ -65,7 +65,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                     </div>
                                 </div>
                                 <div>
-                                    Tôi làm đơn này, đề nghị Ban Gián đốc cho
+                                    Tôi làm đơn này, đề nghị Ban Giám đốc cho
                                     tôi xin nghỉ việc vì lý do:
                                 </div>
                                 <div className="custom-area relative">
@@ -73,7 +73,10 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                         className="!pt-[11px] !pl-0"
                                         bordered={false}
                                         autoSize={{ minRows: 1 }}
-                                        value={reasonForEnding}
+                                        value={
+                                            employee?.reasonForEnding ||
+                                            reasonForEnding
+                                        }
                                         maxLength={240}
                                         onChange={(e) => {
                                             setReasonForEnding(e.target.value);
