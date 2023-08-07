@@ -35,7 +35,12 @@ export default function App() {
             children: [
                 {
                     index: true,
-                    element: <>Home page</>,
+                    element: (
+                        <img
+                            className="h-[100%] w-[100%]"
+                            src="https://gw.alipayobjects.com/mdn/rms_08e378/afts/img/A*WzMpTIP8R6gAAAAAAAAAAABkARQnAQ"
+                        />
+                    ),
                 },
                 {
                     path: "/manage_employee",
