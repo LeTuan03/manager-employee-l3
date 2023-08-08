@@ -14,7 +14,7 @@ const TabCV = () => {
             key: "index",
             className: "border-table",
             align: "center",
-            render: (text, record, index) => <b>{index + 1}</b>,
+            render: (text, record, index) => <>{index + 1}</>,
         },
         {
             title: "Họ và tên",
@@ -22,9 +22,7 @@ const TabCV = () => {
             key: "name",
             align: "center",
             className: "border-table",
-            render: (name) => (
-                <div className="min-w-[90px] text-left">{name}</div>
-            ),
+            render: (name) => <div className="max-w-[90px]">{name}</div>,
         },
         {
             title: "Ngày sinh",
@@ -33,9 +31,9 @@ const TabCV = () => {
             className: "border-table",
             align: "center",
             render: (dateOfBirth) => (
-                <p className="min-w-[90px]">
+                <p>
                     {dateOfBirth &&
-                        format(new Date(dateOfBirth).getTime(), "dd-MM-yyyy")}
+                        format(new Date(dateOfBirth).getTime(), "dd/MM/yyyy")}
                 </p>
             ),
         },
@@ -46,9 +44,7 @@ const TabCV = () => {
             className: "border-table",
             align: "center",
             render: (gender) => (
-                <p className="min-w-[70px]">
-                    {gender === GENDER.FEMALE ? "Nữ" : "Nam"}
-                </p>
+                <p>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</p>
             ),
         },
         {
@@ -71,7 +67,7 @@ const TabCV = () => {
                     default:
                         break;
                 }
-                return <p className="min-w-[70px]">{relationShip}</p>;
+                return <p>{relationShip}</p>;
             },
         },
         {
@@ -80,18 +76,16 @@ const TabCV = () => {
             key: "phoneNumber",
             className: "border-table",
             align: "center",
-            render: (phoneNumber) => (
-                <p className="min-w-[100px]">{phoneNumber}</p>
-            ),
+            render: (phoneNumber) => <p>{phoneNumber}</p>,
         },
         {
-            title: "Số CCCD/CMT",
+            title: "Số CCCD",
             dataIndex: "citizenIdentificationNumber",
             key: "citizenIdentificationNumber",
             align: "center",
             className: "border-table",
             render: (citizenIdentificationNumber) => (
-                <p className="min-w-[100px]">{citizenIdentificationNumber}</p>
+                <p className="max-w-[90px]">{citizenIdentificationNumber}</p>
             ),
         },
         {
@@ -99,8 +93,11 @@ const TabCV = () => {
             dataIndex: "address",
             key: "address",
             align: "center",
+
             className: "border-table",
-            render: (address) => <div className="text-left">{address}</div>,
+            render: (address) => (
+                <div className="text-left max-w-[90px] pl-2">{address}</div>
+            ),
         },
     ];
     const dataRows = [
@@ -122,7 +119,7 @@ const TabCV = () => {
             span: 12,
             value:
                 employee.dateOfBirth &&
-                format(new Date(employee.dateOfBirth), "dd-MM-yyyy"),
+                format(new Date(employee.dateOfBirth), "dd/MM/yyyy"),
         },
         {
             id: 4,
@@ -148,13 +145,15 @@ const TabCV = () => {
             span: 12,
             value:
                 employee.dateOfIssuanceCard &&
-                format(new Date(employee.dateOfIssuanceCard), "dd-MM-yyyy"),
+                format(new Date(employee.dateOfIssuanceCard), "dd/MM/yyyy"),
         },
         {
             id: 8,
             label: "8. Nơi cấp: ",
             span: 24,
-            value: employee.placeOfIssueCard,
+            value:
+                employee.placeOfIssueCard &&
+                TextToTruncate(employee.placeOfIssueCard, 80),
         },
         {
             id: 9,
@@ -229,15 +228,17 @@ const TabCV = () => {
                             số căn cước công dân (chứng minh thư nhân dân) của
                             bố mẹ đẻ, anh chị em ruột, vợ (hoặc chồng), con)
                         </i>
-                        <ConfigProvider renderEmpty={() => <></>}>
-                            <Table
-                                bordered
-                                dataSource={employee.employeeFamilyDtos}
-                                columns={columnFamily}
-                                pagination={false}
-                                style={{ border: "1px solid #000" }}
-                            />
-                        </ConfigProvider>
+                        <div className="table-cv">
+                            <ConfigProvider renderEmpty={() => <></>}>
+                                <Table
+                                    bordered
+                                    dataSource={employee.employeeFamilyDtos}
+                                    columns={columnFamily}
+                                    pagination={false}
+                                    style={{ border: "1px solid #000" }}
+                                />
+                            </ConfigProvider>
+                        </div>
                         <h4 className="text-center my-5">LỜI CAM ĐOAN</h4>
                         <p className="text-left leading-6">
                             Tôi xin cam đoan bản khai sơ yếu lý lịch trên đúng

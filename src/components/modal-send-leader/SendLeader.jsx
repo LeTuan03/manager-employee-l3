@@ -141,7 +141,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center pb-5">
                         <Button
                             type="primary"
-                            className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
+                            className="min-w-[100px] bg-green-600 hover:!bg-green-500"
                             loading={loading}
                             onClick={() => {
                                 form.submit();

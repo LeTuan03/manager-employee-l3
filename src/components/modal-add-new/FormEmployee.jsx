@@ -27,7 +27,13 @@ import {
     getEmployee,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-const FormEmployee = ({ form, family, certificate, setLoading }) => {
+const FormEmployee = ({
+    form,
+    family,
+    certificate,
+    setLoading,
+    setActiveKey,
+}) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
     const dispatch = useDispatch();
@@ -60,9 +66,7 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
             address,
             team,
             email,
-            image: `${
-                import.meta.env.VITE_BACKEND_URL
-            }/public/image/${urlAvatar}`,
+            image: urlAvatar,
             phone,
             citizenIdentificationNumber,
             employeeFamilyDtos: family || [],
@@ -80,6 +84,7 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
         }
     };
     const onFinishFailed = (errorInfo) => {
+        setActiveKey("1");
         console.log("Failed:", errorInfo);
     };
     const handleCreateEmployee = async (data) => {
@@ -113,6 +118,7 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
                         status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
                     })
                 );
+                dispatch(getEmployee(res?.data?.data?.id));
                 message.success("Cập nhật nhân viên thành công");
             } else {
                 message.error(res?.data?.message);
@@ -126,7 +132,11 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
         const res = await postAvatar(file);
         if (res) {
             onSuccess("ok");
-            setUrlAvatar(res?.data?.name);
+            setUrlAvatar(
+                `${import.meta.env.VITE_BACKEND_URL}/public/image/${
+                    res?.data?.name
+                }`
+            );
         } else {
             onError("Error");
         }
@@ -152,7 +162,7 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
         maxCount: 1,
         multiple: false,
         showUploadList: false,
-        accept: "video/*,image/*",
+        accept: "image/*",
         beforeUpload,
         customRequest: handleUploadAvatar,
         onChange(info) {
@@ -181,10 +191,12 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
                 ),
             });
             setUserAvatar(employee.image);
+            setUrlAvatar(employee.image);
         }
         return () => {
             form.resetFields();
             setUserAvatar("");
+            setUrlAvatar("");
         };
     }, [employee]);
     const validateAge = (_, value) => {

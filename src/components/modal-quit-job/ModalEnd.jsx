@@ -1,12 +1,14 @@
 import { Button, Modal, Tabs, message } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import QuitJob from "./QuitJob";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
+import SendLeader from "../modal-send-leader/SendLeader";
 
-const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
+const ModalEnd = () => {
     const dispatch = useDispatch();
     const { open } = useSelector((state) => state.employee);
+    const [reasonForEnding, setReasonForEnding] = useState("");
     const items = [
         {
             key: "1",
@@ -36,7 +38,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                     <div className="flex justify-center pb-5">
                         <Button
                             type="primary"
-                            className="min-w-[100px]"
+                            className="min-w-[100px] bg-green-600 hover:!bg-green-500"
                             onClick={() => {
                                 if (reasonForEnding) {
                                     dispatch(
@@ -68,6 +70,10 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
             >
                 <Tabs tabPosition={"left"} defaultActiveKey="1" items={items} />
             </Modal>
+            <SendLeader
+                reasonForEnding={reasonForEnding}
+                setReasonForEnding={setReasonForEnding}
+            ></SendLeader>
         </>
     );
 };

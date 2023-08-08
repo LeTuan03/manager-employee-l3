@@ -1,6 +1,6 @@
 import React from "react";
 import { Dropdown, Avatar, Menu } from "antd";
-import { HomeFilled, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { BarsOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ROLE } from "../../constants/constants";
@@ -75,7 +75,7 @@ const Header = () => {
                     mode="horizontal"
                     items={items}
                 />
-                {/* <HomeFilled className="fixed top-[20px] left-[23px] text-white text-2xl icon" /> */}
+                <BarsOutlined className="fixed top-[20px] left-[23px] text-white text-2xl icon pointer-events-none" />
             </div>
         </div>
     );

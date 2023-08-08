@@ -140,7 +140,9 @@ tr.ant-table-row:last-child > td {
 .ant-tabs-tab {
     padding-left: 0 !important;
 }
-
+.table-cv .ant-table-cell {
+    padding: 16px 0 !important;
+}
 /* tablet  */
 @media only screen and (max-width: 1024px) {
     .ant-tabs {

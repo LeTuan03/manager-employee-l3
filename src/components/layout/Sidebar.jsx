@@ -3,7 +3,7 @@ import Menu from "./Menu";
 
 const Sidebar = ({ collapsed }) => {
     return (
-        <div className="w-[15%] bg-[#001529] fixed top-0 left-0 h-full overflow-hidden z-1 sidebar">
+        <div className="w-[15%] bg-[#001529] fixed top-0 left-0 h-full overflow-hidden z-1 sidebar max-lg:hidden">
             <div className="p-3">
                 <img
                     className="w-full my-3"

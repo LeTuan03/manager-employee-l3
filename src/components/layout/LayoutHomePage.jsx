@@ -8,11 +8,16 @@ const LayoutHomePage = () => {
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };
-    useEffect(() => {
-        if (window.innerWidth <= 768) {
-            toggleCollapsed();
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (window.innerWidth <= 1024) {
+    //         toggleCollapsed();
+    //     }
+    // }, []);
+    // window.addEventListener("resize", () => {
+    //     if (window.innerWidth <= 1024) {
+    //         toggleCollapsed();
+    //     }
+    // });
     return (
         <>
             <div className="ml-[15%] max-md:ml-0 max-lg:ml-0">

@@ -9,7 +9,7 @@ import {
     EnvironmentOutlined,
     GiftOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Form, Image, Input, Row, Space, message } from "antd";
+import { Avatar, Button, Col, Form, Input, Row, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
@@ -126,6 +126,10 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                 activity: employee?.activity,
             });
         }
+        return () => {
+            form.resetFields();
+            setOpenForm(false);
+        };
     }, [employee]);
 
     function validateDate(_, value) {
@@ -153,11 +157,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
                 <div className=" bg-white flex flex-row min-h-[720px] p-[6%_10%] ">
                     <div className="basis-1/4 pr-10">
-                        <Image
+                        <Avatar
                             width={200}
                             height={200}
-                            className="rounded-full overflow-hidden"
-                            fallback={employee?.image}
+                            src={employee?.image}
+                            size={200}
                         />
                         <div className="leading-10">
                             <div className="mt-10">
@@ -393,9 +397,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     ]}
                                 >
                                     <TextArea
-                                        autoSize
                                         showCount
-                                        maxLength={240}
+                                        autoSize={{
+                                            minRows: 2,
+                                        }}
+                                        maxLength={2000}
                                     />
                                 </Form.Item>
                                 <Form.Item hidden name="id">
@@ -407,7 +413,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             loading={loading}
                                             type="primary"
                                             htmlType="submit"
-                                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
+                                            className=" w-[100px]"
                                         >
                                             {values?.id ? "Cập nhật" : "Lưu"}
                                         </Button>
@@ -473,8 +479,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 employee.submitProfileStatus
                                             ) && (
                                                 <div
-                                                    className="absolute z-10 right-0 bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
-                                        justify-center gap-2 items-center p-2 rounded-md"
+                                                    className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex w-12 h-12 top-0
+                                        justify-center gap-2 items-center p-2 rounded-md absolute left-[102%]"
                                                 >
                                                     <EditOutlined
                                                         onClick={() => {

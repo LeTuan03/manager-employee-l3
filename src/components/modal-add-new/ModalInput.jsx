@@ -24,6 +24,7 @@ const ModalInput = () => {
                     certificate={certificate}
                     form={form}
                     setOpen={setOpen}
+                    setActiveKey={setActiveKey}
                 ></FormEmployee>
             ),
         },
@@ -73,6 +74,7 @@ const ModalInput = () => {
                             type="primary"
                             onClick={() => {
                                 form.submit();
+                                setActiveKey("1");
                             }}
                         >
                             {employee?.id ? "Lưu" : "Thêm"}
@@ -82,7 +84,7 @@ const ModalInput = () => {
                                 className=" w-[100px] bg-green-600 hover:!bg-green-500"
                                 type="primary"
                                 onClick={() => {
-                                    dispatch(getEmployee(employee?.id));
+                                    form.submit();
                                     dispatch(
                                         setOpen({ ...open, modalProfile: true })
                                     );

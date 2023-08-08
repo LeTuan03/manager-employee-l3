@@ -114,7 +114,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             setUpdate(null);
             formFamily.resetFields();
         }
-        message.success("Xóa thành công văn bằng");
+        message.success("Xóa thành công");
     };
     const handleCreateFamily = async (data) => {
         if (!_.isEmpty(employee)) {
@@ -138,7 +138,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             } else {
                 setFamily([data, ...family]);
             }
-            message.success("Thêm thành công văn bằng");
+            message.success("Thêm thành công");
             formFamily.resetFields();
         }
     };
