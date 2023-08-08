@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import TextToTruncate from "../../hook/TextToTruncate";
 import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 import NumberStatus from "../common/NumberStatus";
+import STT from "../common/STT";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);
@@ -21,9 +22,6 @@ export default function IncreaseSalary() {
     useEffect(() => {
         getCurrentEmpIncreaseSalary();
     }, []);
-    const data = dataSalary.map((item, index) => {
-        return { ...item, index };
-    });
     const columns = [
         {
             title: "STT",
@@ -114,10 +112,13 @@ export default function IncreaseSalary() {
                         <Table
                             bordered
                             columns={columns}
-                            dataSource={data}
+                            dataSource={STT(dataSalary)}
                             pagination={{
-                                showSizeChanger: false,
-                                pageSize: 10,
+                                showSizeChanger: true,
+                                pageSizeOptions: ["1", "10", "20", "30"],
+                                locale: {
+                                    items_per_page: "bản ghi / trang",
+                                },
                             }}
                             scroll={{
                                 y: 490,

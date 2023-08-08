@@ -8,18 +8,15 @@ import { useSelector } from "react-redux";
 import TextToTruncate from "../../hook/TextToTruncate";
 import PromoteTab from "../process/ProcessChildren";
 import StringStatus from "../common/StringStatus";
+import STT from "../common/STT";
+import ProcesPosition from "../common/ProcessPosition";
 
 export default function Promote() {
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [processEmp, setProcessEmp] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+
     const handleGetProcess = async () => {
         const res = await getProcess();
         setProcessEmp(res?.data?.data);
@@ -27,9 +24,7 @@ export default function Promote() {
     useEffect(() => {
         handleGetProcess();
     }, []);
-    const data = processEmp.map((item, index) => {
-        return { ...item, index };
-    });
+
     const columns = [
         {
             title: "STT",
@@ -59,22 +54,7 @@ export default function Promote() {
             dataIndex: "currentPosition",
             align: "center",
             width: 160,
-            render: (currentPosition) => {
-                switch (currentPosition) {
-                    case 0:
-                        return "Giám đốc";
-                    case 1:
-                        return "Giám đốc";
-                    case 2:
-                        return "Trưởng phòng";
-                    case 3:
-                        return "Quản lí";
-                    case 4:
-                        return "Quản lí";
-                    default:
-                        return "Giám đốc";
-                }
-            },
+            render: (currentPosition) => ProcesPosition(currentPosition),
         },
         {
             title: "Chức vụ hiện tại",
@@ -82,22 +62,7 @@ export default function Promote() {
             dataIndex: "newPosition",
             align: "center",
             width: 160,
-            render: (newPosition) => {
-                switch (newPosition) {
-                    case 0:
-                        return "Giám đốc";
-                    case 1:
-                        return "Trưởng phòng";
-                    case 2:
-                        return "Trưởng phòng";
-                    case 3:
-                        return "Trưởng phòng";
-                    case 4:
-                        return "Quản lí";
-                    default:
-                        return "Giám đốc";
-                }
-            },
+            render: (newPosition) => ProcesPosition(newPosition),
         },
         {
             title: "Ghi chú",
@@ -143,9 +108,13 @@ export default function Promote() {
                         <Table
                             bordered
                             columns={columns}
-                            dataSource={data}
+                            dataSource={STT(processEmp)}
                             pagination={{
-                                pageSize: 10,
+                                showSizeChanger: true,
+                                pageSizeOptions: ["1", "10", "20", "30"],
+                                locale: {
+                                    items_per_page: "bản ghi / trang",
+                                },
                             }}
                             scroll={{
                                 y: 490,
@@ -156,8 +125,9 @@ export default function Promote() {
                         zIndex={1}
                         title="Biểu mẫu"
                         open={isModalOpen}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
+                        onCancel={() => {
+                            setIsModalOpen(false);
+                        }}
                         width={1300}
                         centered
                         footer={

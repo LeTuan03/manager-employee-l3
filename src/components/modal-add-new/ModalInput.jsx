@@ -4,7 +4,7 @@ import FormEmployee from "./FormEmployee";
 import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import { setOpen } from "../../redux/employee/employeeSlice";
 const ModalInput = () => {
     const [form] = Form.useForm();
     const [certificate, setCertificate] = useState([]);

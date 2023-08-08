@@ -1,23 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 
 const LayoutHomePage = () => {
-    const [collapsed, setCollapsed] = useState(false);
-    const toggleCollapsed = () => {
-        setCollapsed(!collapsed);
-    };
-    // useEffect(() => {
-    //     if (window.innerWidth <= 1024) {
-    //         toggleCollapsed();
-    //     }
-    // }, []);
-    // window.addEventListener("resize", () => {
-    //     if (window.innerWidth <= 1024) {
-    //         toggleCollapsed();
-    //     }
-    // });
     return (
         <>
             <div className="ml-[15%] max-md:ml-0 max-lg:ml-0">
@@ -26,7 +12,7 @@ const LayoutHomePage = () => {
                     <Outlet />
                 </div>
             </div>
-            <Sidebar collapsed={collapsed}></Sidebar>
+            <Sidebar></Sidebar>
         </>
     );
 };

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, Result, Table, Tabs } from "antd";
+import {
+    Button,
+    ConfigProvider,
+    Empty,
+    Modal,
+    Result,
+    Table,
+    Tabs,
+} from "antd";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import TextToTruncate from "../../hook/TextToTruncate";
 import { format } from "date-fns";
@@ -15,6 +23,7 @@ import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
 import StringStatus from "../common/StringStatus";
 import TeamStatus from "../common/TeamStatus";
 import InputSearch from "../InputSearch";
+import STT from "../common/STT";
 
 export default function Resume() {
     const dispatch = useDispatch();
@@ -38,9 +47,7 @@ export default function Resume() {
             getAllEmployee({ status: `${PENDING},${PROFILE_END_REQUEST}` })
         );
     }, []);
-    const data = listEmployee.map((item, index) => {
-        return { ...item, index };
-    });
+
     const columns = [
         {
             title: "STT",
@@ -154,18 +161,35 @@ export default function Resume() {
                             />
                         </div>
                         <div className="main-table">
-                            <Table
-                                bordered
-                                loading={isLoading}
-                                columns={columns}
-                                dataSource={data}
-                                pagination={{
-                                    pageSize: 10,
-                                }}
-                                scroll={{
-                                    y: 490,
-                                }}
-                            />
+                            <ConfigProvider
+                                renderEmpty={() => (
+                                    <>
+                                        <Empty description={false} />
+                                    </>
+                                )}
+                            >
+                                <Table
+                                    bordered
+                                    loading={isLoading}
+                                    columns={columns}
+                                    dataSource={STT(listEmployee)}
+                                    scroll={{
+                                        y: 490,
+                                    }}
+                                    pagination={{
+                                        showSizeChanger: true,
+                                        pageSizeOptions: [
+                                            "1",
+                                            "10",
+                                            "20",
+                                            "30",
+                                        ],
+                                        locale: {
+                                            items_per_page: "bản ghi / trang",
+                                        },
+                                    }}
+                                />
+                            </ConfigProvider>
                         </div>
                         <Modal
                             zIndex={1}
