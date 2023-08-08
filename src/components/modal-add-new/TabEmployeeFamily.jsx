@@ -486,7 +486,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         <Button
                             loading={loading}
                             type="primary"
-                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
+                            className=" w-[100px]"
                             htmlType="submit"
                         >
                             {update ? "Lưu" : "Thêm"}

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import { FrownOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 export default function ModalInfo({ message, type }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <>
             <span>
-                <FrownOutlined
+                <InfoCircleOutlined
                     className="text-orange-500 text-lg mr-5"
                     onClick={() => {
                         setIsModalOpen(true);
@@ -19,7 +19,7 @@ export default function ModalInfo({ message, type }) {
                 open={isModalOpen}
                 onCancel={() => setIsModalOpen(false)}
                 footer={
-                    <div className="text-center">
+                    <div className="text-center pb-5">
                         <Button
                             type="primary"
                             danger

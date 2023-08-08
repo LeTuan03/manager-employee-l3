@@ -7,7 +7,7 @@ export default function Conclusion(date, name) {
             <Row>
                 <Col flex={3} className="text-center"></Col>
                 <Col flex={2} className="text-center">
-                    <i>
+                    <i className="!text-lg">
                         Hà Nội, ngày {date && format(new Date(date), "dd")}{" "}
                         tháng {date && format(new Date(date), "MM")} năm{" "}
                         {date && format(new Date(date), "yyyy")}

@@ -27,15 +27,16 @@ export default function Propose() {
     useEffect(() => {
         handleGetProposal();
     }, []);
-
+    const data = proposeEmp.map((item, index) => {
+        return { ...item, index };
+    });
     const columns = [
         {
             title: "STT",
             key: "index",
             width: 60,
-            render: (text, record, index) => (
-                <b className="block text-center">{index + 1}</b>
-            ),
+            align: "center",
+            render: (_, item) => <>{item?.index + 1}</>,
         },
         {
             title: "Ngày diễn biến",
@@ -118,7 +119,7 @@ export default function Propose() {
                         <Table
                             bordered
                             columns={columns}
-                            dataSource={proposeEmp}
+                            dataSource={data}
                             pagination={{
                                 pageSize: 10,
                             }}
@@ -136,7 +137,7 @@ export default function Propose() {
                         width={1300}
                         centered
                         footer={
-                            <div className="text-center flex justify-center">
+                            <div className="text-center flex justify-center pb-5">
                                 <ResumeModal
                                     setIsOpen={setIsModalOpen}
                                     profile={profile}

@@ -14,24 +14,23 @@ export default function IncreaseSalary() {
     const [profile, setProfile] = useState({});
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const getCurrentEmpIncreaseSalary = async () => {
         const res = await getSalaryIncreaseByCurrentLeader();
         setDataSalary(res?.data?.data);
     };
-
     useEffect(() => {
         getCurrentEmpIncreaseSalary();
     }, []);
-
+    const data = dataSalary.map((item, index) => {
+        return { ...item, index };
+    });
     const columns = [
         {
             title: "STT",
             key: "index",
             width: 60,
-            render: (text, record, index) => (
-                <b className="block text-center">{index + 1}</b>
-            ),
+            align: "center",
+            render: (_, item) => <>{item?.index + 1}</>,
         },
         {
             title: "Ngày tăng lương",
@@ -115,7 +114,7 @@ export default function IncreaseSalary() {
                         <Table
                             bordered
                             columns={columns}
-                            dataSource={dataSalary}
+                            dataSource={data}
                             pagination={{
                                 showSizeChanger: false,
                                 pageSize: 10,
@@ -134,7 +133,7 @@ export default function IncreaseSalary() {
                         width={1300}
                         centered
                         footer={
-                            <div className="text-center flex justify-center">
+                            <div className="text-center flex justify-center pb-5">
                                 <ResumeModal
                                     getCurrentEmpIncreaseSalary={
                                         getCurrentEmpIncreaseSalary

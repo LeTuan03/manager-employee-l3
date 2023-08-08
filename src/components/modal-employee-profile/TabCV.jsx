@@ -235,8 +235,7 @@ const TabCV = () => {
                                 dataSource={employee.employeeFamilyDtos}
                                 columns={columnFamily}
                                 pagination={false}
-                                scroll={{ x: true }}
-                                style={{ border: "2px solid #000" }}
+                                style={{ border: "1px solid #000" }}
                             />
                         </ConfigProvider>
                         <h4 className="text-center my-5">LỜI CAM ĐOAN</h4>

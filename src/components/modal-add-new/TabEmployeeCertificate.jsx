@@ -337,7 +337,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         span={24}
                     >
                         <Button
-                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
+                            className=" w-[100px]"
                             loading={loading}
                             type="primary"
                             htmlType="submit"

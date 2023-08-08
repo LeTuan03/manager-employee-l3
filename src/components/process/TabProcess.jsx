@@ -27,12 +27,19 @@ import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import ModalUpdateHappening from "../proposal/RecomnentModal";
 
-const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
-    STATUS_EMPLOYEE;
+const {
+    NEW_SAVE,
+    PENDING,
+    BEEN_APPEOVED,
+    ADDITIONAL_REQUIREMENTS,
+    REJECT,
+    REJECT_REQUEST_END_PROFILE,
+    ADDITIONAL_REQUIREMENTS_END_PROFILE,
+} = STATUS_EMPLOYEE;
 
-const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
+const TabProcess = ({ processs, handleGetProcessByEmp }) => {
     const [form] = Form.useForm();
-    const { open } = useSelector((state) => state.employee);
+    const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
             form.resetFields();
@@ -63,13 +70,27 @@ const TabProcess = ({ processs, employee, handleGetProcessByEmp }) => {
                 const res = await updateProcess(value);
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công !");
+                await handleGetProcessByEmp();
+                setIsModalOpen(true);
             } else {
-                const res = await addProcessByEmp(employee?.id, [value]);
-                setData(res?.data?.data[0]);
-                message.success("Thêm mới thành công !");
+                if (
+                    [
+                        REJECT_REQUEST_END_PROFILE,
+                        ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                    ].includes(employee.submitProfileStatus)
+                ) {
+                    message.error(
+                        "Không thể thêm thông tin thăng chức cho nhân viên này"
+                    );
+                } else {
+                    const res = await addProcessByEmp(employee?.id, [value]);
+                    setData(res?.data?.data[0]);
+                    message.success("Thêm mới thành công !");
+                    await handleGetProcessByEmp();
+                    setIsModalOpen(true);
+                }
             }
-            await handleGetProcessByEmp();
-            setIsModalOpen(true);
+
             form.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");

@@ -138,10 +138,10 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                     form.submit();
                 }}
                 footer={
-                    <div className="flex justify-center">
+                    <div className="flex justify-center pb-5">
                         <Button
                             type="primary"
-                            className="min-w-[100px]"
+                            className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
                             loading={loading}
                             onClick={() => {
                                 form.submit();

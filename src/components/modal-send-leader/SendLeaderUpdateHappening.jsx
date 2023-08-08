@@ -94,8 +94,8 @@ const SendLeaderUpdateHappening = (props) => {
         }
     };
     const handleCancel = () => {
-        setIdLeader({ id: null, label: "" });
         form.resetFields();
+        setIdLeader({ id: null, label: "" });
         setOpenLeader(false);
     };
     useEffect(() => {
@@ -187,7 +187,7 @@ const SendLeaderUpdateHappening = (props) => {
                                 <Button
                                     htmlType="submit"
                                     type="primary"
-                                    className="mr-2"
+                                    className="mr-2 bg-green-600 hover:!bg-green-500"
                                 >
                                     Trình lãnh đạo
                                 </Button>

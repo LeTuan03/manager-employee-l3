@@ -50,12 +50,12 @@ const ModalProfile = () => {
     return (
         <>
             <Modal
-                zIndex={2}
+                zIndex={3}
                 width={1300}
                 className="max-h-[720px] overflow-y-hidden"
                 title={
                     <div className="flex justify-between">
-                        <div>Hồ sơ nhân viên</div>
+                        <div>HỒ SƠ NHÂN VIÊN</div>
                         {employee?.numberSaved && (
                             <div className="mr-9 text-green-600">
                                 <i>
@@ -80,12 +80,12 @@ const ModalProfile = () => {
                     setActiveKey("1");
                 }}
                 footer={
-                    <div className="flex justify-center">
+                    <div className="flex justify-center !pb-5">
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
                             <Button
-                                className="w-[100px] bg-green-600 hover:!bg-green-500"
+                                className="w-[100px]"
                                 type="primary"
                                 loading={loading}
                                 onClick={() => {
@@ -118,7 +118,7 @@ const ModalProfile = () => {
                                     Nộp lưu hồ sơ
                                 </Button>
                             )}
-                        {[
+                        {/* {[
                             REJECT_REQUEST_END_PROFILE,
                             ADDITIONAL_REQUIREMENTS_END_PROFILE,
                         ].includes(employee?.submitProfileStatus) &&
@@ -134,12 +134,12 @@ const ModalProfile = () => {
                                 >
                                     Kết thúc
                                 </Button>
-                            )}
+                            )} */}
                         {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                             employee?.submitProfileStatus
                         ) && (
                             <Button
-                                className="min-w-[100px]"
+                                className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
                                 htmlType="submit"
                                 type="primary"
                                 onClick={() => {

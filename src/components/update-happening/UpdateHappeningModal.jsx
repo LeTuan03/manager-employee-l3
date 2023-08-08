@@ -20,7 +20,6 @@ export default function UpdateHappeningModal() {
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
     const [activeKey, setActiveKey] = useState("1");
-
     const handleGetSalaryByEmp = async () => {
         try {
             const res = await getSalaryByEmp(employee?.id);
@@ -52,7 +51,6 @@ export default function UpdateHappeningModal() {
             children: (
                 <TabIncreaseSalary
                     handleGetSalaryByEmp={handleGetSalaryByEmp}
-                    employee={employee}
                     salary={salary}
                 />
             ),
@@ -63,7 +61,6 @@ export default function UpdateHappeningModal() {
             children: (
                 <TabProcess
                     handleGetProcessByEmp={handleGetProcessByEmp}
-                    employee={employee}
                     processs={processs}
                 />
             ),
@@ -74,7 +71,6 @@ export default function UpdateHappeningModal() {
             children: (
                 <TabRecommendation
                     handleGetRecomentByEmp={handleGetRecomentByEmp}
-                    employee={employee}
                     recoments={recoments}
                 />
             ),
@@ -89,7 +85,7 @@ export default function UpdateHappeningModal() {
     }, [employee?.id]);
     return (
         <Modal
-            className="h-screen relative"
+            className="!h-screen relative happening"
             zIndex={3}
             title={
                 <p className="fixed top-0 z-10 py-2 w-[80%] bg-white">
@@ -105,7 +101,17 @@ export default function UpdateHappeningModal() {
                 setActiveKey("1");
             }}
             footer={
-                <div className="text-center bg-white fixed bottom-0 w-[80%] py-5">
+                <div className="text-center bg-white fixed bottom-0 w-[82%] py-5">
+                    <Button
+                        className="min-w-[100px]"
+                        key="submit"
+                        type="primary"
+                        onClick={() => {
+                            dispatch(setOpen({ ...open, modalProfile: true }));
+                        }}
+                    >
+                        Xem hồ sơ
+                    </Button>
                     <Button
                         className="min-w-[100px]"
                         key="submit"
@@ -140,7 +146,7 @@ export default function UpdateHappeningModal() {
                     <Col span={8} className="flex flex-col items-center">
                         <Image width={200} height={200} src={employee.image} />
                         <h1>{employee.name}</h1>
-                        <b>{TeamStatus(employee.currentPosition)}</b>
+                        <b>{TeamStatus(employee.team)}</b>
                     </Col>
                     <Col span={16}>
                         <Card
@@ -212,7 +218,12 @@ export default function UpdateHappeningModal() {
                 <div className="mt-10 mb-20">
                     <Tabs
                         activeKey={activeKey}
-                        onChange={(e) => setActiveKey(e)}
+                        onChange={(e) => {
+                            setActiveKey(e);
+                            handleGetSalaryByEmp();
+                            handleGetProcessByEmp();
+                            handleGetRecomentByEmp();
+                        }}
                         items={items}
                     />
                 </div>

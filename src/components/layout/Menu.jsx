@@ -20,7 +20,7 @@ function getItem(label, key, icon, children, type) {
         type,
     };
 }
-const itemAdmin = [
+export const itemAdmin = [
     getItem(
         <Link to={"/"} className="text-white">
             Quản lí
@@ -40,11 +40,10 @@ const itemAdmin = [
         getItem("Đã duyệt", "10"),
     ]),
 ];
-const itemUser = [
+export const itemUser = [
     getItem(
-        <Link to={"/"} className="text-white">
-            Quản lí
-        </Link>,
+        "Quản lí",
+
         "sub1",
         <AppstoreOutlined />,
         [
@@ -66,26 +65,19 @@ const itemUser = [
         ]
     ),
 ];
-const itemManage = [
-    getItem(
-        <Link to={"/"} className="text-white">
-            Quản lí
-        </Link>,
-        "sub4",
-        <AppstoreOutlined />,
-        [
-            getItem(
-                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
-                "13",
-                <UsergroupDeleteOutlined />
-            ),
-            getItem(
-                <Link to={"/release"}>Kết thúc</Link>,
-                "14",
-                <PartitionOutlined />
-            ),
-        ]
-    ),
+export const itemManage = [
+    getItem("Quản lí", "sub4", <AppstoreOutlined />, [
+        getItem(
+            <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+            "13",
+            <UsergroupDeleteOutlined />
+        ),
+        getItem(
+            <Link to={"/release"}>Kết thúc</Link>,
+            "14",
+            <PartitionOutlined />
+        ),
+    ]),
     getItem("Lãnh đạo", "sub5", <AppstoreOutlined />, [
         getItem(
             <Link to={"/awaiting_approval"}>Chờ duyệt</Link>,
@@ -116,7 +108,7 @@ const MenuComponent = ({ collapsed }) => {
         <>
             <div className="w-full">
                 <Menu
-                    mode="inline"
+                    mode={"inline"}
                     theme="dark"
                     className="text-white h-screen"
                     inlineCollapsed={collapsed}

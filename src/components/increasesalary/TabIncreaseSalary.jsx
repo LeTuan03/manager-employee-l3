@@ -16,19 +16,21 @@ import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import TextToTruncate from "../../hook/TextToTruncate";
 import validateCodeInput from "../../hook/ValidateCodeInput";
-import { STATUS } from "../../constants/constants";
-import { useSelector } from "react-redux";
+import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
+import { getEmployee } from "../../redux/employee/employeeSlice";
 
-const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
-    const { open } = useSelector((state) => state.employee);
+const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
+    const dispatch = useDispatch();
+    const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
             form.resetFields();
         }
     }, [open.modalUpdateHappening]);
-
+    console.log(employee);
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -59,22 +61,32 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                     setData(res?.data?.data);
                     await handleGetSalaryByEmp();
                     setIsModalOpen(true);
-                    form.resetFields();
                 } else {
                     message.error(res?.data?.message);
                 }
             } else {
-                const res = await addSalaryByEmp(employee.id, [value]);
-                if (res?.data?.code === STATUS.SUCCESS) {
-                    message.success("Thêm mới thành công!");
-                    setData(res?.data?.data[0]);
-                    await handleGetSalaryByEmp();
-                    setIsModalOpen(true);
-                    form.resetFields();
+                if (
+                    [
+                        STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
+                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                    ].includes(employee.submitProfileStatus)
+                ) {
+                    message.error(
+                        "Không thể thêm thông tin lương cho nhân viên này"
+                    );
                 } else {
-                    message.error(res?.data?.message);
+                    const res = await addSalaryByEmp(employee.id, [value]);
+                    if (res?.data?.code === STATUS.SUCCESS) {
+                        message.success("Thêm mới thành công!");
+                        setData(res?.data?.data[0]);
+                        await handleGetSalaryByEmp();
+                        setIsModalOpen(true);
+                    } else {
+                        message.error(res?.data?.message);
+                    }
                 }
             }
+            form.resetFields();
         } catch (error) {
             console.log(error);
             message.error("Cập nhật thất bại!");
@@ -101,7 +113,7 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
             key: "startDate",
             width: 150,
             align: "center",
-            render: (text) => format(new Date(text), "yyyy/MM/dd"),
+            render: (text) => format(new Date(text), "dd/MM/yyyy"),
         },
         {
             title: "Lần thứ",
@@ -164,7 +176,12 @@ const TabIncreaseSalary = ({ salary, employee, handleGetSalaryByEmp }) => {
                             <span>
                                 <EditOutlined
                                     className="text-blue-600 text-lg mr-5"
-                                    onClick={() => handleEdit(employee)}
+                                    onClick={() => {
+                                        handleEdit(employee);
+                                        dispatch(
+                                            getEmployee(employee.employeeId)
+                                        );
+                                    }}
                                 />
                             </span>
                             <span>

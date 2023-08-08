@@ -4,11 +4,7 @@ export const searchEmployee = async (status, keyword = "") => {
         `/employee/search?pageIndex=1&pageSize=100&keyword=${keyword}&listStatus=${status}`
     );
 };
-export const searchEmployee2 = async (status) => {
-    return await axios(
-        `/employee/search?pageIndex=1&pageSize=100&listStatus=${status}`
-    );
-};
+
 export const deleteEmployee = async (id) => {
     return await axios.delete(`/employee/${id}`);
 };

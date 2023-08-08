@@ -127,15 +127,22 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             });
         }
     }, [employee]);
+
     function validateDate(_, value) {
         if (value) {
-            const inputDateTime = new Date(value);
+            const startDate = new Date(values.startDate);
+            const endDate = new Date(values.endDate);
             const currentDateTime = new Date();
-            if (inputDateTime > currentDateTime) {
+            if (new Date(value) > currentDateTime) {
                 return Promise.reject(
                     new Error("Yêu cầu chọn trước ngày hôm nay")
                 );
+            } else if (startDate > endDate) {
+                return Promise.reject(
+                    new Error("Ngày kết thúc phải sau ngày bắt đầu")
+                );
             }
+
             return Promise.resolve();
         } else {
             return Promise.reject(new Error(`Vui lòng nhập ngày`));
@@ -185,10 +192,10 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             </div>
                         </div>
                         <h2 className="mt-5">KĨ NĂNG</h2>
-                        <Col className=" pr-4 mb-3">
+                        <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px] !pl-0"
+                                    className="!pt-[8px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -214,7 +221,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px] !pl-0"
+                                    className="!pt-[8px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -419,7 +426,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 exp.map((item) => {
                                     return (
                                         <div
-                                            className="flex justify-between group mb-5"
+                                            className="group mb-5 relative"
                                             key={item.id}
                                         >
                                             <div>
@@ -448,7 +455,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 </div>
                                                 <div className="custom-area relative">
                                                     <TextArea
-                                                        className="!pt-[8px] !pl-0"
+                                                        className="!pt-[8px] !px-0 !w-full"
                                                         value={
                                                             item.jobDescription
                                                         }
@@ -466,7 +473,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 employee.submitProfileStatus
                                             ) && (
                                                 <div
-                                                    className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
+                                                    className="absolute z-10 right-0 bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex 
                                         justify-center gap-2 items-center p-2 rounded-md"
                                                 >
                                                     <EditOutlined

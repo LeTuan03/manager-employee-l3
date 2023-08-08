@@ -33,11 +33,11 @@ const ModalUpdateHappening = ({
                 width={1300}
                 onCancel={() => setIsModalOpen(false)}
                 footer={
-                    <div className="text-center">
+                    <div className="text-center pb-5">
                         {type === "recoment" &&
                             [1, 4, 5].includes(data.proposalStatus) && (
                                 <Button
-                                    className="min-w-[100px]"
+                                    className="min-w-[100px] bg-green-600 hover:!bg-green-500"
                                     type="primary"
                                     onClick={() => {
                                         setOpenLeader(true);
@@ -53,7 +53,7 @@ const ModalUpdateHappening = ({
                                 REJECT,
                             ].includes(data.processStatus) && (
                                 <Button
-                                    className="min-w-[100px]"
+                                    className="min-w-[100px] bg-green-600 hover:!bg-green-500"
                                     type="primary"
                                     onClick={() => {
                                         setOpenLeader(true);

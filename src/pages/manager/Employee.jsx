@@ -6,11 +6,14 @@ import SendLeader from "../../components/modal-send-leader/SendLeader";
 import { getAllEmployee } from "../../redux/employee/employeeSlice";
 import UpdateHappeningModal from "../../components/update-happening/UpdateHappeningModal";
 import ModalProfile from "../../components/modal-employee-profile/ModalProfile";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 import InputSearch from "../../components/InputSearch";
 const Employee = () => {
-    const [reasonForEnding, setReasonForEnding] = useState("");
+    const { employee } = useSelector((state) => state.employee);
+    const [reasonForEnding, setReasonForEnding] = useState(
+        employee?.reasonForEnding
+    );
     const {
         BEEN_APPEOVED,
         PROFILE_END_REQUEST,

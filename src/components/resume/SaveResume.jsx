@@ -52,27 +52,27 @@ export default function SaveResume() {
                 "\\$&"
             );
             const regexPattern = new RegExp("^" + escapedRegexString + "$");
-            const testString = `NL${new Date()
-                .getFullYear()
-                .toString()
-                .slice(-2)}${
+            const testString = `NL${
                 new Date().getMonth() + 1 < 10
                     ? "0" + (new Date().getMonth() + 1)
                     : new Date().getMonth() + 1
-            }${profile?.code?.slice(-3)}`;
+            }${new Date()
+                .getFullYear()
+                .toString()
+                .slice(-2)}/${profile?.code?.slice(-3)}`;
             if (regexPattern.test(testString)) {
                 return Promise.resolve();
             } else {
                 return Promise.reject(
                     new Error(
-                        `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${new Date()
-                            .getFullYear()
-                            .toString()
-                            .slice(-2)}${
+                        `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${
                             new Date().getMonth() + 1 < 10
                                 ? "0" + (new Date().getMonth() + 1)
                                 : new Date().getMonth() + 1
-                        }${profile?.code?.slice(-3)}`
+                        }${new Date()
+                            .getFullYear()
+                            .toString()
+                            .slice(-2)}/${profile?.code?.slice(-3)}`
                     )
                 );
             }

@@ -42,6 +42,10 @@ const TableComponet = () => {
         REJECT_REQUEST_END_PROFILE,
     } = STATUS_EMPLOYEE;
 
+    const data = listEmployee.map((item, index) => {
+        return { ...item, index };
+    });
+
     const columns = [
         {
             title: "STT",
@@ -49,7 +53,7 @@ const TableComponet = () => {
             key: "stt",
             width: 60,
             align: "center",
-            render: (_, item, index) => <b>{index + 1}</b>,
+            render: (_, item) => <>{item?.index + 1}</>,
         },
         {
             title: "Họ tên",
@@ -105,7 +109,10 @@ const TableComponet = () => {
             render: (address) => {
                 const addressText = TextToTruncate(address || "", 30);
                 return (
-                    <div className="cursor-default text-left" title={address}>
+                    <div
+                        className="cursor-default text-left !min-w-[100px]"
+                        title={address}
+                    >
                         {addressText}
                     </div>
                 );
@@ -158,7 +165,6 @@ const TableComponet = () => {
                                 onClick={() => {
                                     setReasonForRejection(employee);
                                     setOpenReject(true);
-                                    console.log(employee);
                                 }}
                                 className="text-orange-500 text-base"
                             />
@@ -178,8 +184,11 @@ const TableComponet = () => {
                             onClick={() => {
                                 dispatch(getEmployee(employee.id));
                                 if (
-                                    employee.submitProfileStatus ===
-                                    BEEN_APPEOVED
+                                    [
+                                        ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                                        REJECT_REQUEST_END_PROFILE,
+                                        BEEN_APPEOVED,
+                                    ].includes(employee.submitProfileStatus)
                                 ) {
                                     {
                                         if (role === ROLE.MANAGE) {
@@ -239,9 +248,9 @@ const TableComponet = () => {
         const res = await deleteEmployee(id);
         if (res?.data?.code === STATUS.SUCCESS) {
             dispatch(
-                getAllEmployee(
-                    { status:`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`}
-                )
+                getAllEmployee({
+                    status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                })
             );
         }
     };
@@ -252,7 +261,7 @@ const TableComponet = () => {
                     scroll={{ x: true }}
                     bordered
                     columns={columns}
-                    dataSource={listEmployee}
+                    dataSource={data}
                     loading={isLoading}
                     pagination={{
                         showSizeChanger: true,
@@ -266,7 +275,7 @@ const TableComponet = () => {
             <Modal
                 centered
                 footer={
-                    <div className="text-center">
+                    <div className="text-center pb-5">
                         <Button
                             type="primary"
                             danger

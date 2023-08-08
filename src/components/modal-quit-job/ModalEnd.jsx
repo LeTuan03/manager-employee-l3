@@ -24,7 +24,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
             <Modal
                 zIndex={4}
                 width={1160}
-                className="max-h-[740px] overflow-y-hidden"
+                className="max-h-[740px]"
                 title="ĐƠN XIN NGHỈ VIỆC"
                 centered
                 open={open.modalEnd}
@@ -33,7 +33,7 @@ const ModalEnd = ({ reasonForEnding, setReasonForEnding }) => {
                     setReasonForEnding("");
                 }}
                 footer={
-                    <div className="flex justify-center">
+                    <div className="flex justify-center pb-5">
                         <Button
                             type="primary"
                             className="min-w-[100px]"

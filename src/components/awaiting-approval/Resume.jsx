@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { searchEmployee2 } from "../../services/api";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, Result, Table, Tabs } from "antd";
@@ -8,38 +7,40 @@ import TextToTruncate from "../../hook/TextToTruncate";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
 import { GENDER, STATUS_EMPLOYEE } from "../../constants/constants";
-import { getEmployee } from "../../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    getEmployee,
+} from "../../redux/employee/employeeSlice";
 import EmployeeProfile from "../modal-employee-profile/EmployeeProfile";
 import StringStatus from "../common/StringStatus";
 import TeamStatus from "../common/TeamStatus";
+import InputSearch from "../InputSearch";
 
 export default function Resume() {
     const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
-    const { employee } = useSelector((state) => state.employee);
+    const { employee, isLoading, listEmployee } = useSelector(
+        (state) => state.employee
+    );
     const [profile, setProfile] = useState({});
     const [reasonForEnding, setReasonForEnding] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [listEmployee, setListEmployee] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [activeKey, setActiveKey] = useState("1");
     const [threeInfo, setThreeInfo] = useState({
-        knowledge: employee?.knowledge || "",
-        skill: employee?.skill || "",
-        activity: employee?.activity || "",
+        knowledge: profile?.knowledge || "",
+        skill: profile?.skill || "",
+        activity: profile?.activity || "",
     });
     const { PENDING, PROFILE_END_REQUEST } = STATUS_EMPLOYEE;
-    const getAllEmployee = async () => {
-        setLoading(true);
-        const res = await searchEmployee2(`${PENDING},${PROFILE_END_REQUEST}`);
-        if (res?.status === 200) {
-            setListEmployee(res?.data?.data);
-            setLoading(false);
-        }
-    };
+
     useEffect(() => {
-        getAllEmployee();
+        dispatch(
+            getAllEmployee({ status: `${PENDING},${PROFILE_END_REQUEST}` })
+        );
     }, []);
+    const data = listEmployee.map((item, index) => {
+        return { ...item, index };
+    });
     const columns = [
         {
             title: "STT",
@@ -47,7 +48,7 @@ export default function Resume() {
             key: "stt",
             width: 60,
             align: "center",
-            render: (_, item, index) => <b>{index + 1}</b>,
+            render: (_, item) => <>{item?.index + 1}</>,
         },
 
         {
@@ -147,12 +148,17 @@ export default function Resume() {
             <div>
                 {role === 5 ? (
                     <>
+                        <div className="mb-4 text-right">
+                            <InputSearch
+                                status={`${PENDING},${PROFILE_END_REQUEST}`}
+                            />
+                        </div>
                         <div className="main-table">
                             <Table
                                 bordered
-                                loading={loading}
+                                loading={isLoading}
                                 columns={columns}
-                                dataSource={listEmployee}
+                                dataSource={data}
                                 pagination={{
                                     pageSize: 10,
                                 }}
@@ -173,12 +179,12 @@ export default function Resume() {
                             width={1300}
                             centered
                             footer={
-                                <div className="text-center flex justify-center">
+                                <div className="text-center flex justify-center pb-5">
                                     <ResumeModal
                                         setIsOpen={setIsModalOpen}
                                         profile={profile}
+                                        setProfile={setProfile}
                                         type="Resume"
-                                        getAllEmployee={getAllEmployee}
                                     />
                                     <Button
                                         className="ml-2"

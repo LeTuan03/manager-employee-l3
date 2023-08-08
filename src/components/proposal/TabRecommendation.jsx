@@ -24,16 +24,17 @@ import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 
-const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
+const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
+    const { open, employee } = useSelector((state) => state.employee);
 
-    const { open } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
             form.resetFields();
@@ -59,13 +60,25 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
                 const res = await updateProposal(value);
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công!");
+                await handleGetRecomentByEmp();
+                setIsModalOpen(true);
             } else {
-                const res = await addProposalByEmp(employee?.id, [value]);
-                setData(res?.data?.data[0]);
-                message.success("Thêm mới thành công!");
+                if (
+                    [
+                        STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
+                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                    ].includes(employee.submitProfileStatus)
+                ) {
+                    message.error("Không thể thêm đề xuất cho nhân viên này");
+                } else {
+                    const res = await addProposalByEmp(employee?.id, [value]);
+                    setData(res?.data?.data[0]);
+                    message.success("Thêm mới thành công!");
+                    await handleGetRecomentByEmp();
+                    setIsModalOpen(true);
+                }
             }
-            await handleGetRecomentByEmp();
-            setIsModalOpen(true);
+
             form.resetFields();
         } catch (error) {
             console.log(error);
@@ -97,7 +110,7 @@ const TabRecommendation = ({ recoments, employee, handleGetRecomentByEmp }) => {
             width: 130,
             align: "center",
             render: (proposalDate) =>
-                format(new Date(proposalDate), "yyyy/MM/dd"),
+                format(new Date(proposalDate), "dd/MM/yyyy"),
         },
         {
             title: "Loại ",

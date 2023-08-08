@@ -11,7 +11,7 @@ const TabListCertificate = () => {
             key: "index",
             className: "border-table",
             align: "center",
-            render: (text, record, index) => <b>{index + 1}</b>,
+            render: (text, record, index) => <>{index + 1}</>,
         },
         {
             title: "Tên văn bằng",
@@ -19,7 +19,9 @@ const TabListCertificate = () => {
             key: "certificateName",
             className: "border-table",
             align: "center",
-            render: (certificateName) => <div className="text-left">{certificateName}</div>,
+            render: (certificateName) => (
+                <div className="text-left">{certificateName}</div>
+            ),
         },
         {
             title: "Nội dung văn bằng",
@@ -48,17 +50,17 @@ const TabListCertificate = () => {
     ];
     return (
         <>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] font-table font">
+            <div className="bg-[#e7e7e7] p-14 font-table max-h-[900px] font">
                 <div className="p-[6%_10%] bg-white">
                     <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
                     <ConfigProvider renderEmpty={() => <></>}>
                         <Table
-                            scroll={{ x: true }}
+                            scroll={{ x: "scroll" }}
                             bordered
                             dataSource={employee?.certificatesDto}
                             columns={columns}
                             pagination={false}
-                            style={{ border: "#515151 2px double" }}
+                            style={{ border: "#515151 1px double" }}
                         />
                     </ConfigProvider>
                 </div>

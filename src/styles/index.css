@@ -11,7 +11,7 @@
 }
 
 .border-table {
-    border: #515151 2px double !important;
+    border: #515151 1px double !important;
 }
 
 th {
@@ -98,9 +98,11 @@ tr.ant-table-row:last-child > td {
     height: 10%;
     transform: translateY(-50%);
 }
-
+/* .happening > .ant-modal-content {
+    height: 100vh;
+} */
 .ant-modal-content {
-    padding: 4px 24px 20px 24px !important;
+    padding: 4px 24px 1px 24px !important;
 }
 
 .custom-area textarea {
@@ -143,5 +145,11 @@ tr.ant-table-row:last-child > td {
 @media only screen and (max-width: 1024px) {
     .ant-tabs {
         display: unset;
+    }
+    .sidebar {
+        display: none;
+    }
+    .ant-tabs-nav-list {
+        display: unset !important;
     }
 }

@@ -524,7 +524,7 @@ const FormEmployee = ({ form, family, certificate, setLoading }) => {
                             )}
                             <Upload {...propUploads}>
                                 <Button icon={<UploadOutlined />}>
-                                    Click to Upload
+                                    Tải ảnh lên
                                 </Button>
                             </Upload>
                         </div>

@@ -66,9 +66,9 @@ const ModalInput = () => {
                     setActiveKey("1");
                 }}
                 footer={
-                    <div className="w-full flex justify-center gap-2">
+                    <div className="w-full flex justify-center gap-2 pb-5">
                         <Button
-                            className=" w-[100px] bg-green-600 hover:!bg-green-500"
+                            className="w-[100px]"
                             loading={loading}
                             type="primary"
                             onClick={() => {
@@ -79,7 +79,7 @@ const ModalInput = () => {
                         </Button>
                         {employee.submitProfileStatus && (
                             <Button
-                                className=" w-[100px]"
+                                className=" w-[100px] bg-green-600 hover:!bg-green-500"
                                 type="primary"
                                 onClick={() => {
                                     dispatch(getEmployee(employee?.id));

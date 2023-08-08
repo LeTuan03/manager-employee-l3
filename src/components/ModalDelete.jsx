@@ -7,16 +7,16 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
             rest?.handleDeleteById(rest?.idDelete);
         } else if (rest?.uidDelete) {
             rest?.handleDeleteByUid(rest?.uidDelete);
-            setOpenDelete(false)
+            setOpenDelete(false);
         } else {
             rest?.handleDeleteEmployee(rest?.employeeIdToDelete);
         }
     };
-    useEffect(()=>{
-        if(!rest?.loading){
+    useEffect(() => {
+        if (!rest?.loading) {
             setOpenDelete(false);
         }
-    },[rest?.loading])
+    }, [rest?.loading]);
     return (
         <Modal
             title="Xóa bản ghi"
@@ -28,7 +28,7 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
             onCancel={() => setOpenDelete(false)}
             footer={
                 <>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center pb-5">
                         <Button
                             loading={rest?.loading}
                             type="primary"
