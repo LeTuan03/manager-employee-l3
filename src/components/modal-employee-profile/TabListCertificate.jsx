@@ -21,7 +21,9 @@ const TabListCertificate = () => {
             className: "border-table",
             align: "center",
             render: (certificateName) => (
-                <div className="text-left break-all">{certificateName}</div>
+                <div className="text-left break-all max-w-[150px]">
+                    {certificateName}
+                </div>
             ),
         },
         {
