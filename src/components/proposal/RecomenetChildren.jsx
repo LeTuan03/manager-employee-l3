@@ -18,24 +18,39 @@ const ProposeTab = ({ profile }) => {
             <div className="bg-white p-[64px]">
                 <CommonHeader company="CÔNG TY OCEAN TECH" profile={profile} />
                 <div className="text-center">
-                    <h3 className="mt-10"> ĐƠN THAM MƯU </h3>
-                    <p className="font-bold">Về việc {profile?.content}</p>
+                    <h3 className="mt-10">
+                        {profile?.type === 2 ? "ĐƠN THAM MƯU" : "ĐƠN ĐỀ XUẤT"}{" "}
+                    </h3>
+                    <p className="font-bold">Về việc {profile?.note}</p>
                 </div>
                 <div className="flex justify-center mt-5 p-20">
                     <div className="leading-9">
                         <p>Kính gửi: Giám đốc công ty Ocean Tech</p>
-                        <p>Tôi tên là: {emp.name} </p>
                         <p>
-                            Sinh ngày:{" "}
-                            {emp.dateOfBirth &&
-                                format(emp.dateOfBirth, "dd-MM-yyyy")}
+                            Tôi tên là:{" "}
+                            <span class="border-b border-dotted border-black inline-block border-t-0 border-l-0 border-r-0 leading-[70%]">
+                                {emp.name}
+                            </span>{" "}
+                            sinh ngày:{" "}
+                            <span class="border-b border-dotted border-black inline-block border-t-0 border-l-0 border-r-0 leading-[70%]">
+                                {emp.dateOfBirth &&
+                                    format(emp.dateOfBirth, "dd/MM/yyyy")}{" "}
+                            </span>{" "}
                         </p>
+
                         <p>Tôi xin trình bày với nội dung sự việc như sau:</p>
-                        <p>{profile?.detailedDescription}</p>
+                        <div className="py-3">
+                            <p class="border-b border-dotted border-black border-t-0 border-l-0 border-r-0 leading-[70%]">
+                                {profile?.detailedDescription}
+                            </p>
+                        </div>
+
                         <p>
                             Tôi xin cam đoan những thông tin mà tôi đã nêu trên
                             đây là đúng sự thật và xin chịu trách nhiệm về tính
-                            chính xác, trung thực của những thông tin này.
+                            chính xác, trung thực của những thông tin này. Kính
+                            mong Ông/Bà xem xét và chấp nhận nguyện vọng trên
+                            của tôi.
                         </p>
                         <p>
                             Kính mong Ông/Bà xem xét và chấp nhận nguyện vọng

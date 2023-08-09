@@ -33,6 +33,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
     console.log(employee);
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [oldMoney, setOldMoney] = useState("");
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
@@ -228,7 +229,19 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
             ),
         },
     ];
-
+    const validateNewMoney = (_, values) => {
+        if (values) {
+            if (+values < +oldMoney) {
+                return Promise.reject(
+                    new Error("Lương mới phải cao hơn lương cũ.")
+                );
+            } else {
+                return Promise.resolve();
+            }
+        } else {
+            return Promise.reject(new Error(`Không được để trống trường này!`));
+        }
+    };
     return (
         <>
             <Form form={form} onFinish={handleSubmit} layout="vertical">
@@ -272,7 +285,12 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                                 },
                             ]}
                         >
-                            <Input type="number" suffix="VND" />
+                            <Input
+                                type="number"
+                                suffix="VND"
+                                onChange={(e) => setOldMoney(e.target.value)}
+                                value={oldMoney}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -281,8 +299,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             label="Lương mới"
                             rules={[
                                 {
-                                    required: true,
-                                    message: "Không được bỏ trống trường này !",
+                                    validator: validateNewMoney,
                                 },
                             ]}
                         >

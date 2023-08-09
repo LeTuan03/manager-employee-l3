@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getEmployeeById } from "../../services/api";
-import { format } from "date-fns";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
+import formatDate from "../common/FormatDate";
 
 const PromoteTab = ({ profile }) => {
     const [emp, setEmp] = useState({});
@@ -41,16 +41,10 @@ const PromoteTab = ({ profile }) => {
                     <h3> QUYẾT ĐỊNH</h3>
                 </div>
                 <div className="flex justify-center leading-10">
-                    <div>
+                    <div className="px-10">
                         <div>
                             <b> Điều 1: </b> Bổ nhiệm Ông/Bà: {emp.name} giữ
-                            chức vụ kể từ ngày{" "}
-                            {profile.promotionDay &&
-                                format(
-                                    new Date(profile.promotionDay),
-                                    "dd-MM-yyyy"
-                                )}
-                            .
+                            chức vụ kể từ {formatDate(profile?.promotionDay)}.
                         </div>
                         <div>
                             <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày

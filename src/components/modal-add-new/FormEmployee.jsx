@@ -112,7 +112,6 @@ const FormEmployee = ({
             setLoading(true);
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
-                dispatch(setOpen({ ...open, modalInput: false }));
                 dispatch(
                     getAllEmployee({
                         status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,

@@ -101,7 +101,7 @@ export default function UpdateHappeningModal() {
                 setActiveKey("1");
             }}
             footer={
-                <div className="text-center bg-white fixed bottom-0 w-[82%] py-5">
+                <div className="text-center bg-white fixed bottom-0 w-[80%] py-5">
                     <Button
                         className="min-w-[100px]"
                         key="submit"
@@ -141,7 +141,7 @@ export default function UpdateHappeningModal() {
                 </div>
             }
         >
-            <div className="h-full overflow-y-scroll happening-scroll mt-5">
+            <div className="h-screen overflow-y-scroll happening-scroll mt-5">
                 <Row className="mt-7">
                     <Col span={8} className="flex flex-col items-center">
                         <Image width={200} height={200} src={employee.image} />

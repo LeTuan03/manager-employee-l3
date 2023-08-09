@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { getEmployeeById } from "../../services/api";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
+import formatDate from "../common/FormatDate";
 
 const IncreaseTab = ({ profile }) => {
     const [emp, setEmp] = useState({});
@@ -43,14 +44,12 @@ const IncreaseTab = ({ profile }) => {
                     <h3>GIÁM ĐỐC CÔNG TY OCEANTECH</h3>
                     <h3> QUYẾT ĐỊNH</h3>
                 </div>
-                <div className="flex justify-center leading-10">
+                <div className="flex justify-center leading-10 mb-8">
                     <div>
                         <div>
-                            <b> Điều 1: </b> Kể từ ngày:{" "}
-                            {profile?.startDate &&
-                                format(profile?.startDate, "dd-MM-yyyy")}{" "}
-                            , mức lương của Ông/Bà: {emp.name} sẽ là:{" "}
-                            {profile.newSalary} đ.
+                            <b> Điều 1: </b> Kể từ{" "}
+                            {formatDate(profile?.startDate)} , mức lương của
+                            Ông/Bà: {emp.name} sẽ là: {profile.newSalary} đ.
                         </div>
                         <div>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài

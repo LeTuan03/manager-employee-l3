@@ -98,9 +98,6 @@ tr.ant-table-row:last-child > td {
     height: 10%;
     transform: translateY(-50%);
 }
-/* .happening > .ant-modal-content {
-    height: 100vh;
-} */
 .ant-modal-content {
     padding: 4px 24px 1px 24px !important;
 }
