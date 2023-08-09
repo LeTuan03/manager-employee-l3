@@ -109,6 +109,7 @@ const SendLeaderUpdateHappening = (props) => {
                 title="Trình lãnh đạo"
                 open={openLeader}
                 onCancel={() => handleCancel()}
+                onOk={() => handleCancel()}
                 footer={false}
             >
                 <Form
