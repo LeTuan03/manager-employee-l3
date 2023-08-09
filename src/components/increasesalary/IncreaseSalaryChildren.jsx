@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
 import { getEmployeeById } from "../../services/api";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";

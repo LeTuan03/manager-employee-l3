@@ -21,7 +21,7 @@ const TabListCertificate = () => {
             className: "border-table",
             align: "center",
             render: (certificateName) => (
-                <div className="text-left">{certificateName}</div>
+                <div className="text-left break-all">{certificateName}</div>
             ),
         },
         {
@@ -31,7 +31,9 @@ const TabListCertificate = () => {
             align: "center",
             className: "border-table",
             render: (content) => (
-                <div className="text-left max-w-[200px]">{content}</div>
+                <div className="text-left max-w-[200px] break-all">
+                    {content}
+                </div>
             ),
         },
         {
@@ -40,7 +42,11 @@ const TabListCertificate = () => {
             key: "issueDate",
             className: "border-table",
             align: "center",
-            render: (dateOfBirth) => <>{format(dateOfBirth, "dd/MM/yyyy")}</>,
+            render: (dateOfBirth) => (
+                <div className="break-all">
+                    {format(dateOfBirth, "dd/MM/yyyy")}
+                </div>
+            ),
         },
         {
             title: "Lĩnh vực",
@@ -49,7 +55,7 @@ const TabListCertificate = () => {
             align: "center",
             className: "border-table",
             render: (field) => (
-                <div className="text-left max-w-[100px]">{field}</div>
+                <div className="text-left max-w-[100px] break-all">{field}</div>
             ),
         },
     ];

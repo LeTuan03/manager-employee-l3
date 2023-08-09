@@ -25,7 +25,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getAllEmployee,
     getEmployee,
-    setOpen,
 } from "../../redux/employee/employeeSlice";
 const FormEmployee = ({
     form,
@@ -37,9 +36,7 @@ const FormEmployee = ({
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
     const dispatch = useDispatch();
-    const { open, employee, isLoading } = useSelector(
-        (state) => state.employee
-    );
+    const { employee, isLoading } = useSelector((state) => state.employee);
     const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } =
         STATUS_EMPLOYEE;
     const onFinish = async (values) => {

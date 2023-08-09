@@ -22,7 +22,7 @@ const TabCV = () => {
             key: "name",
             align: "center",
             className: "border-table",
-            render: (name) => <div className="max-w-[90px]">{name}</div>,
+            render: (name) => <div>{name}</div>,
         },
         {
             title: "Ngày sinh",
@@ -31,10 +31,9 @@ const TabCV = () => {
             className: "border-table",
             align: "center",
             render: (dateOfBirth) => (
-                <p>
-                    {dateOfBirth &&
-                        format(new Date(dateOfBirth).getTime(), "dd/MM/yyyy")}
-                </p>
+                <div className=" break-all">
+                    {dateOfBirth && format(new Date(dateOfBirth), "dd/MM/yyyy")}
+                </div>
             ),
         },
         {
@@ -65,9 +64,10 @@ const TabCV = () => {
                         relationShip = "Anh/Chị/Em";
                         break;
                     default:
+                        relationShip = "Con";
                         break;
                 }
-                return <p>{relationShip}</p>;
+                return <div className="break-all">{relationShip}</div>;
             },
         },
         {
@@ -76,7 +76,9 @@ const TabCV = () => {
             key: "phoneNumber",
             className: "border-table",
             align: "center",
-            render: (phoneNumber) => <p>{phoneNumber}</p>,
+            render: (phoneNumber) => (
+                <div className="break-all">{phoneNumber}</div>
+            ),
         },
         {
             title: "Số CCCD",
@@ -85,7 +87,7 @@ const TabCV = () => {
             align: "center",
             className: "border-table",
             render: (citizenIdentificationNumber) => (
-                <p className="max-w-[90px]">{citizenIdentificationNumber}</p>
+                <p className=" break-all">{citizenIdentificationNumber}</p>
             ),
         },
         {
@@ -96,7 +98,7 @@ const TabCV = () => {
 
             className: "border-table",
             render: (address) => (
-                <div className="text-left max-w-[90px] pl-2">{address}</div>
+                <div className="text-left pl-2 break-all">{address}</div>
             ),
         },
     ];
