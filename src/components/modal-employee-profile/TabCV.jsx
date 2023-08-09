@@ -22,7 +22,9 @@ const TabCV = () => {
             key: "name",
             align: "center",
             className: "border-table",
-            render: (name) => <div>{name}</div>,
+            render: (name) => (
+                <div className="max-w-[90px] break-all">{name}</div>
+            ),
         },
         {
             title: "Ngày sinh",
@@ -31,7 +33,7 @@ const TabCV = () => {
             className: "border-table",
             align: "center",
             render: (dateOfBirth) => (
-                <div className=" break-all">
+                <div className="break-all">
                     {dateOfBirth && format(new Date(dateOfBirth), "dd/MM/yyyy")}
                 </div>
             ),
@@ -87,7 +89,9 @@ const TabCV = () => {
             align: "center",
             className: "border-table",
             render: (citizenIdentificationNumber) => (
-                <p className=" break-all">{citizenIdentificationNumber}</p>
+                <p className=" break-all max-w-[90px]">
+                    {citizenIdentificationNumber}
+                </p>
             ),
         },
         {
