@@ -1,7 +1,9 @@
 import axios from "../utils/axios-customize";
 export const searchEmployee = async (status, keyword = "") => {
     return await axios(
-        `/employee/search?pageIndex=1&pageSize=100&keyword=${keyword}&listStatus=${status}`
+        `/employee/search?pageIndex=1&pageSize=100${
+            keyword && `&keyword=${keyword}`
+        }&listStatus=${status}`
     );
 };
 
