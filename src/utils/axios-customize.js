@@ -21,6 +21,7 @@ instance.interceptors.response.use(
         return response;
     },
     function (error) {
+        window.location.href = "/login";
         return Promise.reject(error);
     }
 );

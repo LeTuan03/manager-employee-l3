@@ -58,7 +58,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 setLoading(true);
                 const res = await createCertificate(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
-                    setCertificate(res?.data?.data);
+                    await handleGetCertificateById();
                     formCertificate.resetFields();
                     message.success("Thêm thành công văn bằng");
                 } else {
@@ -88,7 +88,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 const res = await updateCertificate(id, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setId(null);
-                    handleGetCertificateById();
+                    await handleGetCertificateById();
                     formCertificate.resetFields();
                     message.success("Sửa thành công văn bằng");
                 } else {
@@ -111,7 +111,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             setLoading(true);
             const res = await deleteCertificate(idDelete);
             if (res?.data?.code === STATUS.SUCCESS) {
-                handleGetCertificateById();
+                await handleGetCertificateById();
                 message.success("Xóa thành công văn bằng");
                 setIdDelete(null);
                 if (idDelete === id) {
@@ -164,7 +164,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "stt",
             align: "center",
             key: "stt",
-            width: 60,
+            className: "!min-w-[60px]",
             render: (_, item, index) => <b>{index + 1}</b>,
         },
         {
@@ -219,8 +219,8 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "content",
             key: "content",
             align: "center",
-            className: "!max-w-[200px]",
-            render: (content) => <>{TextToTruncate(content, 26)}</>,
+            className: "min-w-[200px]",
+            render: (content) => <p className="text-left">{content}</p>,
         },
         {
             title: "Ngày cấp",
@@ -236,7 +236,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             dataIndex: "field",
             key: "field",
             align: "center",
-            render: (field) => <>{TextToTruncate(field, 30)}</>,
+            render: (field) => <p className="text-left">{field}</p>,
         },
     ];
     if (role !== 4) {
@@ -269,7 +269,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 },
                                 {
                                     pattern:
-                                        /^(?!.* {2})[^\d!@#$%^&*()+.=,_-]{2,}$/g,
+                                        /^(?!.* {2})[^!@#$%^&*()+.=,_-]{2,}$/g,
                                     message: "Tên sai định dạng",
                                 },
                             ]}

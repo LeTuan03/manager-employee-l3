@@ -173,10 +173,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 <PhoneOutlined className="mr-3" />
                                 {employee?.phone}
                             </div>
-                            <div>
-                                <EnvironmentOutlined className="mr-3" />
-                                {employee?.address &&
-                                    TextToTruncate(employee?.address, 20)}
+                            <div title={employee?.address}>
+                                <div className="flex leading-4 my-3">
+                                    <EnvironmentOutlined className="mr-3" />
+                                    {employee?.address}
+                                </div>
                             </div>
                             <div>
                                 <UserOutlined className="mr-3" />
@@ -191,7 +192,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         new Date(
                                             employee?.dateOfBirth
                                         ).getTime(),
-                                        "dd-MM-yyyy"
+                                        "dd/MM/yyyy"
                                     )}
                             </div>
                         </div>

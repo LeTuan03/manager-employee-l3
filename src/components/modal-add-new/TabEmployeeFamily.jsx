@@ -122,7 +122,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 setLoading(true);
                 const res = await createFamily(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
-                    setFamily(res?.data?.data);
+                    await handleGetFamily();
                     formFamily.resetFields();
                     message.success("Thêm thành công");
                 } else {
@@ -245,6 +245,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             title: "Quan hệ",
             dataIndex: "relationShip",
             align: "center",
+            className: "min-w-[100px]",
             render: (relationShip) => {
                 switch (relationShip) {
                     case RELATIONSHIP.CHILD:
@@ -266,10 +267,9 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         {
             title: "Số CCCD/CMT",
             dataIndex: "citizenIdentificationNumber",
-            width: 120,
-            render: (citizenIdentificationNumber) => (
-                <>{TextToTruncate(citizenIdentificationNumber, 26)}</>
-            ),
+            className: "min-w-[125px]",
+            render: (citizenIdentificationNumber) =>
+                citizenIdentificationNumber,
         },
         {
             title: "Email",
@@ -280,10 +280,8 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             title: "Địa chỉ",
             dataIndex: "address",
             align: "center",
-            className: "!min-w-[180px]",
-            render: (address) => (
-                <div className="text-left">{TextToTruncate(address, 20)}</div>
-            ),
+            className: "min-w-[80px]",
+            render: (address) => <div className="text-left">{address}</div>,
         },
     ];
     function validateDateOfBirth(_, value) {

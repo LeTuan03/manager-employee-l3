@@ -48,7 +48,7 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                                 {employee?.dateOfBirth &&
                                                     format(
                                                         employee?.dateOfBirth,
-                                                        "dd-MM-yyyy"
+                                                        "dd/MM/yyyy"
                                                     )}
                                             </span>
                                         </div>
