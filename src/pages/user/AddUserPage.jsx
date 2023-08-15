@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Table from "../../components/Table";
 import ModalInput from "../../components/modal-add-new/ModalInput";
 import { Button } from "antd";
-import ModalEnd from "../../components/modal-quit-job/ModalEnd";
 import SendLeader from "../../components/modal-send-leader/SendLeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,12 +15,13 @@ import InputSearch from "../../components/InputSearch";
 
 const { NEW_SAVE, PENDING, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const AddUserPage = () => {
-    const [reasonForEnding, setReasonForEnding] = useState("");
     const dispatch = useDispatch();
     const { open } = useSelector((state) => state.employee);
     useEffect(() => {
         dispatch(
-            getAllEmployee({ status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}` })
+            getAllEmployee({
+                status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+            })
         );
     }, []);
 
@@ -37,16 +37,14 @@ const AddUserPage = () => {
                 >
                     Thêm mới
                 </Button>
-                <InputSearch status={`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`}></InputSearch>
+                <InputSearch
+                    status={`${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`}
+                ></InputSearch>
             </div>
             <ModalInput></ModalInput>
             <Table></Table>
             <ModalProfile></ModalProfile>
-            <ModalEnd
-                setReasonForEnding={setReasonForEnding}
-                reasonForEnding={reasonForEnding}
-            ></ModalEnd>
-            <SendLeader reasonForEnding={reasonForEnding}></SendLeader>
+            <SendLeader></SendLeader>
         </>
     );
 };

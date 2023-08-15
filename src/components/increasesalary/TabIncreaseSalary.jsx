@@ -30,7 +30,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
             form.resetFields();
         }
     }, [open.modalUpdateHappening]);
-    console.log(employee);
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [oldMoney, setOldMoney] = useState("");
@@ -57,6 +56,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
         try {
             if (value.id) {
                 const res = await updateSalary(value);
+
                 if (res?.data?.code === STATUS.SUCCESS) {
                     message.success("Cập nhật thành công!");
                     setData(res?.data?.data);
@@ -66,25 +66,15 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                     message.error(res?.data?.message);
                 }
             } else {
-                if (
-                    [
-                        STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
-                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
-                    ].includes(employee.submitProfileStatus)
-                ) {
-                    message.error(
-                        "Không thể thêm thông tin lương cho nhân viên này"
-                    );
+                const res = await addSalaryByEmp(employee.id, [value]);
+
+                if (res?.data?.code === STATUS.SUCCESS) {
+                    message.success("Thêm mới thành công!");
+                    setData(res?.data?.data[0]);
+                    await handleGetSalaryByEmp();
+                    setIsModalOpen(true);
                 } else {
-                    const res = await addSalaryByEmp(employee.id, [value]);
-                    if (res?.data?.code === STATUS.SUCCESS) {
-                        message.success("Thêm mới thành công!");
-                        setData(res?.data?.data[0]);
-                        await handleGetSalaryByEmp();
-                        setIsModalOpen(true);
-                    } else {
-                        message.error(res?.data?.message);
-                    }
+                    message.error(res?.data?.message);
                 }
             }
             form.resetFields();

@@ -63,20 +63,11 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                 await handleGetRecomentByEmp();
                 setIsModalOpen(true);
             } else {
-                if (
-                    [
-                        STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
-                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
-                    ].includes(employee.submitProfileStatus)
-                ) {
-                    message.error("Không thể thêm đề xuất cho nhân viên này");
-                } else {
-                    const res = await addProposalByEmp(employee?.id, [value]);
-                    setData(res?.data?.data[0]);
-                    message.success("Thêm mới thành công!");
-                    await handleGetRecomentByEmp();
-                    setIsModalOpen(true);
-                }
+                const res = await addProposalByEmp(employee?.id, [value]);
+                setData(res?.data?.data[0]);
+                message.success("Thêm mới thành công!");
+                await handleGetRecomentByEmp();
+                setIsModalOpen(true);
             }
 
             form.resetFields();

@@ -37,7 +37,8 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
         }
     };
     const onFinish = async (values) => {
-        const { leaderId, submitDay, submitContent } = values;
+        const { leaderId, submitDay, submitContent, submitEndProfileDay } =
+            values;
         let submitProfileStatus = "2";
         let reasonForEnd = "";
         if (reasonForEnding) {
@@ -48,6 +49,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             ...employee,
             leaderId,
             submitDay,
+            submitEndProfileDay,
             submitContent: submitContent.trim(),
             submitProfileStatus,
             reasonForEnding: reasonForEnd.trim(),
@@ -169,12 +171,20 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                     initialValues={{
                         remember: true,
                         submitDay: format(new Date(), "yyyy-MM-dd"),
+                        submitEndProfileDay: format(new Date(), "yyyy-MM-dd"),
                     }}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
                     <Row gutter={15}>
                         <Col span={8}>
+                            <Form.Item
+                                label="Ngày trình"
+                                name="submitEndProfileDay"
+                                className="hidden"
+                            >
+                                <Input type="date"></Input>
+                            </Form.Item>
                             <Form.Item
                                 label="Ngày trình"
                                 name="submitDay"

@@ -48,7 +48,7 @@ const ModalProfile = () => {
     return (
         <>
             <Modal
-                zIndex={3}
+                zIndex={4}
                 width={1300}
                 className="max-h-[720px] overflow-y-scroll"
                 title={

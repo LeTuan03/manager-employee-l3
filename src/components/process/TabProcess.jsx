@@ -73,22 +73,11 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                 await handleGetProcessByEmp();
                 setIsModalOpen(true);
             } else {
-                if (
-                    [
-                        REJECT_REQUEST_END_PROFILE,
-                        ADDITIONAL_REQUIREMENTS_END_PROFILE,
-                    ].includes(employee.submitProfileStatus)
-                ) {
-                    message.error(
-                        "Không thể thêm thông tin thăng chức cho nhân viên này"
-                    );
-                } else {
-                    const res = await addProcessByEmp(employee?.id, [value]);
-                    setData(res?.data?.data[0]);
-                    message.success("Thêm mới thành công !");
-                    await handleGetProcessByEmp();
-                    setIsModalOpen(true);
-                }
+                const res = await addProcessByEmp(employee?.id, [value]);
+                setData(res?.data?.data[0]);
+                message.success("Thêm mới thành công !");
+                await handleGetProcessByEmp();
+                setIsModalOpen(true);
             }
 
             form.resetFields();

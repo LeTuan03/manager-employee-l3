@@ -1,5 +1,6 @@
-import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
 import {
     getAllLeader,
     getEmployeeById,
@@ -7,7 +8,6 @@ import {
     updateProposal,
     updateSalary,
 } from "../../services/api";
-import { format } from "date-fns";
 import validateCodeInput from "../../hook/ValidateCodeInput";
 import TextArea from "antd/es/input/TextArea";
 
@@ -52,6 +52,7 @@ const SendLeaderUpdateHappening = (props) => {
     }, [employeeId]);
 
     const onFinish = async (values) => {
+        console.log(values);
         const { leaderId } = values;
         const data = {
             ...employee,
@@ -63,23 +64,24 @@ const SendLeaderUpdateHappening = (props) => {
         setIsModalOpen(false);
     };
     const handleSendLeader = async (datas) => {
+        const successMgs = "Trình lãnh đạo thành công";
         try {
             data.leaderId = datas.leaderId;
             if (type === "salary") {
                 data.salaryIncreaseStatus = "2";
                 await updateSalary(data);
                 await handleGetSalaryByEmp();
-                message.success("Trình lãnh đạo thành công");
+                message.success(successMgs);
             } else if (type === "process") {
                 data.processStatus = "2";
                 await updateProcess(data);
                 await handleGetProcessByEmp();
-                message.success("Trình lãnh đạo thành công");
+                message.success(successMgs);
             } else if (type === "recoment") {
                 data.proposalStatus = "2";
                 await updateProposal(data);
                 await handleGetRecomentByEmp();
-                message.success("Trình lãnh đạo thành công");
+                message.success(successMgs);
             }
         } catch (error) {
             console.log(error);
