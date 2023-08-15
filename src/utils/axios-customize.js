@@ -21,6 +21,14 @@ instance.interceptors.response.use(
         return response;
     },
     function (error) {
+        if (
+            error.response &&
+            (error.response.status === 401 || error.response.status === 403)
+        ) {
+            localStorage.removeItem("access_token");
+            window.location.href = "/login";
+        }
+
         return Promise.reject(error);
     }
 );
