@@ -164,10 +164,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             size={200}
                         />
                         <div className="leading-10">
-                            <div className="mt-10">
-                                <MailOutlined className="mr-3" />
-                                {employee?.email &&
-                                    TextToTruncate(employee?.email, 20)}
+                            <div>
+                                <div className="flex mt-10 leading-4 my-3 break-all">
+                                    <MailOutlined className="mr-3" />
+                                    {employee?.email && employee?.email}
+                                </div>
                             </div>
                             <div>
                                 <PhoneOutlined className="mr-3" />
