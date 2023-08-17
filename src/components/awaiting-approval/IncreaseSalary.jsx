@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
-import { Modal, Result, Table, Button, Tabs } from "antd";
+import {
+    Modal,
+    Result,
+    Table,
+    Button,
+    Tabs,
+    ConfigProvider,
+    Empty,
+} from "antd";
 import { getSalaryIncreaseByCurrentLeader } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
@@ -9,6 +17,7 @@ import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
+import { ROLE } from "../../constants/constants";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);
@@ -106,24 +115,32 @@ export default function IncreaseSalary() {
 
     return (
         <div>
-            {role === 5 ? (
+            {role === ROLE.MANAGE ? (
                 <>
                     <div className="main-table">
-                        <Table
-                            bordered
-                            columns={columns}
-                            dataSource={STT(dataSalary)}
-                            pagination={{
-                                showSizeChanger: true,
-                                pageSizeOptions: ["1", "10", "20", "30"],
-                                locale: {
-                                    items_per_page: "bản ghi / trang",
-                                },
-                            }}
-                            scroll={{
-                                y: 490,
-                            }}
-                        />
+                        <ConfigProvider
+                            renderEmpty={() => (
+                                <>
+                                    <Empty description={false} />
+                                </>
+                            )}
+                        >
+                            <Table
+                                bordered
+                                columns={columns}
+                                dataSource={STT(dataSalary)}
+                                pagination={{
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ["1", "10", "20", "30"],
+                                    locale: {
+                                        items_per_page: "bản ghi / trang",
+                                    },
+                                }}
+                                scroll={{
+                                    y: 490,
+                                }}
+                            />
+                        </ConfigProvider>
                     </div>
                     <Modal
                         zIndex={1}

@@ -267,11 +267,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                             <div className="border-l-2 mt-8">
                                 <div>
                                     <h2 className="text-lg mb-3">HỌC VẤN</h2>
-                                    <div className="relative">
-                                        <span className="absolute top-[-0.4em] left-[4px] text-3xl z-50">
-                                            ❝
+                                    <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
+                                        <span className="absolute top-0 left-[8px] text-3xl z-50">
+                                            <i>❝</i>
                                         </span>
-                                        <div className="custom-area relative">
+                                        <div className="relative pl-3">
                                             <TextArea
                                                 className="!pt-[8px] !pl-0"
                                                 placeholder="Học vấn của bạn!"
@@ -293,8 +293,8 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                 }}
                                                 value={threeInfo?.knowledge}
                                             />
-                                            <span className="absolute right-[8px] bottom-[-0.6em] text-3xl z-50">
-                                                ❞
+                                            <span className="absolute right-[8px] bottom-[-0.7em] text-3xl z-50">
+                                                <i>❞</i>
                                             </span>
                                         </div>
                                     </div>
@@ -434,24 +434,22 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                 exp.map((item) => {
                                     return (
                                         <div
-                                            className="group mb-5 relative"
+                                            className="group mb-3 relative"
                                             key={item.id}
                                         >
                                             <div>
                                                 <div className="font-medium">
-                                                    <div>
-                                                        <span className="uppercase">
-                                                            {item.companyName}
-                                                        </span>
-                                                        <span> | </span>
+                                                    <div className="flex items-center flex-wrap">
                                                         {item?.startDate &&
                                                             format(
                                                                 new Date(
                                                                     item.startDate
                                                                 ),
                                                                 "dd/MM/yyy"
-                                                            )}
-                                                        -
+                                                            )}{" "}
+                                                        <b className="mx-1">
+                                                            -
+                                                        </b>{" "}
                                                         {item?.endDate &&
                                                             format(
                                                                 new Date(
@@ -459,9 +457,13 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                                 ),
                                                                 "dd/MM/yyy"
                                                             )}
+                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[10px] mx-3"></span>
+                                                        <span className="uppercase">
+                                                            {item.companyName}{" "}
+                                                        </span>
                                                     </div>
                                                 </div>
-                                                <div className="custom-area relative">
+                                                <div className="relative ml-3">
                                                     <TextArea
                                                         className="!pt-[8px] !px-0 !w-full"
                                                         value={

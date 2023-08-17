@@ -15,15 +15,13 @@ import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { STATUS } from "../../constants/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
-import { getEmployee } from "../../redux/employee/employeeSlice";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
-    const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
@@ -56,7 +54,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
         try {
             if (value.id) {
                 const res = await updateSalary(value);
-
                 if (res?.data?.code === STATUS.SUCCESS) {
                     message.success("Cập nhật thành công!");
                     setData(res?.data?.data);

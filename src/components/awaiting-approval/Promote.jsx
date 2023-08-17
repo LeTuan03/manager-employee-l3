@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
-import { Button, Modal, Result, Table, Tabs } from "antd";
+import {
+    Button,
+    ConfigProvider,
+    Empty,
+    Modal,
+    Result,
+    Table,
+    Tabs,
+} from "antd";
 import { getProcess } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
@@ -105,21 +113,29 @@ export default function Promote() {
             {role === 5 ? (
                 <>
                     <div className="main-table">
-                        <Table
-                            bordered
-                            columns={columns}
-                            dataSource={STT(processEmp)}
-                            pagination={{
-                                showSizeChanger: true,
-                                pageSizeOptions: ["1", "10", "20", "30"],
-                                locale: {
-                                    items_per_page: "bản ghi / trang",
-                                },
-                            }}
-                            scroll={{
-                                y: 490,
-                            }}
-                        />
+                        <ConfigProvider
+                            renderEmpty={() => (
+                                <>
+                                    <Empty description={false} />
+                                </>
+                            )}
+                        >
+                            <Table
+                                bordered
+                                columns={columns}
+                                dataSource={STT(processEmp)}
+                                pagination={{
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ["1", "10", "20", "30"],
+                                    locale: {
+                                        items_per_page: "bản ghi / trang",
+                                    },
+                                }}
+                                scroll={{
+                                    y: 490,
+                                }}
+                            />
+                        </ConfigProvider>
                     </div>
                     <Modal
                         zIndex={1}

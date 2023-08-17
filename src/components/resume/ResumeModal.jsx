@@ -31,7 +31,6 @@ export default function ResumeModal(props) {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
-    const [employeeId, setEmployeeId] = useState(null);
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
@@ -61,10 +60,6 @@ export default function ResumeModal(props) {
             default:
                 break;
         }
-    };
-
-    const handleActionFailure = (error) => {
-        console.error(error);
     };
 
     const onFinish = async (values) => {
@@ -113,7 +108,7 @@ export default function ResumeModal(props) {
             setIsOpen(false);
             form3.resetFields();
         } catch (error) {
-            handleActionFailure(error);
+            console.log(error);
         }
     };
 
@@ -164,7 +159,7 @@ export default function ResumeModal(props) {
             setIsOpen(false);
             form.resetFields();
         } catch (error) {
-            handleActionFailure(error);
+            console.log(error);
         }
     };
 
@@ -219,7 +214,7 @@ export default function ResumeModal(props) {
             setIsRejectOpen(false);
             form2.resetFields();
         } catch (error) {
-            handleActionFailure(error);
+            console.log(error);
         }
     };
     const [form] = Form.useForm();
@@ -231,18 +226,11 @@ export default function ResumeModal(props) {
                 <Button
                     className="bg-green-700 text-white min-w-[100px] hover:!text-white hover:!border-0"
                     onClick={() => {
-                        setEmployeeId(
-                            type === "Resume"
-                                ? profile?.id
-                                : profile?.employeeId
-                        );
-                        dispatch(
-                            getEmployee(
-                                type === "Resume"
-                                    ? profile?.id
-                                    : profile?.employeeId
-                            )
-                        );
+                        if (type === "Resume") {
+                            dispatch(getEmployee(profile?.id));
+                        } else {
+                            dispatch(getEmployee(profile?.employeeId));
+                        }
                         dispatch(setOpen({ ...open, modalProfile: true }));
                     }}
                 >
@@ -273,10 +261,7 @@ export default function ResumeModal(props) {
             </Button>
             <div>
                 {/* Hồ sơ nhân viên  */}
-                <ModalProfile
-                    employeeId={employeeId}
-                    setEmployeeId={setEmployeeId}
-                />
+                {type !== "Resume" && <ModalProfile />}
                 {/* Phê duyệt nhân viên */}
                 <Modal
                     title="Phê duyệt nhân viên"

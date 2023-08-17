@@ -54,15 +54,21 @@ const ModalProfile = () => {
                 title={
                     <div className="flex justify-between">
                         <div>HỒ SƠ NHÂN VIÊN</div>
-                        {employee?.numberSaved && (
+                        {employee?.numberSaved && role !== ROLE.MANAGE && (
                             <div className="mr-9 text-green-600">
                                 <i>
-                                    Số lưu: {employee?.numberSaved} - Ngày lưu:{" "}
-                                    {employee?.submitDay &&
-                                        format(
-                                            new Date(employee?.submitDay),
-                                            "dd/MM/yyyy"
-                                        )}
+                                    Số lưu:{" "}
+                                    <span className="font-normal">
+                                        {employee?.numberSaved}
+                                    </span>{" "}
+                                    - Ngày lưu:{" "}
+                                    <span className="font-normal">
+                                        {employee?.submitDay &&
+                                            format(
+                                                new Date(employee?.submitDay),
+                                                "dd/MM/yyyy"
+                                            )}
+                                    </span>
                                 </i>
                             </div>
                         )}
