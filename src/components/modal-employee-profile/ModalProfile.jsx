@@ -61,7 +61,7 @@ const ModalProfile = () => {
                                     {employee?.submitDay &&
                                         format(
                                             new Date(employee?.submitDay),
-                                            "dd-MM-yyyy"
+                                            "dd/MM/yyyy"
                                         )}
                                 </i>
                             </div>

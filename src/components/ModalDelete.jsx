@@ -42,6 +42,7 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
                             onClick={() => setOpenDelete(false)}
                             type="primary"
                             danger
+                            className="min-w-[100px]"
                         >
                             Hủy
                         </Button>
