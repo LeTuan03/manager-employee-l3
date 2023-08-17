@@ -8,8 +8,8 @@ import {
     updateProposal,
     updateSalary,
 } from "../../services/api";
-import validateCodeInput from "../../hook/ValidateCodeInput";
 import TextArea from "antd/es/input/TextArea";
+import validateCodeInput from "../common/ValidateCodeInput";
 
 const SendLeaderUpdateHappening = (props) => {
     const {

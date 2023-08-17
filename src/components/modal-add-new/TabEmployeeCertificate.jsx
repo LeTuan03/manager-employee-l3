@@ -23,7 +23,7 @@ import {
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
 import ModalDelete from "../ModalDelete";
-import TextToTruncate from "../../hook/TextToTruncate";
+import TextToTruncate from "../common/TextToTruncate";
 const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);

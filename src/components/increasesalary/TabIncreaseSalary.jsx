@@ -14,13 +14,13 @@ import {
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import TextToTruncate from "../../hook/TextToTruncate";
-import validateCodeInput from "../../hook/ValidateCodeInput";
-import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { STATUS } from "../../constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import { getEmployee } from "../../redux/employee/employeeSlice";
+import TextToTruncate from "../common/TextToTruncate";
+import validateCodeInput from "../common/ValidateCodeInput";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
     const dispatch = useDispatch();
@@ -169,9 +169,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                                     className="text-blue-600 text-lg mr-5"
                                     onClick={() => {
                                         handleEdit(employee);
-                                        dispatch(
-                                            getEmployee(employee.employeeId)
-                                        );
                                     }}
                                 />
                             </span>

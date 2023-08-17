@@ -11,7 +11,6 @@ import {
     Tabs,
 } from "antd";
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
-import TextToTruncate from "../../hook/TextToTruncate";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
 import { GENDER, STATUS_EMPLOYEE } from "../../constants/constants";
@@ -24,6 +23,7 @@ import StringStatus from "../common/StringStatus";
 import TeamStatus from "../common/TeamStatus";
 import InputSearch from "../InputSearch";
 import STT from "../common/STT";
+import TextToTruncate from "../common/TextToTruncate";
 
 export default function Resume() {
     const dispatch = useDispatch();

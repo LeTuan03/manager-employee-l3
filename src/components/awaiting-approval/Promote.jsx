@@ -5,11 +5,11 @@ import { getProcess } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
-import TextToTruncate from "../../hook/TextToTruncate";
 import PromoteTab from "../process/ProcessChildren";
 import StringStatus from "../common/StringStatus";
 import STT from "../common/STT";
 import ProcesPosition from "../common/ProcessPosition";
+import TextToTruncate from "../common/TextToTruncate";
 
 export default function Promote() {
     const { role } = useSelector((state) => state.account);

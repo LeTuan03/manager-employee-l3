@@ -24,7 +24,7 @@ import _ from "lodash";
 import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
-import TextToTruncate from "../../hook/TextToTruncate";
+import TextToTruncate from "../common/TextToTruncate";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const [formFamily] = Form.useForm();
     const [loading, setLoading] = useState(false);

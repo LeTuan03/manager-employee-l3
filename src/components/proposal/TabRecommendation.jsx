@@ -19,12 +19,11 @@ import {
 } from "../../services/api";
 import ModalUpdateHappening from "./RecomnentModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import TextToTruncate from "../../hook/TextToTruncate";
-import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+import TextToTruncate from "../common/TextToTruncate";
+import validateCodeInput from "../common/ValidateCodeInput";
 
 const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
     const [form] = Form.useForm();

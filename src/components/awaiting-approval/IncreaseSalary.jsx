@@ -5,10 +5,10 @@ import { getSalaryIncreaseByCurrentLeader } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
 import { useSelector } from "react-redux";
-import TextToTruncate from "../../hook/TextToTruncate";
 import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
+import TextToTruncate from "../common/TextToTruncate";
 
 export default function IncreaseSalary() {
     const { role } = useSelector((state) => state.account);

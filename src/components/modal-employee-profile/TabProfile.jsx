@@ -16,9 +16,9 @@ import _ from "lodash";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
-import TextToTruncate from "../../hook/TextToTruncate";
 import ModalDelete from "../ModalDelete";
 import TeamStatus from "../common/TeamStatus";
+import TextToTruncate from "../common/TextToTruncate";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({ setThreeInfo, threeInfo }) => {
     const { employee } = useSelector((state) => state.employee);

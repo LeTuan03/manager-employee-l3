@@ -18,24 +18,17 @@ import {
     updateProcess,
 } from "../../services/api";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import TextToTruncate from "../../hook/TextToTruncate";
-import validateCodeInput from "../../hook/ValidateCodeInput";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import ModalUpdateHappening from "../proposal/RecomnentModal";
+import TextToTruncate from "../common/TextToTruncate";
+import validateCodeInput from "../common/ValidateCodeInput";
 
-const {
-    NEW_SAVE,
-    PENDING,
-    BEEN_APPEOVED,
-    ADDITIONAL_REQUIREMENTS,
-    REJECT,
-    REJECT_REQUEST_END_PROFILE,
-    ADDITIONAL_REQUIREMENTS_END_PROFILE,
-} = STATUS_EMPLOYEE;
+const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
+    STATUS_EMPLOYEE;
 
 const TabProcess = ({ processs, handleGetProcessByEmp }) => {
     const [form] = Form.useForm();

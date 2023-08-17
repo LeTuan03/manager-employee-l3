@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Modal, Table } from "antd";
-import TextToTruncate from "../hook/TextToTruncate";
 import {
     DeleteOutlined,
     EditOutlined,
@@ -19,6 +18,7 @@ import { GENDER, ROLE, STATUS, STATUS_EMPLOYEE } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
 import TeamStatus from "./common/TeamStatus";
+import TextToTruncate from "./common/TextToTruncate";
 const TableComponet = () => {
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);

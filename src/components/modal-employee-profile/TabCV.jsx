@@ -3,8 +3,8 @@ import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { GENDER, RELATIONSHIP } from "../../constants/constants";
-import TextToTruncate from "../../hook/TextToTruncate";
 import Conclusion from "../common/Conclusion";
+import TextToTruncate from "../common/TextToTruncate";
 
 const TabCV = () => {
     const { employee } = useSelector((state) => state.employee);
