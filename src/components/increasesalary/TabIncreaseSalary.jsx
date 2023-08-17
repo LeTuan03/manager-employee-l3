@@ -52,6 +52,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
 
     const handleSubmit = async (value) => {
         try {
+            setLoading(true);
             if (value.id) {
                 const res = await updateSalary(value);
                 if (res?.data?.code === STATUS.SUCCESS) {
@@ -74,10 +75,12 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                     message.error(res?.data?.message);
                 }
             }
+            setLoading(false);
             form.resetFields();
         } catch (error) {
             console.log(error);
             message.error("Cập nhật thất bại!");
+            setLoading(false);
         }
     };
 
@@ -321,6 +324,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
+                                loading={loading}
                                 className="w-full"
                                 type="primary"
                                 htmlType="submit"

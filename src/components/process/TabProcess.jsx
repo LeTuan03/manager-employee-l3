@@ -59,6 +59,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
 
     const handleSubmit = async (value) => {
         try {
+            setLoading(true);
             if (value.id) {
                 const res = await updateProcess(value);
                 setData(res?.data?.data);
@@ -72,11 +73,12 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                 await handleGetProcessByEmp();
                 setIsModalOpen(true);
             }
-
+            setLoading(false);
             form.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
             console.log(error);
+            setLoading(false);
         }
     };
 
@@ -294,6 +296,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
+                                loading={loading}
                                 className="w-full"
                                 type="primary"
                                 htmlType="submit"

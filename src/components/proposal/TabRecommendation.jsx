@@ -55,6 +55,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
     };
     const handleSubmit = async (value) => {
         try {
+            setLoading(true);
             if (value.id) {
                 const res = await updateProposal(value);
                 setData(res?.data?.data);
@@ -68,10 +69,12 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                 await handleGetRecomentByEmp();
                 setIsModalOpen(true);
             }
-
+            setLoading(false);
             form.resetFields();
         } catch (error) {
+            message.error("Cập nhật thất bại !");
             console.log(error);
+            setLoading(false);
         }
     };
 
@@ -298,6 +301,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                     <Col span={2}>
                         <Form.Item label=" ">
                             <Button
+                                loading={loading}
                                 type="primary"
                                 className="w-full"
                                 htmlType="submit"
