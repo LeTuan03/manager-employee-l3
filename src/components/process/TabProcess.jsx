@@ -339,7 +339,6 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
-                employee={employee}
                 handleGetProcessByEmp={handleGetProcessByEmp}
             />
             <ModalDelete

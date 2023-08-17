@@ -9,6 +9,7 @@ import { STATUS_EMPLOYEE } from "../../constants/constants";
 export default function SaveResume() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
+    const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useState({});
     const [form] = Form.useForm();
     const handleGetProfile = async () => {
@@ -22,6 +23,7 @@ export default function SaveResume() {
 
     const onFinish = async (values) => {
         try {
+            setLoading(true);
             profile.decisionDay = values.decisionDay;
             profile.numberSaved = values.numberSaved;
             profile.submitProfileStatus = "0";
@@ -36,9 +38,11 @@ export default function SaveResume() {
                     status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
                 })
             );
+            setLoading(false);
         } catch (error) {
             console.log(error);
             message.error("Nộp lưu hồ sơ thất bại!");
+            setLoading(false);
         }
     };
     const onFinishFailed = (values) => {
@@ -138,7 +142,7 @@ export default function SaveResume() {
                     />
                 </Form.Item>
                 <Form.Item className="text-center">
-                    <Button htmlType="submit" type="primary">
+                    <Button htmlType="submit" type="primary" loading={loading}>
                         Xác nhận
                     </Button>
                     <Button

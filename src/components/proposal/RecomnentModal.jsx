@@ -10,7 +10,6 @@ const ModalUpdateHappening = ({
     isModalOpen,
     setIsModalOpen,
     data,
-    employee,
     handleGetRecomentByEmp,
     handleGetProcessByEmp,
 }) => {
@@ -85,7 +84,6 @@ const ModalUpdateHappening = ({
             <SendLeaderUpdateHappening
                 type={type}
                 data={data}
-                employeeId={employee.id}
                 openLeader={openLeader}
                 setOpenLeader={setOpenLeader}
                 handleGetRecomentByEmp={handleGetRecomentByEmp}

@@ -3,17 +3,16 @@ import { format } from "date-fns";
 import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
 import {
     getAllLeader,
-    getEmployeeById,
     updateProcess,
     updateProposal,
     updateSalary,
 } from "../../services/api";
 import TextArea from "antd/es/input/TextArea";
 import validateCodeInput from "../common/ValidateCodeInput";
+import { useSelector } from "react-redux";
 
 const SendLeaderUpdateHappening = (props) => {
     const {
-        employeeId,
         openLeader,
         setOpenLeader,
         data,
@@ -24,8 +23,9 @@ const SendLeaderUpdateHappening = (props) => {
         setIsModalOpen,
     } = props;
     const [form] = Form.useForm();
+    const { employee } = useSelector((state) => state.employee);
+    const [loading, setLoading] = useState(false);
     const [nameLeader, setNameLeader] = useState([]);
-    const [employee, setEmployee] = useState({});
     const [idLeader, setIdLeader] = useState({ id: null, label: "" });
 
     const handleGetAllLeader = async () => {
@@ -41,24 +41,16 @@ const SendLeaderUpdateHappening = (props) => {
             setNameLeader(nameData);
         }
     };
-    const getEmployee = async () => {
-        if (employeeId !== null) {
-            const res = await getEmployeeById(employeeId);
-            setEmployee(res?.data?.data);
-        }
-    };
-    useEffect(() => {
-        getEmployee();
-    }, [employeeId]);
 
     const onFinish = async (values) => {
-        console.log(values);
+        setLoading(true);
         const { leaderId } = values;
         const data = {
             ...employee,
             leaderId,
         };
         await handleSendLeader(data);
+        setLoading(false);
         form.resetFields();
         setOpenLeader(false);
         setIsModalOpen(false);
@@ -96,8 +88,8 @@ const SendLeaderUpdateHappening = (props) => {
         }
     };
     const handleCancel = () => {
-        form.resetFields();
         setIdLeader({ id: null, label: "" });
+        form.resetFields();
         setOpenLeader(false);
     };
     useEffect(() => {
@@ -188,6 +180,7 @@ const SendLeaderUpdateHappening = (props) => {
                         <Col span={24}>
                             <Form.Item className="text-center">
                                 <Button
+                                    loading={loading}
                                     htmlType="submit"
                                     type="primary"
                                     className="mr-2 bg-green-600 hover:!bg-green-500"

@@ -7,7 +7,6 @@ const SalaryModal = ({
     isModalOpen,
     setIsModalOpen,
     data,
-    employee,
     handleGetSalaryByEmp,
 }) => {
     const items = [
@@ -17,7 +16,6 @@ const SalaryModal = ({
             children: <IncreaseTab profile={data} />,
         },
     ];
-
     const [openLeader, setOpenLeader] = useState("");
     return (
         <>
@@ -65,7 +63,6 @@ const SalaryModal = ({
             <SendLeaderUpdateHappening
                 type="salary"
                 data={data}
-                employeeId={employee.id}
                 openLeader={openLeader}
                 setOpenLeader={setOpenLeader}
                 handleGetSalaryByEmp={handleGetSalaryByEmp}

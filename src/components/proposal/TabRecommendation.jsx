@@ -343,7 +343,6 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
-                employee={employee}
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
             />
             <ModalDelete

@@ -366,7 +366,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
-                employee={employee}
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
             />
             <ModalDelete
