@@ -261,7 +261,7 @@ export default function ResumeModal(props) {
             </Button>
             <div>
                 {/* Hồ sơ nhân viên  */}
-                {type !== "Resume" && <ModalProfile />}
+                {type === "Resume" && <ModalProfile />}
                 {/* Phê duyệt nhân viên */}
                 <Modal
                     title="Phê duyệt nhân viên"
