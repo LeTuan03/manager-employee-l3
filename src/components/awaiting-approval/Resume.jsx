@@ -29,9 +29,7 @@ import ModalProfile from "../modal-employee-profile/ModalProfile";
 export default function Resume() {
     const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
-    const { employee, isLoading, listEmployee } = useSelector(
-        (state) => state.employee
-    );
+    const { employee, listEmployee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const [reasonForEnding, setReasonForEnding] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -172,7 +170,6 @@ export default function Resume() {
                             >
                                 <Table
                                     bordered
-                                    loading={isLoading}
                                     columns={columns}
                                     dataSource={STT(listEmployee)}
                                     scroll={{

@@ -108,20 +108,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             setIdLeader({ ...idLeader, label: "Trưởng phòng" });
         }
     };
-    function validateDate(_, value) {
-        if (value) {
-            const inputDateTime = new Date(value);
-            const currentDateTime = new Date();
-            if (inputDateTime > currentDateTime) {
-                return Promise.reject(
-                    new Error("Yêu cầu chọn trước ngày hôm nay")
-                );
-            }
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error(`Vui lòng nhập ngày`));
-        }
-    }
+
     const handleCancel = () => {
         setIdLeader({ id: null, label: "" });
         dispatch(setOpen({ ...open, modalSendLeader: false }));
@@ -194,7 +181,8 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                                 name="submitDay"
                                 rules={[
                                     {
-                                        validator: validateDate,
+                                        required: true,
+                                        message: "Vui lòng chọn ngày !",
                                     },
                                 ]}
                             >
@@ -202,7 +190,17 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item name="leaderId" label="Tên lãnh đạo">
+                            <Form.Item
+                                name="leaderId"
+                                label="Tên lãnh đạo"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            "Không được bỏ trống trường này!",
+                                    },
+                                ]}
+                            >
                                 <Select
                                     options={nameLeader}
                                     onChange={(value) => {
