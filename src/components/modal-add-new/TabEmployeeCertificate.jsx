@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import { STATUS } from "../../constants/constants";
 import {
@@ -24,10 +24,11 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import ModalDelete from "../ModalDelete";
 import TextToTruncate from "../common/TextToTruncate";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
+    const dispatch = useDispatch();
     const [formCertificate] = Form.useForm();
     const [id, setId] = useState(null);
-    const [loading, setLoading] = useState(false);
     const { role } = useSelector((state) => state.account);
     const { employee } = useSelector((state) => state.employee);
     const [openDelete, setOpenDelete] = useState(false);
@@ -54,13 +55,13 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
     const showFailded = (error) => {
         console.log(error);
-        setLoading(false);
+        dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
     const handleCreateCertificate = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
-                setLoading(true);
+                dispatch(setIsLoading(true));
                 const res = await createCertificate(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     await handleGetCertificateById();
@@ -69,7 +70,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 } else {
                     message.error(res?.data?.message);
                 }
-                setLoading(false);
+                dispatch(setIsLoading(false));
             } catch (error) {
                 showFailded(error);
             }
@@ -89,7 +90,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
         const index = cloneCertificate.findIndex((item) => item.uid === id);
         if (index === -1) {
             try {
-                setLoading(true);
+                dispatch(setIsLoading(true));
                 const res = await updateCertificate(id, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     setId(null);
@@ -99,7 +100,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 } else {
                     message.error(res?.data?.message);
                 }
-                setLoading(false);
+                dispatch(setIsLoading(false));
             } catch (error) {
                 showFailded(error);
             }
@@ -113,7 +114,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
     const handleDeleteCertificate = async (idDelete) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await deleteCertificate(idDelete);
             if (res?.data?.code === STATUS.SUCCESS) {
                 await handleGetCertificateById();
@@ -126,7 +127,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             showFailded(error);
         }
@@ -143,15 +144,14 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
     const handleGetCertificateById = async () => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await getCertificateByEmployeeId(employee.id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 setCertificate(res?.data?.data);
-                setLoading(false);
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             showFailded(error);
         }
@@ -250,7 +250,6 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     return (
         <>
             <Form
-                disabled={loading}
                 className="mb-4"
                 layout={"vertical"}
                 name="basic"
@@ -341,7 +340,6 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             <div className="flex justify-center items-center gap-2">
                                 <Button
                                     className=" w-[100px]"
-                                    loading={loading}
                                     type="primary"
                                     htmlType="submit"
                                 >
@@ -377,12 +375,10 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                         dataSource={certificate}
                         columns={columns}
                         pagination={false}
-                        loading={loading}
                     />
                 </div>
             </ConfigProvider>
             <ModalDelete
-                loading={loading}
                 handleDeleteById={handleDeleteCertificate}
                 handleDeleteByUid={handleDeleteByUid}
                 uidDelete={uidDelete}

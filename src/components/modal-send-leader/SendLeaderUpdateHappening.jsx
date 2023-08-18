@@ -9,7 +9,8 @@ import {
 } from "../../services/api";
 import TextArea from "antd/es/input/TextArea";
 import validateCodeInput from "../common/ValidateCodeInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 const SendLeaderUpdateHappening = (props) => {
     const {
@@ -22,9 +23,9 @@ const SendLeaderUpdateHappening = (props) => {
         handleGetRecomentByEmp,
         setIsModalOpen,
     } = props;
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const { employee } = useSelector((state) => state.employee);
-    const [loading, setLoading] = useState(false);
     const [nameLeader, setNameLeader] = useState([]);
     const [idLeader, setIdLeader] = useState({ id: null, label: "" });
 
@@ -43,14 +44,14 @@ const SendLeaderUpdateHappening = (props) => {
     };
 
     const onFinish = async (values) => {
-        setLoading(true);
+        dispatch(setIsLoading(true));
         const { leaderId } = values;
         const data = {
             ...employee,
             leaderId,
         };
         await handleSendLeader(data);
-        setLoading(false);
+        dispatch(setIsLoading(false));
         form.resetFields();
         setOpenLeader(false);
         setIsModalOpen(false);
@@ -180,7 +181,6 @@ const SendLeaderUpdateHappening = (props) => {
                         <Col span={24}>
                             <Form.Item className="text-center">
                                 <Button
-                                    loading={loading}
                                     htmlType="submit"
                                     type="primary"
                                     className="mr-2 bg-green-600 hover:!bg-green-500"

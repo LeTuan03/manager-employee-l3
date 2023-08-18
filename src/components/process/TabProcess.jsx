@@ -18,7 +18,7 @@ import {
     updateProcess,
 } from "../../services/api";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
@@ -26,11 +26,13 @@ import ProcesPosition from "../common/ProcessPosition";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
     STATUS_EMPLOYEE;
 
 const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
+    const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
@@ -39,18 +41,17 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
     }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
-    const [loading, setLoading] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDeletePromote = async (id) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             await deleteProcess(id);
             message.success("Xóa thành công !");
             await handleGetProcessByEmp();
             formProcess.resetFields();
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại !");
         }
@@ -58,7 +59,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
 
     const handleSubmit = async (value) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             if (value.id) {
                 const res = await updateProcess(value);
                 setData(res?.data?.data);
@@ -72,12 +73,12 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 await handleGetProcessByEmp();
                 setIsModalOpen(true);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
             formProcess.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
             console.log(error);
-            setLoading(false);
+            dispatch(setIsLoading(false));
         }
     };
 
@@ -296,7 +297,6 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                     <Col xl={2} lg={3} md={3} sm={4} xs={5}>
                         <Form.Item label=" ">
                             <Button
-                                loading={loading}
                                 className="w-full"
                                 type="primary"
                                 htmlType="submit"
@@ -311,7 +311,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                                 type="primary"
                                 danger
                                 className="w-full"
-                                onClick={() => form.resetFields()}
+                                onClick={() => formProcess.resetFields()}
                             >
                                 Đặt lại
                             </Button>
@@ -342,7 +342,6 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 handleGetProcessByEmp={handleGetProcessByEmp}
             />
             <ModalDelete
-                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}

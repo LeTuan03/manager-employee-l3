@@ -14,14 +14,16 @@ import {
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { STATUS } from "../../constants/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
+    const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
@@ -30,28 +32,28 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
     }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [oldMoney, setOldMoney] = useState("");
-    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
 
     const handleDelete = async (value) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             await deleteSalary(value);
             message.success("Xóa thành công!");
             formSalary.resetFields();
             handleGetSalaryByEmp();
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
-            message.error("Xóa thất bại!");
             console.log(error);
+            dispatch(setIsLoading(false));
+            message.error("Xóa thất bại!");
         }
     };
 
     const handleSubmit = async (value) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             if (value.id) {
                 const res = await updateSalary(value);
                 if (res?.data?.code === STATUS.SUCCESS) {
@@ -74,12 +76,12 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                     message.error(res?.data?.message);
                 }
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
             formSalary.resetFields();
         } catch (error) {
             console.log(error);
             message.error("Cập nhật thất bại!");
-            setLoading(false);
+            dispatch(setIsLoading(false));
         }
     };
 
@@ -322,7 +324,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                     <Col xs={6} sm={4} md={4} xl={2} lg={4}>
                         <Form.Item label=" ">
                             <Button
-                                loading={loading}
                                 className="w-full"
                                 type="primary"
                                 htmlType="submit"
@@ -337,7 +338,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                                 type="primary"
                                 danger
                                 className="w-full"
-                                onClick={() => form.resetFields()}
+                                onClick={() => formSalary.resetFields()}
                             >
                                 Đặt lại
                             </Button>
@@ -368,7 +369,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
             />
             <ModalDelete
-                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}

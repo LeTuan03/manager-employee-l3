@@ -6,7 +6,7 @@ import Mask from "./Mask";
 import { useSelector } from "react-redux";
 
 const LayoutHomePage = () => {
-    const { open } = useSelector((state) => state.employee);
+    const { isLoading } = useSelector((state) => state.employee);
     return (
         <>
             <div className="ml-[15%] max-md:ml-0 max-lg:ml-0">
@@ -16,7 +16,7 @@ const LayoutHomePage = () => {
                 </div>
             </div>
             <Sidebar></Sidebar>
-            {open.modalLoading && <Mask />}
+            {isLoading && <Mask />}
         </>
     );
 };

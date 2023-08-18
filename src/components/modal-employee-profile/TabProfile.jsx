@@ -14,11 +14,12 @@ import TextArea from "antd/es/input/TextArea";
 import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import ModalDelete from "../ModalDelete";
 import TeamStatus from "../common/TeamStatus";
 import TextToTruncate from "../common/TextToTruncate";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({
     setThreeInfo,
@@ -26,8 +27,8 @@ const TabProfile = ({
     setErrorThreeInfo,
     errorThreeInfo,
 }) => {
+    const dispatch = useDispatch();
     const { employee } = useSelector((state) => state.employee);
-    const [loading, setLoading] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
     const [form] = Form.useForm();
@@ -55,6 +56,11 @@ const TabProfile = ({
         } else {
             await handlePostExp(data);
         }
+    };
+    const handleShowError = (error) => {
+        console.log(error);
+        dispatch(setIsLoading(false));
+        message.error("Đã có lỗi xảy ra!");
     };
     const handleChange = (e) => {
         setThreeInfo({ ...threeInfo, [e.target.name]: e.target.value });
@@ -87,7 +93,7 @@ const TabProfile = ({
     };
     const handlePostExp = async (data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await postExp(employee?.id, [data]);
             if (res?.data?.code === STATUS.SUCCESS) {
                 await handleGetExp();
@@ -97,14 +103,14 @@ const TabProfile = ({
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
     const handleUpdate = async (id, data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await updateExp(id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 await handleGetExp();
@@ -114,9 +120,9 @@ const TabProfile = ({
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
     const handleGetExp = async () => {
@@ -128,12 +134,12 @@ const TabProfile = ({
                 message.error(res?.data?.message);
             }
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
     const handleDeleteExp = async (id) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await deleteExp(id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 await handleGetExp();
@@ -143,9 +149,9 @@ const TabProfile = ({
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
     useEffect(() => {
@@ -459,7 +465,6 @@ const TabProfile = ({
                                 <Form.Item className="mt-8">
                                     <Space>
                                         <Button
-                                            loading={loading}
                                             type="primary"
                                             htmlType="submit"
                                             className=" w-[100px]"
@@ -574,7 +579,6 @@ const TabProfile = ({
                                 })}
                         </div>
                         <ModalDelete
-                            loading={loading}
                             handleDeleteEmployee={handleDeleteExp}
                             employeeIdToDelete={employeeIdToDelete}
                             openDelete={openDelete}

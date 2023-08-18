@@ -22,12 +22,13 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import TextToTruncate from "../common/TextToTruncate";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 const TabEmployeeFamily = ({ setFamily, family }) => {
+    const dispatch = useDispatch();
     const [formFamily] = Form.useForm();
-    const [loading, setLoading] = useState(false);
     const [update, setUpdate] = useState(null);
     const { employee } = useSelector((state) => state.employee);
     const [openDelete, setOpenDelete] = useState(false);
@@ -67,7 +68,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     };
     const handleFailded = (error) => {
         console.log(error);
-        setLoading(false);
+        dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
     useEffect(() => {
@@ -79,21 +80,21 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     }, [employee]);
     const handleGetFamily = async () => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await getFamilyByEmployeeId(employee.id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 setFamily(res?.data?.data);
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             handleFailded(error);
         }
     };
     const handleDeleteFamily = async (id) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await deleteFamily(id);
             if (res?.data?.code === STATUS.SUCCESS) {
                 message.success("Xóa thành công");
@@ -106,7 +107,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             handleFailded(error);
         }
@@ -124,7 +125,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     const handleCreateFamily = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
-                setLoading(true);
+                dispatch(setIsLoading(true));
                 const res = await createFamily(employee.id, [data]);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     await handleGetFamily();
@@ -133,7 +134,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 } else {
                     message.error(res?.data?.message);
                 }
-                setLoading(false);
+                dispatch(setIsLoading(false));
             } catch (error) {
                 handleFailded(error);
             }
@@ -152,7 +153,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         const index = cloneFamily.findIndex((item) => item.uid === update);
         if (index === -1) {
             try {
-                setLoading(true);
+                dispatch(setIsLoading(true));
                 const res = await updateFamily(update, data);
                 if (res?.data?.code === STATUS.SUCCESS) {
                     await handleGetFamily();
@@ -162,7 +163,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                     message.error(res?.data?.message);
                 }
                 setUpdate(null);
-                setLoading(false);
+                dispatch(setIsLoading(false));
             } catch (error) {
                 handleFailded(error);
             }
@@ -485,7 +486,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                         <Form.Item label=" ">
                             <div className="flex justify-center items-center gap-2">
                                 <Button
-                                    loading={loading}
                                     type="primary"
                                     className=" w-[100px]"
                                     htmlType="submit"
@@ -517,7 +517,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             >
                 <div className="main-table">
                     <Table
-                        loading={loading}
                         scroll={{ x: true, y: 200 }}
                         bordered
                         dataSource={family}
@@ -527,7 +526,6 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 </div>
             </ConfigProvider>
             <ModalDelete
-                loading={loading}
                 handleDeleteById={handleDeleteFamily}
                 handleDeleteByUid={handleDeleteByUid}
                 uidDelete={uidDelete}

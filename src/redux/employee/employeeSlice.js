@@ -7,7 +7,6 @@ const initialState = {
     employee: {},
     open: {
         modalInput: false,
-        modalLoading: false,
         modalProfile: false,
         modalEnd: false,
         modalSendLeader: false,
@@ -51,6 +50,9 @@ const employeeSlice = createSlice({
         resetEmployee: (state) => {
             state.employee = {};
         },
+        setIsLoading: (state, action) => {
+            state.isLoading = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -70,5 +72,5 @@ const employeeSlice = createSlice({
             });
     },
 });
-export const { setOpen, resetEmployee } = employeeSlice.actions;
+export const { setOpen, resetEmployee, setIsLoading } = employeeSlice.actions;
 export default employeeSlice.reducer;

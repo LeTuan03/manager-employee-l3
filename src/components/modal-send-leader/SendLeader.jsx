@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { getAllLeader, updateEmployee } from "../../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    setIsLoading,
+    setOpen,
+} from "../../redux/employee/employeeSlice";
 import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import TextArea from "antd/es/input/TextArea";
 const {
@@ -20,7 +24,6 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
     const [form] = Form.useForm();
     const [nameLeader, setNameLeader] = useState([]);
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
     const { open, employee } = useSelector((state) => state.employee);
     const [idLeader, setIdLeader] = useState({ id: null, label: "" });
     const handleGetAllLeader = async () => {
@@ -58,7 +61,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
     };
     const handleSendLeader = async (data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 if (res?.data?.data?.submitProfileStatus === "2") {
@@ -91,9 +94,11 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             console.log(error);
+            message.error("Đã có lỗi xảy ra!");
+            dispatch(setIsLoading(false));
         }
     };
     const handleChange = (value) => {
@@ -121,7 +126,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
         setIdLeader({ id: null, label: "" });
         dispatch(setOpen({ ...open, modalSendLeader: false }));
         form.resetFields();
-        setLoading(false);
+        dispatch(setIsLoading(false));
     };
     useEffect(() => {
         handleGetAllLeader();
@@ -144,7 +149,6 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
                         <Button
                             type="primary"
                             className="min-w-[100px] bg-green-600 hover:!bg-green-500"
-                            loading={loading}
                             onClick={() => {
                                 form.submit();
                             }}

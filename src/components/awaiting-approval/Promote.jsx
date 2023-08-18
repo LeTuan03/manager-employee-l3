@@ -12,22 +12,26 @@ import {
 import { getProcess } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PromoteTab from "../process/ProcessChildren";
 import StringStatus from "../common/StringStatus";
 import STT from "../common/STT";
 import ProcesPosition from "../common/ProcessPosition";
 import TextToTruncate from "../common/TextToTruncate";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 export default function Promote() {
+    const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [processEmp, setProcessEmp] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleGetProcess = async () => {
+        dispatch(setIsLoading(true));
         const res = await getProcess();
         setProcessEmp(res?.data?.data);
+        dispatch(setIsLoading(false));
     };
     useEffect(() => {
         handleGetProcess();

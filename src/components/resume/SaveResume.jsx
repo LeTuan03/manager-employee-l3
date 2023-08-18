@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react";
 import { getEmployeeById, submitAndSaveResume } from "../../services/api";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    setIsLoading,
+    setOpen,
+} from "../../redux/employee/employeeSlice";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 export default function SaveResume() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
-    const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useState({});
     const [form] = Form.useForm();
     const handleGetProfile = async () => {
@@ -23,7 +26,7 @@ export default function SaveResume() {
 
     const onFinish = async (values) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             profile.decisionDay = values.decisionDay;
             profile.numberSaved = values.numberSaved;
             profile.submitProfileStatus = "0";
@@ -38,11 +41,11 @@ export default function SaveResume() {
                     status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
                 })
             );
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             console.log(error);
+            dispatch(setIsLoading(false));
             message.error("Nộp lưu hồ sơ thất bại!");
-            setLoading(false);
         }
     };
     const onFinishFailed = (values) => {
@@ -96,6 +99,7 @@ export default function SaveResume() {
                 form.resetFields();
             }}
             footer={false}
+            zIndex={7}
         >
             <Form
                 onFinish={onFinish}
@@ -142,7 +146,7 @@ export default function SaveResume() {
                     />
                 </Form.Item>
                 <Form.Item className="text-center mt-6">
-                    <Button htmlType="submit" type="primary" loading={loading}>
+                    <Button htmlType="submit" type="primary">
                         Xác nhận
                     </Button>
                     <Button

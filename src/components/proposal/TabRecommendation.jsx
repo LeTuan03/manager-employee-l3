@@ -19,18 +19,19 @@ import {
 } from "../../services/api";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 const TabRecommendation = ({
     recoments,
     handleGetRecomentByEmp,
     formRecoment,
 }) => {
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
@@ -45,20 +46,21 @@ const TabRecommendation = ({
 
     const handleDeleteRecoment = async (id) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             await deleteProposal(id);
             message.success("Xóa thành công!");
             formRecoment.resetFields();
             await handleGetRecomentByEmp();
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại!");
             console.log(error);
+            dispatch(setIsLoading(false));
         }
     };
     const handleSubmit = async (value) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             if (value.id) {
                 const res = await updateProposal(value);
                 setData(res?.data?.data);
@@ -72,12 +74,12 @@ const TabRecommendation = ({
                 await handleGetRecomentByEmp();
                 setIsModalOpen(true);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
             formRecoment.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
             console.log(error);
-            setLoading(false);
+            dispatch(setIsLoading(false));
         }
     };
 
@@ -305,7 +307,6 @@ const TabRecommendation = ({
                     <Col xl={2} lg={3} md={3} sm={4} xs={4}>
                         <Form.Item label=" ">
                             <Button
-                                loading={loading}
                                 type="primary"
                                 className="w-full"
                                 htmlType="submit"
@@ -320,7 +321,7 @@ const TabRecommendation = ({
                                 type="primary"
                                 danger
                                 className="w-full"
-                                onClick={() => form.resetFields()}
+                                onClick={() => formRecoment.resetFields()}
                             >
                                 Đặt lại
                             </Button>
@@ -350,7 +351,6 @@ const TabRecommendation = ({
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
             />
             <ModalDelete
-                loading={loading}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
                 employeeIdToDelete={employeeIdToDelete}

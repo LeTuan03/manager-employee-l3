@@ -3,7 +3,11 @@ import EmployeeProfile from "./EmployeeProfile";
 import { Button, Modal, message } from "antd";
 import { updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEmployee, setOpen } from "../../redux/employee/employeeSlice";
+import {
+    getAllEmployee,
+    setIsLoading,
+    setOpen,
+} from "../../redux/employee/employeeSlice";
 import { ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import { format } from "date-fns";
 
@@ -17,7 +21,6 @@ const {
 const ModalProfile = () => {
     const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
-    const [loading, setLoading] = useState(false);
     const { open, employee } = useSelector((state) => state.employee);
     const [threeInfo, setThreeInfo] = useState({
         knowledge: employee?.knowledge || "",
@@ -33,7 +36,7 @@ const ModalProfile = () => {
     const [activeKey, setActiveKey] = useState("1");
     const handleUpdateEmployee = async (data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
@@ -45,11 +48,11 @@ const ModalProfile = () => {
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             console.log(error);
             message.error("Đã có lỗi!");
-            setLoading(false);
+            dispatch(setIsLoading(false));
         }
     };
     const validateInfo = () => {
@@ -125,8 +128,8 @@ const ModalProfile = () => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
                 }}
                 onCancel={() => {
-                    dispatch(setOpen({ ...open, modalProfile: false }));
                     setActiveKey("1");
+                    dispatch(setOpen({ ...open, modalProfile: false }));
                     setErrorThreeInfo({
                         knowledge: "",
                         skill: "",
@@ -144,7 +147,6 @@ const ModalProfile = () => {
                             <Button
                                 className="w-[100px]"
                                 type="primary"
-                                loading={loading}
                                 onClick={() => {
                                     handleSubmit();
                                 }}
@@ -183,8 +185,7 @@ const ModalProfile = () => {
                                 disabled={
                                     !threeInfo?.knowledge ||
                                     !threeInfo?.skill ||
-                                    !threeInfo?.activity ||
-                                    loading
+                                    !threeInfo?.activity
                                 }
                                 onClick={() => {
                                     handleUpdateEmployee({

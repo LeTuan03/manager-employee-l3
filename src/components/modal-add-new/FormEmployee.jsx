@@ -25,14 +25,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getAllEmployee,
     getEmployee,
+    setIsLoading,
 } from "../../redux/employee/employeeSlice";
-const FormEmployee = ({
-    form,
-    family,
-    certificate,
-    setLoading,
-    setActiveKey,
-}) => {
+const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
     const dispatch = useDispatch();
@@ -82,7 +77,7 @@ const FormEmployee = ({
     };
     const showFailed = (error) => {
         console.log(error);
-        setLoading(false);
+        dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
     const onFinishFailed = (errorInfo) => {
@@ -91,7 +86,7 @@ const FormEmployee = ({
     };
     const handleCreateEmployee = async (data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await createEmployee(data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
@@ -104,14 +99,14 @@ const FormEmployee = ({
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             showFailed(error);
         }
     };
     const handleUpdateEmployee = async (data) => {
         try {
-            setLoading(true);
+            dispatch(setIsLoading(true));
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
                 dispatch(
@@ -124,7 +119,7 @@ const FormEmployee = ({
             } else {
                 message.error(res?.data?.message);
             }
-            setLoading(false);
+            dispatch(setIsLoading(false));
         } catch (error) {
             showFailed(error);
         }

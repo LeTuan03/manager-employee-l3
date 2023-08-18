@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getAllEmployee,
     getEmployee,
+    setIsLoading,
     setOpen,
 } from "../../redux/employee/employeeSlice";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
@@ -36,7 +37,11 @@ export default function ResumeModal(props) {
     const [form] = Form.useForm();
     const [form2] = Form.useForm();
     const [form3] = Form.useForm();
-
+    const handleShowError = (error) => {
+        console.log(error);
+        dispatch(setIsLoading(false));
+        message.error("Đã có lỗi xảy ra!");
+    };
     const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
@@ -63,6 +68,7 @@ export default function ResumeModal(props) {
 
     const onFinish = async (values) => {
         try {
+            dispatch(setIsLoading(true));
             switch (type) {
                 case "Propose":
                     profile.acceptanceDate = values.acceptDay;
@@ -106,13 +112,15 @@ export default function ResumeModal(props) {
             setIsApproveOpen(false);
             setIsOpen(false);
             form3.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
 
     const onFinishAdditional = async (values) => {
         try {
+            dispatch(setIsLoading(true));
             switch (type) {
                 case "Propose":
                     profile.additionalRequest = values.additionalRequest;
@@ -157,13 +165,15 @@ export default function ResumeModal(props) {
             setIsAdditionalRequestOpen(false);
             setIsOpen(false);
             form.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
 
     const onFinishReject = async (values) => {
         try {
+            dispatch(setIsLoading(true));
             switch (type) {
                 case "Propose":
                     profile.rejectionDate = values.rejectionDate;
@@ -212,8 +222,9 @@ export default function ResumeModal(props) {
             setIsOpen(false);
             setIsRejectOpen(false);
             form2.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            handleShowError(error);
         }
     };
 
@@ -262,6 +273,7 @@ export default function ResumeModal(props) {
                 open={isApproveOpen}
                 onCancel={() => setIsApproveOpen(false)}
                 footer={false}
+                zIndex={7}
             >
                 <Form
                     onFinish={onFinish}
@@ -321,6 +333,7 @@ export default function ResumeModal(props) {
                     setIsAdditionalRequestOpen(false);
                     form.resetFields();
                 }}
+                zIndex={7}
                 footer={false}
             >
                 <Form
@@ -380,6 +393,7 @@ export default function ResumeModal(props) {
                     form2.resetFields();
                 }}
                 footer={false}
+                zIndex={7}
             >
                 <Form
                     layout="vertical"

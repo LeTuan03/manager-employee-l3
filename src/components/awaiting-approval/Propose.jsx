@@ -12,21 +12,25 @@ import {
 import { getProposal } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProposeTab from "../proposal/RecomenetChildren";
 import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 export default function Propose() {
+    const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [proposeEmp, setProposeEmp] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleGetProposal = async () => {
+        dispatch(setIsLoading(true));
         const res = await getProposal();
         setProposeEmp(res?.data?.data);
+        dispatch(setIsLoading(false));
     };
     useEffect(() => {
         handleGetProposal();

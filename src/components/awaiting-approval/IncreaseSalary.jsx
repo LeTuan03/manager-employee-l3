@@ -12,21 +12,25 @@ import {
 import { getSalaryIncreaseByCurrentLeader } from "../../services/api";
 import { format } from "date-fns";
 import ResumeModal from "../resume/ResumeModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import { ROLE } from "../../constants/constants";
+import { setIsLoading } from "../../redux/employee/employeeSlice";
 
 export default function IncreaseSalary() {
+    const dispatch = useDispatch();
     const { role } = useSelector((state) => state.account);
     const [profile, setProfile] = useState({});
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const getCurrentEmpIncreaseSalary = async () => {
+        dispatch(setIsLoading(true));
         const res = await getSalaryIncreaseByCurrentLeader();
         setDataSalary(res?.data?.data);
+        dispatch(setIsLoading(false));
     };
     useEffect(() => {
         getCurrentEmpIncreaseSalary();

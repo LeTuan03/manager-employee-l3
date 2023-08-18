@@ -50,18 +50,14 @@ const ModalInput = () => {
         },
     ];
     const handleRegister = async () => {
-        try {
-            await form.validateFields();
-            form.submit();
-            dispatch(
-                setOpen({
-                    ...open,
-                    modalProfile: true,
-                })
-            );
-        } catch (error) {
-            console.log(error);
-        }
+        await form.validateFields();
+        form.submit();
+        dispatch(
+            setOpen({
+                ...open,
+                modalProfile: true,
+            })
+        );
     };
     return (
         <>

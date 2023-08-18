@@ -262,7 +262,6 @@ const TableComponet = () => {
                     bordered
                     columns={columns}
                     dataSource={data}
-                    loading={isLoading}
                     pagination={{
                         showSizeChanger: true,
                         pageSizeOptions: ["1", "10", "20", "30"],
