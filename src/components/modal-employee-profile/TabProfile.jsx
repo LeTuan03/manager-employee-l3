@@ -20,7 +20,12 @@ import ModalDelete from "../ModalDelete";
 import TeamStatus from "../common/TeamStatus";
 import TextToTruncate from "../common/TextToTruncate";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
-const TabProfile = ({ setThreeInfo, threeInfo }) => {
+const TabProfile = ({
+    setThreeInfo,
+    threeInfo,
+    setErrorThreeInfo,
+    errorThreeInfo,
+}) => {
     const { employee } = useSelector((state) => state.employee);
     const [loading, setLoading] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
@@ -53,6 +58,32 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
     };
     const handleChange = (e) => {
         setThreeInfo({ ...threeInfo, [e.target.name]: e.target.value });
+        if (e.target.value === "") {
+            switch (e.target.name) {
+                case "knowledge":
+                    setErrorThreeInfo({
+                        ...errorThreeInfo,
+                        [e.target.name]: `Vui lòng nhập học vấn của bạn`,
+                    });
+                    break;
+                case "skill":
+                    setErrorThreeInfo({
+                        ...errorThreeInfo,
+                        [e.target.name]: `Vui lòng nhập kĩ năng của bạn`,
+                    });
+                    break;
+                case "activity":
+                    setErrorThreeInfo({
+                        ...errorThreeInfo,
+                        [e.target.name]: `Vui lòng nhập hoạt động của bạn`,
+                    });
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            setErrorThreeInfo({ ...errorThreeInfo, [e.target.name]: "" });
+        }
     };
     const handlePostExp = async (data) => {
         try {
@@ -221,6 +252,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     }}
                                     value={threeInfo?.skill}
                                 ></TextArea>
+                                {errorThreeInfo?.skill && (
+                                    <p className="text-red-600">
+                                        {errorThreeInfo?.skill}
+                                    </p>
+                                )}
                             </div>
                         </Col>
                         <h2 className="mt-5">HOẠT ĐỘNG</h2>
@@ -247,6 +283,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                     placeholder="Hoạt động của bạn !"
                                     value={threeInfo?.activity}
                                 ></TextArea>
+                                {errorThreeInfo?.activity && (
+                                    <p className="text-red-600">
+                                        {errorThreeInfo?.activity}
+                                    </p>
+                                )}
                             </div>
                         </Col>
                     </div>
@@ -299,6 +340,11 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                             </span>
                                         </div>
                                     </div>
+                                    {errorThreeInfo?.knowledge && (
+                                        <p className="text-red-600">
+                                            {errorThreeInfo?.knowledge}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>

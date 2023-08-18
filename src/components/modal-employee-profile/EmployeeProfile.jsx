@@ -8,6 +8,8 @@ export default function EmployeeProfile({
     threeInfo,
     activeKey,
     setActiveKey,
+    setErrorThreeInfo,
+    errorThreeInfo,
 }) {
     const items = [
         {
@@ -17,6 +19,8 @@ export default function EmployeeProfile({
                 <TabProfile
                     threeInfo={threeInfo}
                     setThreeInfo={setThreeInfo}
+                    setErrorThreeInfo={setErrorThreeInfo}
+                    errorThreeInfo={errorThreeInfo}
                 ></TabProfile>
             ),
         },

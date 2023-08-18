@@ -24,6 +24,12 @@ const ModalProfile = () => {
         skill: employee?.skill || "",
         activity: employee?.activity || "",
     });
+    const [errorThreeInfo, setErrorThreeInfo] = useState({
+        knowledge: "",
+        skill: "",
+        activity: "",
+    });
+
     const [activeKey, setActiveKey] = useState("1");
     const handleUpdateEmployee = async (data) => {
         try {
@@ -44,6 +50,40 @@ const ModalProfile = () => {
             console.log(error);
             message.error("Đã có lỗi!");
             setLoading(false);
+        }
+    };
+    const validateInfo = () => {
+        let isValid = true;
+        const newErrors = { ...errorThreeInfo };
+        if (threeInfo?.knowledge?.trim() === "" || !threeInfo?.knowledge) {
+            isValid = false;
+            newErrors.knowledge = "Vui lòng nhập học vấn của bạn";
+        } else {
+            newErrors.knowledge = "";
+        }
+        if (threeInfo?.skill?.trim() === "" || !threeInfo?.skill) {
+            isValid = false;
+            newErrors.skill = "Vui lòng nhập kĩ năng của bạn";
+        } else {
+            newErrors.skill = "";
+        }
+        if (threeInfo?.activity?.trim() === "" || !threeInfo?.activity) {
+            isValid = false;
+            newErrors.activity = "Vui lòng nhập hoạt động của bạn";
+        } else {
+            newErrors.activity = "";
+        }
+        setErrorThreeInfo(newErrors);
+        return isValid;
+    };
+    const handleSubmit = () => {
+        if (validateInfo()) {
+            handleUpdateEmployee({
+                ...employee,
+                knowledge: threeInfo?.knowledge?.trim(),
+                skill: threeInfo?.skill?.trim(),
+                activity: threeInfo?.activity?.trim(),
+            });
         }
     };
     return (
@@ -87,6 +127,11 @@ const ModalProfile = () => {
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
                     setActiveKey("1");
+                    setErrorThreeInfo({
+                        knowledge: "",
+                        skill: "",
+                        activity: "",
+                    });
                 }}
                 footer={
                     <div className="flex justify-center !pb-5">
@@ -101,12 +146,7 @@ const ModalProfile = () => {
                                 type="primary"
                                 loading={loading}
                                 onClick={() => {
-                                    handleUpdateEmployee({
-                                        ...employee,
-                                        knowledge: threeInfo?.knowledge?.trim(),
-                                        skill: threeInfo?.skill?.trim(),
-                                        activity: threeInfo?.activity?.trim(),
-                                    });
+                                    handleSubmit();
                                 }}
                             >
                                 Lưu
@@ -140,6 +180,12 @@ const ModalProfile = () => {
                                 className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
                                 htmlType="submit"
                                 type="primary"
+                                disabled={
+                                    !threeInfo?.knowledge ||
+                                    !threeInfo?.skill ||
+                                    !threeInfo?.activity ||
+                                    loading
+                                }
                                 onClick={() => {
                                     handleUpdateEmployee({
                                         ...employee,
@@ -167,6 +213,11 @@ const ModalProfile = () => {
                                     setOpen({ ...open, modalProfile: false })
                                 );
                                 setActiveKey("1");
+                                setErrorThreeInfo({
+                                    knowledge: "",
+                                    skill: "",
+                                    activity: "",
+                                });
                             }}
                         >
                             Hủy
@@ -175,6 +226,8 @@ const ModalProfile = () => {
                 }
             >
                 <EmployeeProfile
+                    setErrorThreeInfo={setErrorThreeInfo}
+                    errorThreeInfo={errorThreeInfo}
                     threeInfo={threeInfo}
                     setThreeInfo={setThreeInfo}
                     activeKey={activeKey}
