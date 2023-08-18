@@ -141,7 +141,7 @@ export default function SaveResume() {
                         }}
                     />
                 </Form.Item>
-                <Form.Item className="text-center">
+                <Form.Item className="text-center mt-6">
                     <Button htmlType="submit" type="primary" loading={loading}>
                         Xác nhận
                     </Button>

@@ -12,7 +12,6 @@ import {
     ConfigProvider,
 } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
-import SalaryModal from "./SalaryModal";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { STATUS } from "../../constants/constants";
 import { useSelector } from "react-redux";
@@ -20,15 +19,15 @@ import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
+import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 
-const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
+const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
-            form.resetFields();
+            formSalary.resetFields();
         }
     }, [open.modalUpdateHappening]);
-    const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [oldMoney, setOldMoney] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,7 +40,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
             setLoading(true);
             await deleteSalary(value);
             message.success("Xóa thành công!");
-            form.resetFields();
+            formSalary.resetFields();
             handleGetSalaryByEmp();
             setLoading(false);
         } catch (error) {
@@ -76,7 +75,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                 }
             }
             setLoading(false);
-            form.resetFields();
+            formSalary.resetFields();
         } catch (error) {
             console.log(error);
             message.error("Cập nhật thất bại!");
@@ -87,7 +86,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
     const handleEdit = (employee) => {
         employee.startDate = format(new Date(employee.startDate), "yyyy-MM-dd");
         setData(employee);
-        form.setFieldsValue(employee);
+        formSalary.setFieldsValue(employee);
     };
     const columns = [
         {
@@ -231,23 +230,23 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
     };
     return (
         <>
-            <Form form={form} onFinish={handleSubmit} layout="vertical">
-                <Row gutter={16} className="hidden">
+            <Form form={formSalary} onFinish={handleSubmit} layout="vertical">
+                <Row gutter={25} className="hidden">
                     <Col span={8}>
                         <Form.Item name={"id"}>
                             <Input />
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={16} className="hidden">
+                <Row gutter={25} className="hidden">
                     <Col span={8}>
                         <Form.Item name={"salaryIncreaseStatus"}>
                             <Input value={1} />
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
+                <Row gutter={25}>
+                    <Col span={8} xl={8} lg={12} xs={24} sm={12} md={12}>
                         <Form.Item
                             name="startDate"
                             label="Ngày tăng lương"
@@ -261,7 +260,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             <Input type="date" />
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col span={8} xl={8} lg={12} xs={24} sm={12} md={12}>
                         <Form.Item
                             name="oldSalary"
                             label="Lương cũ"
@@ -280,27 +279,25 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col span={8} xl={8} lg={12} xs={24} sm={12} md={12}>
                         <Form.Item
                             name="newSalary"
                             label="Lương mới"
                             rules={[
-                                {
-                                    validator: validateNewMoney,
-                                },
+                                { required: true, validator: validateNewMoney },
                             ]}
                         >
                             <Input type="number" suffix="VND" />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={16} className="mb-2">
-                    <Col span={9}>
+
+                    <Col span={9} xl={8} lg={12} xs={24} sm={12} md={12}>
                         <Form.Item
                             name="note"
                             label="Ghi chú"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -308,12 +305,13 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                    <Col span={11}>
+                    <Col span={11} lg={12} xs={24} sm={12} md={12}>
                         <Form.Item
                             name="reason"
                             label="Lý do"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -321,7 +319,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             <Input maxLength={240} showCount />
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xs={6} sm={4} md={4} xl={2} lg={4}>
                         <Form.Item label=" ">
                             <Button
                                 loading={loading}
@@ -333,7 +331,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                             </Button>
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xs={6} sm={4} md={4} xl={2} lg={4}>
                         <Form.Item label=" ">
                             <Button
                                 type="primary"
@@ -362,7 +360,8 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp }) => {
                     </div>
                 </Col>
             </Row>
-            <SalaryModal
+            <FormUpdateHappening
+                type="salary"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

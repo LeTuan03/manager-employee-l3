@@ -63,6 +63,7 @@ export default function Propose() {
             key: "note",
             dataIndex: "note",
             align: "center",
+            width: 150,
             render: (note) => (
                 <p className="text-left">{TextToTruncate(note || "", 25)}</p>
             ),
@@ -72,6 +73,7 @@ export default function Propose() {
             key: "content",
             dataIndex: "content",
             align: "center",
+            width: 150,
             render: (content) => (
                 <p className="text-left">{TextToTruncate(content || "", 25)}</p>
             ),
@@ -81,6 +83,7 @@ export default function Propose() {
             key: "detailedDescription",
             dataIndex: "detailedDescription",
             align: "center",
+            width: 250,
             render: (detailedDescription) => (
                 <p className="text-left">
                     {TextToTruncate(detailedDescription || "", 25)}
@@ -92,7 +95,7 @@ export default function Propose() {
             key: "proposalStatus",
             dataIndex: "proposalStatus",
             align: "center",
-            width: 200,
+            width: 180,
             render: (_, status) => NumberStatus(status.proposalStatus),
         },
         {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Checkbox, Form, Input, Modal, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { format } from "date-fns";
@@ -15,7 +15,6 @@ import {
     getEmployee,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-import ModalProfile from "../modal-employee-profile/ModalProfile";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 
 export default function ResumeModal(props) {
@@ -34,10 +33,10 @@ export default function ResumeModal(props) {
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
-    const [info, setInfo] = useState({ ...employee });
-    useEffect(() => {
-        setInfo({ ...employee });
-    }, [employee]);
+    const [form] = Form.useForm();
+    const [form2] = Form.useForm();
+    const [form3] = Form.useForm();
+
     const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
@@ -87,13 +86,13 @@ export default function ResumeModal(props) {
                     let data = {};
                     if (profile.submitProfileStatus === "6") {
                         data = {
-                            ...info,
+                            ...employee,
                             terminationAppointmentDate: values.acceptDay,
                             submitProfileStatus: "7",
                         };
                     } else {
                         data = {
-                            ...info,
+                            ...employee,
                             appointmentDate: values.acceptDay,
                             submitProfileStatus: "3",
                         };
@@ -137,14 +136,14 @@ export default function ResumeModal(props) {
                     let data = {};
                     if (profile.submitProfileStatus === "6") {
                         data = {
-                            ...info,
+                            ...employee,
                             submitProfileStatus: "8",
                             additionalRequestTermination:
                                 values.additionalRequest,
                         };
                     } else {
                         data = {
-                            ...info,
+                            ...employee,
                             additionalRequest: values.additionalRequest,
                             submitProfileStatus: "4",
                         };
@@ -191,7 +190,7 @@ export default function ResumeModal(props) {
                     let data = {};
                     if (profile.submitProfileStatus === "6") {
                         data = {
-                            ...info,
+                            ...employee,
                             refuseEndProfileDay: values.rejectionDate,
                             reasonForRefuseEndProfile:
                                 values.reasonForRejection,
@@ -199,7 +198,7 @@ export default function ResumeModal(props) {
                         };
                     } else {
                         data = {
-                            ...info,
+                            ...employee,
                             reasonForRejection: values.reasonForRejection,
                             submitProfileStatus: "5",
                         };
@@ -217,20 +216,16 @@ export default function ResumeModal(props) {
             console.log(error);
         }
     };
-    const [form] = Form.useForm();
-    const [form2] = Form.useForm();
-    const [form3] = Form.useForm();
+
     return (
         <>
             {profile.submitProfileStatus !== STATUS_EMPLOYEE.PENDING && (
                 <Button
                     className="bg-green-700 text-white min-w-[100px] hover:!text-white hover:!border-0"
                     onClick={() => {
-                        if (type === "Resume") {
-                            dispatch(getEmployee(profile?.id));
-                        } else {
-                            dispatch(getEmployee(profile?.employeeId));
-                        }
+                        dispatch(
+                            getEmployee(profile?.employeeId || profile?.id)
+                        );
                         dispatch(setOpen({ ...open, modalProfile: true }));
                     }}
                 >
@@ -259,204 +254,203 @@ export default function ResumeModal(props) {
             >
                 Từ chối
             </Button>
-            <div>
-                {/* Hồ sơ nhân viên  */}
-                {type === "Resume" && <ModalProfile />}
-                {/* Phê duyệt nhân viên */}
-                <Modal
-                    title="Phê duyệt nhân viên"
-                    centered
-                    open={isApproveOpen}
-                    onCancel={() => setIsApproveOpen(false)}
-                    footer={false}
-                >
-                    <Form
-                        onFinish={onFinish}
-                        layout="vertical"
-                        initialValues={{
-                            remember: true,
-                            acceptDay: format(new Date(), "yyyy-MM-dd"),
-                        }}
-                        form={form3}
-                    >
-                        <Form.Item
-                            className="mt-4"
-                            label=" Ngày hẹn:"
-                            name="acceptDay"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn ngày",
-                                },
-                            ]}
-                        >
-                            <Input
-                                type="date"
-                                placeholder="Chọn ngày"
-                                style={{ width: "470px" }}
-                            />
-                        </Form.Item>
-                        <Checkbox checked className="mt-2">
-                            Đã đủ điều kiện phê duyệt
-                        </Checkbox>
-                        <Form.Item className="text-center mt-8">
-                            <Button
-                                className="mr-2 min-w-[100px]"
-                                key="submit"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
-                            </Button>
-                            <Button
-                                className="min-w-[100px]"
-                                type="primary"
-                                danger
-                                onClick={() => setIsApproveOpen(false)}
-                            >
-                                Hủy
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-                {/* Nội dung yêu cầu bổ sung */}
-                <Modal
-                    title="Nội dung yêu cầu bổ sung"
-                    centered
-                    open={isAdditionalRequestOpen}
-                    onCancel={() => {
-                        setIsAdditionalRequestOpen(false);
-                        form.resetFields();
+
+            {/* Phê duyệt nhân viên */}
+            <Modal
+                title="Phê duyệt nhân viên"
+                centered
+                open={isApproveOpen}
+                onCancel={() => setIsApproveOpen(false)}
+                footer={false}
+            >
+                <Form
+                    onFinish={onFinish}
+                    layout="vertical"
+                    initialValues={{
+                        remember: true,
+                        acceptDay: format(new Date(), "yyyy-MM-dd"),
                     }}
-                    footer={false}
+                    form={form3}
                 >
-                    <Form
-                        onFinish={onFinishAdditional}
-                        layout="vertical"
-                        form={form}
+                    <Form.Item
+                        className="mt-4"
+                        label=" Ngày hẹn:"
+                        name="acceptDay"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng chọn ngày",
+                            },
+                        ]}
                     >
-                        <Form.Item
-                            name="additionalRequest"
-                            label="Nội dung yêu cầu bổ sung:"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập nội dung!",
-                                },
-                            ]}
+                        <Input
+                            type="date"
+                            placeholder="Chọn ngày"
+                            style={{ width: "470px" }}
+                        />
+                    </Form.Item>
+                    <Checkbox checked className="mt-2">
+                        Đã đủ điều kiện phê duyệt
+                    </Checkbox>
+                    <Form.Item className="text-center mt-8">
+                        <Button
+                            className="mr-2 min-w-[100px]"
+                            key="submit"
+                            type="primary"
+                            htmlType="submit"
                         >
-                            <TextArea
-                                required
-                                autoSize={{
-                                    minRows: 3,
-                                }}
-                                maxLength={240}
-                                showCount
-                            />
-                        </Form.Item>
-                        <Form.Item className="text-center">
-                            <Button
-                                className="min-w-[100px] mr-2"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
-                            </Button>{" "}
-                            <Button
-                                className="min-w-[100px]"
-                                type="primary"
-                                danger
-                                onClick={() => {
-                                    setIsAdditionalRequestOpen(false);
-                                    form.resetFields();
-                                }}
-                            >
-                                Hủy
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-                {/* Nội dung từ chối */}
-                <Modal
-                    title="Nội dung từ chối"
-                    centered
-                    open={isRejectOpen}
-                    onCancel={() => {
-                        setIsRejectOpen(false);
-                        form2.resetFields();
+                            Xác nhận
+                        </Button>
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={() => setIsApproveOpen(false)}
+                        >
+                            Hủy
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+            {/* Nội dung yêu cầu bổ sung */}
+            <Modal
+                title="Nội dung yêu cầu bổ sung"
+                centered
+                open={isAdditionalRequestOpen}
+                onCancel={() => {
+                    setIsAdditionalRequestOpen(false);
+                    form.resetFields();
+                }}
+                footer={false}
+            >
+                <Form
+                    onFinish={onFinishAdditional}
+                    layout="vertical"
+                    form={form}
+                >
+                    <Form.Item
+                        name="additionalRequest"
+                        label="Nội dung yêu cầu bổ sung:"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng nhập nội dung!",
+                            },
+                        ]}
+                    >
+                        <TextArea
+                            required
+                            autoSize={{
+                                minRows: 3,
+                                maxRows: 10,
+                            }}
+                            maxLength={240}
+                            showCount
+                        />
+                    </Form.Item>
+                    <Form.Item className="text-center mt-8">
+                        <Button
+                            className="min-w-[100px] mr-2"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            Xác nhận
+                        </Button>{" "}
+                        <Button
+                            className="min-w-[100px]"
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                setIsAdditionalRequestOpen(false);
+                                form.resetFields();
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+            {/* Nội dung từ chối */}
+            <Modal
+                title="Nội dung từ chối"
+                centered
+                open={isRejectOpen}
+                onCancel={() => {
+                    setIsRejectOpen(false);
+                    form2.resetFields();
+                }}
+                footer={false}
+            >
+                <Form
+                    layout="vertical"
+                    onFinish={onFinishReject}
+                    initialValues={{
+                        remember: true,
+                        rejectionDate: format(new Date(), "yyyy-MM-dd"),
                     }}
-                    footer={false}
+                    form={form2}
                 >
-                    <Form
-                        layout="vertical"
-                        onFinish={onFinishReject}
-                        initialValues={{
-                            remember: true,
-                            rejectionDate: format(new Date(), "yyyy-MM-dd"),
-                        }}
-                        form={form2}
+                    <Form.Item
+                        name="rejectionDate"
+                        label="Ngày từ chối"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng chọn ngày!",
+                            },
+                        ]}
                     >
-                        <Form.Item
-                            name="rejectionDate"
-                            label="Ngày từ chối"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn ngày!",
-                                },
-                            ]}
+                        <Input
+                            placeholder="Chọn ngày"
+                            style={{ width: "470px" }}
+                            type="date"
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Lí do"
+                        name="reasonForRejection"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng nhập nội dung!",
+                            },
+                        ]}
+                    >
+                        <TextArea
+                            className="mt-1"
+                            placeholder="Nhập nội dung ..."
+                            autoSize={{
+                                minRows: 3,
+                                maxRows: 10,
+                            }}
+                            maxLength={240}
+                            showCount
+                        />
+                    </Form.Item>
+                    <Form.Item className="text-center mt-8">
+                        <Button
+                            className="min-w-[100px] mr-2"
+                            key="submit"
+                            type="primary"
+                            htmlType="submit"
                         >
-                            <Input
-                                placeholder="Chọn ngày"
-                                style={{ width: "470px" }}
-                                type="date"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Lí do"
-                            name="reasonForRejection"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập nội dung!",
-                                },
-                            ]}
+                            Xác nhận
+                        </Button>
+                        <Button
+                            className="min-w-[100px]"
+                            key="cancel"
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                setIsRejectOpen(false);
+                                form2.resetFields();
+                            }}
                         >
-                            <TextArea
-                                className="mt-1"
-                                placeholder="Nhập nội dung ..."
-                                autoSize={{
-                                    minRows: 3,
-                                }}
-                                maxLength={240}
-                                showCount
-                            />
-                        </Form.Item>
-                        <Form.Item className="text-center mt-8">
-                            <Button
-                                className="min-w-[100px] mr-2"
-                                key="submit"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Xác nhận
-                            </Button>
-                            <Button
-                                className="min-w-[100px]"
-                                key="cancel"
-                                type="primary"
-                                danger
-                                onClick={() => {
-                                    setIsRejectOpen(false);
-                                    form2.resetFields();
-                                }}
-                            >
-                                Hủy
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            </div>
+                            Hủy
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 }

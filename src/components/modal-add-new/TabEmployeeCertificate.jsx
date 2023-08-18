@@ -52,6 +52,11 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };
+    const showFailded = (error) => {
+        console.log(error);
+        setLoading(false);
+        message.error("Đã có lỗi!");
+    };
     const handleCreateCertificate = async (data) => {
         if (!_.isEmpty(employee)) {
             try {
@@ -66,7 +71,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 }
                 setLoading(false);
             } catch (error) {
-                console.log(error);
+                showFailded(error);
             }
         } else {
             if (_.isEmpty(certificate)) {
@@ -96,7 +101,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 }
                 setLoading(false);
             } catch (error) {
-                console.log(error);
+                showFailded(error);
             }
         } else {
             cloneCertificate[index] = data;
@@ -123,7 +128,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            showFailded(error);
         }
     };
     const handleDeleteByUid = (uid) => {
@@ -148,7 +153,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            showFailded(error);
         }
     };
     useEffect(() => {
@@ -331,30 +336,30 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                             <Input maxLength={200} showCount />
                         </Form.Item>
                     </Col>
-                    <Col
-                        className="flex justify-center items-center gap-2"
-                        lg={4}
-                        span={24}
-                    >
-                        <Button
-                            className=" w-[100px]"
-                            loading={loading}
-                            type="primary"
-                            htmlType="submit"
-                        >
-                            {id ? "Lưu" : "Thêm"}
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            htmlType="button"
-                            onClick={() => {
-                                formCertificate.resetFields();
-                                setId(null);
-                            }}
-                        >
-                            Đặt lại
-                        </Button>
+                    <Col lg={4} span={24}>
+                        <Form.Item label=" ">
+                            <div className="flex justify-center items-center gap-2">
+                                <Button
+                                    className=" w-[100px]"
+                                    loading={loading}
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    {id ? "Lưu" : "Thêm"}
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    danger
+                                    htmlType="button"
+                                    onClick={() => {
+                                        formCertificate.resetFields();
+                                        setId(null);
+                                    }}
+                                >
+                                    Đặt lại
+                                </Button>
+                            </div>
+                        </Form.Item>
                     </Col>
                 </Row>
             </Form>

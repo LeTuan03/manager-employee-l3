@@ -59,7 +59,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
             setLoading(true);
             const res = await postExp(employee?.id, [data]);
             if (res?.data?.code === STATUS.SUCCESS) {
-                setExp(res?.data?.data);
+                await handleGetExp();
                 setOpenForm(false);
                 form.resetFields();
                 message.success("Thêm thành công!");
@@ -201,7 +201,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px] !px-0"
+                                    className="!pt-[7px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -227,7 +227,7 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[8px] !px-0"
+                                    className="!pt-[7px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -273,8 +273,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                         </span>
                                         <div className="relative pl-3">
                                             <TextArea
-                                                className="!pt-[8px] !pl-0"
+                                                className="!pt-[8px] !px-0 !pr-4"
                                                 placeholder="Học vấn của bạn!"
+                                                spellCheck={false}
                                                 bordered={false}
                                                 maxLength={240}
                                                 autoSize={{ minRows: 1 }}
@@ -463,9 +464,9 @@ const TabProfile = ({ setThreeInfo, threeInfo }) => {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div className="relative ml-3">
+                                                <div className="relative custom-area ml-3">
                                                     <TextArea
-                                                        className="!pt-[8px] !px-0 !w-full"
+                                                        className="!pt-[7px] !px-0 !w-full"
                                                         value={
                                                             item.jobDescription
                                                         }

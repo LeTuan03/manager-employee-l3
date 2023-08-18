@@ -1,4 +1,4 @@
-import { Button, Card, Col, Image, Input, Modal, Row, Tabs } from "antd";
+import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import TabIncreaseSalary from "../increasesalary/TabIncreaseSalary";
@@ -16,6 +16,9 @@ import TeamStatus from "../common/TeamStatus";
 export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
+    const [formSalary] = Form.useForm();
+    const [formProcess] = Form.useForm();
+    const [formRecoment] = Form.useForm();
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
@@ -52,6 +55,7 @@ export default function UpdateHappeningModal() {
                 <TabIncreaseSalary
                     handleGetSalaryByEmp={handleGetSalaryByEmp}
                     salary={salary}
+                    formSalary={formSalary}
                 />
             ),
         },
@@ -62,6 +66,7 @@ export default function UpdateHappeningModal() {
                 <TabProcess
                     handleGetProcessByEmp={handleGetProcessByEmp}
                     processs={processs}
+                    formProcess={formProcess}
                 />
             ),
         },
@@ -72,6 +77,7 @@ export default function UpdateHappeningModal() {
                 <TabRecommendation
                     handleGetRecomentByEmp={handleGetRecomentByEmp}
                     recoments={recoments}
+                    formRecoment={formRecoment}
                 />
             ),
         },
@@ -85,7 +91,7 @@ export default function UpdateHappeningModal() {
     }, [employee?.id]);
     return (
         <Modal
-            className="!h-screen relative happening"
+            className="!h-screen relative happening !w-[84%] max-lg:!w-[100%]"
             zIndex={3}
             title={
                 <p className="fixed top-0 z-10 py-2 w-[80%] bg-white">
@@ -94,14 +100,13 @@ export default function UpdateHappeningModal() {
             }
             centered
             open={open.modalUpdateHappening}
-            width="84%"
             onCancel={() => {
                 dispatch(setOpen({ ...open, modalUpdateHappening: false }));
                 dispatch(resetEmployee());
                 setActiveKey("1");
             }}
             footer={
-                <div className="text-center bg-white fixed bottom-0 w-[80%] py-5">
+                <div className="text-center bg-white fixed bottom-0 !w-[82%] max-lg:!w-[92%] max-sm:!w-[90%] py-5">
                     <Button
                         className="min-w-[100px]"
                         key="submit"
@@ -143,12 +148,17 @@ export default function UpdateHappeningModal() {
         >
             <div className="h-screen overflow-y-scroll happening-scroll mt-5">
                 <Row className="mt-7">
-                    <Col span={8} className="flex flex-col items-center">
+                    <Col
+                        lg={8}
+                        sm={24}
+                        xs={24}
+                        className="flex flex-col items-center"
+                    >
                         <Image width={200} height={200} src={employee.image} />
                         <h1>{employee.name}</h1>
                         <b>{TeamStatus(employee.team)}</b>
                     </Col>
-                    <Col span={16}>
+                    <Col lg={16} sm={24} xs={24}>
                         <Card
                             title="Thông tin nhân viên"
                             bordered={false}
@@ -223,6 +233,9 @@ export default function UpdateHappeningModal() {
                             handleGetSalaryByEmp();
                             handleGetProcessByEmp();
                             handleGetRecomentByEmp();
+                            formSalary.resetFields();
+                            formProcess.resetFields();
+                            formRecoment.resetFields();
                         }}
                         items={items}
                     />

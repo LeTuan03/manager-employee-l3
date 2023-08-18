@@ -28,7 +28,7 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
             onCancel={() => setOpenDelete(false)}
             footer={
                 <>
-                    <div className="flex justify-center pb-5">
+                    <div className="flex justify-center pb-5 mt-6">
                         <Button
                             loading={rest?.loading}
                             type="primary"

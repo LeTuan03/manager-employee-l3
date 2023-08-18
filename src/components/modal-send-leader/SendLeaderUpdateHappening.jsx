@@ -176,7 +176,7 @@ const SendLeaderUpdateHappening = (props) => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="mt-4">
                         <Col span={24}>
                             <Form.Item className="text-center">
                                 <Button

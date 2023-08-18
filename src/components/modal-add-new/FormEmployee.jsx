@@ -80,6 +80,11 @@ const FormEmployee = ({
             await handleCreateEmployee(data);
         }
     };
+    const showFailed = (error) => {
+        console.log(error);
+        setLoading(false);
+        message.error("Đã có lỗi!");
+    };
     const onFinishFailed = (errorInfo) => {
         setActiveKey("1");
         console.log("Failed:", errorInfo);
@@ -101,7 +106,7 @@ const FormEmployee = ({
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            showFailed(error);
         }
     };
     const handleUpdateEmployee = async (data) => {
@@ -121,7 +126,7 @@ const FormEmployee = ({
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            showFailed(error);
         }
     };
     const handleUploadAvatar = async ({ file, onSuccess, onError }) => {
@@ -298,6 +303,7 @@ const FormEmployee = ({
                                     label="Mã nhân viên"
                                     rules={[
                                         {
+                                            required: true,
                                             validator: validateEmployeeCode,
                                         },
                                     ]}
@@ -338,6 +344,7 @@ const FormEmployee = ({
                                     name="dateOfBirth"
                                     rules={[
                                         {
+                                            required: true,
                                             validator: validateAge,
                                         },
                                     ]}
@@ -401,6 +408,7 @@ const FormEmployee = ({
                                     label="Ngày cấp"
                                     rules={[
                                         {
+                                            required: true,
                                             validator: validateDateOfBirth,
                                         },
                                     ]}

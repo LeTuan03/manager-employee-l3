@@ -47,7 +47,7 @@ tr.ant-table-row:last-child > td {
 .dotted::after {
     content: "";
     left: 0;
-    top: 80%;
+    top: 83%;
     position: absolute;
     width: 100%;
     border-bottom: 1px dotted #000;
@@ -139,6 +139,9 @@ tr.ant-table-row:last-child > td {
 }
 .table-cv .ant-table-cell {
     padding: 16px 0 !important;
+}
+.ant-form-item {
+    margin-bottom: 14px !important;
 }
 /* tablet  */
 @media only screen and (max-width: 1024px) {

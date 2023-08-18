@@ -65,6 +65,11 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };
+    const handleFailded = (error) => {
+        console.log(error);
+        setLoading(false);
+        message.error("Đã có lỗi!");
+    };
     useEffect(() => {
         setFamily(employee.employeeFamilyDtos);
         return () => {
@@ -83,7 +88,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            handleFailded(error);
         }
     };
     const handleDeleteFamily = async (id) => {
@@ -103,7 +108,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            handleFailded(error);
         }
     };
     const handleDeleteByUid = (uid) => {
@@ -130,7 +135,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 }
                 setLoading(false);
             } catch (error) {
-                console.log(error);
+                handleFailded(error);
             }
         } else {
             if (_.isEmpty(family)) {
@@ -159,7 +164,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 setUpdate(null);
                 setLoading(false);
             } catch (error) {
-                console.log(error);
+                handleFailded(error);
             }
         } else {
             cloneFamily[index] = data;
@@ -476,30 +481,30 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                    <Col
-                        className="flex justify-center items-center gap-2"
-                        md={4}
-                        span={24}
-                    >
-                        <Button
-                            loading={loading}
-                            type="primary"
-                            className=" w-[100px]"
-                            htmlType="submit"
-                        >
-                            {update ? "Lưu" : "Thêm"}
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            htmlType="button"
-                            onClick={() => {
-                                formFamily.resetFields();
-                                setUpdate(null);
-                            }}
-                        >
-                            Đặt lại
-                        </Button>
+                    <Col md={4} span={24}>
+                        <Form.Item label=" ">
+                            <div className="flex justify-center items-center gap-2">
+                                <Button
+                                    loading={loading}
+                                    type="primary"
+                                    className=" w-[100px]"
+                                    htmlType="submit"
+                                >
+                                    {update ? "Lưu" : "Thêm"}
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    danger
+                                    htmlType="button"
+                                    onClick={() => {
+                                        formFamily.resetFields();
+                                        setUpdate(null);
+                                    }}
+                                >
+                                    Đặt lại
+                                </Button>
+                            </div>
+                        </Form.Item>
                     </Col>
                 </Row>
             </Form>

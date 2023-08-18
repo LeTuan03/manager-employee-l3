@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import LayoutHomePage from "./components/layout/LayoutHomePage";
 import Employee from "./pages/manager/Employee";
 import { getAccount } from "./services/api";
@@ -12,6 +12,7 @@ import PageEnd from "./pages/manage-end/PageEnd";
 import AwaitingApproval from "./pages/awaiting-approval/AwaitingApproval";
 import Approved from "./pages/approved/Approved";
 import { STATUS } from "./constants/constants";
+import { Button, Result } from "antd";
 export default function App() {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.account);
@@ -31,7 +32,18 @@ export default function App() {
         {
             path: "/",
             element: <LayoutHomePage></LayoutHomePage>,
-            errorElement: <>Not Found</>,
+            errorElement: (
+                <Result
+                    status="404"
+                    title="404"
+                    subTitle="Xin lỗi, trang bạn truy cập không tồn tại."
+                    extra={
+                        <Button type="primary">
+                            <Link to={"/"}>Trở lại trang chủ</Link>
+                        </Button>
+                    }
+                />
+            ),
             children: [
                 {
                     index: true,

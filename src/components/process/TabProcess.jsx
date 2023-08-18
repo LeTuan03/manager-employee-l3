@@ -23,19 +23,18 @@ import ModalDelete from "../ModalDelete";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
-import ModalUpdateHappening from "../proposal/RecomnentModal";
+import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 
 const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
     STATUS_EMPLOYEE;
 
-const TabProcess = ({ processs, handleGetProcessByEmp }) => {
-    const [form] = Form.useForm();
+const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
         if (!open.modalUpdateHappening) {
-            form.resetFields();
+            formProcess.resetFields();
         }
     }, [open.modalUpdateHappening]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +49,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
             await deleteProcess(id);
             message.success("Xóa thành công !");
             await handleGetProcessByEmp();
-            form.resetFields();
+            formProcess.resetFields();
             setLoading(false);
         } catch (error) {
             message.error("Xóa thất bại !");
@@ -74,7 +73,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                 setIsModalOpen(true);
             }
             setLoading(false);
-            form.resetFields();
+            formProcess.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
             console.log(error);
@@ -88,7 +87,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
             "yyyy-MM-dd"
         );
         setData(employee);
-        form.setFieldsValue(employee);
+        formProcess.setFieldsValue(employee);
     };
 
     const handleWatch = (employee) => {
@@ -224,8 +223,8 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
 
     return (
         <>
-            <Form form={form} onFinish={handleSubmit} layout="vertical">
-                <Row gutter={16} className="mb-2">
+            <Form form={formProcess} onFinish={handleSubmit} layout="vertical">
+                <Row gutter={25} className="mb-2">
                     <Col span={4} className="hidden">
                         <Form.Item name="id">
                             <Input />
@@ -236,7 +235,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                             <Input value={1} />
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col xl={5} lg={12} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="promotionDay"
                             label="Ngày thăng chức"
@@ -250,7 +249,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                             <Input type="date" />
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col xl={5} lg={12} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="newPosition"
                             label="Chức vụ mới"
@@ -280,12 +279,13 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col xl={10} lg={16} md={16} sm={16} xs={24}>
                         <Form.Item
                             name="note"
                             label="Ghi chú"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -293,7 +293,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xl={2} lg={3} md={3} sm={4} xs={5}>
                         <Form.Item label=" ">
                             <Button
                                 loading={loading}
@@ -305,7 +305,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                             </Button>
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xl={2} lg={3} md={3} sm={4} xs={5}>
                         <Form.Item label=" ">
                             <Button
                                 type="primary"
@@ -334,7 +334,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp }) => {
                     </div>
                 </Col>
             </Row>
-            <ModalUpdateHappening
+            <FormUpdateHappening
                 type="process"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}

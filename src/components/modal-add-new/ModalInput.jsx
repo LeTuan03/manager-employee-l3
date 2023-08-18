@@ -49,7 +49,20 @@ const ModalInput = () => {
             ),
         },
     ];
-
+    const handleRegister = async () => {
+        try {
+            await form.validateFields();
+            form.submit();
+            dispatch(
+                setOpen({
+                    ...open,
+                    modalProfile: true,
+                })
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <>
             <Modal
@@ -83,12 +96,8 @@ const ModalInput = () => {
                             <Button
                                 className=" w-[100px] bg-green-600 hover:!bg-green-500"
                                 type="primary"
-                                onClick={() => {
-                                    form.submit();
-                                    dispatch(
-                                        setOpen({ ...open, modalProfile: true })
-                                    );
-                                }}
+                                htmlType="submit"
+                                onClick={() => handleRegister()}
                             >
                                 Đăng kí
                             </Button>

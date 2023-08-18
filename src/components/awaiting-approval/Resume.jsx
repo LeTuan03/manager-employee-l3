@@ -24,6 +24,7 @@ import TeamStatus from "../common/TeamStatus";
 import InputSearch from "../InputSearch";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
+import ModalProfile from "../modal-employee-profile/ModalProfile";
 
 export default function Resume() {
     const dispatch = useDispatch();
@@ -106,6 +107,7 @@ export default function Resume() {
             dataIndex: "address",
             key: "address",
             align: "center",
+            width: 300,
             render: (address) => {
                 const addressText = TextToTruncate(address, 35);
                 return <p className="text-left">{addressText}</p>;
@@ -115,7 +117,7 @@ export default function Resume() {
             title: "Trạng thái",
             key: "submitProfileStatus",
             dataIndex: "submitProfileStatus",
-            width: 200,
+            width: 180,
             align: "center",
             render: (status) => {
                 return (
@@ -257,6 +259,7 @@ export default function Resume() {
                                 </div>
                             )}
                         </Modal>
+                        <ModalProfile />
                     </>
                 ) : (
                     <Result

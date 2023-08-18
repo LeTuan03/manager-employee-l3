@@ -17,7 +17,7 @@ import {
     deleteProposal,
     updateProposal,
 } from "../../services/api";
-import ModalUpdateHappening from "./RecomnentModal";
+import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
@@ -25,8 +25,11 @@ import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 
-const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
-    const [form] = Form.useForm();
+const TabRecommendation = ({
+    recoments,
+    handleGetRecomentByEmp,
+    formRecoment,
+}) => {
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
@@ -36,7 +39,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
 
     useEffect(() => {
         if (!open.modalUpdateHappening) {
-            form.resetFields();
+            formRecoment.resetFields();
         }
     }, [open.modalUpdateHappening]);
 
@@ -45,7 +48,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
             setLoading(true);
             await deleteProposal(id);
             message.success("Xóa thành công!");
-            form.resetFields();
+            formRecoment.resetFields();
             await handleGetRecomentByEmp();
             setLoading(false);
         } catch (error) {
@@ -70,7 +73,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                 setIsModalOpen(true);
             }
             setLoading(false);
-            form.resetFields();
+            formRecoment.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
             console.log(error);
@@ -84,7 +87,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
             "yyyy-MM-dd"
         );
         setData(employee);
-        form.setFieldsValue(employee);
+        formRecoment.setFieldsValue(employee);
     };
 
     const columns = [
@@ -204,8 +207,8 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
 
     return (
         <>
-            <Form form={form} onFinish={handleSubmit} layout="vertical">
-                <Row gutter={16} className="mb-2">
+            <Form form={formRecoment} onFinish={handleSubmit} layout="vertical">
+                <Row gutter={25}>
                     <Col span={6} className="hidden">
                         <Form.Item name="id">
                             <Input />
@@ -216,8 +219,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             <Input value={1} />
                         </Form.Item>
                     </Col>
-
-                    <Col span={6}>
+                    <Col span={6} xl={6} lg={6} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="proposalDate"
                             label="Ngày diễn biến"
@@ -231,7 +233,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             <Input type="date" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={6} xl={6} lg={6} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="type"
                             label="Loại"
@@ -257,12 +259,13 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} xl={12} lg={12} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="note"
                             label="Ghi chú"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -270,14 +273,14 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
+
+                    <Col xl={8} lg={12} md={12} sm={12} xs={12}>
                         <Form.Item
                             name="content"
                             label="Nội dung"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -285,12 +288,13 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} xl={12} lg={12} md={12} sm={24} xs={24}>
                         <Form.Item
                             name="detailedDescription"
                             label="Mô tả chi tiết"
                             rules={[
                                 {
+                                    required: true,
                                     validator: validateCodeInput,
                                 },
                             ]}
@@ -298,7 +302,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             <Input maxLength={100} showCount />
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xl={2} lg={3} md={3} sm={4} xs={4}>
                         <Form.Item label=" ">
                             <Button
                                 loading={loading}
@@ -310,7 +314,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                             </Button>
                         </Form.Item>
                     </Col>
-                    <Col span={2}>
+                    <Col xl={2} lg={3} md={3} sm={4} xs={4}>
                         <Form.Item label=" ">
                             <Button
                                 type="primary"
@@ -338,7 +342,7 @@ const TabRecommendation = ({ recoments, handleGetRecomentByEmp }) => {
                     </div>
                 </Col>
             </Row>
-            <ModalUpdateHappening
+            <FormUpdateHappening
                 type="recoment"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}

@@ -77,6 +77,7 @@ export default function Promote() {
             key: "note",
             dataIndex: "note",
             align: "center",
+            width: 300,
             render: (note) => (
                 <p className="text-left">{TextToTruncate(note || "", 40)}</p>
             ),
@@ -86,7 +87,7 @@ export default function Promote() {
             key: "processStatus",
             dataIndex: "processStatus",
             align: "center",
-            width: 200,
+            width: 180,
             render: (_, status) => StringStatus(status.processStatus),
         },
         {

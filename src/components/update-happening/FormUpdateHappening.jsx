@@ -1,17 +1,19 @@
 import { Button, Modal, Tabs } from "antd";
 import { useState } from "react";
-import ProposeTab from "./RecomenetChildren";
+import ProposeTab from "../proposal/RecomenetChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 import PromoteTab from "../process/ProcessChildren";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
+import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 
-const ModalUpdateHappening = ({
+const FormUpdateHappening = ({
     type,
     isModalOpen,
     setIsModalOpen,
     data,
     handleGetRecomentByEmp,
     handleGetProcessByEmp,
+    handleGetSalaryByEmp,
 }) => {
     const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
     const items = [
@@ -61,6 +63,18 @@ const ModalUpdateHappening = ({
                                     Trình lãnh đạo
                                 </Button>
                             )}
+                        {type === "salary" &&
+                            [1, 4, 5].includes(data.salaryIncreaseStatus) && (
+                                <Button
+                                    className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
+                                    type="primary"
+                                    onClick={() => {
+                                        setOpenLeader(true);
+                                    }}
+                                >
+                                    Trình lãnh đạo
+                                </Button>
+                            )}
                         <Button
                             className="min-w-[100px]"
                             type="primary"
@@ -88,12 +102,13 @@ const ModalUpdateHappening = ({
                 setOpenLeader={setOpenLeader}
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
                 handleGetProcessByEmp={handleGetProcessByEmp}
+                handleGetSalaryByEmp={handleGetSalaryByEmp}
                 setIsModalOpen={setIsModalOpen}
             />
         </>
     );
 };
-export default ModalUpdateHappening;
+export default FormUpdateHappening;
 
 const getTitle = (type) => {
     switch (type) {
@@ -101,7 +116,8 @@ const getTitle = (type) => {
             return `ĐỀ XUẤT/THAM MƯU`;
         case "process":
             return `THĂNG CHỨC`;
-
+        case "salary":
+            return `TĂNG LƯƠNG`;
         default:
             break;
     }
@@ -113,6 +129,8 @@ const getChild = (type, data) => {
             return <ProposeTab profile={data} />;
         case "process":
             return <PromoteTab profile={data} />;
+        case "salary":
+            return <IncreaseTab profile={data} />;
         default:
             break;
     }

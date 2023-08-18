@@ -42,9 +42,10 @@ const ModalProfile = () => {
             setLoading(false);
         } catch (error) {
             console.log(error);
+            message.error("Đã có lỗi!");
+            setLoading(false);
         }
     };
-
     return (
         <>
             <Modal
@@ -54,24 +55,28 @@ const ModalProfile = () => {
                 title={
                     <div className="flex justify-between">
                         <div>HỒ SƠ NHÂN VIÊN</div>
-                        {employee?.numberSaved && role !== ROLE.MANAGE && (
-                            <div className="mr-9 text-green-600">
-                                <i>
-                                    Số lưu:{" "}
-                                    <span className="font-normal">
-                                        {employee?.numberSaved}
-                                    </span>{" "}
-                                    - Ngày lưu:{" "}
-                                    <span className="font-normal">
-                                        {employee?.submitDay &&
-                                            format(
-                                                new Date(employee?.submitDay),
-                                                "dd/MM/yyyy"
-                                            )}
-                                    </span>
-                                </i>
-                            </div>
-                        )}
+                        {employee?.numberSaved &&
+                            role !== ROLE.MANAGE &&
+                            employee.submitProfileStatus === "0" && (
+                                <div className="mr-9 text-green-600">
+                                    <i>
+                                        Số lưu:{" "}
+                                        <span className="font-normal">
+                                            {employee?.numberSaved}
+                                        </span>{" "}
+                                        - Ngày lưu:{" "}
+                                        <span className="font-normal">
+                                            {employee?.submitDay &&
+                                                format(
+                                                    new Date(
+                                                        employee?.submitDay
+                                                    ),
+                                                    "dd/MM/yyyy"
+                                                )}
+                                        </span>
+                                    </i>
+                                </div>
+                            )}
                     </div>
                 }
                 centered
@@ -85,9 +90,12 @@ const ModalProfile = () => {
                 }}
                 footer={
                     <div className="flex justify-center !pb-5">
-                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
-                            employee?.submitProfileStatus
-                        ) && (
+                        {[
+                            NEW_SAVE,
+                            REJECT,
+                            ADDITIONAL_REQUIREMENTS,
+                            role !== ROLE.MANAGE,
+                        ].includes(employee?.submitProfileStatus) && (
                             <Button
                                 className="w-[100px]"
                                 type="primary"
@@ -122,9 +130,12 @@ const ModalProfile = () => {
                                     Nộp lưu hồ sơ
                                 </Button>
                             )}
-                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
-                            employee?.submitProfileStatus
-                        ) && (
+                        {[
+                            NEW_SAVE,
+                            REJECT,
+                            ADDITIONAL_REQUIREMENTS,
+                            role !== ROLE.MANAGE,
+                        ].includes(employee?.submitProfileStatus) && (
                             <Button
                                 className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
                                 htmlType="submit"

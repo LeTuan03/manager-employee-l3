@@ -72,6 +72,7 @@ export default function IncreaseSalary() {
             title: "Ghi chú",
             key: "note",
             dataIndex: "note",
+            width: 200,
             align: "center",
             render: (note) => (
                 <p className="text-left">{TextToTruncate(note || "", 25)}</p>
@@ -81,6 +82,7 @@ export default function IncreaseSalary() {
             title: "Lý do",
             key: "reason",
             dataIndex: "reason",
+            width: 240,
             align: "center",
             render: (reason) => (
                 <p className="text-left">{TextToTruncate(reason || "", 25)}</p>
@@ -91,7 +93,7 @@ export default function IncreaseSalary() {
             key: "salaryIncreaseStatus",
             dataIndex: "salaryIncreaseStatus",
             align: "center",
-            width: 170,
+            width: 180,
             render: (_, status) => NumberStatus(status.salaryIncreaseStatus),
         },
         {
@@ -103,8 +105,8 @@ export default function IncreaseSalary() {
                 <div
                     className="cursor-pointer"
                     onClick={() => {
-                        setIsModalOpen(true);
                         setProfile(user);
+                        setIsModalOpen(true);
                     }}
                 >
                     <EyeOutlined className="text-green-600 text-lg" />
