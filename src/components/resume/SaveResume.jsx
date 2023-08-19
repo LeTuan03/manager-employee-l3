@@ -72,7 +72,7 @@ export default function SaveResume() {
             } else {
                 return Promise.reject(
                     new Error(
-                        `Số lưu phải có định dạng NL-YY-XXX ví dụ: NL${
+                        `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: NL${
                             new Date().getMonth() + 1 < 10
                                 ? "0" + (new Date().getMonth() + 1)
                                 : new Date().getMonth() + 1
@@ -84,9 +84,7 @@ export default function SaveResume() {
                 );
             }
         } else {
-            return Promise.reject(
-                new Error("Không được để trống trường này!.")
-            );
+            return Promise.reject(new Error("Không được để trống trường này!"));
         }
     };
     return (

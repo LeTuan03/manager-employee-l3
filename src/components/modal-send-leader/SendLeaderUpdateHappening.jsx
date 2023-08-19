@@ -45,11 +45,13 @@ const SendLeaderUpdateHappening = (props) => {
 
     const onFinish = async (values) => {
         dispatch(setIsLoading(true));
-        const { leaderId } = values;
+        const { leaderId, submitContent } = values;
         const data = {
             ...employee,
             leaderId,
+            submitContent,
         };
+        console.log(data);
         await handleSendLeader(data);
         dispatch(setIsLoading(false));
         form.resetFields();
@@ -60,6 +62,7 @@ const SendLeaderUpdateHappening = (props) => {
         const successMgs = "Trình lãnh đạo thành công";
         try {
             data.leaderId = datas.leaderId;
+            data.submitContent = datas.submitContent;
             if (type === "salary") {
                 data.salaryIncreaseStatus = "2";
                 await updateSalary(data);
