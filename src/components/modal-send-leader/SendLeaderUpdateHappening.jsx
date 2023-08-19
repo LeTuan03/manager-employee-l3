@@ -51,12 +51,12 @@ const SendLeaderUpdateHappening = (props) => {
             leaderId,
             submitContent,
         };
-        console.log(data);
         await handleSendLeader(data);
         dispatch(setIsLoading(false));
         form.resetFields();
         setOpenLeader(false);
         setIsModalOpen(false);
+        handleCancel();
     };
     const handleSendLeader = async (datas) => {
         const successMgs = "Trình lãnh đạo thành công";
