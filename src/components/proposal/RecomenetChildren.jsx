@@ -3,6 +3,7 @@ import { getEmployeeById } from "../../services/api";
 import { format } from "date-fns";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
+import TextArea from "antd/es/input/TextArea";
 
 const ProposeTab = ({ profile }) => {
     const [emp, setEmp] = useState({});
@@ -39,12 +40,14 @@ const ProposeTab = ({ profile }) => {
                         </p>
 
                         <p>Tôi xin trình bày với nội dung sự việc như sau:</p>
-                        <div className="py-3">
-                            <p class="border-b border-dotted border-black border-t-0 border-l-0 border-r-0 leading-[70%]">
-                                {profile?.detailedDescription}
-                            </p>
+                        <div className="custom-area relative">
+                            <TextArea
+                                className="!pt-[11px] !pl-0"
+                                bordered={false}
+                                autoSize={{ minRows: 1 }}
+                                value={profile?.detailedDescription}
+                            />
                         </div>
-
                         <p>
                             Tôi xin cam đoan những thông tin mà tôi đã nêu trên
                             đây là đúng sự thật và xin chịu trách nhiệm về tính
