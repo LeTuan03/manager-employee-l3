@@ -103,7 +103,7 @@ tr.ant-table-row:last-child > td {
 }
 
 .custom-area textarea {
-    line-height: 2.25em !important;
+    line-height: 2.35em !important;
     background-color: transparent !important;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 6 6"><circle cx="3" cy="3" r="1" fill="rgb(0, 0, 0)" /></svg>') !important;
     background-position: 0 1em !important;

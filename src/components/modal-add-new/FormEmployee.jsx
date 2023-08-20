@@ -327,6 +327,10 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                                 value: GENDER.FEMALE,
                                                 label: "Nữ",
                                             },
+                                            {
+                                                value: GENDER.OTHER,
+                                                label: "Khác",
+                                            },
                                         ]}
                                     />
                                 </Form.Item>

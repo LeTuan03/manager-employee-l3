@@ -82,7 +82,13 @@ const TableComponet = () => {
             align: "center",
             width: 90,
             render: (gender) => (
-                <p>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</p>
+                <p>
+                    {gender === GENDER.FEMALE
+                        ? "Nữ"
+                        : gender === GENDER.MALE
+                        ? "Nam"
+                        : "Khác"}
+                </p>
             ),
         },
         {

@@ -245,7 +245,15 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "gender",
             align: "center",
             className: "!min-w-[90px]",
-            render: (gender) => <>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</>,
+            render: (gender) => (
+                <>
+                    {gender === GENDER.FEMALE
+                        ? "Nữ"
+                        : gender === GENDER.MALE
+                        ? "Nam"
+                        : "Khác"}
+                </>
+            ),
         },
         {
             title: "Quan hệ",
@@ -291,13 +299,24 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         },
     ];
     function validateDateOfBirth(_, value) {
+        const today = new Date();
+        const inputDate = new Date(value);
+        const ageDiff = today.getFullYear() - inputDate.getFullYear();
+        const monthDiff = today.getMonth() - inputDate.getMonth();
+        const dayDiff = today.getDate() - inputDate.getDate();
         if (value) {
             const inputDateTime = new Date(value);
             const currentDateTime = new Date();
+            const isUnder100 =
+                ageDiff < 100 ||
+                (ageDiff === 100 && monthDiff < 0) ||
+                (ageDiff === 100 && monthDiff === 0 && dayDiff < 0);
             if (inputDateTime > currentDateTime) {
                 return Promise.reject(
                     new Error("Yêu cầu chọn trước ngày hôm nay")
                 );
+            } else if (!isUnder100) {
+                return Promise.reject(new Error("Tuổi phải nhỏ hơn 100!"));
             }
             return Promise.resolve();
         } else {
@@ -419,6 +438,10 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                                     {
                                         value: GENDER.FEMALE,
                                         label: "Nữ",
+                                    },
+                                    {
+                                        value: GENDER.OTHER,
+                                        label: "Khác",
                                     },
                                 ]}
                             />

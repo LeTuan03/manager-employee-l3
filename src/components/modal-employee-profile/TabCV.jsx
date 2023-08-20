@@ -43,7 +43,13 @@ const TabCV = () => {
             className: "border-table",
             align: "center",
             render: (gender) => (
-                <p>{gender === GENDER.FEMALE ? "Nữ" : "Nam"}</p>
+                <p>
+                    {gender === GENDER.FEMALE
+                        ? "Nữ"
+                        : gender === GENDER.MALE
+                        ? "Nam"
+                        : "Khác"}
+                </p>
             ),
         },
         {
@@ -115,7 +121,12 @@ const TabCV = () => {
             id: 2,
             label: "2. Nam/Nữ: ",
             span: 8,
-            value: employee.gender === GENDER.MALE ? "Nam" : "Nữ",
+            value:
+                employee.gender === GENDER.MALE
+                    ? "Nam"
+                    : employee.gender === GENDER.FEMALE
+                    ? "Nữ"
+                    : "Khác",
         },
         {
             id: 3,
@@ -272,7 +283,7 @@ const DataRow = ({ label, value, span }) => (
         <div className="flex flex-shrink flex-grow h-[32px] pl-1">
             <span className="relative z-10 pl-3 h-fit inline-block w-full ">
                 {value}
-                <div className="absolute w-full left-0 h-full top-[80%] dotted-border" />
+                <div className="absolute w-full left-0 h-full top-[82%] dotted-border" />
             </span>
         </div>
     </Col>

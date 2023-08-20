@@ -179,7 +179,13 @@ const ModalProfile = () => {
                             role !== ROLE.MANAGE,
                         ].includes(employee?.submitProfileStatus) && (
                             <Button
-                                className="min-w-[100px]  bg-green-600 hover:!bg-green-500"
+                                className={`min-w-[100px] ${
+                                    !threeInfo?.knowledge ||
+                                    !threeInfo?.skill ||
+                                    (!threeInfo?.activity
+                                        ? ""
+                                        : "hover:!bg-green-500")
+                                } bg-green-600 `}
                                 htmlType="submit"
                                 type="primary"
                                 disabled={

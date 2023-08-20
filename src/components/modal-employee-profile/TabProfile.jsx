@@ -221,7 +221,9 @@ const TabProfile = ({
                                 <UserOutlined className="mr-3" />
                                 {employee?.gender === GENDER.FEMALE
                                     ? "Nữ"
-                                    : "Nam"}
+                                    : employee?.gender === GENDER.MALE
+                                    ? "Nam"
+                                    : "Khác"}
                             </div>
                             <div>
                                 <GiftOutlined className="mr-3" />

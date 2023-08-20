@@ -4,6 +4,7 @@ export const STATUS = {
 export const GENDER = {
     MALE: 0,
     FEMALE: 1,
+    OTHER: 2,
 };
 export const TEAM = {
     FE: 1,
