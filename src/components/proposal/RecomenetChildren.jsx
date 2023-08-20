@@ -55,10 +55,6 @@ const ProposeTab = ({ profile }) => {
                             mong Ông/Bà xem xét và chấp nhận nguyện vọng trên
                             của tôi.
                         </p>
-                        <p>
-                            Kính mong Ông/Bà xem xét và chấp nhận nguyện vọng
-                            trên của tôi.
-                        </p>
                         <p>Tôi xin chân thành cảm ơn!</p>
                     </div>
                 </div>
