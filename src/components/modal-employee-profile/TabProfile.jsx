@@ -250,6 +250,7 @@ const TabProfile = ({
                                             employee?.submitProfileStatus
                                         )
                                     }
+                                    spellCheck={false}
                                     bordered={false}
                                     maxLength={240}
                                     autoSize={{ minRows: 1 }}
@@ -519,7 +520,7 @@ const TabProfile = ({
                                                 </div>
                                                 <div className="relative custom-area ml-3">
                                                     <TextArea
-                                                        className="!pt-[7px] !px-0 !w-full"
+                                                        className="!pt-[8px] !px-0 !w-full"
                                                         value={
                                                             item.jobDescription
                                                         }
