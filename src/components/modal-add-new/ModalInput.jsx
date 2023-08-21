@@ -95,7 +95,7 @@ const ModalInput = () => {
                                 htmlType="submit"
                                 onClick={() => handleRegister()}
                             >
-                                Đăng kí
+                                Đăng ký
                             </Button>
                         )}
                         <Button
