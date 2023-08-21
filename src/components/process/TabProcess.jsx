@@ -65,13 +65,12 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 const res = await updateProcess(value);
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công !");
-                await handleGetProcessByEmp();
             } else {
                 const res = await addProcessByEmp(employee?.id, [value]);
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công !");
-                await handleGetProcessByEmp();
             }
+            await handleGetProcessByEmp();
             setIsModalOpen(true);
             dispatch(setIsLoading(false));
             formProcess.resetFields();

@@ -6,7 +6,7 @@ import React from "react";
 export default function ModalReject({
     isRejectOpen,
     setIsRejectOpen,
-    form2,
+    formReject,
     onFinishReject,
 }) {
     return (
@@ -16,7 +16,7 @@ export default function ModalReject({
             open={isRejectOpen}
             onCancel={() => {
                 setIsRejectOpen(false);
-                form2.resetFields();
+                formReject.resetFields();
             }}
             footer={false}
             zIndex={7}
@@ -28,7 +28,7 @@ export default function ModalReject({
                     remember: true,
                     rejectionDate: format(new Date(), "yyyy-MM-dd"),
                 }}
-                form={form2}
+                form={formReject}
             >
                 <Form.Item
                     name="rejectionDate"
@@ -83,7 +83,7 @@ export default function ModalReject({
                         danger
                         onClick={() => {
                             setIsRejectOpen(false);
-                            form2.resetFields();
+                            formReject.resetFields();
                         }}
                     >
                         Hủy

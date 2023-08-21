@@ -6,7 +6,7 @@ export default function ModalAccept({
     isApproveOpen,
     setIsApproveOpen,
     onFinish,
-    form3,
+    formAccept,
 }) {
     return (
         <Modal
@@ -24,7 +24,7 @@ export default function ModalAccept({
                     remember: true,
                     acceptDay: format(new Date(), "yyyy-MM-dd"),
                 }}
-                form={form3}
+                form={formAccept}
             >
                 <Form.Item
                     className="mt-4"
@@ -59,7 +59,10 @@ export default function ModalAccept({
                         className="min-w-[100px]"
                         type="primary"
                         danger
-                        onClick={() => setIsApproveOpen(false)}
+                        onClick={() => {
+                            setIsApproveOpen(false);
+                            formAccept.resetFields();
+                        }}
                     >
                         Hủy
                     </Button>

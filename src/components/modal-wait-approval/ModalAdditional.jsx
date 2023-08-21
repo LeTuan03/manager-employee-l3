@@ -5,7 +5,7 @@ import React from "react";
 export default function ModalAdditional({
     isAdditionalRequestOpen,
     setIsAdditionalRequestOpen,
-    form,
+    formAdditional,
     onFinishAdditional,
 }) {
     return (
@@ -15,12 +15,16 @@ export default function ModalAdditional({
             open={isAdditionalRequestOpen}
             onCancel={() => {
                 setIsAdditionalRequestOpen(false);
-                form.resetFields();
+                formAdditional.resetFields();
             }}
             zIndex={7}
             footer={false}
         >
-            <Form onFinish={onFinishAdditional} layout="vertical" form={form}>
+            <Form
+                onFinish={onFinishAdditional}
+                layout="vertical"
+                form={formAdditional}
+            >
                 <Form.Item
                     name="additionalRequest"
                     label="Nội dung yêu cầu bổ sung:"
@@ -55,7 +59,7 @@ export default function ModalAdditional({
                         danger
                         onClick={() => {
                             setIsAdditionalRequestOpen(false);
-                            form.resetFields();
+                            formAdditional.resetFields();
                         }}
                     >
                         Hủy

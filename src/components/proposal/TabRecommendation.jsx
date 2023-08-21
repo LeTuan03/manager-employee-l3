@@ -64,13 +64,12 @@ const TabRecommendation = ({
                 const res = await updateProposal(value);
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công!");
-                await handleGetRecomentByEmp();
             } else {
                 const res = await addProposalByEmp(employee?.id, [value]);
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công!");
-                await handleGetRecomentByEmp();
             }
+            await handleGetRecomentByEmp();
             setIsModalOpen(true);
             dispatch(setIsLoading(false));
             formRecoment.resetFields();

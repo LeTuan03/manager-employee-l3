@@ -35,9 +35,9 @@ export default function ResumeModal(props) {
     const [isAdditionalRequestOpen, setIsAdditionalRequestOpen] =
         useState(false);
     const [isRejectOpen, setIsRejectOpen] = useState(false);
-    const [form] = Form.useForm();
-    const [form2] = Form.useForm();
-    const [form3] = Form.useForm();
+    const [formAdditional] = Form.useForm();
+    const [formReject] = Form.useForm();
+    const [formAccept] = Form.useForm();
     const handleShowError = (error) => {
         console.error(error);
         dispatch(setIsLoading(false));
@@ -73,35 +73,40 @@ export default function ResumeModal(props) {
             switch (type) {
                 case "Propose":
                     profile.acceptanceDate = values.acceptDay;
-                    profile.proposalStatus = "3";
+                    profile.proposalStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
                     await proposalEdit(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Promote":
                     profile.acceptanceDate = values.acceptDay;
-                    profile.processStatus = "3";
+                    profile.processStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
                     await acceptPromote(profile);
                     await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
                     profile.acceptanceDate = values.acceptDay;
-                    profile.salaryIncreaseStatus = "3";
+                    profile.salaryIncreaseStatus =
+                        STATUS_EMPLOYEE.BEEN_APPEOVED;
                     await salaryApprove(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Resume":
                     let data = {};
-                    if (profile.submitProfileStatus === "6") {
+                    if (
+                        profile.submitProfileStatus ===
+                        STATUS_EMPLOYEE.PROFILE_END_REQUEST
+                    ) {
                         data = {
                             ...employee,
                             terminationAppointmentDate: values.acceptDay,
-                            submitProfileStatus: "7",
+                            submitProfileStatus:
+                                STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE,
                         };
                     } else {
                         data = {
                             ...employee,
                             appointmentDate: values.acceptDay,
-                            submitProfileStatus: "3",
+                            submitProfileStatus: STATUS_EMPLOYEE.BEEN_APPEOVED,
                         };
                     }
                     await acceptEmployee(data);
@@ -112,7 +117,7 @@ export default function ResumeModal(props) {
             }
             setIsApproveOpen(false);
             setIsOpen(false);
-            form3.resetFields();
+            formAccept.resetFields();
             dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
@@ -125,28 +130,35 @@ export default function ResumeModal(props) {
             switch (type) {
                 case "Propose":
                     profile.additionalRequest = values.additionalRequest;
-                    profile.proposalStatus = "4";
+                    profile.proposalStatus =
+                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
                     await proposalEdit(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Promote":
                     profile.additionalRequest = values.additionalRequest;
-                    profile.processStatus = "4";
+                    profile.processStatus =
+                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
                     await acceptPromote(profile);
                     await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
                     profile.additionalRequest = values.additionalRequest;
-                    profile.salaryIncreaseStatus = "4";
+                    profile.salaryIncreaseStatus =
+                        STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
                     await salaryApprove(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Resume":
                     let data = {};
-                    if (profile.submitProfileStatus === "6") {
+                    if (
+                        profile.submitProfileStatus ===
+                        STATUS_EMPLOYEE.PROFILE_END_REQUEST
+                    ) {
                         data = {
                             ...employee,
-                            submitProfileStatus: "8",
+                            submitProfileStatus:
+                                STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
                             additionalRequestTermination:
                                 values.additionalRequest,
                         };
@@ -154,7 +166,8 @@ export default function ResumeModal(props) {
                         data = {
                             ...employee,
                             additionalRequest: values.additionalRequest,
-                            submitProfileStatus: "4",
+                            submitProfileStatus:
+                                STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS,
                         };
                     }
                     await acceptEmployee(data);
@@ -165,7 +178,7 @@ export default function ResumeModal(props) {
             }
             setIsAdditionalRequestOpen(false);
             setIsOpen(false);
-            form.resetFields();
+            formAdditional.resetFields();
             dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
@@ -179,39 +192,43 @@ export default function ResumeModal(props) {
                 case "Propose":
                     profile.rejectionDate = values.rejectionDate;
                     profile.reasonForRefusal = values.reasonForRejection;
-                    profile.proposalStatus = "5";
+                    profile.proposalStatus = STATUS_EMPLOYEE.REJECT;
                     await proposalEdit(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Promote":
                     profile.rejectionDate = values.rejectionDate;
                     profile.reasonForRefusal = values.reasonForRejection;
-                    profile.processStatus = "5";
+                    profile.processStatus = STATUS_EMPLOYEE.REJECT;
                     await rejectPromote(profile);
                     await handleActionSuccess(type);
                     break;
                 case "IncreaseSalary":
                     profile.rejectionDate = values.rejectionDate;
                     profile.reasonForRefusal = values.reasonForRejection;
-                    profile.salaryIncreaseStatus = "5";
+                    profile.salaryIncreaseStatus = STATUS_EMPLOYEE.REJECT;
                     await salaryApprove(profile);
                     await handleActionSuccess(type);
                     break;
                 case "Resume":
                     let data = {};
-                    if (profile.submitProfileStatus === "6") {
+                    if (
+                        profile.submitProfileStatus ===
+                        STATUS_EMPLOYEE.PROFILE_END_REQUEST
+                    ) {
                         data = {
                             ...employee,
                             refuseEndProfileDay: values.rejectionDate,
                             reasonForRefuseEndProfile:
                                 values.reasonForRejection,
-                            submitProfileStatus: "9",
+                            submitProfileStatus:
+                                STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
                         };
                     } else {
                         data = {
                             ...employee,
                             reasonForRejection: values.reasonForRejection,
-                            submitProfileStatus: "5",
+                            submitProfileStatus: STATUS_EMPLOYEE.REJECT,
                         };
                     }
                     await acceptEmployee(data);
@@ -222,7 +239,7 @@ export default function ResumeModal(props) {
             }
             setIsOpen(false);
             setIsRejectOpen(false);
-            form2.resetFields();
+            formReject.resetFields();
             dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
@@ -269,18 +286,18 @@ export default function ResumeModal(props) {
                 isApproveOpen={isApproveOpen}
                 setIsApproveOpen={setIsApproveOpen}
                 onFinish={onFinish}
-                form3={form3}
+                formAccept={formAccept}
             />
             <ModalAdditional
                 isAdditionalRequestOpen={isAdditionalRequestOpen}
                 setIsAdditionalRequestOpen={setIsAdditionalRequestOpen}
-                form={form}
+                formAdditional={formAdditional}
                 onFinishAdditional={onFinishAdditional}
             />
             <ModalReject
                 isRejectOpen={isRejectOpen}
                 setIsRejectOpen={setIsRejectOpen}
-                form2={form2}
+                formReject={formReject}
                 onFinishReject={onFinishReject}
             />
         </>
