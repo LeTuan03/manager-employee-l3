@@ -1,67 +1,64 @@
-import { Button, Modal,Form, message } from "antd";
+import { Button, Modal, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
-import { acceptEmployee } from "../../services/api";
 
 export default function ModalAdditional({
     isAdditionalRequestOpen,
     setIsAdditionalRequestOpen,
-    profile,
-    getAllEmployee,
+    form,
+    onFinishAdditional,
 }) {
-    const [form] = Form.useForm();
-    const onFinish = async (values) => {
-        try {
-            profile.additionalRequest = values.additionalRequest;
-            profile.submitProfileStatus = "4";
-            const res = await acceptEmployee(profile);
-            setIsAdditionalRequestOpen(false);
-            message.success(res?.data?.message);
-            await getAllEmployee();
-        } catch (error) {
-            console.log(error);
-            message.error(error);
-        }
-    };
-    const handleReset = () => {
-        setIsAdditionalRequestOpen(false);
-        form.resetFields();
-    };
     return (
         <Modal
             title="Nội dung yêu cầu bổ sung"
             centered
-            onCancel={handleReset}
             open={isAdditionalRequestOpen}
+            onCancel={() => {
+                setIsAdditionalRequestOpen(false);
+                form.resetFields();
+            }}
+            zIndex={7}
             footer={false}
         >
-            <Form layout="vertical" onFinish={onFinish} form={form}>
+            <Form onFinish={onFinishAdditional} layout="vertical" form={form}>
                 <Form.Item
                     name="additionalRequest"
+                    label="Nội dung yêu cầu bổ sung:"
                     rules={[
                         {
-                            required: "true",
-                            message: "Nhập nội dung yêu cầu bổ sung",
+                            required: true,
+                            message: "Vui lòng nhập nội dung!",
                         },
                     ]}
                 >
                     <TextArea
-                        placeholder="Nhập nội dung"
+                        required
                         autoSize={{
                             minRows: 3,
+                            maxRows: 10,
                         }}
+                        maxLength={240}
+                        showCount
                     />
                 </Form.Item>
                 <Form.Item className="text-center mt-8">
                     <Button
+                        className="min-w-[100px] mr-2"
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        Xác nhận
+                    </Button>
+                    <Button
+                        className="min-w-[100px]"
                         type="primary"
                         danger
-                        onClick={() => setIsAdditionalRequestOpen(false)}
+                        onClick={() => {
+                            setIsAdditionalRequestOpen(false);
+                            form.resetFields();
+                        }}
                     >
                         Hủy
-                    </Button>
-                    <Button htmlType="submit" type="primary" className="ml-2">
-                        Xác nhận
                     </Button>
                 </Form.Item>
             </Form>

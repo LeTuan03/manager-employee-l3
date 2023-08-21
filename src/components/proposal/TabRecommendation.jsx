@@ -54,7 +54,6 @@ const TabRecommendation = ({
             dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại!");
-            console.log(error);
             dispatch(setIsLoading(false));
         }
     };
@@ -66,19 +65,17 @@ const TabRecommendation = ({
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công!");
                 await handleGetRecomentByEmp();
-                setIsModalOpen(true);
             } else {
                 const res = await addProposalByEmp(employee?.id, [value]);
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công!");
                 await handleGetRecomentByEmp();
-                setIsModalOpen(true);
             }
+            setIsModalOpen(true);
             dispatch(setIsLoading(false));
             formRecoment.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
-            console.log(error);
             dispatch(setIsLoading(false));
         }
     };
@@ -344,7 +341,7 @@ const TabRecommendation = ({
                 </Col>
             </Row>
             <FormUpdateHappening
-                type="recoment"
+                type="recommend"
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

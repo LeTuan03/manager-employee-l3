@@ -28,7 +28,7 @@ export default function UpdateHappeningModal() {
             const res = await getSalaryByEmp(employee?.id);
             setSalary(res?.data?.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     const handleGetProcessByEmp = async () => {
@@ -36,7 +36,7 @@ export default function UpdateHappeningModal() {
             const res = await getProcessByEmp(employee?.id);
             setProcesss(res?.data?.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     const handleGetRecomentByEmp = async () => {
@@ -44,7 +44,7 @@ export default function UpdateHappeningModal() {
             const res = await getProposalByEmp(employee?.id);
             setRecoments(res?.data?.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     const items = [

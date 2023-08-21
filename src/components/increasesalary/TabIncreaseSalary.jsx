@@ -13,7 +13,6 @@ import {
 } from "antd";
 import { addSalaryByEmp, deleteSalary, updateSalary } from "../../services/api";
 import ModalInfo from "../modal-update-happening/ModalInfo";
-import { STATUS } from "../../constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
@@ -45,7 +44,6 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
             handleGetSalaryByEmp();
             dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
             dispatch(setIsLoading(false));
             message.error("Xóa thất bại!");
         }
@@ -56,32 +54,21 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
             dispatch(setIsLoading(true));
             if (value.id) {
                 const res = await updateSalary(value);
-                if (res?.data?.code === STATUS.SUCCESS) {
-                    message.success("Cập nhật thành công!");
-                    setData(res?.data?.data);
-                    await handleGetSalaryByEmp();
-                    setIsModalOpen(true);
-                } else {
-                    message.error(res?.data?.message);
-                }
+                message.success("Cập nhật thành công!");
+                setData(res?.data?.data);
+                await handleGetSalaryByEmp();
             } else {
                 const res = await addSalaryByEmp(employee.id, [value]);
-
-                if (res?.data?.code === STATUS.SUCCESS) {
-                    message.success("Thêm mới thành công!");
-                    setData(res?.data?.data[0]);
-                    await handleGetSalaryByEmp();
-                    setIsModalOpen(true);
-                } else {
-                    message.error(res?.data?.message);
-                }
+                message.success("Thêm mới thành công!");
+                setData(res?.data?.data[0]);
+                await handleGetSalaryByEmp();
             }
+            setIsModalOpen(true);
             dispatch(setIsLoading(false));
             formSalary.resetFields();
         } catch (error) {
-            console.log(error);
-            message.error("Cập nhật thất bại!");
             dispatch(setIsLoading(false));
+            message.error("Cập nhật thất bại!");
         }
     };
 

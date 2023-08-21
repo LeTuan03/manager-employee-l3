@@ -54,6 +54,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
             dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại !");
+            dispatch(setIsLoading(false));
         }
     };
 
@@ -65,19 +66,17 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 setData(res?.data?.data);
                 message.success("Cập nhật thành công !");
                 await handleGetProcessByEmp();
-                setIsModalOpen(true);
             } else {
                 const res = await addProcessByEmp(employee?.id, [value]);
                 setData(res?.data?.data[0]);
                 message.success("Thêm mới thành công !");
                 await handleGetProcessByEmp();
-                setIsModalOpen(true);
             }
+            setIsModalOpen(true);
             dispatch(setIsLoading(false));
             formProcess.resetFields();
         } catch (error) {
             message.error("Cập nhật thất bại !");
-            console.log(error);
             dispatch(setIsLoading(false));
         }
     };
@@ -91,10 +90,6 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
         formProcess.setFieldsValue(employee);
     };
 
-    const handleWatch = (employee) => {
-        setData(employee);
-        setIsModalOpen(true);
-    };
     const columns = [
         {
             title: "STT",
@@ -192,7 +187,10 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
-                                onClick={() => handleWatch(employee)}
+                                onClick={() => {
+                                    setData(employee);
+                                    setIsModalOpen(true);
+                                }}
                             />
                         </div>
                     )}

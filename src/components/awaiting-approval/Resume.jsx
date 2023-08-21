@@ -13,7 +13,7 @@ import {
 import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
-import { GENDER, STATUS_EMPLOYEE } from "../../constants/constants";
+import { GENDER, ROLE, STATUS_EMPLOYEE } from "../../constants/constants";
 import {
     getAllEmployee,
     getEmployee,
@@ -153,7 +153,7 @@ export default function Resume() {
     return (
         <>
             <div>
-                {role === 5 ? (
+                {role === ROLE.MANAGE ? (
                     <>
                         <div className="mb-4 text-right">
                             <InputSearch

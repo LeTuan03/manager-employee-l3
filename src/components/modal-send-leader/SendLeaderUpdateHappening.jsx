@@ -73,7 +73,7 @@ const SendLeaderUpdateHappening = (props) => {
                 await updateProcess(data);
                 await handleGetProcessByEmp();
                 message.success(successMgs);
-            } else if (type === "recoment") {
+            } else if (type === "recommend") {
                 data.proposalStatus = "2";
                 await updateProposal(data);
                 await handleGetRecomentByEmp();

@@ -1,48 +1,35 @@
-import { Button, Checkbox, DatePicker, Form, Modal, message } from "antd";
-import { format } from "date-fns";
 import React from "react";
-import { acceptEmployee } from "../../services/api";
+import { Button, Checkbox, Form, Input, Modal } from "antd";
+import { format } from "date-fns";
 
 export default function ModalAccept({
     isApproveOpen,
     setIsApproveOpen,
-    profile,
-    getAllEmployee,
+    onFinish,
+    form3,
 }) {
-    const [form] = Form.useForm();
-    const onFinish = async (values) => {
-        try {
-            profile.submitProfileStatus = "3";
-            profile.terminationAppointmentDate = format(
-                new Date(values.terminationAppointmentDate.$d).getTime(),
-                "yyyy-MM-dd"
-            );
-            const res = await acceptEmployee(profile);
-            setIsApproveOpen(false);
-            message.success(res?.data?.message);
-            await getAllEmployee();
-        } catch (error) {
-            console.log(error);
-            message.error(error);
-        }
-    };
-    const handleReset = () => {
-        setIsApproveOpen(false);
-        form.resetFields();
-    };
     return (
         <Modal
             title="Phê duyệt nhân viên"
             centered
             open={isApproveOpen}
-            onCancel={handleReset}
+            onCancel={() => setIsApproveOpen(false)}
             footer={false}
+            zIndex={7}
         >
-            <Form onFinish={onFinish} layout="vertical" form={form}>
+            <Form
+                onFinish={onFinish}
+                layout="vertical"
+                initialValues={{
+                    remember: true,
+                    acceptDay: format(new Date(), "yyyy-MM-dd"),
+                }}
+                form={form3}
+            >
                 <Form.Item
-                    className="mt-5"
-                    label="Ngày hẹn:"
-                    name={"terminationAppointmentDate"}
+                    className="mt-4"
+                    label=" Ngày hẹn:"
+                    name="acceptDay"
                     rules={[
                         {
                             required: true,
@@ -50,24 +37,31 @@ export default function ModalAccept({
                         },
                     ]}
                 >
-                    <DatePicker
+                    <Input
+                        type="date"
                         placeholder="Chọn ngày"
                         style={{ width: "470px" }}
                     />
                 </Form.Item>
-                <Checkbox checked>Đã đủ điều kiện phê duyệt</Checkbox>
-
+                <Checkbox checked className="mt-2">
+                    Đã đủ điều kiện phê duyệt
+                </Checkbox>
                 <Form.Item className="text-center mt-8">
                     <Button
-                        key="cancel"
+                        className="mr-2 min-w-[100px]"
+                        key="submit"
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        Xác nhận
+                    </Button>
+                    <Button
+                        className="min-w-[100px]"
                         type="primary"
                         danger
                         onClick={() => setIsApproveOpen(false)}
                     >
                         Hủy
-                    </Button>
-                    <Button className="ml-2" htmlType="submit" type="primary">
-                        Xác nhận
                     </Button>
                 </Form.Item>
             </Form>
