@@ -8,7 +8,12 @@ import {
     setIsLoading,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-import { ACTIVE_KEY, ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    ACTIVE_KEY,
+    ROLE,
+    STATUS,
+    STATUS_EMPLOYEE,
+} from "../../constants/constants";
 import { format } from "date-fns";
 
 const {
@@ -100,7 +105,8 @@ const ModalProfile = () => {
                         <div>HỒ SƠ NHÂN VIÊN</div>
                         {employee?.numberSaved &&
                             role !== ROLE.MANAGE &&
-                            employee.submitProfileStatus === "0" && (
+                            employee.submitProfileStatus ===
+                                STATUS_EMPLOYEE.SUBMIT_FILE_SAVE && (
                                 <div className="mr-9 text-green-600">
                                     <i>
                                         Số lưu:{" "}
@@ -138,22 +144,20 @@ const ModalProfile = () => {
                 }}
                 footer={
                     <div className="flex justify-center !pb-5">
-                        {[
-                            NEW_SAVE,
-                            REJECT,
-                            ADDITIONAL_REQUIREMENTS,
-                            role !== ROLE.MANAGE,
-                        ].includes(employee?.submitProfileStatus) && (
-                            <Button
-                                className="w-[100px]"
-                                type="primary"
-                                onClick={() => {
-                                    handleSubmit();
-                                }}
-                            >
-                                Lưu
-                            </Button>
-                        )}
+                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                            employee?.submitProfileStatus
+                        ) &&
+                            role !== ROLE.MANAGE && (
+                                <Button
+                                    className="w-[100px]"
+                                    type="primary"
+                                    onClick={() => {
+                                        handleSubmit();
+                                    }}
+                                >
+                                    Lưu
+                                </Button>
+                            )}
                         {employee?.submitProfileStatus ===
                             ACCEPT_REQUEST_END_PROFILE &&
                             role !== ROLE.MANAGE && (
@@ -172,45 +176,45 @@ const ModalProfile = () => {
                                     Nộp lưu hồ sơ
                                 </Button>
                             )}
-                        {[
-                            NEW_SAVE,
-                            REJECT,
-                            ADDITIONAL_REQUIREMENTS,
-                            role !== ROLE.MANAGE,
-                        ].includes(employee?.submitProfileStatus) && (
-                            <Button
-                                className={`min-w-[100px] ${
-                                    !threeInfo?.knowledge ||
-                                    !threeInfo?.skill ||
-                                    (!threeInfo?.activity
-                                        ? ""
-                                        : "hover:!bg-green-500")
-                                } bg-green-600 `}
-                                htmlType="submit"
-                                type="primary"
-                                disabled={
-                                    !threeInfo?.knowledge ||
-                                    !threeInfo?.skill ||
-                                    !threeInfo?.activity
-                                }
-                                onClick={() => {
-                                    handleUpdateEmployee({
-                                        ...employee,
-                                        knowledge: threeInfo?.knowledge?.trim(),
-                                        skill: threeInfo?.skill?.trim(),
-                                        activity: threeInfo?.activity?.trim(),
-                                    });
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalSendLeader: true,
-                                        })
-                                    );
-                                }}
-                            >
-                                Trình lãnh đạo
-                            </Button>
-                        )}
+                        {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                            employee?.submitProfileStatus
+                        ) &&
+                            role !== ROLE.MANAGE && (
+                                <Button
+                                    className={`min-w-[100px] ${
+                                        !threeInfo?.knowledge ||
+                                        !threeInfo?.skill ||
+                                        (!threeInfo?.activity
+                                            ? ""
+                                            : "hover:!bg-green-500")
+                                    } bg-green-600 `}
+                                    htmlType="submit"
+                                    type="primary"
+                                    disabled={
+                                        !threeInfo?.knowledge ||
+                                        !threeInfo?.skill ||
+                                        !threeInfo?.activity
+                                    }
+                                    onClick={() => {
+                                        handleUpdateEmployee({
+                                            ...employee,
+                                            knowledge:
+                                                threeInfo?.knowledge?.trim(),
+                                            skill: threeInfo?.skill?.trim(),
+                                            activity:
+                                                threeInfo?.activity?.trim(),
+                                        });
+                                        dispatch(
+                                            setOpen({
+                                                ...open,
+                                                modalSendLeader: true,
+                                            })
+                                        );
+                                    }}
+                                >
+                                    Trình lãnh đạo
+                                </Button>
+                            )}
                         <Button
                             className="min-w-[100px]"
                             type="primary"
