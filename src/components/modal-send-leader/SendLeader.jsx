@@ -8,7 +8,7 @@ import {
     setIsLoading,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { POSITION, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import TextArea from "antd/es/input/TextArea";
 const {
     NEW_SAVE,
@@ -42,10 +42,10 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
     const onFinish = async (values) => {
         const { leaderId, submitDay, submitContent, submitEndProfileDay } =
             values;
-        let submitProfileStatus = "2";
+        let submitProfileStatus = PENDING;
         let reasonForEnd = "";
         if (reasonForEnding) {
-            submitProfileStatus = "6";
+            submitProfileStatus = PROFILE_END_REQUEST;
             reasonForEnd = reasonForEnding;
         }
         const data = {
@@ -64,7 +64,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             dispatch(setIsLoading(true));
             const res = await updateEmployee(employee?.id, data);
             if (res?.data?.code === STATUS.SUCCESS) {
-                if (res?.data?.data?.submitProfileStatus === "2") {
+                if (res?.data?.data?.submitProfileStatus === PENDING) {
                     dispatch(
                         getAllEmployee({
                             status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
@@ -102,9 +102,9 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
         }
     };
     const handleChange = (value) => {
-        if (value === 1) {
+        if (value === POSITION.MANAGER) {
             setIdLeader({ ...idLeader, label: "Giám đốc" });
-        } else if (value === 2) {
+        } else if (value === POSITION.LEADER) {
             setIdLeader({ ...idLeader, label: "Trưởng phòng" });
         }
     };

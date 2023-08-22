@@ -8,7 +8,7 @@ import {
     setIsLoading,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-import { ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { ACTIVE_KEY, ROLE, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import { format } from "date-fns";
 
 const {
@@ -33,7 +33,7 @@ const ModalProfile = () => {
         activity: "",
     });
 
-    const [activeKey, setActiveKey] = useState("1");
+    const [activeKey, setActiveKey] = useState(ACTIVE_KEY);
     const handleUpdateEmployee = async (data) => {
         try {
             dispatch(setIsLoading(true));
@@ -128,7 +128,7 @@ const ModalProfile = () => {
                     dispatch(setOpen({ ...open, modalProfile: false }));
                 }}
                 onCancel={() => {
-                    setActiveKey("1");
+                    setActiveKey(ACTIVE_KEY);
                     dispatch(setOpen({ ...open, modalProfile: false }));
                     setErrorThreeInfo({
                         knowledge: "",
@@ -219,7 +219,7 @@ const ModalProfile = () => {
                                 dispatch(
                                     setOpen({ ...open, modalProfile: false })
                                 );
-                                setActiveKey("1");
+                                setActiveKey(ACTIVE_KEY);
                                 setErrorThreeInfo({
                                     knowledge: "",
                                     skill: "",

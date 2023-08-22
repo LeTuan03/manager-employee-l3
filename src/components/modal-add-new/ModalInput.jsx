@@ -5,21 +5,20 @@ import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
+import { ACTIVE_KEY } from "../../constants/constants";
 const ModalInput = () => {
     const [form] = Form.useForm();
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
     const dispatch = useDispatch();
-    const [activeKey, setActiveKey] = useState("1");
+    const [activeKey, setActiveKey] = useState(ACTIVE_KEY);
     const { open, employee } = useSelector((state) => state.employee);
-    const [loading, setLoading] = useState(false);
     const items = [
         {
             key: "1",
             label: `THÔNG TIN NHÂN VIÊN`,
             children: (
                 <FormEmployee
-                    setLoading={setLoading}
                     family={family}
                     certificate={certificate}
                     form={form}
@@ -73,17 +72,16 @@ const ModalInput = () => {
                 width={1000}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalInput: false }));
-                    setActiveKey("1");
+                    setActiveKey(ACTIVE_KEY);
                 }}
                 footer={
                     <div className="w-full flex justify-center gap-2 pb-5">
                         <Button
                             className="w-[100px]"
-                            loading={loading}
                             type="primary"
                             onClick={() => {
                                 form.submit();
-                                setActiveKey("1");
+                                setActiveKey(ACTIVE_KEY);
                             }}
                         >
                             {employee?.id ? "Lưu" : "Thêm"}
@@ -106,7 +104,7 @@ const ModalInput = () => {
                                 dispatch(
                                     setOpen({ ...open, modalInput: false })
                                 );
-                                setActiveKey("1");
+                                setActiveKey(ACTIVE_KEY);
                             }}
                         >
                             Hủy

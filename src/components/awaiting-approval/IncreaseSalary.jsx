@@ -10,7 +10,7 @@ import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
-import { TYPE_WAITING } from "../../constants/constants";
+import { ACTIVE_KEY, TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
 
 export default function IncreaseSalary() {
     const dispatch = useDispatch();
@@ -124,13 +124,7 @@ export default function IncreaseSalary() {
                         bordered
                         columns={columns}
                         dataSource={STT(dataSalary)}
-                        pagination={{
-                            showSizeChanger: true,
-                            pageSizeOptions: ["1", "10", "20", "30"],
-                            locale: {
-                                items_per_page: "bản ghi / trang",
-                            },
-                        }}
+                        pagination={TABLE_PAGINATION}
                         scroll={{
                             y: 490,
                         }}
@@ -169,7 +163,7 @@ export default function IncreaseSalary() {
                 <Tabs
                     style={{ height: 600, overflowY: "scroll" }}
                     tabPosition="left"
-                    defaultActiveKey="1"
+                    defaultActiveKey={ACTIVE_KEY}
                     items={[
                         {
                             key: "1",

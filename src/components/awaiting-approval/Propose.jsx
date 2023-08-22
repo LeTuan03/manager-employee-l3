@@ -10,8 +10,7 @@ import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
-import TablePagination from "../common/TablePagination";
-import { TYPE_WAITING } from "../../constants/constants";
+import { ACTIVE_KEY, TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
 
 export default function Propose() {
     const dispatch = useDispatch();
@@ -132,7 +131,7 @@ export default function Propose() {
                         bordered
                         columns={columns}
                         dataSource={STT(proposeEmp)}
-                        pagination={TablePagination}
+                        pagination={TABLE_PAGINATION}
                         scroll={{
                             y: 490,
                         }}
@@ -170,7 +169,7 @@ export default function Propose() {
                 <Tabs
                     style={{ height: 600, overflowY: "scroll" }}
                     tabPosition="left"
-                    defaultActiveKey="1"
+                    defaultActiveKey={ACTIVE_KEY}
                     items={[
                         {
                             key: "1",

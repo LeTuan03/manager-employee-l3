@@ -23,12 +23,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
-import validateCodeInput from "../common/ValidateCodeInput";
+
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import {
+    OPTION_PROPOSE,
     STATUS_EMPLOYEE_NUMBER,
     TYPE_UPDATEHAPPENING,
 } from "../../constants/constants";
+import { validateCodeInput } from "../common/Validate";
 
 const TabRecommendation = ({
     recoments,
@@ -46,7 +48,7 @@ const TabRecommendation = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
-    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
     const { open, employee } = useSelector((state) => state.employee);
 
     useEffect(() => {
@@ -55,12 +57,13 @@ const TabRecommendation = ({
         }
     }, [open.modalUpdateHappening]);
 
-    const handleDeleteRecoment = async (id) => {
+    const handleDeleteRecoment = async () => {
         try {
             dispatch(setIsLoading(true));
-            await deleteProposal(id);
+            await deleteProposal(employeeIdToDelete);
             message.success("Xóa thành công!");
             formRecoment.resetFields();
+            setEmployeeIdToDelete(null)
             await handleGetRecomentByEmp();
             dispatch(setIsLoading(false));
         } catch (error) {
@@ -262,16 +265,7 @@ const TabRecommendation = ({
                         >
                             <Select
                                 className="w-full"
-                                options={[
-                                    {
-                                        value: 1,
-                                        label: "Đề xuất",
-                                    },
-                                    {
-                                        value: 2,
-                                        label: "Tham mưu",
-                                    },
-                                ]}
+                                options={OPTION_PROPOSE}
                             />
                         </Form.Item>
                     </Col>
@@ -368,8 +362,7 @@ const TabRecommendation = ({
                 <ModalDelete
                     openDelete={openDelete}
                     setOpenDelete={setOpenDelete}
-                    employeeIdToDelete={employeeIdToDelete}
-                    handleDeleteEmployee={handleDeleteRecoment}
+                    handleDelete={handleDeleteRecoment}
                 />
             )}
         </>

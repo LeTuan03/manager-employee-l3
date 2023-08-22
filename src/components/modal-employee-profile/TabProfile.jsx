@@ -12,7 +12,7 @@ import {
 import { Avatar, Button, Col, Form, Input, Row, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
-import _ from "lodash";
+import lodash from "lodash";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
@@ -21,6 +21,7 @@ import TeamStatus from "../common/TeamStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import Gender from "../common/Gender";
+import { validateDate } from "../common/Validate";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({
     setThreeInfo,
@@ -138,13 +139,13 @@ const TabProfile = ({
             handleShowError(error);
         }
     };
-    const handleDeleteExp = async (id) => {
+    const handleDeleteExp = async () => {
         try {
             dispatch(setIsLoading(true));
-            const res = await deleteExp(id);
+            const res = await deleteExp(employeeIdToDelete);
             if (res?.data?.code === STATUS.SUCCESS) {
                 await handleGetExp();
-                if (id === values?.id) {
+                if (employeeIdToDelete === values?.id) {
                     form.resetFields();
                 }
             } else {
@@ -156,7 +157,7 @@ const TabProfile = ({
         }
     };
     useEffect(() => {
-        if (!_.isEmpty(employee)) {
+        if (!lodash.isEmpty(employee)) {
             handleGetExp();
             setThreeInfo({
                 knowledge: employee?.knowledge,
@@ -170,26 +171,7 @@ const TabProfile = ({
         };
     }, [employee]);
 
-    function validateDate(_, value) {
-        if (value) {
-            const startDate = new Date(values.startDate);
-            const endDate = new Date(values.endDate);
-            const currentDateTime = new Date();
-            if (new Date(value) > currentDateTime) {
-                return Promise.reject(
-                    new Error("Yêu cầu chọn trước ngày hôm nay")
-                );
-            } else if (startDate > endDate) {
-                return Promise.reject(
-                    new Error("Ngày kết thúc phải sau ngày bắt đầu")
-                );
-            }
-
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error(`Vui lòng nhập ngày`));
-        }
-    }
+    
     return (
         <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
@@ -387,7 +369,7 @@ const TabProfile = ({
                                             label="Ngày bắt đầu"
                                             rules={[
                                                 {
-                                                    validator: validateDate,
+                                                    validator: validateDate(values?.startDate,values?.endDate),
                                                 },
                                             ]}
                                         >
@@ -400,7 +382,7 @@ const TabProfile = ({
                                             label="Ngày kết thúc"
                                             rules={[
                                                 {
-                                                    validator: validateDate,
+                                                    validator: validateDate(values?.startDate,values?.endDate),
                                                 },
                                             ]}
                                         >
@@ -578,12 +560,11 @@ const TabProfile = ({
                                     );
                                 })}
                         </div>
-                        <ModalDelete
-                            handleDeleteEmployee={handleDeleteExp}
-                            employeeIdToDelete={employeeIdToDelete}
+                        {openDelete&&<ModalDelete
+                            handleDelete={handleDeleteExp}
                             openDelete={openDelete}
                             setOpenDelete={setOpenDelete}
-                        ></ModalDelete>
+                        ></ModalDelete>}
                     </div>
                 </div>
             </div>

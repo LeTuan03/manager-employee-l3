@@ -8,10 +8,10 @@ import {
     updateSalary,
 } from "../../services/api";
 import TextArea from "antd/es/input/TextArea";
-import validateCodeInput from "../common/ValidateCodeInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+import { POSITION, STATUS_EMPLOYEE } from "../../constants/constants";
+import { validateCodeInput } from "../common/Validate";
 
 const SendLeaderUpdateHappening = (props) => {
     const {
@@ -86,9 +86,9 @@ const SendLeaderUpdateHappening = (props) => {
         }
     };
     const handleChange = (value) => {
-        if (value === 1) {
+        if (value === POSITION.MANAGER) {
             setIdLeader({ ...idLeader, label: "Giám đốc" });
-        } else if (value === 2) {
+        } else if (value === POSITION.LEADER) {
             setIdLeader({ ...idLeader, label: "Trưởng phòng" });
         }
     };

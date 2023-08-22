@@ -2,10 +2,10 @@ import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
-import { RELATIONSHIP } from "../../constants/constants";
 import Conclusion from "../common/Conclusion";
 import TextToTruncate from "../common/TextToTruncate";
 import Gender from "../common/Gender";
+import RelationShip from "../common/RelationShip";
 
 const TabCV = () => {
     const { employee } = useSelector((state) => state.employee);
@@ -51,23 +51,7 @@ const TabCV = () => {
             key: "relationShip",
             className: "border-table",
             align: "center",
-            render: (relationShip) => {
-                switch (relationShip) {
-                    case RELATIONSHIP.CHILD:
-                        relationShip = "Con";
-                        break;
-                    case RELATIONSHIP.PARENTS:
-                        relationShip = "Bố/Mẹ";
-                        break;
-                    case RELATIONSHIP.SIBLINGS:
-                        relationShip = "Anh/Chị/Em";
-                        break;
-                    default:
-                        relationShip = "Con";
-                        break;
-                }
-                return <div className="break-all">{relationShip}</div>;
-            },
+            render: (relationShip) => RelationShip(relationShip),
         },
         {
             title: "Số điện thoại",

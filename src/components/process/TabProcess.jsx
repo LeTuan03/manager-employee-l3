@@ -21,6 +21,7 @@ import ModalInfo from "../modal-update-happening/ModalInfo";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import {
+    OPTION_POSITION,
     STATUS_EMPLOYEE,
     TYPE_UPDATEHAPPENING,
 } from "../../constants/constants";
@@ -28,8 +29,9 @@ import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import TextToTruncate from "../common/TextToTruncate";
-import validateCodeInput from "../common/ValidateCodeInput";
+
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import { validateCodeInput } from "../common/Validate";
 
 const { NEW_SAVE, PENDING, BEEN_APPEOVED, ADDITIONAL_REQUIREMENTS, REJECT } =
     STATUS_EMPLOYEE;
@@ -45,15 +47,16 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
-    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
 
-    const handleDeletePromote = async (id) => {
+    const handleDeletePromote = async () => {
         try {
             dispatch(setIsLoading(true));
-            await deleteProcess(id);
+            await deleteProcess(employeeIdToDelete);
             message.success("Xóa thành công !");
             await handleGetProcessByEmp();
             formProcess.resetFields();
+            setEmployeeIdToDelete(null)
             dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại !");
@@ -263,20 +266,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                         >
                             <Select
                                 className="w-full"
-                                options={[
-                                    {
-                                        value: 0,
-                                        label: "Giám đốc",
-                                    },
-                                    {
-                                        value: 1,
-                                        label: "Trưởng phòng",
-                                    },
-                                    {
-                                        value: 2,
-                                        label: "Quản lí",
-                                    },
-                                ]}
+                                options={OPTION_POSITION}
                             />
                         </Form.Item>
                     </Col>
@@ -345,8 +335,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 <ModalDelete
                     openDelete={openDelete}
                     setOpenDelete={setOpenDelete}
-                    employeeIdToDelete={employeeIdToDelete}
-                    handleDeleteEmployee={handleDeletePromote}
+                    handleDelete={handleDeletePromote}
                 />
             )}
         </>

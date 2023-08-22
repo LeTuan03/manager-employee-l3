@@ -13,12 +13,14 @@ import {
     Select,
 } from "antd";
 import { format } from "date-fns";
-import _ from "lodash";
+import lodash from "lodash";
 import {
-    GENDER,
     STATUS,
-    TEAM,
     STATUS_EMPLOYEE,
+    REGEX,
+    OPTION_TEAM,
+    MESSAGE_ERROR,
+    OPTION_GENDER,
 } from "../../constants/constants";
 import { createEmployee, postAvatar, updateEmployee } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +29,7 @@ import {
     getEmployee,
     setIsLoading,
 } from "../../redux/employee/employeeSlice";
+import { validateAge, validateEmployeeCode } from "../common/Validate";
 const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [urlAvatar, setUrlAvatar] = useState("");
@@ -67,7 +70,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
             religion,
             dateOfIssuanceCard,
             placeOfIssueCard,
-            submitProfileStatus: "1",
+            submitProfileStatus: NEW_SAVE,
         };
         if (employee?.id) {
             await handleUpdateEmployee(data);
@@ -129,8 +132,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
         if (res) {
             onSuccess("ok");
             setUrlAvatar(
-                `${import.meta.env.VITE_BACKEND_URL}/public/image/${
-                    res?.data?.name
+                `${import.meta.env.VITE_BACKEND_URL}/public/image/${res?.data?.name
                 }`
             );
         } else {
@@ -174,7 +176,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
     };
 
     useEffect(() => {
-        if (!_.isEmpty(employee)) {
+        if (!lodash.isEmpty(employee)) {
             form.setFieldsValue({
                 ...employee,
                 dateOfBirth: format(
@@ -195,66 +197,9 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
             setUrlAvatar("");
         };
     }, [employee]);
-    const validateAge = (_, value) => {
-        if (value) {
-            const today = new Date();
-            const inputDate = new Date(value);
-            const ageDiff = today.getFullYear() - inputDate.getFullYear();
-            const monthDiff = today.getMonth() - inputDate.getMonth();
-            const dayDiff = today.getDate() - inputDate.getDate();
-            const isOver18 =
-                ageDiff > 18 ||
-                (ageDiff === 18 && monthDiff > 0) ||
-                (ageDiff === 18 && monthDiff === 0 && dayDiff >= 0);
-            const isUnder60 =
-                ageDiff < 60 ||
-                (ageDiff === 60 && monthDiff < 0) ||
-                (ageDiff === 60 && monthDiff === 0 && dayDiff < 0);
-            if (!isOver18) {
-                return Promise.reject(new Error("Tuổi phải lớn hơn 18 "));
-            } else if (!isUnder60) {
-                return Promise.reject(new Error("Tuổi phải nhỏ hơn 60!"));
-            } else {
-                return Promise.resolve();
-            }
-        } else {
-            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
-        }
-    };
-    function validateEmployeeCode(_, value) {
-        if (value) {
-            let regexString = "^NV";
-            const year = new Date().getFullYear().toString().slice(-2);
-            regexString += year;
-            regexString += "\\d{3}$";
-            const employeeCodeRegex = new RegExp(regexString);
-            const check = employeeCodeRegex.test(value);
-            if (!check) {
-                return Promise.reject(
-                    new Error(
-                        "Mã nhân viên phải có định dạng NV-YY-XXX ví dụ: NV23001"
-                    )
-                );
-            }
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error("Vui lòng nhập mã nhân viên"));
-        }
-    }
-    function validateDateOfBirth(_, value) {
-        if (value) {
-            const inputDateTime = new Date(value);
-            const currentDateTime = new Date();
-            if (inputDateTime > currentDateTime) {
-                return Promise.reject(
-                    new Error("Yêu cầu chọn trước ngày hôm nay")
-                );
-            }
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
-        }
-    }
+
+
+
     return (
         <>
             <Form
@@ -283,8 +228,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                                 "Vui lòng nhập tên nhân viên!",
                                         },
                                         {
-                                            pattern:
-                                                /^(?!.* {2})[^\d!@#$%^&*()+.=_-]{2,}$/g,
+                                            pattern: REGEX.NAME,
                                             message: "Tên sai định dạng",
                                         },
                                     ]}
@@ -318,20 +262,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                     ]}
                                 >
                                     <Select
-                                        options={[
-                                            {
-                                                value: GENDER.MALE,
-                                                label: "Nam",
-                                            },
-                                            {
-                                                value: GENDER.FEMALE,
-                                                label: "Nữ",
-                                            },
-                                            {
-                                                value: GENDER.OTHER,
-                                                label: "Khác",
-                                            },
-                                        ]}
+                                        options={OPTION_GENDER}
                                     />
                                 </Form.Item>
                             </Col>
@@ -344,7 +275,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                     rules={[
                                         {
                                             required: true,
-                                            validator: validateAge,
+                                            validator: validateAge(60, 18),
                                         },
                                     ]}
                                 >
@@ -392,9 +323,8 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                                 "Vui lòng nhập số CCCD/CMT!",
                                         },
                                         {
-                                            pattern: /^(?:\d{9}|\d{12})$/,
-                                            message:
-                                                "CMT phải là 9 số, CCCD phải là 12 số!",
+                                            pattern: REGEX.CITIZEN_IDENTIFICATION_NUMBER,
+                                            message:MESSAGE_ERROR.CITIZEN_IDENTIFICATION_NUMBER,
                                         },
                                     ]}
                                 >
@@ -408,7 +338,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                     rules={[
                                         {
                                             required: true,
-                                            validator: validateDateOfBirth,
+                                            validator: validateAge(),
                                         },
                                     ]}
                                 >
@@ -461,7 +391,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                                 "Vui lòng nhập số điện thoại!",
                                         },
                                         {
-                                            pattern: /^0\d{9}$/,
+                                            pattern: REGEX.PHONE,
                                             message:
                                                 "Định dạng số điện thoại chưa đúng",
                                         },
@@ -482,20 +412,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                     ]}
                                 >
                                     <Select
-                                        options={[
-                                            {
-                                                value: TEAM.FE,
-                                                label: "Front-end",
-                                            },
-                                            {
-                                                value: TEAM.BE,
-                                                label: "Back-end",
-                                            },
-                                            {
-                                                value: TEAM.TESTER,
-                                                label: "Tester",
-                                            },
-                                        ]}
+                                        options={OPTION_TEAM}
                                     />
                                 </Form.Item>
                             </Col>

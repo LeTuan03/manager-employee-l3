@@ -14,7 +14,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
-import { STATUS } from "../../constants/constants";
+import { MESSAGE_ERROR, REGEX, ROLE, STATUS } from "../../constants/constants";
 import {
     createCertificate,
     deleteCertificate,
@@ -112,36 +112,38 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             message.success("Sửa thành công văn bằng");
         }
     };
-    const handleDeleteCertificate = async (idDelete) => {
-        try {
-            dispatch(setIsLoading(true));
-            const res = await deleteCertificate(idDelete);
-            if (res?.data?.code === STATUS.SUCCESS) {
-                await handleGetCertificateById();
-                message.success("Xóa thành công văn bằng");
-                setIdDelete(null);
-                if (idDelete === id) {
-                    setId(null);
-                    formCertificate.resetFields();
+    const handleDelete = async () => {
+        if (idDelete) {
+            try {
+                dispatch(setIsLoading(true));
+                const res = await deleteCertificate(idDelete);
+                if (res?.data?.code === STATUS.SUCCESS) {
+                    await handleGetCertificateById();
+                    message.success("Xóa thành công văn bằng");
+                    setIdDelete(null);
+                    if (idDelete === id) {
+                        setId(null);
+                        formCertificate.resetFields();
+                    }
+                } else {
+                    message.error(res?.data?.message);
                 }
-            } else {
-                message.error(res?.data?.message);
+                dispatch(setIsLoading(false));
+            } catch (error) {
+                showFailded(error);
             }
-            dispatch(setIsLoading(false));
-        } catch (error) {
-            showFailded(error);
+        } else {
+            const newList = certificate.filter((item) => item.uid !== uidDelete);
+            setCertificate(newList);
+            if (uidDelete === id) {
+                setId(null);
+                formCertificate.resetFields();
+            }
+            setUidDelete(null);
+            message.success("Xóa thành công văn bằng");
         }
-    };
-    const handleDeleteByUid = (uid) => {
-        const newList = certificate.filter((item) => item.uid !== uid);
-        setCertificate(newList);
-        setUidDelete(null);
-        if (uid === id) {
-            setId(null);
-            formCertificate.resetFields();
-        }
-        message.success("Xóa thành công văn bằng");
-    };
+    }
+
     const handleGetCertificateById = async () => {
         try {
             dispatch(setIsLoading(true));
@@ -244,7 +246,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             render: (field) => <p className="text-left">{field}</p>,
         },
     ];
-    if (role !== 4) {
+    if (role !== ROLE.USER) {
         columns.splice(1, 1);
     }
     return (
@@ -272,8 +274,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern:
-                                        /^(?!.* {2})[^!@#$%^&*()+.=,_-]{2,}$/g,
+                                    pattern:REGEX.NAME_CERTIFICATE,
                                     message: "Tên sai định dạng",
                                 },
                             ]}
@@ -305,8 +306,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern:
-                                        /^(?!.* {2})[^\d!@#$%^&*()+.=_]{2,}$/g,
+                                    pattern:REGEX.FIELD,
                                     message: "Sai định dạng",
                                 },
                             ]}
@@ -326,9 +326,8 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern: /^(?!.* {2})\S+(?: \S+)*$/,
-                                    message:
-                                        "Không để khoảng trắng ở đầu, cuối và quá nhiều khoảng trắng liên tiếp",
+                                    pattern: REGEX.DELETE_SPACE,
+                                    message:MESSAGE_ERROR.DELETE_SPACE,
                                 },
                             ]}
                         >
@@ -378,14 +377,11 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     />
                 </div>
             </ConfigProvider>
-            <ModalDelete
-                handleDeleteById={handleDeleteCertificate}
-                handleDeleteByUid={handleDeleteByUid}
-                uidDelete={uidDelete}
-                idDelete={idDelete}
+            {openDelete&&<ModalDelete
+                handleDelete={handleDelete}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
-            ></ModalDelete>
+            ></ModalDelete>}
         </>
     );
 };

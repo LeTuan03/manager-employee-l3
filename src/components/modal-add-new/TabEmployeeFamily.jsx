@@ -20,13 +20,15 @@ import {
     updateFamily,
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
-import _ from "lodash";
+import lodash from "lodash";
 import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import Gender from "../common/Gender";
+import { validateAge } from "../common/Validate";
+import RelationShip from "../common/RelationShip";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const dispatch = useDispatch();
     const [formFamily] = Form.useForm();
@@ -93,38 +95,40 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             handleFailded(error);
         }
     };
-    const handleDeleteFamily = async (id) => {
-        try {
-            dispatch(setIsLoading(true));
-            const res = await deleteFamily(id);
-            if (res?.data?.code === STATUS.SUCCESS) {
-                message.success("Xóa thành công");
-                await handleGetFamily();
-                setIdDelete(null);
-                if (id === update) {
-                    setUpdate(null);
-                    formFamily.resetFields();
+    const handleDelete = async () => {
+        if (idDelete) {
+            try {
+                dispatch(setIsLoading(true));
+                const res = await deleteFamily(idDelete);
+                if (res?.data?.code === STATUS.SUCCESS) {
+                    message.success("Xóa thành công");
+                    await handleGetFamily();
+                    if (idDelete === update) {
+                        setUpdate(null);
+                        formFamily.resetFields();
+                    }
+                    setIdDelete(null);
+                } else {
+                    message.error(res?.data?.message);
                 }
-            } else {
-                message.error(res?.data?.message);
+                dispatch(setIsLoading(false));
+            } catch (error) {
+                handleFailded(error);
             }
-            dispatch(setIsLoading(false));
-        } catch (error) {
-            handleFailded(error);
+        } else {
+            const newList = family.filter((item) => item.uid !== uidDelete);
+            setFamily(newList);
+            setUidDelete(null);
+            if (uidDelete === update) {
+                setUpdate(null);
+                formFamily.resetFields();
+            }
+            message.success("Xóa thành công");
         }
-    };
-    const handleDeleteByUid = (uid) => {
-        const newList = family.filter((item) => item.uid !== uid);
-        setFamily(newList);
-        setUidDelete(null);
-        if (uid === update) {
-            setUpdate(null);
-            formFamily.resetFields();
-        }
-        message.success("Xóa thành công");
-    };
+    }
+
     const handleCreateFamily = async (data) => {
-        if (!_.isEmpty(employee)) {
+        if (!lodash.isEmpty(employee)) {
             try {
                 dispatch(setIsLoading(true));
                 const res = await createFamily(employee.id, [data]);
@@ -140,7 +144,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 handleFailded(error);
             }
         } else {
-            if (_.isEmpty(family)) {
+            if (lodash.isEmpty(family)) {
                 setFamily([data]);
             } else {
                 setFamily([data, ...family]);
@@ -253,23 +257,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "relationShip",
             align: "center",
             className: "min-w-[100px]",
-            render: (relationShip) => {
-                switch (relationShip) {
-                    case RELATIONSHIP.CHILD:
-                        relationShip = "Con";
-                        break;
-                    case RELATIONSHIP.PARENTS:
-                        relationShip = "Bố/Mẹ";
-                        break;
-                    case RELATIONSHIP.SIBLINGS:
-                        relationShip = "Anh/Chị/Em";
-                        break;
-                    default:
-                        relationShip = "Anh/Chị/Em";
-                        break;
-                }
-                return <>{relationShip}</>;
-            },
+            render: (relationShip) => RelationShip(relationShip),
         },
         {
             title: "Số CCCD/CMT",
@@ -291,31 +279,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             render: (address) => <div className="text-left">{address}</div>,
         },
     ];
-    function validateDateOfBirth(_, value) {
-        const today = new Date();
-        const inputDate = new Date(value);
-        const ageDiff = today.getFullYear() - inputDate.getFullYear();
-        const monthDiff = today.getMonth() - inputDate.getMonth();
-        const dayDiff = today.getDate() - inputDate.getDate();
-        if (value) {
-            const inputDateTime = new Date(value);
-            const currentDateTime = new Date();
-            const isUnder100 =
-                ageDiff < 100 ||
-                (ageDiff === 100 && monthDiff < 0) ||
-                (ageDiff === 100 && monthDiff === 0 && dayDiff < 0);
-            if (inputDateTime > currentDateTime) {
-                return Promise.reject(
-                    new Error("Yêu cầu chọn trước ngày hôm nay")
-                );
-            } else if (!isUnder100) {
-                return Promise.reject(new Error("Tuổi phải nhỏ hơn 100!"));
-            }
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error("Vui lòng nhập ngày sinh"));
-        }
-    }
+
     return (
         <>
             <Form
@@ -375,7 +339,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                             label="Ngày sinh"
                             rules={[
                                 {
-                                    validator: validateDateOfBirth,
+                                    validator: validateAge(100),
                                 },
                             ]}
                         >
@@ -541,14 +505,11 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                     />
                 </div>
             </ConfigProvider>
-            <ModalDelete
-                handleDeleteById={handleDeleteFamily}
-                handleDeleteByUid={handleDeleteByUid}
-                uidDelete={uidDelete}
-                idDelete={idDelete}
+            {openDelete && <ModalDelete
+                handleDelete={handleDelete}
                 openDelete={openDelete}
                 setOpenDelete={setOpenDelete}
-            ></ModalDelete>
+            ></ModalDelete>}
         </>
     );
 };

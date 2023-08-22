@@ -1,4 +1,5 @@
 import axios from "axios";
+import { STATUS } from "../constants/constants";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 const instance = axios.create({
     baseURL,
@@ -23,7 +24,7 @@ instance.interceptors.response.use(
     function (error) {
         if (
             error.response &&
-            (error.response.status === 401 || error.response.status === 403)
+            (error.response.status === STATUS.UNAUTHORIZED_ERROR || error.response.status === STATUS.FORBIDDEN_ERROR)
         ) {
             window.location.href = "/login";
         }

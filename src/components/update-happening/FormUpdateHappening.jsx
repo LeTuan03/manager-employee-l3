@@ -4,6 +4,7 @@ import ProposeTab from "../proposal/RecomenetChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 import PromoteTab from "../process/ProcessChildren";
 import {
+    ACTIVE_KEY,
     STATUS_EMPLOYEE,
     STATUS_EMPLOYEE_NUMBER,
     TYPE_UPDATEHAPPENING,
@@ -78,7 +79,7 @@ const FormUpdateHappening = ({
                 <div className="mt-10">
                     <Tabs
                         style={{ height: 600, overflowY: "scroll" }}
-                        defaultActiveKey="1"
+                        defaultActiveKey={ACTIVE_KEY}
                         items={items}
                         tabPosition={"left"}
                     />

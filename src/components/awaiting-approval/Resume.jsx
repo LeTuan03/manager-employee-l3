@@ -6,8 +6,10 @@ import { EyeOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
 import {
+    ACTIVE_KEY,
     GENDER,
     STATUS_EMPLOYEE,
+    TABLE_PAGINATION,
     TYPE_WAITING,
 } from "../../constants/constants";
 import {
@@ -21,8 +23,6 @@ import InputSearch from "../InputSearch";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import ModalProfile from "../modal-employee-profile/ModalProfile";
-import TablePagination from "../common/TablePagination";
-
 export default function Resume() {
     const dispatch = useDispatch();
     const { employee, listEmployee } = useSelector((state) => state.employee);
@@ -166,7 +166,7 @@ export default function Resume() {
                         scroll={{
                             y: 490,
                         }}
-                        pagination={TablePagination}
+                        pagination={TABLE_PAGINATION}
                     />
                 </ConfigProvider>
             </div>
@@ -177,7 +177,7 @@ export default function Resume() {
                 onOk={() => setIsModalOpen(false)}
                 onCancel={() => {
                     setIsModalOpen(false);
-                    setActiveKey("1");
+                    setActiveKey(ACTIVE_KEY);
                 }}
                 width={1300}
                 centered
@@ -195,7 +195,7 @@ export default function Resume() {
                             danger
                             onClick={() => {
                                 setIsModalOpen(false);
-                                setActiveKey("1");
+                                setActiveKey(ACTIVE_KEY);
                             }}
                         >
                             Hủy
@@ -205,7 +205,6 @@ export default function Resume() {
             >
                 {employee?.submitProfileStatus === PROFILE_END_REQUEST ? (
                     <Tabs
-                        defaultActiveKey="1"
                         tabPosition="left"
                         items={[
                             {

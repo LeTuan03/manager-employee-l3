@@ -12,14 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getAllEmployee,
     getEmployee,
+    setIsLoading,
     setOpen,
 } from "../redux/employee/employeeSlice";
-import { ROLE, STATUS, STATUS_EMPLOYEE } from "../constants/constants";
+import { ROLE, STATUS, STATUS_EMPLOYEE, TABLE_PAGINATION } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
 import TeamStatus from "./common/TeamStatus";
 import TextToTruncate from "./common/TextToTruncate";
-import TablePagination from "./common/TablePagination";
 import Gender from "./common/Gender";
 const TableComponet = () => {
     const [reasonForRejection, setReasonForRejection] = useState("");
@@ -27,7 +27,7 @@ const TableComponet = () => {
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
     const dispatch = useDispatch();
-    const { open, listEmployee, isLoading } = useSelector(
+    const { open, listEmployee } = useSelector(
         (state) => state.employee
     );
     const { role } = useSelector((state) => state.account);
@@ -160,16 +160,16 @@ const TableComponet = () => {
                         REJECT,
                         ADDITIONAL_REQUIREMENTS,
                     ].includes(employee.submitProfileStatus) && (
-                        <span>
-                            <InfoCircleOutlined
-                                onClick={() => {
-                                    setReasonForRejection(employee);
-                                    setOpenReject(true);
-                                }}
-                                className="text-orange-500 text-base"
-                            />
-                        </span>
-                    )}
+                            <span>
+                                <InfoCircleOutlined
+                                    onClick={() => {
+                                        setReasonForRejection(employee);
+                                        setOpenReject(true);
+                                    }}
+                                    className="text-orange-500 text-base"
+                                />
+                            </span>
+                        )}
                     {[
                         PENDING,
                         SUBMIT_FILE_SAVE,
@@ -179,79 +179,87 @@ const TableComponet = () => {
                         BEEN_APPEOVED,
                         REJECT_REQUEST_END_PROFILE,
                     ].includes(employee.submitProfileStatus) && (
-                        <EyeOutlined
-                            className="text-green-600 text-lg"
-                            onClick={() => {
-                                dispatch(getEmployee(employee.id));
-                                if (
-                                    [
-                                        ADDITIONAL_REQUIREMENTS_END_PROFILE,
-                                        REJECT_REQUEST_END_PROFILE,
-                                        BEEN_APPEOVED,
-                                    ].includes(employee.submitProfileStatus)
-                                ) {
-                                    {
-                                        if (role === ROLE.MANAGE) {
-                                            dispatch(
-                                                setOpen({
-                                                    ...open,
-                                                    modalProfile: true,
-                                                })
-                                            );
-                                        } else {
-                                            dispatch(
-                                                setOpen({
-                                                    ...open,
-                                                    modalUpdateHappening: true,
-                                                })
-                                            );
+                            <EyeOutlined
+                                className="text-green-600 text-lg"
+                                onClick={() => {
+                                    dispatch(getEmployee(employee.id));
+                                    if (
+                                        [
+                                            ADDITIONAL_REQUIREMENTS_END_PROFILE,
+                                            REJECT_REQUEST_END_PROFILE,
+                                            BEEN_APPEOVED,
+                                        ].includes(employee.submitProfileStatus)
+                                    ) {
+                                        {
+                                            if (role === ROLE.MANAGE) {
+                                                dispatch(
+                                                    setOpen({
+                                                        ...open,
+                                                        modalProfile: true,
+                                                    })
+                                                );
+                                            } else {
+                                                dispatch(
+                                                    setOpen({
+                                                        ...open,
+                                                        modalUpdateHappening: true,
+                                                    })
+                                                );
+                                            }
                                         }
+                                    } else if (
+                                        employee.submitProfileStatus ===
+                                        ACCEPT_REQUEST_END_PROFILE
+                                    ) {
+                                        dispatch(
+                                            setOpen({
+                                                ...open,
+                                                modalProfile: true,
+                                            })
+                                        );
+                                    } else {
+                                        dispatch(
+                                            setOpen({ ...open, modalProfile: true })
+                                        );
                                     }
-                                } else if (
-                                    employee.submitProfileStatus ===
-                                    ACCEPT_REQUEST_END_PROFILE
-                                ) {
-                                    dispatch(
-                                        setOpen({
-                                            ...open,
-                                            modalProfile: true,
-                                        })
-                                    );
-                                } else {
-                                    dispatch(
-                                        setOpen({ ...open, modalProfile: true })
-                                    );
-                                }
-                            }}
-                        />
-                    )}
+                                }}
+                            />
+                        )}
                     {[NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
                         employee.submitProfileStatus
                     ) && (
-                        <span
-                            onClick={() => {
-                                dispatch(getEmployee(employee.id));
-                                dispatch(
-                                    setOpen({ ...open, modalInput: true })
-                                );
-                            }}
-                            className="cursor-pointer"
-                        >
-                            <EditOutlined className="text-blue-600 text-lg" />
-                        </span>
-                    )}
+                            <span
+                                onClick={() => {
+                                    dispatch(getEmployee(employee.id));
+                                    dispatch(
+                                        setOpen({ ...open, modalInput: true })
+                                    );
+                                }}
+                                className="cursor-pointer"
+                            >
+                                <EditOutlined className="text-blue-600 text-lg" />
+                            </span>
+                        )}
                 </div>
             ),
         },
     ];
-    const handleDeleteEmployee = async (id) => {
-        const res = await deleteEmployee(id);
-        if (res?.data?.code === STATUS.SUCCESS) {
-            dispatch(
-                getAllEmployee({
-                    status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
-                })
-            );
+    const handleDeleteEmployee = async () => {
+        try {
+            dispatch(setIsLoading(true));
+            const res = await deleteEmployee(employeeIdToDelete);
+            if (res?.data?.code === STATUS.SUCCESS) {
+                dispatch(
+                    getAllEmployee({
+                        status: `${NEW_SAVE},${PENDING},${ADDITIONAL_REQUIREMENTS},${REJECT}`,
+                    })
+                );
+                setEmployeeIdToDelete(null)
+            }
+            dispatch(setIsLoading(false));
+        } catch (error) {
+            console.error(error)
+            dispatch(setIsLoading(false));
         }
     };
     return (
@@ -262,7 +270,7 @@ const TableComponet = () => {
                     bordered
                     columns={columns}
                     dataSource={data}
-                    pagination={TablePagination}
+                    pagination={TABLE_PAGINATION}
                 />
             </div>
             <Modal
@@ -293,10 +301,8 @@ const TableComponet = () => {
             </Modal>
             {openDelete && (
                 <ModalDelete
-                    handleDeleteEmployee={handleDeleteEmployee}
-                    employeeIdToDelete={employeeIdToDelete}
+                    handleDelete={handleDeleteEmployee}
                     openDelete={openDelete}
-                    loading={isLoading}
                     setOpenDelete={setOpenDelete}
                 ></ModalDelete>
             )}

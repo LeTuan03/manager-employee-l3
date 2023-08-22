@@ -17,13 +17,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
-import validateCodeInput from "../common/ValidateCodeInput";
+
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import {
     STATUS_EMPLOYEE_NUMBER,
     TYPE_UPDATEHAPPENING,
 } from "../../constants/constants";
+import { validateCodeInput } from "../common/Validate";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
     const {
@@ -44,14 +45,15 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
     const [oldMoney, setOldMoney] = useState("");
     const [data, setData] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
-    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(false);
+    const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
 
-    const handleDelete = async (value) => {
+    const handleDelete = async () => {
         try {
             dispatch(setIsLoading(true));
-            await deleteSalary(value);
+            await deleteSalary(employeeIdToDelete);
             message.success("Xóa thành công!");
             formSalary.resetFields();
+            setEmployeeIdToDelete(null)
             handleGetSalaryByEmp();
             dispatch(setIsLoading(false));
         } catch (error) {
@@ -375,8 +377,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                 <ModalDelete
                     openDelete={openDelete}
                     setOpenDelete={setOpenDelete}
-                    employeeIdToDelete={employeeIdToDelete}
-                    handleDeleteEmployee={handleDelete}
+                    handleDelete={handleDelete}
                 />
             )}
         </>

@@ -1,15 +1,9 @@
 import { Button, Modal } from "antd";
 import React from "react";
 
-const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
+const ModalDelete = ({ openDelete, setOpenDelete,handleDelete }) => {
     const handleOK = () => {
-        if (rest?.idDelete) {
-            rest?.handleDeleteById(rest?.idDelete);
-        } else if (rest?.uidDelete) {
-            rest?.handleDeleteByUid(rest?.uidDelete);
-        } else {
-            rest?.handleDeleteEmployee(rest?.employeeIdToDelete);
-        }
+        handleDelete&&handleDelete()
         setOpenDelete(false);
     };
     return (
@@ -25,7 +19,6 @@ const ModalDelete = ({ openDelete, setOpenDelete, ...rest }) => {
                 <>
                     <div className="flex justify-center pb-5 mt-6">
                         <Button
-                            loading={rest?.loading}
                             type="primary"
                             onClick={() => {
                                 handleOK();

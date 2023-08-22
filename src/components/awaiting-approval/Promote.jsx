@@ -11,8 +11,7 @@ import STT from "../common/STT";
 import ProcesPosition from "../common/ProcessPosition";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
-import TablePagination from "../common/TablePagination";
-import { TYPE_WAITING } from "../../constants/constants";
+import { ACTIVE_KEY, TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
 
 export default function Promote() {
     const dispatch = useDispatch();
@@ -120,7 +119,7 @@ export default function Promote() {
                         bordered
                         columns={columns}
                         dataSource={STT(processEmp)}
-                        pagination={TablePagination}
+                        pagination={TABLE_PAGINATION}
                         scroll={{
                             y: 490,
                         }}
@@ -158,7 +157,7 @@ export default function Promote() {
                 <Tabs
                     style={{ height: 600, overflowY: "scroll" }}
                     tabPosition="left"
-                    defaultActiveKey="1"
+                    defaultActiveKey={ACTIVE_KEY}
                     items={[
                         {
                             key: "1",
