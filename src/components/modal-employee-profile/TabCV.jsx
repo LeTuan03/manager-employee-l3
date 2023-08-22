@@ -2,9 +2,10 @@ import { Avatar, Col, ConfigProvider, Row, Table } from "antd";
 import { format } from "date-fns";
 import React from "react";
 import { useSelector } from "react-redux";
-import { GENDER, RELATIONSHIP } from "../../constants/constants";
+import { RELATIONSHIP } from "../../constants/constants";
 import Conclusion from "../common/Conclusion";
 import TextToTruncate from "../common/TextToTruncate";
+import Gender from "../common/Gender";
 
 const TabCV = () => {
     const { employee } = useSelector((state) => state.employee);
@@ -42,15 +43,7 @@ const TabCV = () => {
             key: "gender",
             className: "border-table",
             align: "center",
-            render: (gender) => (
-                <p>
-                    {gender === GENDER.FEMALE
-                        ? "Nữ"
-                        : gender === GENDER.MALE
-                        ? "Nam"
-                        : "Khác"}
-                </p>
-            ),
+            render: (gender) => Gender(gender),
         },
         {
             title: "Quan hệ",
@@ -121,12 +114,7 @@ const TabCV = () => {
             id: 2,
             label: "2. Nam/Nữ: ",
             span: 8,
-            value:
-                employee.gender === GENDER.MALE
-                    ? "Nam"
-                    : employee.gender === GENDER.FEMALE
-                    ? "Nữ"
-                    : "Khác",
+            value: Gender(employee.gender),
         },
         {
             id: 3,

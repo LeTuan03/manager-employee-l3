@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import Gender from "../common/Gender";
 const TabEmployeeFamily = ({ setFamily, family }) => {
     const dispatch = useDispatch();
     const [formFamily] = Form.useForm();
@@ -245,15 +246,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             dataIndex: "gender",
             align: "center",
             className: "!min-w-[90px]",
-            render: (gender) => (
-                <>
-                    {gender === GENDER.FEMALE
-                        ? "Nữ"
-                        : gender === GENDER.MALE
-                        ? "Nam"
-                        : "Khác"}
-                </>
-            ),
+            render: (gender) => Gender(gender),
         },
         {
             title: "Quan hệ",

@@ -15,11 +15,12 @@ import { deleteExp, getExp, postExp, updateExp } from "../../services/api";
 import _ from "lodash";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { GENDER, STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
+import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import ModalDelete from "../ModalDelete";
 import TeamStatus from "../common/TeamStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import Gender from "../common/Gender";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({
     setThreeInfo,
@@ -204,7 +205,7 @@ const TabProfile = ({
                             <div>
                                 <div className="flex mt-10 leading-4 my-3 break-all">
                                     <MailOutlined className="mr-3" />
-                                    {employee?.email && employee?.email}
+                                    {employee?.email}
                                 </div>
                             </div>
                             <div>
@@ -219,11 +220,7 @@ const TabProfile = ({
                             </div>
                             <div>
                                 <UserOutlined className="mr-3" />
-                                {employee?.gender === GENDER.FEMALE
-                                    ? "Nữ"
-                                    : employee?.gender === GENDER.MALE
-                                    ? "Nam"
-                                    : "Khác"}
+                                {Gender(employee?.gender)}
                             </div>
                             <div>
                                 <GiftOutlined className="mr-3" />

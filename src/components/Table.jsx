@@ -14,12 +14,13 @@ import {
     getEmployee,
     setOpen,
 } from "../redux/employee/employeeSlice";
-import { GENDER, ROLE, STATUS, STATUS_EMPLOYEE } from "../constants/constants";
+import { ROLE, STATUS, STATUS_EMPLOYEE } from "../constants/constants";
 import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
 import TeamStatus from "./common/TeamStatus";
 import TextToTruncate from "./common/TextToTruncate";
 import TablePagination from "./common/TablePagination";
+import Gender from "./common/Gender";
 const TableComponet = () => {
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);
@@ -82,15 +83,7 @@ const TableComponet = () => {
             key: "gender",
             align: "center",
             width: 90,
-            render: (gender) => (
-                <p>
-                    {gender === GENDER.FEMALE
-                        ? "Nữ"
-                        : gender === GENDER.MALE
-                        ? "Nam"
-                        : "Khác"}
-                </p>
-            ),
+            render: (gender) => Gender(gender),
         },
         {
             title: "Số điện thoại",
