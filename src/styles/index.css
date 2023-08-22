@@ -61,7 +61,10 @@ tr.ant-table-row:last-child > td {
     color: white !important;
     background-color: #1677ff !important;
 }
-
+.font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+}
 .font {
     font-family: "Tinos", sans-serif;
 }
