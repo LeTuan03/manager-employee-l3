@@ -9,8 +9,12 @@ import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
-import { setIsLoading } from "../../redux/employee/employeeSlice";
-import { ACTIVE_KEY, TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
+import { getEmployee, setIsLoading } from "../../redux/employee/employeeSlice";
+import {
+    ACTIVE_KEY,
+    TABLE_PAGINATION,
+    TYPE_WAITING,
+} from "../../constants/constants";
 
 export default function IncreaseSalary() {
     const dispatch = useDispatch();
@@ -101,6 +105,7 @@ export default function IncreaseSalary() {
                     className="cursor-pointer"
                     onClick={() => {
                         setProfile(user);
+                        dispatch(getEmployee(user.employeeId));
                         setIsModalOpen(true);
                     }}
                 >

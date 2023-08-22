@@ -10,8 +10,12 @@ import StringStatus from "../common/StringStatus";
 import STT from "../common/STT";
 import ProcesPosition from "../common/ProcessPosition";
 import TextToTruncate from "../common/TextToTruncate";
-import { setIsLoading } from "../../redux/employee/employeeSlice";
-import { ACTIVE_KEY, TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
+import { getEmployee, setIsLoading } from "../../redux/employee/employeeSlice";
+import {
+    ACTIVE_KEY,
+    TABLE_PAGINATION,
+    TYPE_WAITING,
+} from "../../constants/constants";
 
 export default function Promote() {
     const dispatch = useDispatch();
@@ -96,8 +100,9 @@ export default function Promote() {
                     key={index}
                     className="cursor-pointer"
                     onClick={() => {
-                        setIsModalOpen(true);
                         setProfile(user);
+                        dispatch(getEmployee(user.employeeId));
+                        setIsModalOpen(true);
                     }}
                 >
                     <EyeOutlined className="text-green-600 text-lg" />
