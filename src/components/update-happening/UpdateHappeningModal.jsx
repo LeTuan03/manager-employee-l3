@@ -1,5 +1,5 @@
 import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import TabIncreaseSalary from "../increasesalary/TabIncreaseSalary";
 import TabProcess from "../process/TabProcess";
@@ -83,6 +83,13 @@ export default function UpdateHappeningModal() {
             ),
         },
     ];
+
+    useEffect(() => {
+        handleGetSalaryByEmp();
+        handleGetProcessByEmp();
+        handleGetRecomentByEmp();
+    }, [employee.id]);
+
     return (
         <Modal
             className="!h-screen relative happening !w-[84%] max-lg:!w-[100%]"
