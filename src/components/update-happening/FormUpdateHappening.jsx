@@ -7,12 +7,10 @@ import {
     ACTIVE_KEY,
     STATUS_EMPLOYEE,
     STATUS_EMPLOYEE_NUMBER,
-    TYPE_UPDATEHAPPENING,
 } from "../../constants/constants";
 import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 
 const FormUpdateHappening = ({
-    type,
     isModalOpen,
     setIsModalOpen,
     data,
@@ -23,12 +21,11 @@ const FormUpdateHappening = ({
     const items = [
         {
             key: "1",
-            label: getTitle(type),
-            children: getChild(type, data),
+            label: getTitle(data),
+            children: getChild(data),
         },
     ];
     const [openLeader, setOpenLeader] = useState("");
-
     return (
         <>
             <Modal
@@ -100,27 +97,21 @@ const FormUpdateHappening = ({
 export default FormUpdateHappening;
 
 const getTitle = (type) => {
-    switch (type) {
-        case TYPE_UPDATEHAPPENING.RECOMMEND:
-            return `ĐỀ XUẤT/THAM MƯU`;
-        case TYPE_UPDATEHAPPENING.PROCESS:
-            return `THĂNG CHỨC`;
-        case TYPE_UPDATEHAPPENING.SALARY:
-            return `TĂNG LƯƠNG`;
-        default:
-            break;
+    if (type.salaryIncreaseStatus) {
+        return "TĂNG LƯƠNG";
+    } else if (type.processStatus) {
+        return `THĂNG CHỨC`;
+    } else {
+        return `ĐỀ XUẤT/THAM MƯU`;
     }
 };
 
-const getChild = (type, data) => {
-    switch (type) {
-        case TYPE_UPDATEHAPPENING.RECOMMEND:
-            return <ProposeTab profile={data} />;
-        case TYPE_UPDATEHAPPENING.PROCESS:
-            return <PromoteTab profile={data} />;
-        case TYPE_UPDATEHAPPENING.SALARY:
-            return <IncreaseTab profile={data} />;
-        default:
-            break;
+const getChild = (data) => {
+    if (data.salaryIncreaseStatus) {
+        return <IncreaseTab profile={data} />;
+    } else if (data.processStatus) {
+        return <PromoteTab profile={data} />;
+    } else {
+        return <ProposeTab profile={data} />;
     }
 };
