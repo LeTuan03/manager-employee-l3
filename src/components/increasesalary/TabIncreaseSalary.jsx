@@ -20,8 +20,19 @@ import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import {
+    STATUS_EMPLOYEE_NUMBER,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
+    const {
+        NEW_SAVE,
+        PENDING,
+        BEEN_APPEOVED,
+        ADDITIONAL_REQUIREMENTS,
+        REJECT,
+    } = STATUS_EMPLOYEE_NUMBER;
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
     useEffect(() => {
@@ -64,8 +75,8 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                 await handleGetSalaryByEmp();
             }
             setIsModalOpen(true);
-            dispatch(setIsLoading(false));
             formSalary.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
             dispatch(setIsLoading(false));
             message.error("Cập nhật thất bại!");
@@ -150,7 +161,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
             align: "center",
             render: (_, employee) => (
                 <div>
-                    {employee.salaryIncreaseStatus === 1 && (
+                    {employee.salaryIncreaseStatus === NEW_SAVE && (
                         <div>
                             <span>
                                 <EditOutlined
@@ -171,7 +182,9 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                             </span>
                         </div>
                     )}
-                    {[2, 3].includes(employee.salaryIncreaseStatus) && (
+                    {[PENDING, BEEN_APPEOVED].includes(
+                        employee.salaryIncreaseStatus
+                    ) && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -182,12 +195,15 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                             />
                         </div>
                     )}
-                    {[4, 5].includes(employee.salaryIncreaseStatus) && (
+                    {[ADDITIONAL_REQUIREMENTS, REJECT].includes(
+                        employee.salaryIncreaseStatus
+                    ) && (
                         <div>
                             <ModalInfo
                                 message={employee}
                                 type={
-                                    employee.salaryIncreaseStatus === 4
+                                    employee.salaryIncreaseStatus ===
+                                    ADDITIONAL_REQUIREMENTS
                                         ? "req"
                                         : ""
                                 }
@@ -349,18 +365,20 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                 </Col>
             </Row>
             <FormUpdateHappening
-                type="salary"
+                type={TYPE_UPDATEHAPPENING.SALARY}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
                 handleGetSalaryByEmp={handleGetSalaryByEmp}
             />
-            <ModalDelete
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-                employeeIdToDelete={employeeIdToDelete}
-                handleDeleteEmployee={handleDelete}
-            />
+            {openDelete && (
+                <ModalDelete
+                    openDelete={openDelete}
+                    setOpenDelete={setOpenDelete}
+                    employeeIdToDelete={employeeIdToDelete}
+                    handleDeleteEmployee={handleDelete}
+                />
+            )}
         </>
     );
 };

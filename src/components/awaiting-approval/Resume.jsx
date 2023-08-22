@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ResumeModal from "../resume/ResumeModal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    Button,
-    ConfigProvider,
-    Empty,
-    Modal,
-    Result,
-    Table,
-    Tabs,
-} from "antd";
-import { EyeOutlined, SmileOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Empty, Modal, Table, Tabs } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
-import { GENDER, ROLE, STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    GENDER,
+    STATUS_EMPLOYEE,
+    TYPE_WAITING,
+} from "../../constants/constants";
 import {
     getAllEmployee,
     getEmployee,
@@ -25,10 +21,10 @@ import InputSearch from "../InputSearch";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import ModalProfile from "../modal-employee-profile/ModalProfile";
+import TablePagination from "../common/TablePagination";
 
 export default function Resume() {
     const dispatch = useDispatch();
-    const { role } = useSelector((state) => state.account);
     const { employee, listEmployee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const [reasonForEnding, setReasonForEnding] = useState({});
@@ -151,120 +147,91 @@ export default function Resume() {
         },
     ];
     return (
-        <>
-            <div>
-                {role === ROLE.MANAGE ? (
-                    <>
-                        <div className="mb-4 text-right">
-                            <InputSearch
-                                status={`${PENDING},${PROFILE_END_REQUEST}`}
-                            />
-                        </div>
-                        <div className="main-table">
-                            <ConfigProvider
-                                renderEmpty={() => (
-                                    <>
-                                        <Empty description={false} />
-                                    </>
-                                )}
-                            >
-                                <Table
-                                    bordered
-                                    columns={columns}
-                                    dataSource={STT(listEmployee)}
-                                    scroll={{
-                                        y: 490,
-                                    }}
-                                    pagination={{
-                                        showSizeChanger: true,
-                                        pageSizeOptions: [
-                                            "1",
-                                            "10",
-                                            "20",
-                                            "30",
-                                        ],
-                                        locale: {
-                                            items_per_page: "bản ghi / trang",
-                                        },
-                                    }}
-                                />
-                            </ConfigProvider>
-                        </div>
-                        <Modal
-                            zIndex={1}
-                            title="BIỂU MẪU"
-                            open={isModalOpen}
-                            onOk={() => setIsModalOpen(false)}
-                            onCancel={() => {
+        <div>
+            <div className="mb-4 text-right">
+                <InputSearch status={`${PENDING},${PROFILE_END_REQUEST}`} />
+            </div>
+            <div className="main-table">
+                <ConfigProvider
+                    renderEmpty={() => (
+                        <>
+                            <Empty description={false} />
+                        </>
+                    )}
+                >
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={STT(listEmployee)}
+                        scroll={{
+                            y: 490,
+                        }}
+                        pagination={TablePagination}
+                    />
+                </ConfigProvider>
+            </div>
+            <Modal
+                zIndex={1}
+                title="BIỂU MẪU"
+                open={isModalOpen}
+                onOk={() => setIsModalOpen(false)}
+                onCancel={() => {
+                    setIsModalOpen(false);
+                    setActiveKey("1");
+                }}
+                width={1300}
+                centered
+                footer={
+                    <div className="text-center flex justify-center pb-5">
+                        <ResumeModal
+                            setIsOpen={setIsModalOpen}
+                            profile={profile}
+                            setProfile={setProfile}
+                            type={TYPE_WAITING.RESUME}
+                        />
+                        <Button
+                            className="ml-2"
+                            type="primary"
+                            danger
+                            onClick={() => {
                                 setIsModalOpen(false);
                                 setActiveKey("1");
                             }}
-                            width={1300}
-                            centered
-                            footer={
-                                <div className="text-center flex justify-center pb-5">
-                                    <ResumeModal
-                                        setIsOpen={setIsModalOpen}
-                                        profile={profile}
-                                        setProfile={setProfile}
-                                        type="Resume"
-                                    />
-                                    <Button
-                                        className="ml-2"
-                                        type="primary"
-                                        danger
-                                        onClick={() => {
-                                            setIsModalOpen(false);
-                                            setActiveKey("1");
-                                        }}
-                                    >
-                                        Hủy
-                                    </Button>
-                                </div>
-                            }
                         >
-                            {employee?.submitProfileStatus ===
-                            PROFILE_END_REQUEST ? (
-                                <Tabs
-                                    defaultActiveKey="1"
-                                    tabPosition="left"
-                                    items={[
-                                        {
-                                            key: "1",
-                                            label: `ĐƠN XIN NGHỈ VIỆC`,
-                                            children: (
-                                                <QuitJob
-                                                    reasonForEnding={
-                                                        reasonForEnding
-                                                    }
-                                                    setReasonForEnding={
-                                                        setReasonForEnding
-                                                    }
-                                                />
-                                            ),
-                                        },
-                                    ]}
-                                />
-                            ) : (
-                                <div>
-                                    <EmployeeProfile
-                                        threeInfo={threeInfo}
-                                        setThreeInfo={setThreeInfo}
-                                        activeKey={activeKey}
-                                        setActiveKey={setActiveKey}
-                                    ></EmployeeProfile>
-                                </div>
-                            )}
-                        </Modal>
-                        <ModalProfile />
-                    </>
-                ) : (
-                    <Result
-                        icon={<SmileOutlined />}
-                        title="Yêu cầu tài khoản manager để truy cập."
+                            Hủy
+                        </Button>
+                    </div>
+                }
+            >
+                {employee?.submitProfileStatus === PROFILE_END_REQUEST ? (
+                    <Tabs
+                        defaultActiveKey="1"
+                        tabPosition="left"
+                        items={[
+                            {
+                                key: "1",
+                                label: `ĐƠN XIN NGHỈ VIỆC`,
+                                children: (
+                                    <QuitJob
+                                        reasonForEnding={reasonForEnding}
+                                        setReasonForEnding={setReasonForEnding}
+                                    />
+                                ),
+                            },
+                        ]}
                     />
+                ) : (
+                    <div>
+                        <EmployeeProfile
+                            threeInfo={threeInfo}
+                            setThreeInfo={setThreeInfo}
+                            activeKey={activeKey}
+                            setActiveKey={setActiveKey}
+                        ></EmployeeProfile>
+                    </div>
                 )}
-            </div>
-        </>
+            </Modal>
+            <ModalProfile />
+        </div>
     );
 }

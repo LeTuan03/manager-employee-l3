@@ -15,9 +15,14 @@ export default function SaveResume() {
     const { open, employee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
     const [form] = Form.useForm();
+
     const handleGetProfile = async () => {
-        const res = await getEmployeeById(employee.id);
-        setProfile(res?.data?.data);
+        try {
+            const res = await getEmployeeById(employee.id);
+            setProfile(res?.data?.data || {});
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
@@ -27,13 +32,20 @@ export default function SaveResume() {
     const onFinish = async (values) => {
         try {
             dispatch(setIsLoading(true));
-            profile.decisionDay = values.decisionDay;
-            profile.numberSaved = values.numberSaved;
-            profile.submitProfileStatus = "0";
-            await submitAndSaveResume(profile);
+            const updatedProfile = {
+                ...profile,
+                decisionDay: values.decisionDay,
+                numberSaved: values.numberSaved,
+                submitProfileStatus: STATUS_EMPLOYEE.SUBMIT_FILE_SAVE,
+            };
+            await submitAndSaveResume(updatedProfile);
             message.success("Nộp lưu hồ sơ thành công!");
             dispatch(
-                setOpen({ ...open, modalResume: false, modalProfile: false })
+                setOpen({
+                    ...open,
+                    modalResume: false,
+                    modalProfile: false,
+                })
             );
             form.resetFields();
             dispatch(
@@ -41,19 +53,17 @@ export default function SaveResume() {
                     status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
                 })
             );
+
             dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
             dispatch(setIsLoading(false));
             message.error("Nộp lưu hồ sơ thất bại!");
         }
     };
-    const onFinishFailed = (values) => {
-        console.log("Received values of form: ", values);
-    };
-    const validateNumberSaved = (_, values) => {
-        if (values) {
-            const regexString = values;
+
+    const validateNumberSaved = (_, value) => {
+        if (value) {
+            const regexString = value;
             const escapedRegexString = regexString.replace(
                 /[.*+?^${}()|[\]\\]/g,
                 "\\$&"
@@ -72,14 +82,7 @@ export default function SaveResume() {
             } else {
                 return Promise.reject(
                     new Error(
-                        `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: NL${
-                            new Date().getMonth() + 1 < 10
-                                ? "0" + (new Date().getMonth() + 1)
-                                : new Date().getMonth() + 1
-                        }${new Date()
-                            .getFullYear()
-                            .toString()
-                            .slice(-2)}/${profile?.code?.slice(-3)}`
+                        `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: ${testString}`
                     )
                 );
             }
@@ -102,14 +105,15 @@ export default function SaveResume() {
             <Form
                 onFinish={onFinish}
                 layout={"vertical"}
-                name="basic"
-                onFinishFailed={onFinishFailed}
                 initialValues={{
                     remember: true,
                     decisionDay: format(new Date(), "yyyy-MM-dd"),
                 }}
                 form={form}
             >
+                <Form.Item name="submitProfileStatus" className="hidden">
+                    <Input value={"STATUS_EMPLOYEE.SUBMIT_FILE_SAVE"} />
+                </Form.Item>
                 <Form.Item
                     label="Ngày quyết định"
                     name="decisionDay"
@@ -151,9 +155,10 @@ export default function SaveResume() {
                         className="ml-2 min-w-[100px]"
                         type="primary"
                         danger
-                        onClick={() =>
-                            dispatch(setOpen({ ...open, modalResume: false }))
-                        }
+                        onClick={() => {
+                            dispatch(setOpen({ ...open, modalResume: false }));
+                            form.resetFields();
+                        }}
                     >
                         Hủy
                     </Button>

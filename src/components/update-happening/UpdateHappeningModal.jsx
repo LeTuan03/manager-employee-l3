@@ -1,5 +1,5 @@
 import { Button, Card, Col, Form, Image, Input, Modal, Row, Tabs } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
 import TabIncreaseSalary from "../increasesalary/TabIncreaseSalary";
 import TabProcess from "../process/TabProcess";
@@ -12,6 +12,7 @@ import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import TeamStatus from "../common/TeamStatus";
+import { ACTIVE_KEY } from "../../constants/constants";
 
 export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export default function UpdateHappeningModal() {
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
-    const [activeKey, setActiveKey] = useState("1");
+    const [activeKey, setActiveKey] = useState(ACTIVE_KEY);
     const handleGetSalaryByEmp = async () => {
         try {
             const res = await getSalaryByEmp(employee?.id);
@@ -49,7 +50,7 @@ export default function UpdateHappeningModal() {
     };
     const items = [
         {
-            key: "1",
+            key: ACTIVE_KEY,
             label: `TĂNG LƯƠNG`,
             children: (
                 <TabIncreaseSalary
@@ -82,13 +83,6 @@ export default function UpdateHappeningModal() {
             ),
         },
     ];
-    useEffect(() => {
-        if (employee?.id) {
-            handleGetSalaryByEmp();
-            handleGetProcessByEmp();
-            handleGetRecomentByEmp();
-        }
-    }, [employee?.id]);
     return (
         <Modal
             className="!h-screen relative happening !w-[84%] max-lg:!w-[100%]"
@@ -103,7 +97,7 @@ export default function UpdateHappeningModal() {
             onCancel={() => {
                 dispatch(setOpen({ ...open, modalUpdateHappening: false }));
                 dispatch(resetEmployee());
-                setActiveKey("1");
+                setActiveKey(ACTIVE_KEY);
             }}
             footer={
                 <div className="text-center bg-white fixed bottom-0 !w-[82%] max-lg:!w-[92%] max-sm:!w-[90%] py-5">

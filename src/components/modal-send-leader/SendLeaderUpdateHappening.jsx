@@ -11,13 +11,13 @@ import TextArea from "antd/es/input/TextArea";
 import validateCodeInput from "../common/ValidateCodeInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import { STATUS_EMPLOYEE } from "../../constants/constants";
 
 const SendLeaderUpdateHappening = (props) => {
     const {
         openLeader,
         setOpenLeader,
         data,
-        type,
         handleGetSalaryByEmp,
         handleGetProcessByEmp,
         handleGetRecomentByEmp,
@@ -60,25 +60,26 @@ const SendLeaderUpdateHappening = (props) => {
     };
     const handleSendLeader = async (datas) => {
         const successMgs = "Trình lãnh đạo thành công";
+        const newData = {
+            ...data,
+            leaderId: datas.leaderId,
+            submitContent: datas.submitContent,
+        };
         try {
-            data.leaderId = datas.leaderId;
-            data.submitContent = datas.submitContent;
-            if (type === "salary") {
-                data.salaryIncreaseStatus = "2";
-                await updateSalary(data);
+            if (data.salaryIncreaseStatus) {
+                newData.salaryIncreaseStatus = STATUS_EMPLOYEE.PENDING;
+                await updateSalary(newData);
                 await handleGetSalaryByEmp();
-                message.success(successMgs);
-            } else if (type === "process") {
-                data.processStatus = "2";
-                await updateProcess(data);
+            } else if (data.processStatus) {
+                newData.processStatus = STATUS_EMPLOYEE.PENDING;
+                await updateProcess(newData);
                 await handleGetProcessByEmp();
-                message.success(successMgs);
-            } else if (type === "recommend") {
-                data.proposalStatus = "2";
-                await updateProposal(data);
+            } else if (newData.proposalStatus) {
+                newData.proposalStatus = STATUS_EMPLOYEE.PENDING;
+                await updateProposal(newData);
                 await handleGetRecomentByEmp();
-                message.success(successMgs);
             }
+            message.success(successMgs);
         } catch (error) {
             console.log(error);
             message.error("Trình lãnh đạo thất bại!");

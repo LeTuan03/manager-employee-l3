@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { getEmployeeById } from "../../services/api";
+import React from "react";
 import { format } from "date-fns";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
 import TextArea from "antd/es/input/TextArea";
+import { useSelector } from "react-redux";
+import { TYPE_PROCESS } from "../../constants/constants";
 
 const ProposeTab = ({ profile }) => {
-    const [emp, setEmp] = useState({});
-    const handleGetDetailPromote = async () => {
-        const res2 = await getEmployeeById(profile.employeeId);
-        setEmp(res2?.data?.data);
-    };
-    useEffect(() => {
-        handleGetDetailPromote();
-    }, [profile]);
+    const { employee } = useSelector((state) => state.employee);
     return (
         <div className="p-[35px] bg-[#e7e7e7] font">
             <div className="bg-white p-[64px]">
                 <CommonHeader company="CÔNG TY OCEAN TECH" profile={profile} />
                 <div className="text-center">
                     <h3 className="mt-10">
-                        {profile?.type === 2 ? "ĐƠN THAM MƯU" : "ĐƠN ĐỀ XUẤT"}{" "}
+                        {profile?.type === TYPE_PROCESS
+                            ? "ĐƠN THAM MƯU"
+                            : "ĐƠN ĐỀ XUẤT"}{" "}
                     </h3>
                     <p className="font-bold">Về việc {profile?.note}</p>
                 </div>
@@ -30,12 +26,15 @@ const ProposeTab = ({ profile }) => {
                         <p>
                             Tôi tên là:{" "}
                             <span class="border-b border-dotted border-black inline-block border-t-0 border-l-0 border-r-0 leading-[70%]">
-                                {emp.name}
+                                {employee.name}
                             </span>{" "}
                             sinh ngày:{" "}
                             <span class="border-b border-dotted border-black inline-block border-t-0 border-l-0 border-r-0 leading-[70%]">
-                                {emp.dateOfBirth &&
-                                    format(emp.dateOfBirth, "dd/MM/yyyy")}{" "}
+                                {employee.dateOfBirth &&
+                                    format(
+                                        employee.dateOfBirth,
+                                        "dd/MM/yyyy"
+                                    )}{" "}
                             </span>{" "}
                         </p>
 
@@ -58,7 +57,7 @@ const ProposeTab = ({ profile }) => {
                         <p>Tôi xin chân thành cảm ơn!</p>
                     </div>
                 </div>
-                {Conclusion(profile.proposalDate, emp.name)}
+                {Conclusion(profile.proposalDate, employee.name)}
             </div>
         </div>
     );

@@ -3,7 +3,11 @@ import { useState } from "react";
 import ProposeTab from "../proposal/RecomenetChildren";
 import SendLeaderUpdateHappening from "../modal-send-leader/SendLeaderUpdateHappening";
 import PromoteTab from "../process/ProcessChildren";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    STATUS_EMPLOYEE,
+    STATUS_EMPLOYEE_NUMBER,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 import IncreaseTab from "../increasesalary/IncreaseSalaryChildren";
 
 const FormUpdateHappening = ({
@@ -15,7 +19,6 @@ const FormUpdateHappening = ({
     handleGetProcessByEmp,
     handleGetSalaryByEmp,
 }) => {
-    const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
     const items = [
         {
             key: "1",
@@ -35,16 +38,24 @@ const FormUpdateHappening = ({
                 onCancel={() => setIsModalOpen(false)}
                 footer={
                     <div className="text-center pb-5">
-                        {(type === "recommend" &&
-                            [1, 4, 5].includes(data.proposalStatus)) ||
-                        (type === "process" &&
+                        {(data.proposalStatus &&
                             [
-                                NEW_SAVE,
-                                ADDITIONAL_REQUIREMENTS,
-                                REJECT,
+                                STATUS_EMPLOYEE_NUMBER.NEW_SAVE,
+                                STATUS_EMPLOYEE_NUMBER.ADDITIONAL_REQUIREMENTS,
+                                STATUS_EMPLOYEE_NUMBER.REJECT,
+                            ].includes(data.proposalStatus)) ||
+                        (data.processStatus &&
+                            [
+                                STATUS_EMPLOYEE.NEW_SAVE,
+                                STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS,
+                                STATUS_EMPLOYEE.REJECT,
                             ].includes(data.processStatus)) ||
-                        (type === "salary" &&
-                            [1, 4, 5].includes(data.salaryIncreaseStatus)) ? (
+                        (data.salaryIncreaseStatus &&
+                            [
+                                STATUS_EMPLOYEE_NUMBER.NEW_SAVE,
+                                STATUS_EMPLOYEE_NUMBER.ADDITIONAL_REQUIREMENTS,
+                                STATUS_EMPLOYEE_NUMBER.REJECT,
+                            ].includes(data.salaryIncreaseStatus)) ? (
                             <Button
                                 className="min-w-[100px] bg-green-600 hover:!bg-green-500"
                                 type="primary"
@@ -74,7 +85,6 @@ const FormUpdateHappening = ({
                 </div>
             </Modal>
             <SendLeaderUpdateHappening
-                type={type}
                 data={data}
                 openLeader={openLeader}
                 setOpenLeader={setOpenLeader}
@@ -90,11 +100,11 @@ export default FormUpdateHappening;
 
 const getTitle = (type) => {
     switch (type) {
-        case "recommend":
+        case TYPE_UPDATEHAPPENING.RECOMMEND:
             return `ĐỀ XUẤT/THAM MƯU`;
-        case "process":
+        case TYPE_UPDATEHAPPENING.PROCESS:
             return `THĂNG CHỨC`;
-        case "salary":
+        case TYPE_UPDATEHAPPENING.SALARY:
             return `TĂNG LƯƠNG`;
         default:
             break;
@@ -103,11 +113,11 @@ const getTitle = (type) => {
 
 const getChild = (type, data) => {
     switch (type) {
-        case "recommend":
+        case TYPE_UPDATEHAPPENING.RECOMMEND:
             return <ProposeTab profile={data} />;
-        case "process":
+        case TYPE_UPDATEHAPPENING.PROCESS:
             return <PromoteTab profile={data} />;
-        case "salary":
+        case TYPE_UPDATEHAPPENING.SALARY:
             return <IncreaseTab profile={data} />;
         default:
             break;

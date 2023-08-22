@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { getEmployeeById } from "../../services/api";
+import React from "react";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
 import formatDate from "../common/FormatDate";
 import ProcesPosition from "../common/ProcessPosition";
+import { useSelector } from "react-redux";
 
 const PromoteTab = ({ profile }) => {
-    const [emp, setEmp] = useState({});
-    const handleGetDetailPromote = async () => {
-        const res2 = await getEmployeeById(profile.employeeId);
-        setEmp(res2?.data?.data);
-    };
-    useEffect(() => {
-        handleGetDetailPromote();
-    }, [profile]);
+    const { employee } = useSelector((state) => state.employee);
     return (
         <div className="p-[35px] bg-[#e7e7e7] font" s>
             <div className="bg-white p-[64px]">
@@ -44,9 +37,9 @@ const PromoteTab = ({ profile }) => {
                 <div className="flex justify-center leading-10">
                     <div className="px-10">
                         <div>
-                            <b> Điều 1: </b> Bổ nhiệm Ông/Bà: {emp.name} giữ
-                            chức vụ {ProcesPosition(profile?.newPosition)} kể từ{" "}
-                            {formatDate(profile?.promotionDay)}.
+                            <b> Điều 1: </b> Bổ nhiệm Ông/Bà: {employee.name}{" "}
+                            giữ chức vụ {ProcesPosition(profile?.newPosition)}{" "}
+                            kể từ {formatDate(profile?.promotionDay)}.
                         </div>
                         <div>
                             <b>Điều 2:</b> Quyết định này có hiệu lực kể từ ngày
@@ -54,12 +47,12 @@ const PromoteTab = ({ profile }) => {
                         </div>
                         <div>
                             <b>Điều 3:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: {emp.name} chịu trách nhiệm
-                            thi hành quyết định này.
+                            chính Kế toán và Ông/Bà: {employee.name} chịu trách
+                            nhiệm thi hành quyết định này.
                         </div>
                     </div>
                 </div>
-                {Conclusion(profile.promotionDay, emp.name)}
+                {Conclusion(profile.promotionDay, employee.name)}
             </div>
         </div>
     );

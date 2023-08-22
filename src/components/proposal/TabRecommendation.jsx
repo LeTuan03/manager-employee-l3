@@ -25,12 +25,23 @@ import NumberStatus from "../common/NumberStatus";
 import TextToTruncate from "../common/TextToTruncate";
 import validateCodeInput from "../common/ValidateCodeInput";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
+import {
+    STATUS_EMPLOYEE_NUMBER,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 
 const TabRecommendation = ({
     recoments,
     handleGetRecomentByEmp,
     formRecoment,
 }) => {
+    const {
+        NEW_SAVE,
+        PENDING,
+        BEEN_APPEOVED,
+        ADDITIONAL_REQUIREMENTS,
+        REJECT,
+    } = STATUS_EMPLOYEE_NUMBER;
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState({});
@@ -152,7 +163,7 @@ const TabRecommendation = ({
             align: "center",
             render: (_, employee) => (
                 <div>
-                    {employee.proposalStatus === 1 && (
+                    {employee.proposalStatus === NEW_SAVE && (
                         <div>
                             <span>
                                 <EditOutlined
@@ -171,7 +182,9 @@ const TabRecommendation = ({
                             </span>
                         </div>
                     )}
-                    {[2, 3].includes(employee.proposalStatus) && (
+                    {[PENDING, BEEN_APPEOVED].includes(
+                        employee.proposalStatus
+                    ) && (
                         <div>
                             <EyeOutlined
                                 className="text-green-600 text-lg"
@@ -182,11 +195,16 @@ const TabRecommendation = ({
                             />
                         </div>
                     )}
-                    {[4, 5].includes(employee.proposalStatus) && (
+                    {[ADDITIONAL_REQUIREMENTS, REJECT].includes(
+                        employee.proposalStatus
+                    ) && (
                         <div>
                             <ModalInfo
                                 type={
-                                    employee.proposalStatus === 4 ? "req" : ""
+                                    employee.proposalStatus ===
+                                    ADDITIONAL_REQUIREMENTS
+                                        ? "req"
+                                        : ""
                                 }
                                 message={employee}
                             />
@@ -340,18 +358,20 @@ const TabRecommendation = ({
                 </Col>
             </Row>
             <FormUpdateHappening
-                type="recommend"
+                type={TYPE_UPDATEHAPPENING.RECOMMEND}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
                 handleGetRecomentByEmp={handleGetRecomentByEmp}
             />
-            <ModalDelete
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-                employeeIdToDelete={employeeIdToDelete}
-                handleDeleteEmployee={handleDeleteRecoment}
-            />
+            {openDelete && (
+                <ModalDelete
+                    openDelete={openDelete}
+                    setOpenDelete={setOpenDelete}
+                    employeeIdToDelete={employeeIdToDelete}
+                    handleDeleteEmployee={handleDeleteRecoment}
+                />
+            )}
         </>
     );
 };

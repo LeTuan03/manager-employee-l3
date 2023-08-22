@@ -20,7 +20,10 @@ import {
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    STATUS_EMPLOYEE,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
@@ -332,18 +335,20 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 </Col>
             </Row>
             <FormUpdateHappening
-                type="process"
+                type={TYPE_UPDATEHAPPENING.PROCESS}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}
                 handleGetProcessByEmp={handleGetProcessByEmp}
             />
-            <ModalDelete
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-                employeeIdToDelete={employeeIdToDelete}
-                handleDeleteEmployee={handleDeletePromote}
-            />
+            {openDelete && (
+                <ModalDelete
+                    openDelete={openDelete}
+                    setOpenDelete={setOpenDelete}
+                    employeeIdToDelete={employeeIdToDelete}
+                    handleDeleteEmployee={handleDeletePromote}
+                />
+            )}
         </>
     );
 };

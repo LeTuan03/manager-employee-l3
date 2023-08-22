@@ -19,6 +19,7 @@ import ModalDelete from "./ModalDelete";
 import StringStatus from "./common/StringStatus";
 import TeamStatus from "./common/TeamStatus";
 import TextToTruncate from "./common/TextToTruncate";
+import TablePagination from "./common/TablePagination";
 const TableComponet = () => {
     const [reasonForRejection, setReasonForRejection] = useState("");
     const [openReject, setOpenReject] = useState(false);
@@ -268,13 +269,7 @@ const TableComponet = () => {
                     bordered
                     columns={columns}
                     dataSource={data}
-                    pagination={{
-                        showSizeChanger: true,
-                        pageSizeOptions: ["1", "10", "20", "30"],
-                        locale: {
-                            items_per_page: "bản ghi / trang",
-                        },
-                    }}
+                    pagination={TablePagination}
                 />
             </div>
             <Modal
@@ -303,13 +298,15 @@ const TableComponet = () => {
                     reasonForRejection
                 )}
             </Modal>
-            <ModalDelete
-                handleDeleteEmployee={handleDeleteEmployee}
-                employeeIdToDelete={employeeIdToDelete}
-                openDelete={openDelete}
-                loading={isLoading}
-                setOpenDelete={setOpenDelete}
-            ></ModalDelete>
+            {openDelete && (
+                <ModalDelete
+                    handleDeleteEmployee={handleDeleteEmployee}
+                    employeeIdToDelete={employeeIdToDelete}
+                    openDelete={openDelete}
+                    loading={isLoading}
+                    setOpenDelete={setOpenDelete}
+                ></ModalDelete>
+            )}
         </>
     );
 };

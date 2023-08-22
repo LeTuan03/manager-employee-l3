@@ -14,7 +14,7 @@ import {
     setIsLoading,
     setOpen,
 } from "../../redux/employee/employeeSlice";
-import { STATUS_EMPLOYEE } from "../../constants/constants";
+import { STATUS_EMPLOYEE, TYPE_WAITING } from "../../constants/constants";
 import ModalAccept from "../modal-wait-approval/ModalAccept";
 import ModalAdditional from "../modal-wait-approval/ModalAdditional";
 import ModalReject from "../modal-wait-approval/ModalReject";
@@ -46,16 +46,16 @@ export default function ResumeModal(props) {
     const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
-            case "Propose":
+            case TYPE_WAITING.PROPOSE:
                 await handleGetProposal();
                 break;
-            case "Promote":
+            case TYPE_WAITING.PROMOTE:
                 await handleGetProcess();
                 break;
-            case "IncreaseSalary":
+            case TYPE_WAITING.INCREASESALARY:
                 await getCurrentEmpIncreaseSalary();
                 break;
-            case "Resume":
+            case TYPE_WAITING.RESUME:
                 dispatch(
                     getAllEmployee({
                         status: `${PENDING},${PROFILE_END_REQUEST}`,
@@ -67,30 +67,31 @@ export default function ResumeModal(props) {
         }
     };
 
-    const onFinish = async (values) => {
+    const onFinish = async (value) => {
         try {
             dispatch(setIsLoading(true));
+            const newData = {
+                ...profile,
+                acceptanceDate: value.acceptDay,
+            };
             switch (type) {
-                case "Propose":
-                    profile.acceptanceDate = values.acceptDay;
-                    profile.proposalStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
-                    await proposalEdit(profile);
+                case TYPE_WAITING.PROPOSE:
+                    newData.proposalStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
+                    await proposalEdit(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Promote":
-                    profile.acceptanceDate = values.acceptDay;
-                    profile.processStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
-                    await acceptPromote(profile);
+                case TYPE_WAITING.PROMOTE:
+                    newData.processStatus = STATUS_EMPLOYEE.BEEN_APPEOVED;
+                    await acceptPromote(newData);
                     await handleActionSuccess(type);
                     break;
-                case "IncreaseSalary":
-                    profile.acceptanceDate = values.acceptDay;
-                    profile.salaryIncreaseStatus =
+                case TYPE_WAITING.INCREASESALARY:
+                    newData.salaryIncreaseStatus =
                         STATUS_EMPLOYEE.BEEN_APPEOVED;
-                    await salaryApprove(profile);
+                    await salaryApprove(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Resume":
+                case TYPE_WAITING.RESUME:
                     let data = {};
                     if (
                         profile.submitProfileStatus ===
@@ -98,14 +99,14 @@ export default function ResumeModal(props) {
                     ) {
                         data = {
                             ...employee,
-                            terminationAppointmentDate: values.acceptDay,
+                            terminationAppointmentDate: value.acceptDay,
                             submitProfileStatus:
                                 STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE,
                         };
                     } else {
                         data = {
                             ...employee,
-                            appointmentDate: values.acceptDay,
+                            appointmentDate: value.acceptDay,
                             submitProfileStatus: STATUS_EMPLOYEE.BEEN_APPEOVED,
                         };
                     }
@@ -124,32 +125,33 @@ export default function ResumeModal(props) {
         }
     };
 
-    const onFinishAdditional = async (values) => {
+    const onFinishAdditional = async (value) => {
         try {
             dispatch(setIsLoading(true));
+            const newData = {
+                ...profile,
+                additionalRequest: value.additionalRequest,
+            };
             switch (type) {
-                case "Propose":
-                    profile.additionalRequest = values.additionalRequest;
-                    profile.proposalStatus =
+                case TYPE_WAITING.PROPOSE:
+                    newData.proposalStatus =
                         STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
-                    await proposalEdit(profile);
+                    await proposalEdit(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Promote":
-                    profile.additionalRequest = values.additionalRequest;
-                    profile.processStatus =
+                case TYPE_WAITING.PROMOTE:
+                    newData.processStatus =
                         STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
-                    await acceptPromote(profile);
+                    await acceptPromote(newData);
                     await handleActionSuccess(type);
                     break;
-                case "IncreaseSalary":
-                    profile.additionalRequest = values.additionalRequest;
-                    profile.salaryIncreaseStatus =
+                case TYPE_WAITING.INCREASESALARY:
+                    newData.salaryIncreaseStatus =
                         STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS;
-                    await salaryApprove(profile);
+                    await salaryApprove(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Resume":
+                case TYPE_WAITING.RESUME:
                     let data = {};
                     if (
                         profile.submitProfileStatus ===
@@ -160,12 +162,12 @@ export default function ResumeModal(props) {
                             submitProfileStatus:
                                 STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS_END_PROFILE,
                             additionalRequestTermination:
-                                values.additionalRequest,
+                                value.additionalRequest,
                         };
                     } else {
                         data = {
                             ...employee,
-                            additionalRequest: values.additionalRequest,
+                            additionalRequest: value.additionalRequest,
                             submitProfileStatus:
                                 STATUS_EMPLOYEE.ADDITIONAL_REQUIREMENTS,
                         };
@@ -185,32 +187,31 @@ export default function ResumeModal(props) {
         }
     };
 
-    const onFinishReject = async (values) => {
+    const onFinishReject = async (value) => {
         try {
             dispatch(setIsLoading(true));
+            const newData = {
+                ...profile,
+                rejectionDate: value.rejectionDate,
+                reasonForRefusal: value.reasonForRejection,
+            };
             switch (type) {
-                case "Propose":
-                    profile.rejectionDate = values.rejectionDate;
-                    profile.reasonForRefusal = values.reasonForRejection;
-                    profile.proposalStatus = STATUS_EMPLOYEE.REJECT;
-                    await proposalEdit(profile);
+                case TYPE_WAITING.PROPOSE:
+                    newData.proposalStatus = STATUS_EMPLOYEE.REJECT;
+                    await proposalEdit(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Promote":
-                    profile.rejectionDate = values.rejectionDate;
-                    profile.reasonForRefusal = values.reasonForRejection;
-                    profile.processStatus = STATUS_EMPLOYEE.REJECT;
-                    await rejectPromote(profile);
+                case TYPE_WAITING.PROMOTE:
+                    newData.processStatus = STATUS_EMPLOYEE.REJECT;
+                    await rejectPromote(newData);
                     await handleActionSuccess(type);
                     break;
-                case "IncreaseSalary":
-                    profile.rejectionDate = values.rejectionDate;
-                    profile.reasonForRefusal = values.reasonForRejection;
-                    profile.salaryIncreaseStatus = STATUS_EMPLOYEE.REJECT;
-                    await salaryApprove(profile);
+                case TYPE_WAITING.INCREASESALARY:
+                    newData.salaryIncreaseStatus = STATUS_EMPLOYEE.REJECT;
+                    await salaryApprove(newData);
                     await handleActionSuccess(type);
                     break;
-                case "Resume":
+                case TYPE_WAITING.RESUME:
                     let data = {};
                     if (
                         profile.submitProfileStatus ===
@@ -218,16 +219,15 @@ export default function ResumeModal(props) {
                     ) {
                         data = {
                             ...employee,
-                            refuseEndProfileDay: values.rejectionDate,
-                            reasonForRefuseEndProfile:
-                                values.reasonForRejection,
+                            refuseEndProfileDay: value.rejectionDate,
+                            reasonForRefuseEndProfile: value.reasonForRejection,
                             submitProfileStatus:
                                 STATUS_EMPLOYEE.REJECT_REQUEST_END_PROFILE,
                         };
                     } else {
                         data = {
                             ...employee,
-                            reasonForRejection: values.reasonForRejection,
+                            reasonForRejection: value.reasonForRejection,
                             submitProfileStatus: STATUS_EMPLOYEE.REJECT,
                         };
                     }

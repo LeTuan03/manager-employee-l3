@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { getEmployeeById } from "../../services/api";
+import React from "react";
 import Conclusion from "../common/Conclusion";
 import CommonHeader from "../common/CommonHeader";
 import formatDate from "../common/FormatDate";
+import { useSelector } from "react-redux";
 
 const IncreaseTab = ({ profile }) => {
-    const [emp, setEmp] = useState({});
-    const handleGetDetailSalary = async () => {
-        const res2 = await getEmployeeById(profile?.employeeId);
-        setEmp(res2?.data?.data);
-    };
-    useEffect(() => {
-        handleGetDetailSalary();
-    }, [profile]);
+    const { employee } = useSelector((state) => state.employee);
     return (
         <div className="p-[35px] bg-[#e7e7e7] font">
             <div className="bg-white p-[64px]">
@@ -48,16 +41,17 @@ const IncreaseTab = ({ profile }) => {
                         <div>
                             <b> Điều 1: </b> Kể từ{" "}
                             {formatDate(profile?.startDate)} , mức lương của
-                            Ông/Bà: {emp.name} sẽ là: {profile.newSalary} đ.
+                            Ông/Bà: {employee.name} sẽ là: {profile.newSalary}{" "}
+                            đ.
                         </div>
                         <div>
                             <b>Điều 2:</b> Các ông/bà Phòng Nhân sự, Phòng Tài
-                            chính Kế toán và Ông/Bà: {emp.name} căn cứ quyết
-                            định thi hành.
+                            chính Kế toán và Ông/Bà: {employee.name} căn cứ
+                            quyết định thi hành.
                         </div>
                     </div>
                 </div>
-                {Conclusion(profile.startDate, emp.name)}
+                {Conclusion(profile.startDate, employee.name)}
             </div>
         </div>
     );
