@@ -12,7 +12,9 @@ export const validateAge = (maxAge, minAge) => {
                     (ageDiff === minAge && monthDiff > 0) ||
                     (ageDiff === minAge && monthDiff === 0 && dayDiff >= 0);
                 if (!isOverMinAge) {
-                    return Promise.reject(new Error(`Tuổi phải lớn hơn ${minAge}`));
+                    return Promise.reject(
+                        new Error(`Tuổi phải lớn hơn ${minAge}`)
+                    );
                 }
             } else {
                 if (inputDate > today) {
@@ -27,14 +29,16 @@ export const validateAge = (maxAge, minAge) => {
                     (ageDiff === maxAge && monthDiff < 0) ||
                     (ageDiff === maxAge && monthDiff === 0 && dayDiff < 0);
                 if (!isUnderMaxAge) {
-                    return Promise.reject(new Error(`Tuổi phải nhỏ hơn ${maxAge}`));
+                    return Promise.reject(
+                        new Error(`Tuổi phải nhỏ hơn ${maxAge}`)
+                    );
                 }
             }
             return Promise.resolve();
         } else {
             return Promise.reject(new Error("Vui lòng nhập ngày"));
         }
-    }
+    };
 };
 
 export const validateDate = (start, end) => {
@@ -56,8 +60,8 @@ export const validateDate = (start, end) => {
         } else {
             return Promise.reject(new Error(`Vui lòng nhập ngày`));
         }
-    }
-}
+    };
+};
 
 export function validateEmployeeCode(_, value) {
     if (value) {

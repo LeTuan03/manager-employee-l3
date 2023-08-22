@@ -21,7 +21,7 @@ import {
 } from "../../services/api";
 import { v4 as uuidv4 } from "uuid";
 import lodash from "lodash";
-import { GENDER, RELATIONSHIP, STATUS } from "../../constants/constants";
+import { GENDER, STATUS } from "../../constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
 import TextToTruncate from "../common/TextToTruncate";
@@ -125,7 +125,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
             }
             message.success("Xóa thành công");
         }
-    }
+    };
 
     const handleCreateFamily = async (data) => {
         if (!lodash.isEmpty(employee)) {
@@ -505,11 +505,13 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                     />
                 </div>
             </ConfigProvider>
-            {openDelete && <ModalDelete
-                handleDelete={handleDelete}
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-            ></ModalDelete>}
+            {openDelete && (
+                <ModalDelete
+                    handleDelete={handleDelete}
+                    openDelete={openDelete}
+                    setOpenDelete={setOpenDelete}
+                ></ModalDelete>
+            )}
         </>
     );
 };
