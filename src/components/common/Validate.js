@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export const validateAge = (maxAge, minAge) => {
     return (_, value) => {
         if (value) {
@@ -98,5 +100,31 @@ export const validateCodeInput = (_, value) => {
         }
     } else {
         return Promise.reject(new Error(`Không được để trống trường này!`));
+    }
+};
+
+export const validateNumberSaved = (_, value, profile) => {
+    if (value) {
+        const regexString = value;
+        const escapedRegexString = regexString.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+        const regexPattern = new RegExp("^" + escapedRegexString + "$");
+        const testString = `NL${format(new Date(), "MM")}${format(
+            new Date(),
+            "yy"
+        )}/${profile?.code?.slice(-3)}`;
+        if (regexPattern.test(testString)) {
+            return Promise.resolve();
+        } else {
+            return Promise.reject(
+                new Error(
+                    `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: ${testString}`
+                )
+            );
+        }
+    } else {
+        return Promise.reject(new Error("Không được để trống trường này!"));
     }
 };

@@ -10,6 +10,7 @@ import {
     setOpen,
 } from "../../redux/employee/employeeSlice";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
+import { validateNumberSaved } from "../common/Validate";
 export default function SaveResume() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
@@ -59,31 +60,10 @@ export default function SaveResume() {
         }
     };
 
-    const validateNumberSaved = (_, value) => {
-        if (value) {
-            const regexString = value;
-            const escapedRegexString = regexString.replace(
-                /[.*+?^${}()|[\]\\]/g,
-                "\\$&"
-            );
-            const regexPattern = new RegExp("^" + escapedRegexString + "$");
-            const testString = `NL${format(new Date(), "MM")}${format(
-                new Date(),
-                "yy"
-            )}/${profile?.code?.slice(-3)}`;
-            if (regexPattern.test(testString)) {
-                return Promise.resolve();
-            } else {
-                return Promise.reject(
-                    new Error(
-                        `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: ${testString}`
-                    )
-                );
-            }
-        } else {
-            return Promise.reject(new Error("Không được để trống trường này!"));
-        }
+    const createValidator = () => (rule, value) => {
+        return validateNumberSaved(rule, value, profile);
     };
+
     return (
         <Modal
             title="NỘP LƯU HỒ SƠ"
@@ -131,7 +111,7 @@ export default function SaveResume() {
                     name={"numberSaved"}
                     rules={[
                         {
-                            validator: validateNumberSaved,
+                            validator: createValidator(validateNumberSaved),
                         },
                     ]}
                 >
@@ -140,6 +120,7 @@ export default function SaveResume() {
                         autoSize={{
                             maxRows: 1,
                         }}
+                        spellCheck={false}
                     />
                 </Form.Item>
                 <Form.Item className="text-center mt-6">
