@@ -73,6 +73,7 @@ export default function ResumeModal(props) {
         }
     };
 
+    //the act of accepting approval of an employee or registration form
     const onFinish = async (value) => {
         try {
             dispatch(setIsLoading(true));
@@ -128,6 +129,7 @@ export default function ResumeModal(props) {
         }
     };
 
+    //the act of requesting additional records of an employee or registration form
     const onFinishAdditional = async (value) => {
         try {
             dispatch(setIsLoading(true));
@@ -187,6 +189,7 @@ export default function ResumeModal(props) {
         }
     };
 
+    //the act of rejecting of an employee or registration form
     const onFinishReject = async (value) => {
         try {
             dispatch(setIsLoading(true));
