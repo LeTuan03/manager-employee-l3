@@ -27,7 +27,6 @@ export default function Resume() {
     const dispatch = useDispatch();
     const { employee, listEmployee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
-    const [reasonForEnding, setReasonForEnding] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeKey, setActiveKey] = useState("1");
     const [threeInfo, setThreeInfo] = useState({
@@ -135,7 +134,6 @@ export default function Resume() {
                         className="cursor-pointer"
                         onClick={() => {
                             setProfile(user);
-                            setReasonForEnding(user?.reasonForEnding);
                             dispatch(getEmployee(user.id));
                             setIsModalOpen(true);
                         }}
@@ -210,12 +208,7 @@ export default function Resume() {
                             {
                                 key: "1",
                                 label: `ĐƠN XIN NGHỈ VIỆC`,
-                                children: (
-                                    <QuitJob
-                                        reasonForEnding={reasonForEnding}
-                                        setReasonForEnding={setReasonForEnding}
-                                    />
-                                ),
+                                children: <QuitJob />,
                             },
                         ]}
                     />

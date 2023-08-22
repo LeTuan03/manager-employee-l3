@@ -115,10 +115,10 @@ const ModalProfile = () => {
                                         </span>{" "}
                                         - Ngày lưu:{" "}
                                         <span className="font-normal">
-                                            {employee?.submitDay &&
+                                            {employee?.decisionDay &&
                                                 format(
                                                     new Date(
-                                                        employee?.submitDay
+                                                        employee?.decisionDay
                                                     ),
                                                     "dd/MM/yyyy"
                                                 )}

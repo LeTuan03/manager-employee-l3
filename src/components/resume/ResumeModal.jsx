@@ -43,6 +43,12 @@ export default function ResumeModal(props) {
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi xảy ra!");
     };
+    const actionCleanup = (form, setOpenType) => {
+        form.resetFields();
+        setIsOpen(false);
+        setOpenType(false);
+        dispatch(setIsLoading(false));
+    };
     const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
@@ -116,10 +122,7 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            setIsApproveOpen(false);
-            setIsOpen(false);
-            formAccept.resetFields();
-            dispatch(setIsLoading(false));
+            actionCleanup(formAccept, setIsApproveOpen);
         } catch (error) {
             handleShowError(error);
         }
@@ -178,10 +181,7 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            setIsAdditionalRequestOpen(false);
-            setIsOpen(false);
-            formAdditional.resetFields();
-            dispatch(setIsLoading(false));
+            actionCleanup(formAdditional, setIsAdditionalRequestOpen);
         } catch (error) {
             handleShowError(error);
         }
@@ -237,10 +237,7 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            setIsOpen(false);
-            setIsRejectOpen(false);
-            formReject.resetFields();
-            dispatch(setIsLoading(false));
+            actionCleanup(formReject, setIsRejectOpen);
         } catch (error) {
             handleShowError(error);
         }

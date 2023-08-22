@@ -34,12 +34,11 @@ export default function SaveResume() {
             dispatch(setIsLoading(true));
             const updatedProfile = {
                 ...profile,
-                decisionDay: values.decisionDay,
-                numberSaved: values.numberSaved,
-                submitProfileStatus: STATUS_EMPLOYEE.SUBMIT_FILE_SAVE,
+                ...values,
             };
             await submitAndSaveResume(updatedProfile);
             message.success("Nộp lưu hồ sơ thành công!");
+            form.resetFields();
             dispatch(
                 setOpen({
                     ...open,
@@ -47,7 +46,6 @@ export default function SaveResume() {
                     modalProfile: false,
                 })
             );
-            form.resetFields();
             dispatch(
                 getAllEmployee({
                     status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
@@ -69,14 +67,10 @@ export default function SaveResume() {
                 "\\$&"
             );
             const regexPattern = new RegExp("^" + escapedRegexString + "$");
-            const testString = `NL${
-                new Date().getMonth() + 1 < 10
-                    ? "0" + (new Date().getMonth() + 1)
-                    : new Date().getMonth() + 1
-            }${new Date()
-                .getFullYear()
-                .toString()
-                .slice(-2)}/${profile?.code?.slice(-3)}`;
+            const testString = `NL${format(new Date(), "MM")}${format(
+                new Date(),
+                "yy"
+            )}/${profile?.code?.slice(-3)}`;
             if (regexPattern.test(testString)) {
                 return Promise.resolve();
             } else {
@@ -108,11 +102,12 @@ export default function SaveResume() {
                 initialValues={{
                     remember: true,
                     decisionDay: format(new Date(), "yyyy-MM-dd"),
+                    submitProfileStatus: STATUS_EMPLOYEE.SUBMIT_FILE_SAVE,
                 }}
                 form={form}
             >
                 <Form.Item name="submitProfileStatus" className="hidden">
-                    <Input value={"STATUS_EMPLOYEE.SUBMIT_FILE_SAVE"} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     label="Ngày quyết định"

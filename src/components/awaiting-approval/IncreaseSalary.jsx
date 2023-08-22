@@ -22,10 +22,15 @@ export default function IncreaseSalary() {
     const [dataSalary, setDataSalary] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const getCurrentEmpIncreaseSalary = async () => {
-        dispatch(setIsLoading(true));
-        const res = await getSalaryIncreaseByCurrentLeader();
-        setDataSalary(res?.data?.data);
-        dispatch(setIsLoading(false));
+        try {
+            dispatch(setIsLoading(true));
+            const res = await getSalaryIncreaseByCurrentLeader();
+            setDataSalary(res?.data?.data);
+            dispatch(setIsLoading(false));
+        } catch (error) {
+            console.error(error);
+            dispatch(setIsLoading(false));
+        }
     };
     useEffect(() => {
         getCurrentEmpIncreaseSalary();

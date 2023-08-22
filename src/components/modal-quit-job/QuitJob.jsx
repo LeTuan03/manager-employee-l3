@@ -73,7 +73,10 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                         className="!pt-[11px] !pl-0"
                                         bordered={false}
                                         autoSize={{ minRows: 1 }}
-                                        value={reasonForEnding}
+                                        value={
+                                            reasonForEnding ||
+                                            employee.reasonForEnding
+                                        }
                                         maxLength={240}
                                         onChange={(e) => {
                                             setReasonForEnding(e.target.value);
