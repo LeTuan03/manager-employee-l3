@@ -74,8 +74,9 @@ const QuitJob = ({ reasonForEnding, setReasonForEnding }) => {
                                         bordered={false}
                                         autoSize={{ minRows: 1 }}
                                         value={
-                                            reasonForEnding ||
-                                            employee.reasonForEnding
+                                            role === ROLE.MANAGE
+                                                ? employee.reasonForEnding
+                                                : reasonForEnding
                                         }
                                         maxLength={240}
                                         onChange={(e) => {
