@@ -20,7 +20,10 @@ import TextToTruncate from "../common/TextToTruncate";
 
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
-import { STATUS_EMPLOYEE_NUMBER } from "../../constants/constants";
+import {
+    STATUS_EMPLOYEE_NUMBER,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 import { validateCodeInput } from "../common/Validate";
 
 const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
@@ -50,7 +53,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
             await deleteSalary(employeeIdToDelete);
             message.success("Xóa thành công!");
             formSalary.resetFields();
-            setEmployeeIdToDelete(null);
+            setEmployeeIdToDelete(null)
             handleGetSalaryByEmp();
             dispatch(setIsLoading(false));
         } catch (error) {
@@ -364,6 +367,7 @@ const TabIncreaseSalary = ({ salary, handleGetSalaryByEmp, formSalary }) => {
                 </Col>
             </Row>
             <FormUpdateHappening
+                type={TYPE_UPDATEHAPPENING.SALARY}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

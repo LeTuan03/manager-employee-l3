@@ -12,7 +12,7 @@ import TabRecommendation from "../proposal/TabRecommendation";
 import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import TeamStatus from "../common/TeamStatus";
-import { ACTIVE_KEY } from "../../constants/constants";
+import { TABS } from "../../constants/constants";
 
 export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ export default function UpdateHappeningModal() {
     const [salary, setSalary] = useState([]);
     const [processs, setProcesss] = useState([]);
     const [recoments, setRecoments] = useState([]);
-    const [activeKey, setActiveKey] = useState(ACTIVE_KEY);
+    const [activeKey, setActiveKey] = useState(TABS.UPDATEHAPPENING.CODE);
     const handleGetSalaryByEmp = async () => {
         try {
             const res = await getSalaryByEmp(employee?.id);
@@ -50,7 +50,7 @@ export default function UpdateHappeningModal() {
     };
     const items = [
         {
-            key: ACTIVE_KEY,
+            key: TABS.UPDATEHAPPENING.CODE,
             label: `TĂNG LƯƠNG`,
             children: (
                 <TabIncreaseSalary
@@ -83,13 +83,11 @@ export default function UpdateHappeningModal() {
             ),
         },
     ];
-
     useEffect(() => {
         handleGetSalaryByEmp();
         handleGetProcessByEmp();
         handleGetRecomentByEmp();
     }, [employee.id]);
-
     return (
         <Modal
             className="!h-screen relative happening !w-[84%] max-lg:!w-[100%]"
@@ -104,7 +102,7 @@ export default function UpdateHappeningModal() {
             onCancel={() => {
                 dispatch(setOpen({ ...open, modalUpdateHappening: false }));
                 dispatch(resetEmployee());
-                setActiveKey(ACTIVE_KEY);
+                setActiveKey(TABS.UPDATEHAPPENING.CODE);
             }}
             footer={
                 <div className="text-center bg-white fixed bottom-0 !w-[82%] max-lg:!w-[92%] max-sm:!w-[90%] py-5">
@@ -157,7 +155,7 @@ export default function UpdateHappeningModal() {
                     >
                         <Image width={200} height={200} src={employee.image} />
                         <h1>{employee.name}</h1>
-                        <b>{TeamStatus(employee.team)}</b>
+                        {TeamStatus(employee.team)}
                     </Col>
                     <Col lg={16} sm={24} xs={24}>
                         <Card

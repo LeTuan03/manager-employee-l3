@@ -48,6 +48,11 @@ export const ROLE = {
     MANAGE: 5,
 };
 
+export const TYPE_UPDATEHAPPENING = {
+    SALARY: "SALARY",
+    PROCESS: "PROCESS",
+    RECOMMEND: "RECOMMEND",
+};
 export const TYPE_WAITING = {
     PROPOSE: "PROPOSE",
     PROMOTE: "PROMOTE",
@@ -59,7 +64,28 @@ export const POSITION = {
     LEADER: 2,
 };
 export const TYPE_PROCESS = 2;
-export const ACTIVE_KEY = "1";
+export const TABS = {
+    RESUME: {
+        NAME: "RESUME",
+        CODE: "1",
+    },
+    UPDATEHAPPENING: {
+        NAME: "UPDATEHAPPENING",
+        CODE: "1",
+    },
+    AWAITINGAPPROVAL: {
+        NAME: "AWAITINGAPPROVAL",
+        CODE: "1",
+    },
+    MODALINPUT: {
+        NAME: "MODALINPUT",
+        CODE: "1",
+    },
+    MODALPROFILE: {
+        NAME: "MODALPROFILE",
+        CODE: "1",
+    },
+};
 export const REGEX = {
     NAME: /^(?!.* {2})[^\d!@#$%^&*()+.=_-]{2,}$/g,
     CITIZEN_IDENTIFICATION_NUMBER: /^(?:\d{9}|\d{12})$/,

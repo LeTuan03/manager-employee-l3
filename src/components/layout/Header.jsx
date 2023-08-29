@@ -56,7 +56,7 @@ const Header = () => {
             <div className="flex justify-between items-center mr-4">
                 <div></div>
                 <div>
-                    <strong className="font-mono leading-3">
+                    <strong className="leading-3">
                         {renderGreetingText()}
                     </strong>
                     <Dropdown

@@ -79,13 +79,13 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
         }
     };
     const showFailed = (error) => {
-        console.log(error);
+        console.error(error);
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
     const onFinishFailed = (errorInfo) => {
         setActiveKey("1");
-        console.log("Failed:", errorInfo);
+        console.error("Failed:", errorInfo);
     };
     const handleCreateEmployee = async (data) => {
         try {
@@ -132,7 +132,8 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
         if (res) {
             onSuccess("ok");
             setUrlAvatar(
-                `${import.meta.env.VITE_BACKEND_URL}/public/image/${res?.data?.name
+                `${import.meta.env.VITE_BACKEND_URL}/public/image/${
+                    res?.data?.name
                 }`
             );
         } else {
@@ -198,8 +199,6 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
         };
     }, [employee]);
 
-
-
     return (
         <>
             <Form
@@ -261,9 +260,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        options={OPTION_GENDER}
-                                    />
+                                    <Select options={OPTION_GENDER} />
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -323,8 +320,10 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                                 "Vui lòng nhập số CCCD/CMT!",
                                         },
                                         {
-                                            pattern: REGEX.CITIZEN_IDENTIFICATION_NUMBER,
-                                            message:MESSAGE_ERROR.CITIZEN_IDENTIFICATION_NUMBER,
+                                            pattern:
+                                                REGEX.CITIZEN_IDENTIFICATION_NUMBER,
+                                            message:
+                                                MESSAGE_ERROR.CITIZEN_IDENTIFICATION_NUMBER,
                                         },
                                     ]}
                                 >
@@ -411,9 +410,7 @@ const FormEmployee = ({ form, family, certificate, setActiveKey }) => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        options={OPTION_TEAM}
-                                    />
+                                    <Select options={OPTION_TEAM} />
                                 </Form.Item>
                             </Col>
                         </Row>

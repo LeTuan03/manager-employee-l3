@@ -96,7 +96,7 @@ const SendLeader = ({ reasonForEnding, setReasonForEnding }) => {
             }
             dispatch(setIsLoading(false));
         } catch (error) {
-            console.log(error);
+            console.error(error);
             message.error("Đã có lỗi xảy ra!");
             dispatch(setIsLoading(false));
         }

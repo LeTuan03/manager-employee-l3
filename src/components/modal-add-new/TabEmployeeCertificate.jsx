@@ -51,10 +51,10 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
 
     const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+        console.error("Failed:", errorInfo);
     };
     const showFailded = (error) => {
-        console.log(error);
+        console.error(error);
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
@@ -86,8 +86,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
     };
 
     const handleUpdateCertificate = async (data) => {
-        const cloneCertificate = _.cloneDeep(certificate);
-        const index = cloneCertificate.findIndex((item) => item.uid === id);
+        const index = certificate.findIndex((item) => item.uid === id);
         if (index === -1) {
             try {
                 dispatch(setIsLoading(true));
@@ -105,6 +104,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 showFailded(error);
             }
         } else {
+            const cloneCertificate = [...certificate];
             cloneCertificate[index] = data;
             setCertificate(cloneCertificate);
             setId(null);
@@ -133,7 +133,9 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                 showFailded(error);
             }
         } else {
-            const newList = certificate.filter((item) => item.uid !== uidDelete);
+            const newList = certificate.filter(
+                (item) => item.uid !== uidDelete
+            );
             setCertificate(newList);
             if (uidDelete === id) {
                 setId(null);
@@ -142,7 +144,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
             setUidDelete(null);
             message.success("Xóa thành công văn bằng");
         }
-    }
+    };
 
     const handleGetCertificateById = async () => {
         try {
@@ -274,7 +276,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern:REGEX.NAME_CERTIFICATE,
+                                    pattern: REGEX.NAME_CERTIFICATE,
                                     message: "Tên sai định dạng",
                                 },
                             ]}
@@ -306,7 +308,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                     message: "Bạn cần nhập trường này",
                                 },
                                 {
-                                    pattern:REGEX.FIELD,
+                                    pattern: REGEX.FIELD,
                                     message: "Sai định dạng",
                                 },
                             ]}
@@ -327,7 +329,7 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                                 },
                                 {
                                     pattern: REGEX.DELETE_SPACE,
-                                    message:MESSAGE_ERROR.DELETE_SPACE,
+                                    message: MESSAGE_ERROR.DELETE_SPACE,
                                 },
                             ]}
                         >
@@ -377,11 +379,13 @@ const TabEmployeeCertificate = ({ setCertificate, certificate }) => {
                     />
                 </div>
             </ConfigProvider>
-            {openDelete&&<ModalDelete
-                handleDelete={handleDelete}
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-            ></ModalDelete>}
+            {openDelete && (
+                <ModalDelete
+                    handleDelete={handleDelete}
+                    openDelete={openDelete}
+                    setOpenDelete={setOpenDelete}
+                ></ModalDelete>
+            )}
         </>
     );
 };

@@ -6,10 +6,10 @@ import { EyeOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import QuitJob from "../modal-quit-job/QuitJob";
 import {
-    ACTIVE_KEY,
     GENDER,
     STATUS_EMPLOYEE,
     TABLE_PAGINATION,
+    TABS,
     TYPE_WAITING,
 } from "../../constants/constants";
 import {
@@ -27,6 +27,7 @@ export default function Resume() {
     const dispatch = useDispatch();
     const { employee, listEmployee } = useSelector((state) => state.employee);
     const [profile, setProfile] = useState({});
+    const [reasonForEnding, setReasonForEnding] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeKey, setActiveKey] = useState("1");
     const [threeInfo, setThreeInfo] = useState({
@@ -134,6 +135,7 @@ export default function Resume() {
                         className="cursor-pointer"
                         onClick={() => {
                             setProfile(user);
+                            setReasonForEnding(user?.reasonForEnding);
                             dispatch(getEmployee(user.id));
                             setIsModalOpen(true);
                         }}
@@ -175,7 +177,7 @@ export default function Resume() {
                 onOk={() => setIsModalOpen(false)}
                 onCancel={() => {
                     setIsModalOpen(false);
-                    setActiveKey(ACTIVE_KEY);
+                    setActiveKey(TABS.RESUME.CODE);
                 }}
                 width={1300}
                 centered
@@ -193,7 +195,7 @@ export default function Resume() {
                             danger
                             onClick={() => {
                                 setIsModalOpen(false);
-                                setActiveKey(ACTIVE_KEY);
+                                setActiveKey(TABS.RESUME.CODE);
                             }}
                         >
                             Hủy
@@ -208,7 +210,12 @@ export default function Resume() {
                             {
                                 key: "1",
                                 label: `ĐƠN XIN NGHỈ VIỆC`,
-                                children: <QuitJob />,
+                                children: (
+                                    <QuitJob
+                                        reasonForEnding={reasonForEnding}
+                                        setReasonForEnding={setReasonForEnding}
+                                    />
+                                ),
                             },
                         ]}
                     />

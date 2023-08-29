@@ -20,7 +20,11 @@ import {
 import ModalInfo from "../modal-update-happening/ModalInfo";
 import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../ModalDelete";
-import { OPTION_POSITION, STATUS_EMPLOYEE } from "../../constants/constants";
+import {
+    OPTION_POSITION,
+    STATUS_EMPLOYEE,
+    TYPE_UPDATEHAPPENING,
+} from "../../constants/constants";
 import StringStatus from "../common/StringStatus";
 import ProcesPosition from "../common/ProcessPosition";
 import FormUpdateHappening from "../update-happening/FormUpdateHappening";
@@ -52,7 +56,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
             message.success("Xóa thành công !");
             await handleGetProcessByEmp();
             formProcess.resetFields();
-            setEmployeeIdToDelete(null);
+            setEmployeeIdToDelete(null)
             dispatch(setIsLoading(false));
         } catch (error) {
             message.error("Xóa thất bại !");
@@ -321,6 +325,7 @@ const TabProcess = ({ processs, handleGetProcessByEmp, formProcess }) => {
                 </Col>
             </Row>
             <FormUpdateHappening
+                type={TYPE_UPDATEHAPPENING.PROCESS}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

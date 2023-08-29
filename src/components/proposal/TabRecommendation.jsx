@@ -28,6 +28,7 @@ import { setIsLoading } from "../../redux/employee/employeeSlice";
 import {
     OPTION_PROPOSE,
     STATUS_EMPLOYEE_NUMBER,
+    TYPE_UPDATEHAPPENING,
 } from "../../constants/constants";
 import { validateCodeInput } from "../common/Validate";
 
@@ -62,7 +63,7 @@ const TabRecommendation = ({
             await deleteProposal(employeeIdToDelete);
             message.success("Xóa thành công!");
             formRecoment.resetFields();
-            setEmployeeIdToDelete(null);
+            setEmployeeIdToDelete(null)
             await handleGetRecomentByEmp();
             dispatch(setIsLoading(false));
         } catch (error) {
@@ -351,6 +352,7 @@ const TabRecommendation = ({
                 </Col>
             </Row>
             <FormUpdateHappening
+                type={TYPE_UPDATEHAPPENING.RECOMMEND}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 data={data}

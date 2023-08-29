@@ -4,7 +4,6 @@ import IncreaseSalary from "../../components/awaiting-approval/IncreaseSalary";
 import Promote from "../../components/awaiting-approval/Promote";
 import Propose from "../../components/awaiting-approval/Propose";
 import Resume from "../../components/awaiting-approval/Resume";
-import { ACTIVE_KEY } from "../../constants/constants";
 
 export default function AwaitingApproval() {
     const items = [
@@ -29,5 +28,5 @@ export default function AwaitingApproval() {
             children: <Propose />,
         },
     ];
-    return <Tabs defaultActiveKey={ACTIVE_KEY} items={items} />;
+    return <Tabs items={items} />;
 }

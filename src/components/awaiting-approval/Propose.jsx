@@ -10,11 +10,7 @@ import NumberStatus from "../common/NumberStatus";
 import STT from "../common/STT";
 import TextToTruncate from "../common/TextToTruncate";
 import { getEmployee, setIsLoading } from "../../redux/employee/employeeSlice";
-import {
-    ACTIVE_KEY,
-    TABLE_PAGINATION,
-    TYPE_WAITING,
-} from "../../constants/constants";
+import { TABLE_PAGINATION, TYPE_WAITING } from "../../constants/constants";
 
 export default function Propose() {
     const dispatch = useDispatch();
@@ -174,7 +170,6 @@ export default function Propose() {
                 <Tabs
                     style={{ height: 600, overflowY: "scroll" }}
                     tabPosition="left"
-                    defaultActiveKey={ACTIVE_KEY}
                     items={[
                         {
                             key: "1",

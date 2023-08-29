@@ -81,7 +81,7 @@ const SendLeaderUpdateHappening = (props) => {
             }
             message.success(successMgs);
         } catch (error) {
-            console.log(error);
+            console.error(error);
             message.error("Trình lãnh đạo thất bại!");
         }
     };

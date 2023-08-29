@@ -29,7 +29,7 @@ export const itemAdmin = [
         <AppstoreOutlined />,
         [
             getItem(
-                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+                <Link to={"/manage_employee"}>Quản lý nhân viên</Link>,
                 "5"
             ),
             getItem(<Link to={"/release"}>Kết thúc</Link>, "6"),
@@ -42,7 +42,7 @@ export const itemAdmin = [
 ];
 export const itemUser = [
     getItem(
-        "Quản lí",
+        "Quản lý",
 
         "sub1",
         <AppstoreOutlined />,
@@ -53,7 +53,7 @@ export const itemUser = [
                 <PlusSquareOutlined />
             ),
             getItem(
-                <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+                <Link to={"/manage_employee"}>Quản lý nhân viên</Link>,
                 "2",
                 <UsergroupDeleteOutlined />
             ),
@@ -66,9 +66,9 @@ export const itemUser = [
     ),
 ];
 export const itemManage = [
-    getItem("Quản lí", "sub4", <AppstoreOutlined />, [
+    getItem("Quản lý", "sub4", <AppstoreOutlined />, [
         getItem(
-            <Link to={"/manage_employee"}>Quản lí nhân viên</Link>,
+            <Link to={"/manage_employee"}>Quản lý nhân viên</Link>,
             "13",
             <UsergroupDeleteOutlined />
         ),

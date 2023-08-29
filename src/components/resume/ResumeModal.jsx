@@ -43,12 +43,6 @@ export default function ResumeModal(props) {
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi xảy ra!");
     };
-    const actionCleanup = (form, setOpenType) => {
-        form.resetFields();
-        setIsOpen(false);
-        setOpenType(false);
-        dispatch(setIsLoading(false));
-    };
     const handleActionSuccess = async (type) => {
         message.success("Cập nhật thông tin nhân viên thành công!");
         switch (type) {
@@ -73,7 +67,6 @@ export default function ResumeModal(props) {
         }
     };
 
-    //the act of accepting approval of an employee or registration form
     const onFinish = async (value) => {
         try {
             dispatch(setIsLoading(true));
@@ -123,13 +116,15 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            actionCleanup(formAccept, setIsApproveOpen);
+            setIsApproveOpen(false);
+            setIsOpen(false);
+            formAccept.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
         }
     };
 
-    //the act of requesting additional records of an employee or registration form
     const onFinishAdditional = async (value) => {
         try {
             dispatch(setIsLoading(true));
@@ -183,13 +178,15 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            actionCleanup(formAdditional, setIsAdditionalRequestOpen);
+            setIsAdditionalRequestOpen(false);
+            setIsOpen(false);
+            formAdditional.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
         }
     };
 
-    //the act of rejecting of an employee or registration form
     const onFinishReject = async (value) => {
         try {
             dispatch(setIsLoading(true));
@@ -240,7 +237,10 @@ export default function ResumeModal(props) {
                 default:
                     break;
             }
-            actionCleanup(formReject, setIsRejectOpen);
+            setIsOpen(false);
+            setIsRejectOpen(false);
+            formReject.resetFields();
+            dispatch(setIsLoading(false));
         } catch (error) {
             handleShowError(error);
         }

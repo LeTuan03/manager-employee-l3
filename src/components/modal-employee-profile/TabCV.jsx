@@ -169,14 +169,9 @@ const TabCV = () => {
     ];
     return (
         <>
-            <div
-                className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font"
-                style={{
-                    fontFamily: "Tinos",
-                }}
-            >
-                <div className=" min-h-[720px] p-[6%_10%] bg-white">
-                    <div className="flex">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
+                <div className="min-h-[720px] p-[6%_10%] bg-white">
+                    <div className="flex mb-10">
                         <Avatar
                             className="cursor-pointer"
                             src={employee?.image}
@@ -198,7 +193,7 @@ const TabCV = () => {
                         </div>
                     </div>
                     <div>
-                        <h4 className="mt-10 mb-5">I. THÔNG TIN BẢN THÂN</h4>
+                        <h4 className="mb-[11px]">I. THÔNG TIN BẢN THÂN</h4>
                         <Row>
                             {dataRows.map((row) => (
                                 <DataRow
@@ -209,8 +204,8 @@ const TabCV = () => {
                                 />
                             ))}
                         </Row>
-                        <h4 className="mt-10 mb-5">II. QUAN HỆ GIA ĐÌNH</h4>
-                        <i className="block mb-4">
+                        <h4 className="mt-5 mb-[11px]">II. QUAN HỆ GIA ĐÌNH</h4>
+                        <i className="block mb-[14px] !text-[14px]">
                             (Ghi rõ họ tên, ngày sinh, quan hệ, số điện thoại,
                             số căn cước công dân (chứng minh thư nhân dân) của
                             bố mẹ đẻ, anh chị em ruột, vợ (hoặc chồng), con)
@@ -226,8 +221,8 @@ const TabCV = () => {
                                 />
                             </ConfigProvider>
                         </div>
-                        <h4 className="text-center my-5">LỜI CAM ĐOAN</h4>
-                        <p className="text-left leading-6">
+                        <h4 className="text-center mt-4">LỜI CAM ĐOAN</h4>
+                        <p className="text-left leading-6 mb-5">
                             Tôi xin cam đoan bản khai sơ yếu lý lịch trên đúng
                             sự thật, nếu có điều gì không đúng tôi chịu trách
                             nhiệm trước pháp luật về lời khai của mình.
@@ -248,7 +243,7 @@ const TabCV = () => {
 export default TabCV;
 
 const DataRow = ({ label, value, span }) => (
-    <Col span={span} className=" pr-4 mb-3 flex">
+    <Col span={span} className=" pr-4 mb-[4px] flex">
         <span className="bg-white inline-flex items-center h-[25px]">
             {label}
         </span>

@@ -20,7 +20,7 @@ export default function SignIn() {
         }
     };
     const onFinishFailed = (errorInfo) => {
-        console.log(errorInfo);
+        console.error(errorInfo);
     };
     return (
         <div className="flex justify-center items-center h-screen bg-slate-900 text-white overflow-hidden">

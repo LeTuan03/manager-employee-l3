@@ -60,7 +60,7 @@ const TabProfile = ({
         }
     };
     const handleShowError = (error) => {
-        console.log(error);
+        console.error(error);
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi xảy ra!");
     };
@@ -171,10 +171,9 @@ const TabProfile = ({
         };
     }, [employee]);
 
-    
     return (
         <div>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
                 <div className=" bg-white flex flex-row min-h-[720px] p-[6%_10%] ">
                     <div className="basis-1/4 pr-10">
                         <Avatar
@@ -183,7 +182,7 @@ const TabProfile = ({
                             src={employee?.image}
                             size={200}
                         />
-                        <div className="leading-10">
+                        <div className="leading-8">
                             <div>
                                 <div className="flex mt-10 leading-4 my-3 break-all">
                                     <MailOutlined className="mr-3" />
@@ -215,11 +214,11 @@ const TabProfile = ({
                                     )}
                             </div>
                         </div>
-                        <h2 className="mt-5">KĨ NĂNG</h2>
+                        <h2 className="mt-5 !text-xl font-bold">KĨ NĂNG</h2>
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[7px] !px-0"
+                                    className="!pt-[10px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -247,11 +246,11 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h2 className="mt-5">HOẠT ĐỘNG</h2>
+                        <h2 className="mt-5 !text-xl font-bold">HOẠT ĐỘNG</h2>
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[7px] !px-0"
+                                    className="!pt-[10px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -285,29 +284,30 @@ const TabProfile = ({
                             style={{ borderLeft: "1px solid" }}
                         >
                             <div className="border-l-2">
-                                <h1>
-                                    {employee?.name &&
-                                        TextToTruncate(employee?.name, 25)}
+                                <h1 className="!text-4xl break-all">
+                                    {employee?.name}
                                 </h1>
-                                <div className="text-lg w-fit">
+                                <div className="text-lg w-fit mt-4">
                                     {TeamStatus(employee?.team)}
                                 </div>
                             </div>
                             <div className="border-l-2 mt-8">
                                 <div>
-                                    <h2 className="text-lg mb-3">HỌC VẤN</h2>
+                                    <h2 className="mb-5 !text-xl font-bold">
+                                        HỌC VẤN
+                                    </h2>
                                     <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
-                                        <span className="absolute top-0 left-[8px] text-3xl z-50">
-                                            <i>❝</i>
+                                        <span className="absolute top-1 left-[8px] z-50">
+                                            <i className="!text-3xl">❝</i>
                                         </span>
                                         <div className="relative pl-3">
                                             <TextArea
-                                                className="!pt-[8px] !px-0 !pr-4"
+                                                className="!pt-[10px] !px-0 !pr-4"
                                                 placeholder="Học vấn của bạn!"
                                                 spellCheck={false}
                                                 bordered={false}
                                                 maxLength={240}
-                                                autoSize={{ minRows: 1 }}
+                                                autoSize={{ minRows: 2 }}
                                                 readOnly={
                                                     ![
                                                         NEW_SAVE,
@@ -323,8 +323,8 @@ const TabProfile = ({
                                                 }}
                                                 value={threeInfo?.knowledge}
                                             />
-                                            <span className="absolute right-[8px] bottom-[-0.7em] text-3xl z-50">
-                                                <i>❞</i>
+                                            <span className="absolute right-[8px] bottom-[-1.5em] z-50">
+                                                <i className="!text-3xl">❞</i>
                                             </span>
                                         </div>
                                     </div>
@@ -340,8 +340,10 @@ const TabProfile = ({
                             className="pl-10"
                             style={{ borderLeft: "1px solid" }}
                         >
-                            <div className="border-l-2 flex justify-between items-center mt-6">
-                                <h2 className="my-5">KINH NGHIỆM LÀM VIỆC</h2>
+                            <div className="border-l-2 flex justify-between items-center mt-5">
+                                <h2 className="my-3 !text-xl font-bold">
+                                    KINH NGHIỆM LÀM VIỆC
+                                </h2>
                                 {[
                                     NEW_SAVE,
                                     REJECT,
@@ -369,7 +371,10 @@ const TabProfile = ({
                                             label="Ngày bắt đầu"
                                             rules={[
                                                 {
-                                                    validator: validateDate(values?.startDate,values?.endDate),
+                                                    validator: validateDate(
+                                                        values?.startDate,
+                                                        values?.endDate
+                                                    ),
                                                 },
                                             ]}
                                         >
@@ -382,7 +387,10 @@ const TabProfile = ({
                                             label="Ngày kết thúc"
                                             rules={[
                                                 {
-                                                    validator: validateDate(values?.startDate,values?.endDate),
+                                                    validator: validateDate(
+                                                        values?.startDate,
+                                                        values?.endDate
+                                                    ),
                                                 },
                                             ]}
                                         >
@@ -409,12 +417,12 @@ const TabProfile = ({
                                     <Col span={12}>
                                         <Form.Item
                                             name="companyAddress"
-                                            label="Địa chỉ công ty"
+                                            label="Chức vụ"
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Vui lòng nhập địa chỉ công ty!",
+                                                        "Vui lòng nhập chức vụ!",
                                                 },
                                             ]}
                                         >
@@ -468,11 +476,11 @@ const TabProfile = ({
                                 exp.map((item) => {
                                     return (
                                         <div
-                                            className="group mb-3 relative"
+                                            className="group mb-[6px] relative"
                                             key={item.id}
                                         >
                                             <div>
-                                                <div className="font-medium">
+                                                <div className="font-semibold">
                                                     <div className="flex items-center flex-wrap">
                                                         {item?.startDate &&
                                                             format(
@@ -491,15 +499,18 @@ const TabProfile = ({
                                                                 ),
                                                                 "dd/MM/yyy"
                                                             )}
-                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[10px] mx-3"></span>
+                                                        <span className="bg-[#000000e0] rounded-full w-[0.6em] h-[0.6em] text-[5px] mx-3"></span>
                                                         <span className="uppercase">
                                                             {item.companyName}{" "}
                                                         </span>
                                                     </div>
+                                                    <div className="uppercase mt-1 mb-[2px]">
+                                                        {item.companyAddress}
+                                                    </div>
                                                 </div>
                                                 <div className="relative custom-area ml-3">
                                                     <TextArea
-                                                        className="!pt-[8px] !px-0 !w-full"
+                                                        className="!pt-[10.1px] !px-0 !w-full"
                                                         value={
                                                             item.jobDescription
                                                         }
@@ -560,11 +571,13 @@ const TabProfile = ({
                                     );
                                 })}
                         </div>
-                        {openDelete&&<ModalDelete
-                            handleDelete={handleDeleteExp}
-                            openDelete={openDelete}
-                            setOpenDelete={setOpenDelete}
-                        ></ModalDelete>}
+                        {openDelete && (
+                            <ModalDelete
+                                handleDelete={handleDeleteExp}
+                                openDelete={openDelete}
+                                setOpenDelete={setOpenDelete}
+                            ></ModalDelete>
+                        )}
                     </div>
                 </div>
             </div>

@@ -5,13 +5,13 @@ import TabEmployeeFamily from "./TabEmployeeFamily";
 import TabEmployeeCertificate from "./TabEmployeeCertificate";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
-import { ACTIVE_KEY } from "../../constants/constants";
+import { TABS } from "../../constants/constants";
 const ModalInput = () => {
     const [form] = Form.useForm();
     const [certificate, setCertificate] = useState([]);
     const [family, setFamily] = useState([]);
     const dispatch = useDispatch();
-    const [activeKey, setActiveKey] = useState(ACTIVE_KEY);
+    const [activeKey, setActiveKey] = useState(TABS.MODALINPUT.CODE);
     const { open, employee } = useSelector((state) => state.employee);
     const items = [
         {
@@ -72,7 +72,7 @@ const ModalInput = () => {
                 width={1000}
                 onCancel={() => {
                     dispatch(setOpen({ ...open, modalInput: false }));
-                    setActiveKey(ACTIVE_KEY);
+                    setActiveKey(TABS.MODALINPUT.CODE);
                 }}
                 footer={
                     <div className="w-full flex justify-center gap-2 pb-5">
@@ -81,7 +81,7 @@ const ModalInput = () => {
                             type="primary"
                             onClick={() => {
                                 form.submit();
-                                setActiveKey(ACTIVE_KEY);
+                                setActiveKey(TABS.MODALINPUT.CODE);
                             }}
                         >
                             {employee?.id ? "Lưu" : "Thêm"}
@@ -104,7 +104,7 @@ const ModalInput = () => {
                                 dispatch(
                                     setOpen({ ...open, modalInput: false })
                                 );
-                                setActiveKey(ACTIVE_KEY);
+                                setActiveKey(TABS.MODALINPUT.CODE);
                             }}
                         >
                             Hủy

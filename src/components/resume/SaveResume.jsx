@@ -10,7 +10,6 @@ import {
     setOpen,
 } from "../../redux/employee/employeeSlice";
 import { STATUS_EMPLOYEE } from "../../constants/constants";
-import { validateNumberSaved } from "../common/Validate";
 export default function SaveResume() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
@@ -35,11 +34,12 @@ export default function SaveResume() {
             dispatch(setIsLoading(true));
             const updatedProfile = {
                 ...profile,
-                ...values,
+                decisionDay: values.decisionDay,
+                numberSaved: values.numberSaved,
+                submitProfileStatus: STATUS_EMPLOYEE.SUBMIT_FILE_SAVE,
             };
             await submitAndSaveResume(updatedProfile);
             message.success("Nộp lưu hồ sơ thành công!");
-            form.resetFields();
             dispatch(
                 setOpen({
                     ...open,
@@ -47,6 +47,7 @@ export default function SaveResume() {
                     modalProfile: false,
                 })
             );
+            form.resetFields();
             dispatch(
                 getAllEmployee({
                     status: `${STATUS_EMPLOYEE.SUBMIT_FILE_SAVE},${STATUS_EMPLOYEE.ACCEPT_REQUEST_END_PROFILE}`,
@@ -60,10 +61,35 @@ export default function SaveResume() {
         }
     };
 
-    const createValidator = () => (rule, value) => {
-        return validateNumberSaved(rule, value, profile);
+    const validateNumberSaved = (_, value) => {
+        if (value) {
+            const regexString = value;
+            const escapedRegexString = regexString.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            );
+            const regexPattern = new RegExp("^" + escapedRegexString + "$");
+            const testString = `NL${
+                new Date().getMonth() + 1 < 10
+                    ? "0" + (new Date().getMonth() + 1)
+                    : new Date().getMonth() + 1
+            }${new Date()
+                .getFullYear()
+                .toString()
+                .slice(-2)}/${profile?.code?.slice(-3)}`;
+            if (regexPattern.test(testString)) {
+                return Promise.resolve();
+            } else {
+                return Promise.reject(
+                    new Error(
+                        `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: ${testString}`
+                    )
+                );
+            }
+        } else {
+            return Promise.reject(new Error("Không được để trống trường này!"));
+        }
     };
-
     return (
         <Modal
             title="NỘP LƯU HỒ SƠ"
@@ -82,12 +108,11 @@ export default function SaveResume() {
                 initialValues={{
                     remember: true,
                     decisionDay: format(new Date(), "yyyy-MM-dd"),
-                    submitProfileStatus: STATUS_EMPLOYEE.SUBMIT_FILE_SAVE,
                 }}
                 form={form}
             >
                 <Form.Item name="submitProfileStatus" className="hidden">
-                    <Input />
+                    <Input value={"STATUS_EMPLOYEE.SUBMIT_FILE_SAVE"} />
                 </Form.Item>
                 <Form.Item
                     label="Ngày quyết định"
@@ -111,7 +136,7 @@ export default function SaveResume() {
                     name={"numberSaved"}
                     rules={[
                         {
-                            validator: createValidator(validateNumberSaved),
+                            validator: validateNumberSaved,
                         },
                     ]}
                 >
@@ -120,7 +145,6 @@ export default function SaveResume() {
                         autoSize={{
                             maxRows: 1,
                         }}
-                        spellCheck={false}
                     />
                 </Form.Item>
                 <Form.Item className="text-center mt-6">

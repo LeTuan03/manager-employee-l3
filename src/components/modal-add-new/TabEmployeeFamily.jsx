@@ -67,10 +67,10 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         }
     };
     const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+        console.error("Failed:", errorInfo);
     };
     const handleFailded = (error) => {
-        console.log(error);
+        console.error(error);
         dispatch(setIsLoading(false));
         message.error("Đã có lỗi!");
     };
@@ -154,8 +154,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
         }
     };
     const handleUpdateFamily = async (data) => {
-        const cloneFamily = _.cloneDeep(family);
-        const index = cloneFamily.findIndex((item) => item.uid === update);
+        const index = family.findIndex((item) => item.uid === update);
         if (index === -1) {
             try {
                 dispatch(setIsLoading(true));
@@ -173,6 +172,7 @@ const TabEmployeeFamily = ({ setFamily, family }) => {
                 handleFailded(error);
             }
         } else {
+            const cloneFamily = [...family];
             cloneFamily[index] = data;
             setFamily(cloneFamily);
             setUpdate(null);

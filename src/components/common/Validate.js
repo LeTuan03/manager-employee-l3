@@ -1,46 +1,53 @@
-import { format } from "date-fns";
+const getAgeDifference = (today, inputDate) => ({
+    ageDiff: today.getFullYear() - inputDate.getFullYear(),
+    monthDiff: today.getMonth() - inputDate.getMonth(),
+    dayDiff: today.getDate() - inputDate.getDate(),
+});
 
 export const validateAge = (maxAge, minAge) => {
     return (_, value) => {
-        if (value) {
-            const today = new Date();
-            const inputDate = new Date(value);
-            const ageDiff = today.getFullYear() - inputDate.getFullYear();
-            const monthDiff = today.getMonth() - inputDate.getMonth();
-            const dayDiff = today.getDate() - inputDate.getDate();
-            if (minAge) {
-                const isOverMinAge =
-                    ageDiff > minAge ||
-                    (ageDiff === minAge && monthDiff > 0) ||
-                    (ageDiff === minAge && monthDiff === 0 && dayDiff >= 0);
-                if (!isOverMinAge) {
-                    return Promise.reject(
-                        new Error(`Tuổi phải lớn hơn ${minAge}`)
-                    );
-                }
-            } else {
-                if (inputDate > today) {
-                    return Promise.reject(
-                        new Error("Yêu cầu chọn trước ngày hôm nay")
-                    );
-                }
-            }
-            if (maxAge) {
-                const isUnderMaxAge =
-                    ageDiff < maxAge ||
-                    (ageDiff === maxAge && monthDiff < 0) ||
-                    (ageDiff === maxAge && monthDiff === 0 && dayDiff < 0);
-                if (!isUnderMaxAge) {
-                    return Promise.reject(
-                        new Error(`Tuổi phải nhỏ hơn ${maxAge}`)
-                    );
-                }
-            }
-            return Promise.resolve();
-        } else {
+        if (!value) {
             return Promise.reject(new Error("Vui lòng nhập ngày"));
         }
+
+        const today = new Date();
+        const inputDate = new Date(value);
+
+        if (inputDate > today) {
+            return Promise.reject(new Error("Yêu cầu chọn trước ngày hôm nay"));
+        }
+
+        const { ageDiff, monthDiff, dayDiff } = getAgeDifference(
+            today,
+            inputDate
+        );
+
+        if (minAge && !isOverMinAge(ageDiff, monthDiff, dayDiff, minAge)) {
+            return Promise.reject(new Error(`Tuổi phải lớn hơn ${minAge}`));
+        }
+
+        if (maxAge && !isUnderMaxAge(ageDiff, monthDiff, dayDiff, maxAge)) {
+            return Promise.reject(new Error(`Tuổi phải nhỏ hơn ${maxAge}`));
+        }
+
+        return Promise.resolve();
     };
+};
+
+const isOverMinAge = (ageDiff, monthDiff, dayDiff, minAge) => {
+    return (
+        ageDiff > minAge ||
+        (ageDiff === minAge && monthDiff > 0) ||
+        (ageDiff === minAge && monthDiff === 0 && dayDiff >= 0)
+    );
+};
+
+const isUnderMaxAge = (ageDiff, monthDiff, dayDiff, maxAge) => {
+    return (
+        ageDiff < maxAge ||
+        (ageDiff === maxAge && monthDiff < 0) ||
+        (ageDiff === maxAge && monthDiff === 0 && dayDiff < 0)
+    );
 };
 
 export const validateDate = (start, end) => {
@@ -100,31 +107,5 @@ export const validateCodeInput = (_, value) => {
         }
     } else {
         return Promise.reject(new Error(`Không được để trống trường này!`));
-    }
-};
-
-export const validateNumberSaved = (_, value, profile) => {
-    if (value) {
-        const regexString = value;
-        const escapedRegexString = regexString.replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&"
-        );
-        const regexPattern = new RegExp("^" + escapedRegexString + "$");
-        const testString = `NL${format(new Date(), "MM")}${format(
-            new Date(),
-            "yy"
-        )}/${profile?.code?.slice(-3)}`;
-        if (regexPattern.test(testString)) {
-            return Promise.resolve();
-        } else {
-            return Promise.reject(
-                new Error(
-                    `Số lưu phải có định dạng NL-MM-YY-/-XXX ví dụ: ${testString}`
-                )
-            );
-        }
-    } else {
-        return Promise.reject(new Error("Không được để trống trường này!"));
     }
 };

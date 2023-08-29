@@ -4,7 +4,6 @@ import QuitJob from "./QuitJob";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../redux/employee/employeeSlice";
 import SendLeader from "../modal-send-leader/SendLeader";
-import { ACTIVE_KEY } from "../../constants/constants";
 
 const ModalEnd = () => {
     const dispatch = useDispatch();
@@ -69,7 +68,7 @@ const ModalEnd = () => {
                     </div>
                 }
             >
-                <Tabs tabPosition={"left"} defaultActiveKey={ACTIVE_KEY} items={items} />
+                <Tabs tabPosition={"left"} items={items} />
             </Modal>
             <SendLeader
                 reasonForEnding={reasonForEnding}

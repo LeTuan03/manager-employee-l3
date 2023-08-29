@@ -12,6 +12,7 @@
 
 .border-table {
     border: #515151 1px double !important;
+    font-weight: 500 !important;
 }
 
 th {
@@ -61,10 +62,7 @@ tr.ant-table-row:last-child > td {
     color: white !important;
     background-color: #1677ff !important;
 }
-.font-mono {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-}
+
 .font {
     font-family: "Tinos", sans-serif;
 }
@@ -106,11 +104,11 @@ tr.ant-table-row:last-child > td {
 }
 
 .custom-area textarea {
-    line-height: 2.25em !important;
+    line-height: 2.1em !important;
     background-color: transparent !important;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 6 6"><circle cx="3" cy="3" r="1" fill="rgb(0, 0, 0)" /></svg>') !important;
     background-position: 0 1em !important;
-    background-size: 3px 2.25em !important;
+    background-size: 3px 2.1em !important;
     overflow: hidden !important;
 }
 
