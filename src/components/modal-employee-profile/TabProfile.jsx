@@ -214,7 +214,7 @@ const TabProfile = ({
                                     )}
                             </div>
                         </div>
-                        <h2 className="mt-5 !text-xl font-bold">KĨ NĂNG</h2>
+                        <h4 className="mt-5">KĨ NĂNG</h4>
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
@@ -246,7 +246,7 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h2 className="mt-5 !text-xl font-bold">HOẠT ĐỘNG</h2>
+                        <h4 className="mt-5">HOẠT ĐỘNG</h4>
                         <Col className="pr-4 mb-3">
                             <div className="custom-area relative">
                                 <TextArea
@@ -284,18 +284,16 @@ const TabProfile = ({
                             style={{ borderLeft: "1px solid" }}
                         >
                             <div className="border-l-2">
-                                <h1 className="!text-4xl break-all">
+                                <h2 className="!text-3xl break-all">
                                     {employee?.name}
-                                </h1>
+                                </h2>
                                 <div className="text-lg w-fit mt-4">
                                     {TeamStatus(employee?.team)}
                                 </div>
                             </div>
                             <div className="border-l-2 mt-8">
                                 <div>
-                                    <h2 className="mb-5 !text-xl font-bold">
-                                        HỌC VẤN
-                                    </h2>
+                                    <h4 className="mb-5">HỌC VẤN</h4>
                                     <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
                                         <span className="absolute top-1 left-[8px] z-50">
                                             <i className="!text-3xl">❝</i>
@@ -341,9 +339,7 @@ const TabProfile = ({
                             style={{ borderLeft: "1px solid" }}
                         >
                             <div className="border-l-2 flex justify-between items-center mt-5">
-                                <h2 className="my-3 !text-xl font-bold">
-                                    KINH NGHIỆM LÀM VIỆC
-                                </h2>
+                                <h4 className="my-3">KINH NGHIỆM LÀM VIỆC</h4>
                                 {[
                                     NEW_SAVE,
                                     REJECT,
@@ -480,8 +476,8 @@ const TabProfile = ({
                                             key={item.id}
                                         >
                                             <div>
-                                                <div className="font-semibold">
-                                                    <div className="flex items-center flex-wrap">
+                                                <div className="">
+                                                    <div className="flex items-center flex-wrap font-[500]">
                                                         {item?.startDate &&
                                                             format(
                                                                 new Date(
@@ -499,7 +495,7 @@ const TabProfile = ({
                                                                 ),
                                                                 "dd/MM/yyy"
                                                             )}
-                                                        <span className="bg-[#000000e0] rounded-full w-[0.6em] h-[0.6em] text-[5px] mx-3"></span>
+                                                        <span className="bg-[#000000e0] rounded-full w-[0.5em] h-[0.5em] text-[5px] mx-3"></span>
                                                         <span className="uppercase">
                                                             {item.companyName}{" "}
                                                         </span>

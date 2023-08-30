@@ -56,7 +56,13 @@ const Header = () => {
             <div className="flex justify-between items-center mr-4">
                 <div></div>
                 <div>
-                    <strong className="leading-3">
+                    <strong
+                        className="leading-3"
+                        style={{
+                            fontFamily: "Phudu, cursive",
+                            letterSpacing: 2,
+                        }}
+                    >
                         {renderGreetingText()}
                     </strong>
                     <Dropdown

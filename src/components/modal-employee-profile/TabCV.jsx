@@ -222,7 +222,7 @@ const TabCV = () => {
                             </ConfigProvider>
                         </div>
                         <h4 className="text-center mt-4">LỜI CAM ĐOAN</h4>
-                        <p className="text-left leading-6 mb-5">
+                        <p className="text-left leading-6 mb-8">
                             Tôi xin cam đoan bản khai sơ yếu lý lịch trên đúng
                             sự thật, nếu có điều gì không đúng tôi chịu trách
                             nhiệm trước pháp luật về lời khai của mình.

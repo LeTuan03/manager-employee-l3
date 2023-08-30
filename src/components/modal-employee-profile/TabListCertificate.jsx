@@ -66,7 +66,7 @@ const TabListCertificate = () => {
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
                 <div className=" bg-white flex flex-row p-[6%_10%] ">
                     <div className="w-full">
-                        <h1 className="text-lg mb-10">Danh sách văn bằng</h1>
+                        <h4 className="mb-5">DANH SÁCH VĂN BẰNG</h4>
                         <ConfigProvider renderEmpty={() => <></>}>
                             <Table
                                 className="w-full"
