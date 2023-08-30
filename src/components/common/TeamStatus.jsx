@@ -27,3 +27,23 @@ const TeamStatus = (status) => {
 };
 
 export default TeamStatus;
+
+export const TeamStatusProfile = (status) => {
+    let is;
+    switch (status) {
+        case TEAM.BE:
+            is = "Back-end";
+            break;
+        case TEAM.FE:
+            is = "Front-end";
+            break;
+        default:
+            is = "Tester";
+            break;
+    }
+    return (
+        <div>
+            <h1 className="w-full text-center !uppercase">{is}</h1>
+        </div>
+    );
+};

@@ -103,6 +103,9 @@ tr.ant-table-row:last-child > td {
     padding: 4px 24px 1px 24px !important;
 }
 
+.border-l-profile {
+    border-left: 1px solid;
+}
 .custom-area textarea {
     line-height: 2.1em !important;
     background-color: transparent !important;

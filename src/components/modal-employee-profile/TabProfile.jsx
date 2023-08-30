@@ -17,8 +17,7 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, STATUS_EMPLOYEE } from "../../constants/constants";
 import ModalDelete from "../ModalDelete";
-import TeamStatus from "../common/TeamStatus";
-import TextToTruncate from "../common/TextToTruncate";
+import { TeamStatusProfile } from "../common/TeamStatus";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import Gender from "../common/Gender";
 import { validateDate } from "../common/Validate";
@@ -71,19 +70,19 @@ const TabProfile = ({
                 case "knowledge":
                     setErrorThreeInfo({
                         ...errorThreeInfo,
-                        [e.target.name]: `Vui lòng nhập học vấn của bạn`,
+                        [e.target.name]: `Vui lòng nhập mục tiêu của bạn!`,
                     });
                     break;
                 case "skill":
                     setErrorThreeInfo({
                         ...errorThreeInfo,
-                        [e.target.name]: `Vui lòng nhập kĩ năng của bạn`,
+                        [e.target.name]: `Vui lòng nhập kĩ năng của bạn!`,
                     });
                     break;
                 case "activity":
                     setErrorThreeInfo({
                         ...errorThreeInfo,
-                        [e.target.name]: `Vui lòng nhập hoạt động của bạn`,
+                        [e.target.name]: `Vui lòng nhập hoạt động của bạn!`,
                     });
                     break;
                 default:
@@ -174,8 +173,8 @@ const TabProfile = ({
     return (
         <div>
             <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
-                <div className=" bg-white flex flex-row min-h-[720px] p-[6%_10%] ">
-                    <div className="basis-1/4 pr-10">
+                <div className=" bg-white flex flex-row min-h-[720px] p-[6%_3%] ">
+                    <div className="basis-1/4">
                         <Avatar
                             width={200}
                             height={200}
@@ -278,22 +277,21 @@ const TabProfile = ({
                             </div>
                         </Col>
                     </div>
-                    <div className="basis-3/4 ">
-                        <div
-                            className="pl-10"
-                            style={{ borderLeft: "1px solid" }}
-                        >
-                            <div className="border-l-2">
-                                <h2 className="!text-3xl break-all">
+                    <div className="basis-3/4">
+                        <div>
+                            <div className="pl-5 ml-20 border-l-profile">
+                                <h2 className="!text-4xl break-all">
                                     {employee?.name}
                                 </h2>
-                                <div className="text-lg w-fit mt-4">
-                                    {TeamStatus(employee?.team)}
+                                <div className="text-lg w-fit">
+                                    {TeamStatusProfile(employee?.team)}
                                 </div>
                             </div>
-                            <div className="border-l-2 mt-8">
+                            <div className="mt-8 pl-5 ml-20 border-l-profile">
                                 <div>
-                                    <h4 className="mb-5">HỌC VẤN</h4>
+                                    <h4 className="mb-5">
+                                        MỤC TIÊU NGHỀ NGHIỆP
+                                    </h4>
                                     <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
                                         <span className="absolute top-1 left-[8px] z-50">
                                             <i className="!text-3xl">❝</i>
@@ -301,7 +299,7 @@ const TabProfile = ({
                                         <div className="relative pl-3">
                                             <TextArea
                                                 className="!pt-[10px] !px-0 !pr-4"
-                                                placeholder="Học vấn của bạn!"
+                                                placeholder="Mục tiêu của bạn!"
                                                 spellCheck={false}
                                                 bordered={false}
                                                 maxLength={240}
@@ -334,10 +332,7 @@ const TabProfile = ({
                                 </div>
                             </div>
                         </div>
-                        <div
-                            className="pl-10"
-                            style={{ borderLeft: "1px solid" }}
-                        >
+                        <div className="pl-5 ml-20 border-l-profile">
                             <div className="border-l-2 flex justify-between items-center mt-5">
                                 <h4 className="my-3">KINH NGHIỆM LÀM VIỆC</h4>
                                 {[
@@ -525,7 +520,7 @@ const TabProfile = ({
                                             ) && (
                                                 <div
                                                     className="bg-[#e4e4e4] opacity-0 group-hover:opacity-100 flex w-12 h-12 top-0
-                                        justify-center gap-2 items-center p-2 rounded-md absolute left-[102%]"
+                                        justify-center gap-2 items-center p-2 rounded-md absolute right-0 z-10"
                                                 >
                                                     <EditOutlined
                                                         onClick={() => {
