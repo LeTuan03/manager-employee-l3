@@ -172,8 +172,8 @@ const TabProfile = ({
 
     return (
         <div>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
-                <div className=" bg-white flex flex-row min-h-[720px] p-[7.5%_3.7%] ">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll relative">
+                <div className=" bg-white flex flex-row min-h-[720px] p-[7.5%_3.7%]">
                     <div className="basis-[36.8%]">
                         <div className="text-center pr-[11%]">
                             <Avatar
@@ -183,40 +183,7 @@ const TabProfile = ({
                                 size={216}
                             />
                         </div>
-                        {/* <div className="leading-8">
-                            <div>
-                                <div className="flex mt-10 leading-4 my-3 break-all">
-                                    <MailOutlined className="mr-3" />
-                                    {employee?.email}
-                                </div>
-                            </div>
-                            <div>
-                                <PhoneOutlined className="mr-3" />
-                                {employee?.phone}
-                            </div>
-                            <div title={employee?.address}>
-                                <div className="flex leading-4 my-3">
-                                    <EnvironmentOutlined className="mr-3" />
-                                    {employee?.address}
-                                </div>
-                            </div>
-                            <div>
-                                <UserOutlined className="mr-3" />
-                                {Gender(employee?.gender)}
-                            </div>
-                            <div>
-                                <GiftOutlined className="mr-3" />
-                                {employee?.dateOfBirth &&
-                                    format(
-                                        new Date(
-                                            employee?.dateOfBirth
-                                        ).getTime(),
-                                        "dd/MM/yyyy"
-                                    )}
-                            </div>
-                        </div> */}
                         <h4 className="mt-12 !text-lg mb-1">KĨ NĂNG</h4>
-                        {/* pr-4 */}
                         <Col className="mb-3 pr-[13%]">
                             <div className="custom-area relative">
                                 <TextArea
@@ -291,7 +258,7 @@ const TabProfile = ({
                                 </p>
                             </div>
                             <div className="leading-[43px] text-base info-profile">
-                                <div className="flex gap-3">
+                                <div className="flex gap-10">
                                     <div className="basis-1/2">
                                         <div>
                                             <UserOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />

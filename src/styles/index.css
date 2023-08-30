@@ -104,11 +104,12 @@ tr.ant-table-row:last-child > td {
 }
 
 .border-l-profile {
-    border-left: 1px solid;
+    box-shadow: -1.5px 0px 0px 0px #aaa;
 }
 .info-profile {
     transform: translateX(-3.5%) !important;
 }
+
 .custom-area textarea {
     line-height: 2.1em !important;
     background-color: transparent !important;
