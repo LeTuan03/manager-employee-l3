@@ -290,45 +290,43 @@ const TabProfile = ({
                                     {TeamStatusProfile(employee?.team)}
                                 </p>
                             </div>
-                            <div className="leading-[43px] pl-8 border-l-profile text-base">
-                                <div className="flex flex-row">
-                                    <div className="basis-1/2">
-                                        <UserOutlined className="mr-3" />
-                                        {Gender(employee?.gender)}
-                                    </div>
-                                    <div className="basis-1/2">
-                                        <GiftOutlined className="mr-3" />
-                                        {employee?.dateOfBirth &&
-                                            format(
-                                                new Date(
-                                                    employee?.dateOfBirth
-                                                ).getTime(),
-                                                "dd/MM/yyyy"
-                                            )}
-                                    </div>
-                                </div>
-                                <div className="flex">
+                            <div className="leading-[43px] text-base info-profile">
+                                <div className="flex gap-3">
                                     <div className="basis-1/2">
                                         <div>
-                                            <PhoneOutlined className="mr-3" />
-                                            {employee?.phone}
+                                            <UserOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            {Gender(employee?.gender)}
+                                        </div>
+                                        <div>
+                                            <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            {employee?.dateOfBirth &&
+                                                format(
+                                                    new Date(
+                                                        employee?.dateOfBirth
+                                                    ).getTime(),
+                                                    "dd/MM/yyyy"
+                                                )}
+                                        </div>
+
+                                        <div
+                                            title={employee?.address}
+                                            className="flex items-center break-all"
+                                        >
+                                            <EnvironmentOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            {employee?.address}
                                         </div>
                                     </div>
                                     <div className="basis-1/2">
                                         <div className="break-all">
-                                            <div className="flex leading-none items-center">
-                                                <div>
-                                                    <MailOutlined className="mr-3" />
-                                                </div>
+                                            <div className="flex items-center break-all">
+                                                <MailOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                                 <p>{employee?.email}</p>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div title={employee?.address}>
-                                    <div className="flex leading-4 my-3 break-all">
-                                        <EnvironmentOutlined className="mr-3" />
-                                        {employee?.address}
+                                        <div>
+                                            <PhoneOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            {employee?.phone}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
