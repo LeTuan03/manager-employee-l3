@@ -172,16 +172,18 @@ const TabProfile = ({
 
     return (
         <div>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll font">
-                <div className=" bg-white flex flex-row min-h-[720px] p-[6%_3%] ">
-                    <div className="basis-1/4">
-                        <Avatar
-                            width={200}
-                            height={200}
-                            src={employee?.image}
-                            size={200}
-                        />
-                        <div className="leading-8">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll">
+                <div className=" bg-white flex flex-row min-h-[720px] p-[7.5%_3.7%] ">
+                    <div className="basis-[36.8%]">
+                        <div className="text-center pr-[11%]">
+                            <Avatar
+                                width={216}
+                                height={216}
+                                src={employee?.image}
+                                size={216}
+                            />
+                        </div>
+                        {/* <div className="leading-8">
                             <div>
                                 <div className="flex mt-10 leading-4 my-3 break-all">
                                     <MailOutlined className="mr-3" />
@@ -212,12 +214,13 @@ const TabProfile = ({
                                         "dd/MM/yyyy"
                                     )}
                             </div>
-                        </div>
-                        <h4 className="mt-5">KĨ NĂNG</h4>
-                        <Col className="pr-4 mb-3">
+                        </div> */}
+                        <h4 className="mt-12 !text-lg mb-1">KĨ NĂNG</h4>
+                        {/* pr-4 */}
+                        <Col className="mb-3 pr-[13%]">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[10px] !px-0"
+                                    className="!pt-[8px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -245,11 +248,11 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h4 className="mt-5">HOẠT ĐỘNG</h4>
-                        <Col className="pr-4 mb-3">
+                        <h4 className="mt-5 !text-lg mb-1">HOẠT ĐỘNG</h4>
+                        <Col className="mb-3 pr-[13%]">
                             <div className="custom-area relative">
                                 <TextArea
-                                    className="!pt-[10px] !px-0"
+                                    className="!pt-[8px] !px-0"
                                     readOnly={
                                         ![
                                             NEW_SAVE,
@@ -277,19 +280,57 @@ const TabProfile = ({
                             </div>
                         </Col>
                     </div>
-                    <div className="basis-3/4">
+                    <div className="basis-[63.2%]">
                         <div>
-                            <div className="pl-5 ml-20 border-l-profile">
-                                <h2 className="!text-4xl break-all">
+                            <div className="pl-8 border-l-profile mb-6">
+                                <p className="!text-[37px] break-all font-[600]">
                                     {employee?.name}
-                                </h2>
-                                <div className="text-lg w-fit">
+                                </p>
+                                <p className="w-fit">
                                     {TeamStatusProfile(employee?.team)}
+                                </p>
+                            </div>
+                            <div className="leading-[43px] pl-8 border-l-profile text-base">
+                                <div className="flex">
+                                    <div className="basis-1/2">
+                                        <UserOutlined className="mr-3" />
+                                        {Gender(employee?.gender)}
+                                    </div>
+                                    <div className="basis-1/2">
+                                        <GiftOutlined className="mr-3" />
+                                        {employee?.dateOfBirth &&
+                                            format(
+                                                new Date(
+                                                    employee?.dateOfBirth
+                                                ).getTime(),
+                                                "dd/MM/yyyy"
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="flex">
+                                    <div className="basis-1/2">
+                                        <div>
+                                            <PhoneOutlined className="mr-3" />
+                                            {employee?.phone}
+                                        </div>
+                                    </div>
+                                    <div className="basis-1/2">
+                                        <div className="break-all">
+                                            <MailOutlined className="mr-3" />
+                                            {employee?.email}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div title={employee?.address}>
+                                    <div className="flex leading-4 my-3">
+                                        <EnvironmentOutlined className="mr-3" />
+                                        {employee?.address}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="mt-8 pl-5 ml-20 border-l-profile">
+                            <div className="mt-10 pl-8 border-l-profile">
                                 <div>
-                                    <h4 className="mb-5">
+                                    <h4 className="mb-[22px] !text-lg">
                                         MỤC TIÊU NGHỀ NGHIỆP
                                     </h4>
                                     <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
@@ -332,9 +373,11 @@ const TabProfile = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="pl-5 ml-20 border-l-profile">
-                            <div className="border-l-2 flex justify-between items-center mt-5">
-                                <h4 className="my-3">KINH NGHIỆM LÀM VIỆC</h4>
+                        <div className="pl-8 border-l-profile">
+                            <div className="border-l-2 flex justify-between items-center mt-[16px]">
+                                <h4 className="my-3 !text-lg mb-4">
+                                    KINH NGHIỆM LÀM VIỆC
+                                </h4>
                                 {[
                                     NEW_SAVE,
                                     REJECT,
@@ -471,8 +514,8 @@ const TabProfile = ({
                                             key={item.id}
                                         >
                                             <div>
-                                                <div className="">
-                                                    <div className="flex items-center flex-wrap font-[500]">
+                                                <div>
+                                                    <div className="flex items-center flex-wrap !text-[17px] !font-[600]">
                                                         {item?.startDate &&
                                                             format(
                                                                 new Date(
@@ -490,18 +533,18 @@ const TabProfile = ({
                                                                 ),
                                                                 "dd/MM/yyy"
                                                             )}
-                                                        <span className="bg-[#000000e0] rounded-full w-[0.5em] h-[0.5em] text-[5px] mx-3"></span>
-                                                        <span className="uppercase">
-                                                            {item.companyName}{" "}
+                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[5px] mx-3"></span>
+                                                        <span className="uppercase !text-[17px] !font-[600]">
+                                                            {item.companyName}
                                                         </span>
                                                     </div>
-                                                    <div className="uppercase mt-1 mb-[2px]">
+                                                    <div className="uppercase mb-0 !text-[17px] !font-[600]">
                                                         {item.companyAddress}
                                                     </div>
                                                 </div>
                                                 <div className="relative custom-area ml-3">
                                                     <TextArea
-                                                        className="!pt-[10.1px] !px-0 !w-full"
+                                                        className="!pt-[8px] !px-0 !w-full"
                                                         value={
                                                             item.jobDescription
                                                         }

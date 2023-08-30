@@ -43,7 +43,9 @@ export const TeamStatusProfile = (status) => {
     }
     return (
         <div>
-            <h1 className="w-full text-center !uppercase">{is}</h1>
+            <h1 className="!uppercase !text-xl !font-[600] tracking-[2px]">
+                {is}
+            </h1>
         </div>
     );
 };
