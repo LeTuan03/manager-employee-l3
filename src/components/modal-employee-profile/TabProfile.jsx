@@ -291,7 +291,7 @@ const TabProfile = ({
                                 </p>
                             </div>
                             <div className="leading-[43px] pl-8 border-l-profile text-base">
-                                <div className="flex">
+                                <div className="flex flex-row">
                                     <div className="basis-1/2">
                                         <UserOutlined className="mr-3" />
                                         {Gender(employee?.gender)}
@@ -316,13 +316,17 @@ const TabProfile = ({
                                     </div>
                                     <div className="basis-1/2">
                                         <div className="break-all">
-                                            <MailOutlined className="mr-3" />
-                                            {employee?.email}
+                                            <div className="flex leading-none items-center">
+                                                <div>
+                                                    <MailOutlined className="mr-3" />
+                                                </div>
+                                                <p>{employee?.email}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div title={employee?.address}>
-                                    <div className="flex leading-4 my-3">
+                                    <div className="flex leading-4 my-3 break-all">
                                         <EnvironmentOutlined className="mr-3" />
                                         {employee?.address}
                                     </div>
