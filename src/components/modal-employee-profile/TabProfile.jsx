@@ -215,7 +215,7 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h4 className="mt-5 !text-lg mb-1">HOẠT ĐỘNG</h4>
+                        <h4 className="mt-4 !text-lg mb-1">HOẠT ĐỘNG</h4>
                         <Col className="mb-3 pr-[13%]">
                             <div className="custom-area relative">
                                 <TextArea
@@ -257,14 +257,14 @@ const TabProfile = ({
                                     {TeamStatusProfile(employee?.team)}
                                 </p>
                             </div>
-                            <div className="leading-[43px] text-base info-profile">
+                            <div className="text-base info-profile">
                                 <div className="flex gap-10">
                                     <div className="basis-1/2">
-                                        <div>
+                                        <div className="mb-2">
                                             <UserOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             {Gender(employee?.gender)}
                                         </div>
-                                        <div>
+                                        <div className="mb-2">
                                             <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             {employee?.dateOfBirth &&
                                                 format(
@@ -274,17 +274,16 @@ const TabProfile = ({
                                                     "dd/MM/yyyy"
                                                 )}
                                         </div>
-
                                         <div
                                             title={employee?.address}
-                                            className="flex items-center break-all"
+                                            className="flex items-center break-all mb-[6px]"
                                         >
                                             <EnvironmentOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
-                                            {employee?.address}
+                                            <p> {employee?.address}</p>
                                         </div>
                                     </div>
                                     <div className="basis-1/2">
-                                        <div className="break-all">
+                                        <div className="break-all mb-2">
                                             <div className="flex items-center break-all">
                                                 <MailOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                                 <p>{employee?.email}</p>
@@ -342,7 +341,7 @@ const TabProfile = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="pl-8 border-l-profile">
+                        <div className="pl-8 border-l-profile mt-4">
                             <div className="border-l-2 flex justify-between items-center mt-[16px]">
                                 <h4 className="my-3 !text-lg mb-4">
                                     KINH NGHIỆM LÀM VIỆC
