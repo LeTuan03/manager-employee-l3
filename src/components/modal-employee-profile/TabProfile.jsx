@@ -330,7 +330,7 @@ const TabProfile = ({
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-10 pl-8 border-l-profile">
+                            <div className="mt-6 pl-8 border-l-profile">
                                 <div>
                                     <h4 className="mb-[22px] !text-lg">
                                         MỤC TIÊU NGHỀ NGHIỆP
