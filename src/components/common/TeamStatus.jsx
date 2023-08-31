@@ -41,11 +41,5 @@ export const TeamStatusProfile = (status) => {
             is = "Tester";
             break;
     }
-    return (
-        <div>
-            <h1 className="!uppercase !text-xl !font-[600] tracking-[2px]">
-                {is}
-            </h1>
-        </div>
-    );
+    return <h1 className="!uppercase !text-xl !font-[600]">{is}</h1>;
 };

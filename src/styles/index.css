@@ -104,7 +104,7 @@ tr.ant-table-row:last-child > td {
 }
 
 .border-l-profile {
-    box-shadow: -1.5px 0px 0px 0px #aaa;
+    box-shadow: -1px 0px 0px 0px #aaa;
 }
 .info-profile {
     transform: translateX(-3.5%) !important;
@@ -118,7 +118,12 @@ tr.ant-table-row:last-child > td {
     background-size: 3px 2.1em !important;
     overflow: hidden !important;
 }
-
+.custom-area-profile textarea {
+    line-height: 2.1em !important;
+}
+.reset-default {
+    transform: translateY(-6px);
+}
 .ant-table-wrapper .ant-table-tbody > tr > td {
     border-bottom: none;
 }
@@ -151,6 +156,7 @@ tr.ant-table-row:last-child > td {
 .ant-form-item {
     margin-bottom: 14px !important;
 }
+
 /* tablet  */
 @media only screen and (max-width: 1024px) {
     .ant-tabs {

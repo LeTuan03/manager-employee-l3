@@ -36,6 +36,7 @@ const TabProfile = ({
     const values = Form.useWatch([], form);
     const [openForm, setOpenForm] = useState(false);
     const [exp, setExp] = useState([]);
+
     const onFinish = async (values) => {
         const {
             companyName,
@@ -183,7 +184,7 @@ const TabProfile = ({
                                 size={216}
                             />
                         </div>
-                        <h4 className="mt-12 !text-lg mb-1">KĨ NĂNG</h4>
+                        <h4 className="mt-12 !text-lg mb-1">KỸ NĂNG</h4>
                         <Col className="mb-3 pr-[13%]">
                             <div className="custom-area relative">
                                 <TextArea
@@ -250,21 +251,21 @@ const TabProfile = ({
                     <div className="basis-[63.2%]">
                         <div>
                             <div className="pl-8 border-l-profile mb-6">
-                                <p className="!text-[37px] break-all font-[600]">
+                                <p className="!text-[37px] break-all font-[600] reset-default tracking-[3.2px]">
                                     {employee?.name}
                                 </p>
-                                <p className="w-fit">
+                                <p className="w-fit reset-default tracking-[2.3px]">
                                     {TeamStatusProfile(employee?.team)}
                                 </p>
                             </div>
                             <div className="text-base info-profile">
                                 <div className="flex gap-10">
                                     <div className="basis-1/2">
-                                        <div className="mb-2">
+                                        <div className="mb-2 tracking-[-0.8px]">
                                             <UserOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             {Gender(employee?.gender)}
                                         </div>
-                                        <div className="mb-2">
+                                        <div className="mb-2 tracking-[-0.8px]">
                                             <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             {employee?.dateOfBirth &&
                                                 format(
@@ -276,7 +277,7 @@ const TabProfile = ({
                                         </div>
                                         <div
                                             title={employee?.address}
-                                            className="flex items-center break-all mb-[6px]"
+                                            className="flex items-center break-all mb-[6px] tracking-[-0.8px]"
                                         >
                                             <EnvironmentOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             <p> {employee?.address}</p>
@@ -284,12 +285,12 @@ const TabProfile = ({
                                     </div>
                                     <div className="basis-1/2">
                                         <div className="break-all mb-2">
-                                            <div className="flex items-center break-all">
+                                            <div className="flex items-center break-all tracking-[-1px]">
                                                 <MailOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                                 <p>{employee?.email}</p>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div className="tracking-[-0.8px]">
                                             <PhoneOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
                                             {employee?.phone}
                                         </div>
@@ -343,7 +344,7 @@ const TabProfile = ({
                         </div>
                         <div className="pl-8 border-l-profile mt-4">
                             <div className="border-l-2 flex justify-between items-center mt-[16px]">
-                                <h4 className="my-3 !text-lg mb-4">
+                                <h4 className="my-3 !text-lg mb-4  tracking-[-0.1px]">
                                     KINH NGHIỆM LÀM VIỆC
                                 </h4>
                                 {[
@@ -506,7 +507,7 @@ const TabProfile = ({
                                                             {item.companyName}
                                                         </span>
                                                     </div>
-                                                    <div className="uppercase mb-0 !text-[17px] !font-[600]">
+                                                    <div className="uppercase mb-0 !text-[17px] !font-[600] tracking-[-0.3px]">
                                                         {item.companyAddress}
                                                     </div>
                                                 </div>
