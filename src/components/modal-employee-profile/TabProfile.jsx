@@ -268,7 +268,7 @@ const TabProfile = ({
                         <h4 className="!text-lg mb-4 tracking-wider pl-[1px]">
                             NGOẠI NGỮ
                         </h4>
-                        <Col className="mb-[26px] pr-[29%] flex justify-between">
+                        <Col className="mb-[27px] pr-[29%] flex justify-between">
                             <p className="tracking-[0.6px] pt-[1px]">
                                 Tiếng Anh
                             </p>
@@ -412,7 +412,7 @@ const TabProfile = ({
                                             <UserOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {Gender(employee?.gender)}
                                         </div>
-                                        <div className="flex items-center break-all mb-[6px] tracking-[0.1px]">
+                                        <div className="flex items-center break-all mb-[7px] tracking-[0.1px]">
                                             <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {employee?.dateOfBirth &&
                                                 format(
@@ -444,7 +444,7 @@ const TabProfile = ({
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-[27px] pl-8 border-l-profile">
+                            <div className="mt-[26px] pl-8 border-l-profile">
                                 <div>
                                     <h4 className="mb-[16px] !text-lg tracking-[0.76px]">
                                         MỤC TIÊU NGHỀ NGHIỆP
