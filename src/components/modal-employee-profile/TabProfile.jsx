@@ -326,7 +326,7 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h4 className="mt-4 !text-lg mb-1 tracking-[0.9px]">
+                        <h4 className="mt-[23px] !text-lg mb-1 tracking-[0.9px]">
                             SỞ THÍCH
                         </h4>
                         <Col className="mb-3 pt-[2px]">
