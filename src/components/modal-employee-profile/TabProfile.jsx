@@ -229,14 +229,15 @@ const TabProfile = ({
                                         className="pl-6 !leading-[25px] mt-[13px] tracking-[0.1px]"
                                         onDoubleClick={() => setEdit(true)}
                                     >
-                                        {threeInfo?.skill
-                                            .split("\n")
-                                            .filter(
-                                                (item) => item.trim() !== ""
-                                            )
-                                            .map((item, index) => (
-                                                <li key={index}>{item}</li>
-                                            ))}
+                                        {threeInfo?.skill &&
+                                            threeInfo?.skill
+                                                .split("\n")
+                                                .filter(
+                                                    (item) => item.trim() !== ""
+                                                )
+                                                .map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
                                     </ul>
                                 )}
                             </div>
@@ -314,14 +315,15 @@ const TabProfile = ({
                                             setEditActive(true)
                                         }
                                     >
-                                        {threeInfo?.activity
-                                            .split("\n")
-                                            .filter(
-                                                (item) => item.trim() !== ""
-                                            )
-                                            .map((item, index) => (
-                                                <li key={index}>{item}</li>
-                                            ))}
+                                        {threeInfo?.activity &&
+                                            threeInfo?.activity
+                                                .split("\n")
+                                                .filter(
+                                                    (item) => item.trim() !== ""
+                                                )
+                                                .map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
                                     </ul>
                                 )}
                             </div>
@@ -621,27 +623,30 @@ const TabProfile = ({
                                                 </div>
                                                 <div className="relative ml-3">
                                                     <ul className="pl-[11px] pt-[11px] leading-[25px] ul-profile">
-                                                        {item?.jobDescription
-                                                            .split("\n")
-                                                            .filter(
-                                                                (item) =>
-                                                                    item.trim() !==
-                                                                    ""
-                                                            )
-                                                            .map(
-                                                                (
-                                                                    item,
-                                                                    index
-                                                                ) => (
-                                                                    <li
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                    >
-                                                                        {item}
-                                                                    </li>
+                                                        {item?.jobDescription &&
+                                                            item?.jobDescription
+                                                                .split("\n")
+                                                                .filter(
+                                                                    (item) =>
+                                                                        item.trim() !==
+                                                                        ""
                                                                 )
-                                                            )}
+                                                                .map(
+                                                                    (
+                                                                        item,
+                                                                        index
+                                                                    ) => (
+                                                                        <li
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                item
+                                                                            }
+                                                                        </li>
+                                                                    )
+                                                                )}
                                                     </ul>
                                                 </div>
                                             </div>
