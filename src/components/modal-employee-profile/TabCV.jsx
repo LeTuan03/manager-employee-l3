@@ -22,14 +22,14 @@ const TabCV = () => {
             dataIndex: "name",
             key: "name",
             align: "center",
-            className: "border-table",
+            className: "border-table max-w-[90px]",
             render: (name) => <div className="max-w-[90px]">{name}</div>,
         },
         {
             title: "Ngày sinh",
             dataIndex: "dateOfBirth",
             key: "dateOfBirth",
-            className: "border-table",
+            className: "border-table max-w-[60px]",
             align: "center",
             render: (dateOfBirth) => (
                 <div className=" break-all">
@@ -41,7 +41,7 @@ const TabCV = () => {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
-            className: "border-table",
+            className: "border-table max-w-[50px]",
             align: "center",
             render: (gender) => Gender(gender),
         },
@@ -49,7 +49,7 @@ const TabCV = () => {
             title: "Quan hệ",
             dataIndex: "relationShip",
             key: "relationShip",
-            className: "border-table",
+            className: "border-table max-w-[60px]",
             align: "center",
             render: (relationShip) => RelationShip(relationShip),
         },
@@ -57,7 +57,7 @@ const TabCV = () => {
             title: "Số điện thoại",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
-            className: "border-table",
+            className: "border-table max-w-[70px]",
             align: "center",
             render: (phoneNumber) => (
                 <div className="break-all">{phoneNumber}</div>
@@ -68,7 +68,8 @@ const TabCV = () => {
             dataIndex: "citizenIdentificationNumber",
             key: "citizenIdentificationNumber",
             align: "center",
-            className: "border-table",
+
+            className: "border-table max-w-[60px]",
             render: (citizenIdentificationNumber) => (
                 <p className=" break-all">{citizenIdentificationNumber}</p>
             ),
@@ -78,12 +79,9 @@ const TabCV = () => {
             dataIndex: "address",
             key: "address",
             align: "center",
-
-            className: "border-table",
+            className: "border-table max-w-[130px]",
             render: (address) => (
-                <div className="text-left pl-2 break-all max-w-[90px]">
-                    {address}
-                </div>
+                <div className="text-left p-2 break-all">{address}</div>
             ),
         },
     ];
