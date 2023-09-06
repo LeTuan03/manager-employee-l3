@@ -113,8 +113,7 @@ tr.ant-table-row:last-child > td {
     box-shadow: -1px 0px 0px 0px #aaa;
 }
 .info-profile {
-    margin-top: 25px;
-    transform: translateX(-3.4%) !important;
+    transform: translateX(-3.3%) !important;
 }
 
 .custom-area textarea {

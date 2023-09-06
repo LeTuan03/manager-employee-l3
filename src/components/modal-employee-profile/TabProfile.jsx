@@ -188,10 +188,10 @@ const TabProfile = ({
                                 src={employee?.image}
                             />
                         </div>
-                        <h4 className="mt-[53px] !text-lg mb-1 tracking-[.8px]">
+                        <h4 className="mt-[55px] pl-[1px] !text-lg mb-1 tracking-[.8px]">
                             KỸ NĂNG
                         </h4>
-                        <Col className="mb-[22px] pr-[7%]">
+                        <Col className="mb-[21px] pr-[7%]">
                             <div className="relative">
                                 {edit ? (
                                     <div className="custom-area">
@@ -227,7 +227,15 @@ const TabProfile = ({
                                 ) : (
                                     <ul
                                         className="pl-6 !leading-[25px] mt-[13px] tracking-[0.1px]"
-                                        onDoubleClick={() => setEdit(true)}
+                                        onDoubleClick={() =>
+                                            [
+                                                NEW_SAVE,
+                                                REJECT,
+                                                ADDITIONAL_REQUIREMENTS,
+                                            ].includes(
+                                                employee?.submitProfileStatus
+                                            ) && setEdit(true)
+                                        }
                                     >
                                         {threeInfo?.skill &&
                                             threeInfo?.skill
@@ -242,29 +250,31 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h4 className="!text-lg mb-4 tracking-[0.8px]">
+                        <h4 className="!text-lg mb-4 tracking-wider pl-[1px]">
                             NGOẠI NGỮ
                         </h4>
-                        <Col className="mb-7 pr-[29%] flex justify-between">
-                            <p className="tracking-[0.5px]">Tiếng Anh</p>
-                            <div className="flex gap-4">
+                        <Col className="mb-[26px] pr-[29%] flex justify-between">
+                            <p className="tracking-[0.6px] pt-[1px]">
+                                Tiếng Anh
+                            </p>
+                            <div className="flex gap-4 pt-1">
                                 <StarFilled className="text-sm" />
                                 <StarFilled className="text-sm" />
                                 <StarFilled className="text-sm" />
                             </div>
                         </Col>
-                        <h4 className="!text-lg mb-4 tracking-[0.8px]">
+                        <h4 className="!text-lg mb-4 tracking-[0.6px] pl-[1px]">
                             TIN HỌC
                         </h4>
-                        <Col className="mb-3 pr-[29%] flex justify-between">
+                        <Col className="mb-2 pr-[29%] flex justify-between">
                             <p className="tracking-[0.5px]">Word</p>
-                            <div className="flex gap-4">
+                            <div className="flex gap-4 pt-1">
                                 <StarFilled className="text-sm" />
                                 <StarFilled className="text-sm" />
                                 <StarFilled className="text-sm" />
                             </div>
                         </Col>
-                        <Col className="mb-[25px] pr-[29%] flex justify-between">
+                        <Col className="mb-[26px] pr-[29%] pt-1 flex justify-between">
                             <p className="tracking-[0.5px]">Excel</p>
                             <div className="flex gap-4">
                                 <StarFilled className="text-sm" />
@@ -272,7 +282,7 @@ const TabProfile = ({
                                 <StarOutlined className="text-sm" />
                             </div>
                         </Col>
-                        <h4 className="mt-4 !text-lg mb-1 tracking-[0.9px]">
+                        <h4 className="mt-4 !text-lg mb-1 tracking-[0.8px] pl-[1px]">
                             HOẠT ĐỘNG
                         </h4>
                         <Col className="mb-3 pr-[9%]">
@@ -312,7 +322,13 @@ const TabProfile = ({
                                     <ul
                                         className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
                                         onDoubleClick={() =>
-                                            setEditActive(true)
+                                            [
+                                                NEW_SAVE,
+                                                REJECT,
+                                                ADDITIONAL_REQUIREMENTS,
+                                            ].includes(
+                                                employee?.submitProfileStatus
+                                            ) && setEditActive(true)
                                         }
                                     >
                                         {threeInfo?.activity &&
@@ -328,7 +344,7 @@ const TabProfile = ({
                                 )}
                             </div>
                         </Col>
-                        <h4 className="mt-[23px] !text-lg mb-1 tracking-[0.9px]">
+                        <h4 className="mt-[23px] !text-lg mb-1 tracking-[1px] pl-[1px]">
                             SỞ THÍCH
                         </h4>
                         <Col className="mb-3 pt-[2px]">
@@ -342,11 +358,11 @@ const TabProfile = ({
                                 </ul>
                             </div>
                         </Col>
-                        <h4 className="mt-6 !text-lg mb-1 tracking-[0.7px]">
+                        <h4 className="mt-[23px] !text-lg mb-1 pl-[1px] tracking-[0.75px]">
                             NGƯỜI LIÊN HỆ
                         </h4>
-                        <Col className="mb-3 pt-2">
-                            <div className="relative tracking-[0.2px]">
+                        <Col className="mb-3 pt-[9.5px]">
+                            <div className="relative tracking-[0.25px]">
                                 <ul className="p-0 pl-[22px]">
                                     <li>
                                         <b>Lê Thị Thu Hiền</b>
@@ -360,11 +376,11 @@ const TabProfile = ({
                     </div>
                     <div className="basis-[63.2%]">
                         <div>
-                            <div className="pl-8 border-l-profile mb-6">
-                                <p className="!text-[37px] break-all font-[500] reset-default tracking-[3.95px]">
+                            <div className="pl-8 border-l-profile mb-[22px] reset-default">
+                                <p className="!text-[40px] break-all font-[500] tracking-[2.4px]">
                                     {employee?.name}
                                 </p>
-                                <p className="w-fit reset-default tracking-[2.3px]">
+                                <p className="w-fit reset-default tracking-[2.3px] ">
                                     {TeamStatusProfile(employee?.team)}
                                 </p>
                             </div>
@@ -375,7 +391,7 @@ const TabProfile = ({
                                             <UserOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {Gender(employee?.gender)}
                                         </div>
-                                        <div className="flex items-center break-all mb-2 tracking-[0.1px]">
+                                        <div className="flex items-center break-all mb-[6px] tracking-[0.1px]">
                                             <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {employee?.dateOfBirth &&
                                                 format(
@@ -407,9 +423,9 @@ const TabProfile = ({
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-[25px] pl-8 border-l-profile">
+                            <div className="mt-[27px] pl-8 border-l-profile">
                                 <div>
-                                    <h4 className="mb-[16px] !text-lg tracking-[.7px]">
+                                    <h4 className="mb-[16px] !text-lg tracking-[0.76px]">
                                         MỤC TIÊU NGHỀ NGHIỆP
                                     </h4>
                                     <div className="relative bg-[#e7e7e7] pt-3 rounded-lg">
@@ -452,9 +468,9 @@ const TabProfile = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="pl-8 border-l-profile mt-4">
+                        <div className="pl-8 border-l-profile mt-[17px]">
                             <div className="border-l-2 flex justify-between items-center">
-                                <h4 className="my-3 !text-lg mb-3 tracking-wide">
+                                <h4 className="my-3 !text-lg mb-3 tracking-[0.55px]">
                                     KINH NGHIỆM LÀM VIỆC
                                 </h4>
                                 {[
@@ -594,7 +610,7 @@ const TabProfile = ({
                                         >
                                             <div>
                                                 <div>
-                                                    <div className="flex items-center flex-wrap !text-[17px] !font-[500] mt-[2px] tracking-[0.5px]">
+                                                    <div className="flex items-center flex-wrap !text-[17px] !font-[500] pt-[1px] tracking-[0.5px]">
                                                         {item?.startDate &&
                                                             format(
                                                                 new Date(
@@ -612,17 +628,17 @@ const TabProfile = ({
                                                                 ),
                                                                 "MM/yyy"
                                                             )}
-                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[5px] mx-[14px]"></span>
+                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[5px] mx-[14px] "></span>
                                                         <span className="uppercase !text-[17px] !font-[500]">
                                                             {item.companyName}
                                                         </span>
                                                     </div>
-                                                    <div className="uppercase !text-[17px] !font-[500] tracking-[0.2px]">
+                                                    <div className="uppercase !text-[17px] !font-[500] tracking-[0.24px]">
                                                         {item.companyAddress}
                                                     </div>
                                                 </div>
                                                 <div className="relative ml-3">
-                                                    <ul className="pl-[11px] pt-[11px] leading-[25px] ul-profile">
+                                                    <ul className="pl-[11px] pt-[12px] leading-[25px] ul-profile tracking-[0.4px]">
                                                         {item?.jobDescription &&
                                                             item?.jobDescription
                                                                 .split("\n")
@@ -707,7 +723,7 @@ const TabProfile = ({
                                     CHỨNG CHỈ
                                 </h4>
                             </div>
-                            <div className="relative mt-[6px] leading-[25px] tracking-[0.25px]">
+                            <div className="relative mt-[4px] leading-[25px] tracking-[0.2px]">
                                 <ul className="p-0 pl-[22px]">
                                     <li>
                                         2017: Chứng chỉ tin học văn phòng
