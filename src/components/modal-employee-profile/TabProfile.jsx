@@ -160,6 +160,17 @@ const TabProfile = ({
             handleShowError(error);
         }
     };
+
+    const handleEditClick = (param) => {
+        if (
+            [NEW_SAVE, REJECT, ADDITIONAL_REQUIREMENTS].includes(
+                employee?.submitProfileStatus
+            )
+        ) {
+            param(true);
+        }
+    };
+
     useEffect(() => {
         if (!lodash.isEmpty(employee)) {
             handleGetExp();
@@ -172,6 +183,8 @@ const TabProfile = ({
         return () => {
             form.resetFields();
             setOpenForm(false);
+            setEdit(false);
+            setEditActive(false);
         };
     }, [employee]);
 
@@ -225,28 +238,30 @@ const TabProfile = ({
                                         )}
                                     </div>
                                 ) : (
-                                    <ul
-                                        className="pl-6 !leading-[25px] mt-[13px] tracking-[0.1px]"
-                                        onDoubleClick={() =>
-                                            [
-                                                NEW_SAVE,
-                                                REJECT,
-                                                ADDITIONAL_REQUIREMENTS,
-                                            ].includes(
-                                                employee?.submitProfileStatus
-                                            ) && setEdit(true)
-                                        }
-                                    >
-                                        {threeInfo?.skill &&
-                                            threeInfo?.skill
-                                                .split("\n")
-                                                .filter(
-                                                    (item) => item.trim() !== ""
-                                                )
-                                                .map((item, index) => (
-                                                    <li key={index}>{item}</li>
-                                                ))}
-                                    </ul>
+                                    <>
+                                        {threeInfo?.skill ? (
+                                            <ul
+                                                className="pl-6 !leading-[25px] mt-[13px] tracking-[0.1px]"
+                                                onDoubleClick={() =>
+                                                    handleEditClick(setEdit)
+                                                }
+                                            >
+                                                {threeInfo?.skill
+                                                    .split("\n")
+                                                    .filter(
+                                                        (item) =>
+                                                            item.trim() !== ""
+                                                    )
+                                                    .map((item, index) => (
+                                                        <li key={index}>
+                                                            {item}
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        ) : (
+                                            handleEditClick(setEdit)
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </Col>
@@ -319,28 +334,34 @@ const TabProfile = ({
                                         )}
                                     </div>
                                 ) : (
-                                    <ul
-                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
-                                        onDoubleClick={() =>
-                                            [
-                                                NEW_SAVE,
-                                                REJECT,
-                                                ADDITIONAL_REQUIREMENTS,
-                                            ].includes(
-                                                employee?.submitProfileStatus
-                                            ) && setEditActive(true)
-                                        }
-                                    >
-                                        {threeInfo?.activity &&
-                                            threeInfo?.activity
-                                                .split("\n")
-                                                .filter(
-                                                    (item) => item.trim() !== ""
-                                                )
-                                                .map((item, index) => (
-                                                    <li key={index}>{item}</li>
-                                                ))}
-                                    </ul>
+                                    <>
+                                        {threeInfo?.skill ? (
+                                            <ul
+                                                className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
+                                                onDoubleClick={() =>
+                                                    handleEditClick(
+                                                        setEditActive
+                                                    )
+                                                }
+                                            >
+                                                {threeInfo?.activity &&
+                                                    threeInfo?.activity
+                                                        .split("\n")
+                                                        .filter(
+                                                            (item) =>
+                                                                item.trim() !==
+                                                                ""
+                                                        )
+                                                        .map((item, index) => (
+                                                            <li key={index}>
+                                                                {item}
+                                                            </li>
+                                                        ))}
+                                            </ul>
+                                        ) : (
+                                            handleEditClick(setEditActive)
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </Col>
