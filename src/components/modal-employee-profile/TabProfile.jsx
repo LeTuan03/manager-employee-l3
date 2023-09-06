@@ -23,7 +23,7 @@ import { TeamStatusProfile } from "../common/TeamStatus";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import Gender from "../common/Gender";
 import { validateDate } from "../common/Validate";
-import { convertToLiFormat } from "../common/InsertDashAfterNewLine";
+import convertToLiFormat from "../common/InsertDashAfterNewLine";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({
     setThreeInfo,

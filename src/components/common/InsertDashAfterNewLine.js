@@ -4,4 +4,4 @@ function convertToLiFormat(str) {
     return formatted;
 }
 
-export { convertToLiFormat };
+export default convertToLiFormat;
