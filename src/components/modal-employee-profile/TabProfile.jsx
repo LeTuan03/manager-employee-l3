@@ -182,12 +182,13 @@ const TabProfile = ({
                     <div className="basis-[36.8%]">
                         <div className="text-center pr-[11%]">
                             <Avatar
-                                width={224}
-                                height={224}
+                                width={214}
+                                height={214}
+                                size={214}
                                 src={employee?.image}
                             />
                         </div>
-                        <h4 className="mt-[52px] !text-lg mb-1 tracking-[.8px]">
+                        <h4 className="mt-[53px] !text-lg mb-1 tracking-[.8px]">
                             KỸ NĂNG
                         </h4>
                         <Col className="mb-[22px] pr-[7%]">
@@ -225,14 +226,18 @@ const TabProfile = ({
                                     </div>
                                 ) : (
                                     <ul
+                                        className="pl-6 !leading-[25px] mt-[13px] tracking-[0.1px]"
                                         onDoubleClick={() => setEdit(true)}
-                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
-                                        dangerouslySetInnerHTML={{
-                                            __html: convertToLiFormat(
-                                                threeInfo?.skill
-                                            ),
-                                        }}
-                                    ></ul>
+                                    >
+                                        {threeInfo?.skill
+                                            .split("\n")
+                                            .filter(
+                                                (item) => item.trim() !== ""
+                                            )
+                                            .map((item, index) => (
+                                                <li key={index}>{item}</li>
+                                            ))}
+                                    </ul>
                                 )}
                             </div>
                         </Col>
@@ -258,7 +263,7 @@ const TabProfile = ({
                                 <StarFilled className="text-sm" />
                             </div>
                         </Col>
-                        <Col className="mb-[26px] pr-[29%] flex justify-between">
+                        <Col className="mb-[25px] pr-[29%] flex justify-between">
                             <p className="tracking-[0.5px]">Excel</p>
                             <div className="flex gap-4">
                                 <StarFilled className="text-sm" />
@@ -304,16 +309,20 @@ const TabProfile = ({
                                     </div>
                                 ) : (
                                     <ul
+                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
                                         onDoubleClick={() =>
                                             setEditActive(true)
                                         }
-                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
-                                        dangerouslySetInnerHTML={{
-                                            __html: convertToLiFormat(
-                                                threeInfo?.activity
-                                            ),
-                                        }}
-                                    ></ul>
+                                    >
+                                        {threeInfo?.activity
+                                            .split("\n")
+                                            .filter(
+                                                (item) => item.trim() !== ""
+                                            )
+                                            .map((item, index) => (
+                                                <li key={index}>{item}</li>
+                                            ))}
+                                    </ul>
                                 )}
                             </div>
                         </Col>
@@ -606,19 +615,34 @@ const TabProfile = ({
                                                             {item.companyName}
                                                         </span>
                                                     </div>
-                                                    <div className="uppercase mt-[1px] !text-[17px] !font-[500] tracking-[0.2px]">
+                                                    <div className="uppercase !text-[17px] !font-[500] tracking-[0.2px]">
                                                         {item.companyAddress}
                                                     </div>
                                                 </div>
                                                 <div className="relative ml-3">
-                                                    <ul
-                                                        className="pl-[11px] pt-[10px] leading-6 ul-profile"
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: convertToLiFormat(
-                                                                item.jobDescription
-                                                            ),
-                                                        }}
-                                                    ></ul>
+                                                    <ul className="pl-[11px] pt-[11px] leading-[25px] ul-profile">
+                                                        {item?.jobDescription
+                                                            .split("\n")
+                                                            .filter(
+                                                                (item) =>
+                                                                    item.trim() !==
+                                                                    ""
+                                                            )
+                                                            .map(
+                                                                (
+                                                                    item,
+                                                                    index
+                                                                ) => (
+                                                                    <li
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        {item}
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                    </ul>
                                                 </div>
                                             </div>
                                             {[
@@ -678,7 +702,7 @@ const TabProfile = ({
                                     CHỨNG CHỈ
                                 </h4>
                             </div>
-                            <div className="relative mt-[6px] leading-6 tracking-[0.25px]">
+                            <div className="relative mt-[6px] leading-[25px] tracking-[0.25px]">
                                 <ul className="p-0 pl-[22px]">
                                     <li>
                                         2017: Chứng chỉ tin học văn phòng
