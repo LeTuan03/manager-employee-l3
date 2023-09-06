@@ -8,6 +8,8 @@ import {
     PhoneOutlined,
     EnvironmentOutlined,
     GiftOutlined,
+    StarOutlined,
+    StarFilled,
 } from "@ant-design/icons";
 import { Avatar, Button, Col, Form, Input, Row, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -21,6 +23,7 @@ import { TeamStatusProfile } from "../common/TeamStatus";
 import { setIsLoading } from "../../redux/employee/employeeSlice";
 import Gender from "../common/Gender";
 import { validateDate } from "../common/Validate";
+import { convertToLiFormat } from "../common/InsertDashAfterNewLine";
 const { NEW_SAVE, ADDITIONAL_REQUIREMENTS, REJECT } = STATUS_EMPLOYEE;
 const TabProfile = ({
     setThreeInfo,
@@ -29,6 +32,8 @@ const TabProfile = ({
     errorThreeInfo,
 }) => {
     const dispatch = useDispatch();
+    const [edit, setEdit] = useState(false);
+    const [editActive, setEditActive] = useState(false);
     const { employee } = useSelector((state) => state.employee);
     const [openDelete, setOpenDelete] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
@@ -36,7 +41,6 @@ const TabProfile = ({
     const values = Form.useWatch([], form);
     const [openForm, setOpenForm] = useState(false);
     const [exp, setExp] = useState([]);
-
     const onFinish = async (values) => {
         const {
             companyName,
@@ -173,100 +177,195 @@ const TabProfile = ({
 
     return (
         <div>
-            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll relative">
+            <div className="bg-[#e7e7e7] p-14 max-h-[490px] overflow-y-scroll relative profile-font">
                 <div className=" bg-white flex flex-row min-h-[720px] p-[7.5%_3.7%]">
                     <div className="basis-[36.8%]">
                         <div className="text-center pr-[11%]">
                             <Avatar
-                                width={216}
-                                height={216}
+                                width={224}
+                                height={224}
                                 src={employee?.image}
-                                size={216}
                             />
                         </div>
-                        <h4 className="mt-12 !text-lg mb-1">KỸ NĂNG</h4>
-                        <Col className="mb-3 pr-[13%]">
-                            <div className="custom-area relative">
-                                <TextArea
-                                    className="!pt-[8px] !px-0"
-                                    readOnly={
-                                        ![
-                                            NEW_SAVE,
-                                            REJECT,
-                                            ADDITIONAL_REQUIREMENTS,
-                                        ].includes(
-                                            employee?.submitProfileStatus
-                                        )
-                                    }
-                                    spellCheck={false}
-                                    bordered={false}
-                                    maxLength={240}
-                                    autoSize={{ minRows: 1 }}
-                                    placeholder="Kĩ năng của bạn !"
-                                    name="skill"
-                                    onChange={(e) => {
-                                        handleChange(e);
-                                    }}
-                                    value={threeInfo?.skill}
-                                ></TextArea>
-                                {errorThreeInfo?.skill && (
-                                    <p className="text-red-600">
-                                        {errorThreeInfo?.skill}
-                                    </p>
+                        <h4 className="mt-[52px] !text-lg mb-1 tracking-[.8px]">
+                            KỸ NĂNG
+                        </h4>
+                        <Col className="mb-[22px] pr-[7%]">
+                            <div className="relative">
+                                {edit ? (
+                                    <div className="custom-area">
+                                        <TextArea
+                                            className="tracking-[0.3px] px-0 pt-[8px]"
+                                            readOnly={
+                                                ![
+                                                    NEW_SAVE,
+                                                    REJECT,
+                                                    ADDITIONAL_REQUIREMENTS,
+                                                ].includes(
+                                                    employee?.submitProfileStatus
+                                                )
+                                            }
+                                            spellCheck={false}
+                                            bordered={false}
+                                            maxLength={240}
+                                            autoSize={{ minRows: 1 }}
+                                            placeholder="Kĩ năng của bạn !"
+                                            name="skill"
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                            value={threeInfo?.skill}
+                                            onBlur={() => setEdit(false)}
+                                        ></TextArea>
+                                        {errorThreeInfo?.skill && (
+                                            <p className="text-red-600">
+                                                {errorThreeInfo?.skill}
+                                            </p>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <ul
+                                        onDoubleClick={() => setEdit(true)}
+                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
+                                        dangerouslySetInnerHTML={{
+                                            __html: convertToLiFormat(
+                                                threeInfo?.skill
+                                            ),
+                                        }}
+                                    ></ul>
                                 )}
                             </div>
                         </Col>
-                        <h4 className="mt-4 !text-lg mb-1">HOẠT ĐỘNG</h4>
-                        <Col className="mb-3 pr-[13%]">
-                            <div className="custom-area relative">
-                                <TextArea
-                                    className="!pt-[8px] !px-0"
-                                    readOnly={
-                                        ![
-                                            NEW_SAVE,
-                                            REJECT,
-                                            ADDITIONAL_REQUIREMENTS,
-                                        ].includes(
-                                            employee?.submitProfileStatus
-                                        )
-                                    }
-                                    bordered={false}
-                                    name="activity"
-                                    maxLength={240}
-                                    autoSize={{ minRows: 1 }}
-                                    onChange={(e) => {
-                                        handleChange(e);
-                                    }}
-                                    placeholder="Hoạt động của bạn !"
-                                    value={threeInfo?.activity}
-                                ></TextArea>
-                                {errorThreeInfo?.activity && (
-                                    <p className="text-red-600">
-                                        {errorThreeInfo?.activity}
-                                    </p>
+                        <h4 className="!text-lg mb-4 tracking-[0.8px]">
+                            NGOẠI NGỮ
+                        </h4>
+                        <Col className="mb-7 pr-[29%] flex justify-between">
+                            <p className="tracking-[0.5px]">Tiếng Anh</p>
+                            <div className="flex gap-4">
+                                <StarFilled className="text-sm" />
+                                <StarFilled className="text-sm" />
+                                <StarFilled className="text-sm" />
+                            </div>
+                        </Col>
+                        <h4 className="!text-lg mb-4 tracking-[0.8px]">
+                            TIN HỌC
+                        </h4>
+                        <Col className="mb-3 pr-[29%] flex justify-between">
+                            <p className="tracking-[0.5px]">Word</p>
+                            <div className="flex gap-4">
+                                <StarFilled className="text-sm" />
+                                <StarFilled className="text-sm" />
+                                <StarFilled className="text-sm" />
+                            </div>
+                        </Col>
+                        <Col className="mb-[26px] pr-[29%] flex justify-between">
+                            <p className="tracking-[0.5px]">Excel</p>
+                            <div className="flex gap-4">
+                                <StarFilled className="text-sm" />
+                                <StarFilled className="text-sm" />
+                                <StarOutlined className="text-sm" />
+                            </div>
+                        </Col>
+                        <h4 className="mt-4 !text-lg mb-1 tracking-[0.9px]">
+                            HOẠT ĐỘNG
+                        </h4>
+                        <Col className="mb-3 pr-[9%]">
+                            <div className="relative">
+                                {editActive ? (
+                                    <div className="custom-area">
+                                        <TextArea
+                                            className="!pt-[8px] tracking-[0.9px] px-0"
+                                            readOnly={
+                                                ![
+                                                    NEW_SAVE,
+                                                    REJECT,
+                                                    ADDITIONAL_REQUIREMENTS,
+                                                ].includes(
+                                                    employee?.submitProfileStatus
+                                                )
+                                            }
+                                            spellCheck={false}
+                                            bordered={false}
+                                            name="activity"
+                                            maxLength={240}
+                                            autoSize={{ minRows: 1 }}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                            placeholder="Hoạt động của bạn !"
+                                            value={threeInfo?.activity}
+                                            onBlur={() => setEditActive(false)}
+                                        ></TextArea>
+                                        {errorThreeInfo?.activity && (
+                                            <p className="text-red-600">
+                                                {errorThreeInfo?.activity}
+                                            </p>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <ul
+                                        onDoubleClick={() =>
+                                            setEditActive(true)
+                                        }
+                                        className="pl-6 !leading-[25px] mt-[12px] tracking-[0.1px]"
+                                        dangerouslySetInnerHTML={{
+                                            __html: convertToLiFormat(
+                                                threeInfo?.activity
+                                            ),
+                                        }}
+                                    ></ul>
                                 )}
+                            </div>
+                        </Col>
+                        <h4 className="mt-4 !text-lg mb-1 tracking-[0.9px]">
+                            SỞ THÍCH
+                        </h4>
+                        <Col className="mb-3 pt-[2px]">
+                            <div className="relative tracking-[0.2px]">
+                                <ul className="p-0 pl-[22px]">
+                                    <li>Học ngoại ngữ mới</li>
+                                    <li>
+                                        Chơi rubix, chơi game suy luận, chiến
+                                        thuật
+                                    </li>
+                                </ul>
+                            </div>
+                        </Col>
+                        <h4 className="mt-6 !text-lg mb-1 tracking-[0.7px]">
+                            NGƯỜI LIÊN HỆ
+                        </h4>
+                        <Col className="mb-3 pt-2">
+                            <div className="relative tracking-[0.2px]">
+                                <ul className="p-0 pl-[22px]">
+                                    <li>
+                                        <b>Lê Thị Thu Hiền</b>
+                                    </li>
+                                    <p className="mt-2">Công ty Cổng Vàng</p>
+                                    <p>Sales Manager and Marketer</p>
+                                    <p>090 560 3700</p>
+                                </ul>
                             </div>
                         </Col>
                     </div>
                     <div className="basis-[63.2%]">
                         <div>
                             <div className="pl-8 border-l-profile mb-6">
-                                <p className="!text-[37px] break-all font-[600] reset-default tracking-[3.2px]">
+                                <p className="!text-[37px] break-all font-[500] reset-default tracking-[3.95px]">
                                     {employee?.name}
                                 </p>
                                 <p className="w-fit reset-default tracking-[2.3px]">
                                     {TeamStatusProfile(employee?.team)}
                                 </p>
                             </div>
-                            <div className="text-base info-profile">
+                            <div className="info-profile">
                                 <div className="flex gap-10">
                                     <div className="basis-1/2">
-                                        <div className="mb-2 tracking-[-0.8px]">
-                                            <UserOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                        <div className="mb-2 tracking-[0.1px]">
+                                            <UserOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {Gender(employee?.gender)}
                                         </div>
-                                        <div className="mb-2 tracking-[-0.8px]">
-                                            <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                        <div className="flex items-center break-all mb-2 tracking-[0.1px]">
+                                            <GiftOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                             {employee?.dateOfBirth &&
                                                 format(
                                                     new Date(
@@ -277,38 +376,38 @@ const TabProfile = ({
                                         </div>
                                         <div
                                             title={employee?.address}
-                                            className="flex items-center break-all mb-[6px] tracking-[-0.8px]"
+                                            className="flex items-center break-all mb-2 tracking-[0.1px]"
                                         >
-                                            <EnvironmentOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            <EnvironmentOutlined className="mr-4 bg-[#615f64] text-white p-[11px] !leading-0 rounded-full" />
                                             <p> {employee?.address}</p>
                                         </div>
                                     </div>
                                     <div className="basis-1/2">
                                         <div className="break-all mb-2">
-                                            <div className="flex items-center break-all tracking-[-1px]">
-                                                <MailOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                            <div className="flex items-center break-all tracking-[0.1px]">
+                                                <MailOutlined className="mr-4 bg-[#615f64] text-white p-[11px] rounded-full" />
                                                 <p>{employee?.email}</p>
                                             </div>
                                         </div>
-                                        <div className="tracking-[-0.8px]">
-                                            <PhoneOutlined className="mr-4 bg-[#615f64] text-white p-[10px]  rounded-full" />
+                                        <div className="tracking-[0.1px]">
+                                            <PhoneOutlined className="mr-4 bg-[#615f64] text-white p-[11px]  rounded-full" />
                                             {employee?.phone}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-6 pl-8 border-l-profile">
+                            <div className="mt-[25px] pl-8 border-l-profile">
                                 <div>
-                                    <h4 className="mb-[22px] !text-lg">
+                                    <h4 className="mb-[16px] !text-lg tracking-[.7px]">
                                         MỤC TIÊU NGHỀ NGHIỆP
                                     </h4>
-                                    <div className="relative bg-[#e7e7e7] p-3 pt-5 rounded-lg">
-                                        <span className="absolute top-1 left-[8px] z-50">
+                                    <div className="relative bg-[#e7e7e7] pt-3 rounded-lg">
+                                        <span className="absolute top-[-3px] left-[3px] z-50">
                                             <i className="!text-3xl">❝</i>
                                         </span>
-                                        <div className="relative pl-3">
+                                        <div className="relative pl-3 pb-[1px]">
                                             <TextArea
-                                                className="!pt-[10px] !px-0 !pr-4"
+                                                className="!pt-[9px] !pl-0 !pr-4 tracking-[0.2px]"
                                                 placeholder="Mục tiêu của bạn!"
                                                 spellCheck={false}
                                                 bordered={false}
@@ -329,7 +428,7 @@ const TabProfile = ({
                                                 }}
                                                 value={threeInfo?.knowledge}
                                             />
-                                            <span className="absolute right-[8px] bottom-[-1.5em] z-50">
+                                            <span className="absolute right-[15px] bottom-[-9px] z-50">
                                                 <i className="!text-3xl">❞</i>
                                             </span>
                                         </div>
@@ -343,8 +442,8 @@ const TabProfile = ({
                             </div>
                         </div>
                         <div className="pl-8 border-l-profile mt-4">
-                            <div className="border-l-2 flex justify-between items-center mt-[16px]">
-                                <h4 className="my-3 !text-lg mb-4  tracking-[-0.1px]">
+                            <div className="border-l-2 flex justify-between items-center">
+                                <h4 className="my-3 !text-lg mb-3 tracking-wide">
                                     KINH NGHIỆM LÀM VIỆC
                                 </h4>
                                 {[
@@ -484,43 +583,42 @@ const TabProfile = ({
                                         >
                                             <div>
                                                 <div>
-                                                    <div className="flex items-center flex-wrap !text-[17px] !font-[600]">
+                                                    <div className="flex items-center flex-wrap !text-[17px] !font-[500] mt-[2px] tracking-[0.5px]">
                                                         {item?.startDate &&
                                                             format(
                                                                 new Date(
                                                                     item.startDate
                                                                 ),
-                                                                "dd/MM/yyy"
+                                                                "MM/yyy"
                                                             )}{" "}
-                                                        <b className="mx-1">
+                                                        <p className="mx-1">
                                                             -
-                                                        </b>{" "}
+                                                        </p>{" "}
                                                         {item?.endDate &&
                                                             format(
                                                                 new Date(
                                                                     item.endDate
                                                                 ),
-                                                                "dd/MM/yyy"
+                                                                "MM/yyy"
                                                             )}
-                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[5px] mx-3"></span>
-                                                        <span className="uppercase !text-[17px] !font-[600]">
+                                                        <span className="bg-[#000000e0] rounded-full w-[1em] h-[1em] text-[5px] mx-[14px]"></span>
+                                                        <span className="uppercase !text-[17px] !font-[500]">
                                                             {item.companyName}
                                                         </span>
                                                     </div>
-                                                    <div className="uppercase mb-0 !text-[17px] !font-[600] tracking-[-0.3px]">
+                                                    <div className="uppercase mt-[1px] !text-[17px] !font-[500] tracking-[0.2px]">
                                                         {item.companyAddress}
                                                     </div>
                                                 </div>
-                                                <div className="relative custom-area ml-3">
-                                                    <TextArea
-                                                        className="!pt-[8px] !px-0 !w-full"
-                                                        value={
-                                                            item.jobDescription
-                                                        }
-                                                        bordered={false}
-                                                        autoSize
-                                                        readOnly
-                                                    ></TextArea>
+                                                <div className="relative ml-3">
+                                                    <ul
+                                                        className="pl-[11px] pt-[10px] leading-6 ul-profile"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: convertToLiFormat(
+                                                                item.jobDescription
+                                                            ),
+                                                        }}
+                                                    ></ul>
                                                 </div>
                                             </div>
                                             {[
@@ -573,6 +671,26 @@ const TabProfile = ({
                                         </div>
                                     );
                                 })}
+                        </div>
+                        <div className="pl-8 border-l-profile mt-[30px]">
+                            <div className="border-l-2">
+                                <h4 className="!text-lg tracking-[1.2px]">
+                                    CHỨNG CHỈ
+                                </h4>
+                            </div>
+                            <div className="relative mt-[6px] leading-6 tracking-[0.25px]">
+                                <ul className="p-0 pl-[22px]">
+                                    <li>
+                                        2017: Chứng chỉ tin học văn phòng
+                                        Microsoft Office
+                                    </li>
+                                    <li>
+                                        2019: Chứng chỉ khóa học Kỹ năng thuyết
+                                        trình chuyên nghiệp
+                                    </li>
+                                    <li>2021: TOIEC 800</li>
+                                </ul>
+                            </div>
                         </div>
                         {openDelete && (
                             <ModalDelete

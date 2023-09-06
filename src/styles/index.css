@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;1,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Phudu&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 @tailwind components;
 @tailwind utilities;
@@ -71,7 +72,12 @@ tr.ant-table-row:last-child > td {
     font-family: "Tinos", sans-serif;
     font-size: medium;
 }
-
+.profile-font {
+    font-family: "Roboto", sans-serif;
+}
+.profile-font * {
+    font-family: "Roboto", sans-serif;
+}
 .ant-modal-header {
     position: sticky;
     top: 0;
@@ -107,7 +113,8 @@ tr.ant-table-row:last-child > td {
     box-shadow: -1px 0px 0px 0px #aaa;
 }
 .info-profile {
-    transform: translateX(-3.5%) !important;
+    margin-top: 25px;
+    transform: translateX(-3.4%) !important;
 }
 
 .custom-area textarea {
@@ -122,7 +129,7 @@ tr.ant-table-row:last-child > td {
     line-height: 2.1em !important;
 }
 .reset-default {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
 }
 .ant-table-wrapper .ant-table-tbody > tr > td {
     border-bottom: none;
@@ -157,6 +164,10 @@ tr.ant-table-row:last-child > td {
     margin-bottom: 14px !important;
 }
 
+.ul-profile li {
+    line-height: 21.7px;
+    letter-spacing: 0.09px;
+}
 /* tablet  */
 @media only screen and (max-width: 1024px) {
     .ant-tabs {
