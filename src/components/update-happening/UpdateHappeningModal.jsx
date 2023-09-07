@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetEmployee, setOpen } from "../../redux/employee/employeeSlice";
 import TeamStatus from "../common/TeamStatus";
 import { TABS } from "../../constants/constants";
-
+import errorImage from "../../assets/bg-error.png";
 export default function UpdateHappeningModal() {
     const dispatch = useDispatch();
     const { open, employee } = useSelector((state) => state.employee);
@@ -87,7 +87,12 @@ export default function UpdateHappeningModal() {
         handleGetSalaryByEmp();
         handleGetProcessByEmp();
         handleGetRecomentByEmp();
-    }, [employee.id]);
+    }, [employee.id, activeKey]);
+    useEffect(() => {
+        formSalary.resetFields();
+        formProcess.resetFields();
+        formRecoment.resetFields();
+    }, [activeKey]);
     return (
         <Modal
             className="!h-screen relative happening !w-[84%] max-lg:!w-[100%]"
@@ -153,7 +158,16 @@ export default function UpdateHappeningModal() {
                         xs={24}
                         className="flex flex-col items-center"
                     >
-                        <Image width={200} height={200} src={employee.image} />
+                        {employee?.image ? (
+                            <Image
+                                width={200}
+                                height={200}
+                                src={employee?.image}
+                                onError={(e) => (e.target.src = errorImage)}
+                            />
+                        ) : (
+                            <Image width={200} height={200} src={errorImage} />
+                        )}
                         <h1>{employee.name}</h1>
                         {TeamStatus(employee.team)}
                     </Col>
@@ -229,12 +243,6 @@ export default function UpdateHappeningModal() {
                         activeKey={activeKey}
                         onChange={(e) => {
                             setActiveKey(e);
-                            handleGetSalaryByEmp();
-                            handleGetProcessByEmp();
-                            handleGetRecomentByEmp();
-                            formSalary.resetFields();
-                            formProcess.resetFields();
-                            formRecoment.resetFields();
                         }}
                         items={items}
                     />
